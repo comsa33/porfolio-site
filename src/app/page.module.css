@@ -395,6 +395,36 @@
     font-size: 1rem;
   }
 
+  /* Skills Section Mobile */
+  .skillsSection {
+    margin: 1.5rem 0 1rem;
+    padding: 1rem;
+  }
+
+  .skillsTitle {
+    font-size: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .skillsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .categoryHeader {
+    font-size: 0.75rem;
+  }
+
+  .skillBadge {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  /* Email Text Mobile */
+  .emailText {
+    font-size: 0.85rem;
+  }
+
   .sectionHeader {
     flex-direction: column;
     align-items: flex-start;
@@ -436,5 +466,25 @@
   .contactLink {
     width: 100%;
     justify-content: center;
+  }
+}
+
+/* Tablet Breakpoint */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .skillsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+  }
+
+  .skillsSection {
+    padding: 1.2rem;
+  }
+
+  .categoryTitle {
+    font-size: 0.75rem;
+  }
+
+  .skillBadge {
+    font-size: 0.72rem;
   }
 }
