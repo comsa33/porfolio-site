@@ -13,8 +13,31 @@
       "en": "From Designer to World Traveler to AI Engineer — Building Intelligent Systems with Global Perspective"
     },
     "intro": {
-      "ko": "기술의 기본 원리로 문제의 본질을 해결하는, 3년차 AI 에이전트 플랫폼 개발자입니다. 디자인을 전공하고 세계를 여행하며 얻은 넓은 시야로, 사용자 경험과 기술의 조화를 추구합니다.",
-      "en": "I am a 3rd-year AI Agent Platform Developer who solves the essence of problems through fundamental technology principles. With a background in Visual Design and a global perspective from world travel, I strive for harmony between User Experience and Technology."
+      "ko": "기술의 기본 원리로 문제의 본질을 해결하는 AI 에이전트 플랫폼 개발자입니다. 디자인을 전공하고 세계를 여행하며 얻은 넓은 시야로, 사용자 경험과 기술의 조화를 추구합니다.",
+      "en": "An AI Agent Platform Developer who solves the essence of problems through fundamental technology principles. With a background in Visual Design and a global perspective from world travel, I strive for harmony between User Experience and Technology."
+    },
+    "coreSkills": {
+      "backend": {
+        "title": {
+          "ko": "Backend & Infrastructure",
+          "en": "Backend & Infrastructure"
+        },
+        "skills": ["Python", "FastAPI", "Redis", "Docker", "Kubernetes"]
+      },
+      "ai": {
+        "title": {
+          "ko": "AI & LLM",
+          "en": "AI & LLM"
+        },
+        "skills": ["LLM Agent", "RAG Pipeline", "LLM Integration", "Prompt Eng."]
+      },
+      "system": {
+        "title": {
+          "ko": "System Design",
+          "en": "System Design"
+        },
+        "skills": ["Async/Await", "Multiprocessing", "WebSocket", "Concurrency"]
+      }
     }
   },
   "timeline": [
@@ -31,25 +54,25 @@
       },
       "type": "Education",
       "description": {
-        "ko": "시각디자인 전공. 디자인적 사고와 시각적 커뮤니케이션 능력 함양.",
-        "en": "Majored in Visual Design. Cultivated design thinking and visual communication skills."
+        "ko": "디자인적 사고와 시각적 커뮤니케이션 능력 함양.",
+        "en": "Developed design thinking and visual communication skills."
       }
     },
     {
       "id": "design-biennale",
-      "date": "2009.09",
+      "date": "2009.09 - 2009.11",
       "title": {
-        "ko": "광주디자인비엔날레",
-        "en": "Gwangju Design Biennale"
+        "ko": "2009 광주디자인비엔날레",
+        "en": "2009 Gwangju Design Biennale"
       },
       "role": {
-        "ko": "작품 출품",
-        "en": "Exhibitor"
+        "ko": "출품작가",
+        "en": "Exhibiting Artist"
       },
       "type": "Design",
       "description": {
-        "ko": "광주디자인비엔날레에 작품 2점 출품.",
-        "en": "Exhibited 2 works at Gwangju Design Biennale."
+        "ko": "주제 'The Clue-더할 나위 없는' 전시에 작품 2점 출품.",
+        "en": "Exhibited 2 works at 'The Clue' themed exhibition."
       }
     },
     {
@@ -82,7 +105,7 @@
       },
       "type": "Career",
       "description": {
-        "ko": "초등학교 영어회화 강사로 어린 학생들 교육.",
+        "ko": "초등학교 영어회화 강사.",
         "en": "Taught English conversation to elementary school students."
       }
     },
@@ -141,8 +164,8 @@
       "id": "career-nambu",
       "date": "2017.08 - 2017.10",
       "title": {
-        "ko": "남부대학교",
-        "en": "Nambu University"
+        "ko": "광주보건대학교",
+        "en": "Gwangju Health University"
       },
       "role": {
         "ko": "토익캠프 강의 (계약직)",
@@ -151,7 +174,7 @@
       "type": "Career",
       "description": {
         "ko": "대학교 토익캠프 강의 담당.",
-        "en": "Led TOEIC camp lectures at Nambu University."
+        "en": "Led TOEIC camp lectures at the university."
       }
     },
     {
@@ -167,8 +190,8 @@
       },
       "type": "Career",
       "description": {
-        "ko": "어학원 설립 및 운영. 최종 교육 경력 단계.",
-        "en": "Founded and operated TOEIC Ship language institute. Final stage of teaching career."
+        "ko": "어학원 설립 및 운영.",
+        "en": "Founded and operated TOEIC Ship language institute."
       }
     },
     {
@@ -184,8 +207,47 @@
       },
       "type": "Education",
       "description": {
-        "ko": "인공지능 학사 과정. 학점 4.3/4.5. AI 기초 및 응용 학습.",
-        "en": "Bachelor's in Artificial Intelligence. GPA 4.3/4.5. Studied AI fundamentals and applications."
+        "ko": "• 인공지능 학사 과정\n• 학점 4.3/4.5\n• AI 기초 및 응용 학습",
+        "en": "• AI Bachelor's program\n• GPA 4.3/4.5\n• Studied AI fundamentals and applications"
+      },
+      "paperLink": "https://kiss.kstudy.com/Detail/Ar?key=4028402",
+      "paperTitle": {
+        "ko": "학사 논문",
+        "en": "Bachelor's Thesis"
+      }
+    },
+    {
+      "id": "edu-kcci",
+      "date": "2021.03 - 2021.07",
+      "title": {
+        "ko": "대한상공회의소",
+        "en": "Korea Chamber of Commerce"
+      },
+      "role": {
+        "ko": "AI 소프트웨어 프로그래밍",
+        "en": "AI Software Programming"
+      },
+      "type": "Education",
+      "description": {
+        "ko": "• Python 응용 프로그래밍\n• 데이터 수집 & 분석\n• SQL & RDBMS\n• NLP 프로젝트",
+        "en": "• Python application programming\n• Data collection & analysis\n• SQL & RDBMS\n• NLP projects"
+      }
+    },
+    {
+      "id": "edu-codestates",
+      "date": "2021.09 - 2022.04",
+      "title": {
+        "ko": "코드스테이츠",
+        "en": "Code States"
+      },
+      "role": {
+        "ko": "AI 부트캠프",
+        "en": "AI Bootcamp"
+      },
+      "type": "Education",
+      "description": {
+        "ko": "• 머신러닝/딥러닝 프로젝트\n• Data Engineering & MLOps\n• REST API & 컨테이너 환경 구축\n• 추천 시스템 기업 협업",
+        "en": "• ML/DL projects\n• Data Engineering & MLOps\n• REST API & Container setup\n• Recommendation system collaboration"
       }
     },
     {
@@ -201,8 +263,13 @@
       },
       "type": "Dev",
       "description": {
-        "ko": "구직자-기업 매칭 ML 모델 개발 및 특허 등록. 데이터 파이프라인 구축 및 대규모 웹크롤러 개발.",
-        "en": "Developed job seeker-company matching ML model (patent registered). Built data pipelines and large-scale web crawlers."
+        "ko": "• 구직자-기업 매칭 ML 모델 개발 및 특허 등록\n• 데이터 파이프라인 구축\n• 대규모 웹크롤러 개발",
+        "en": "• Developed job seeker-company matching ML model (patent registered)\n• Built data pipelines\n• Developed large-scale web crawlers"
+      },
+      "paperLink": "https://patentimages.storage.googleapis.com/3c/c8/73/b770f95a418ac0/KR102721044B1.pdf",
+      "paperTitle": {
+        "ko": "특허: 구직자 추천 시스템",
+        "en": "Patent: Job Seeker Recommendation System"
       }
     },
     {
@@ -218,8 +285,8 @@
       },
       "type": "Dev",
       "description": {
-        "ko": "특허/뉴스 챗봇을 위한 RAG 시스템 개발. ElasticSearch 기반 검색 Retriever 서버 및 ETL 파이프라인 구축.",
-        "en": "Developed RAG system for patent/news chatbot. Built ElasticSearch-based Retriever server and ETL pipelines."
+        "ko": "• 특허/뉴스 챗봇을 위한 RAG 시스템 개발\n• ElasticSearch 기반 검색 Retriever 서버 구축\n• ETL 파이프라인 구축",
+        "en": "• Developed RAG system for patent/news chatbot\n• Built ElasticSearch-based Retriever server\n• Built ETL pipelines"
       }
     },
     {
@@ -235,8 +302,8 @@
       },
       "type": "Dev",
       "description": {
-        "ko": "AI 에이전트 플랫폼 개발 및 RAG 시스템 구축. Python 기반 마이크로서비스 아키텍처 설계 및 구현.",
-        "en": "Developing AI Agent Platforms, building RAG systems, and designing Python-based microservice architectures."
+        "ko": "• LLM 에이전트 플랫폼 핵심 백엔드 개발\n• Python 샌드박스 서비스 (PyRunner)\n• RAG 평가 시스템 (Evaluator)\n• 웹 IDE (PyEditor)",
+        "en": "• Developing core backend for LLM Agent Platform\n• Python sandbox service (PyRunner)\n• RAG evaluation system (Evaluator)\n• Web IDE (PyEditor)"
       }
     },
     {
@@ -252,8 +319,13 @@
       },
       "type": "Education",
       "description": {
-        "ko": "AI 빅데이터 석사 과정. 학점 4.23/4.3. 석사논문: 생성형 AI 기반 시계열 예측 자동화 연구.",
-        "en": "Master's in AI Big Data. GPA 4.23/4.3. Thesis: Generative AI-based Time Series Forecasting Automation."
+        "ko": "• AI 빅데이터 석사 과정\n• 학점 4.23/4.3\n• 석사논문: 생성형 AI 기반 시계열 예측 자동화 연구",
+        "en": "• Master's in AI Big Data\n• GPA 4.23/4.3\n• Thesis: Generative AI-based Time Series Forecasting Automation"
+      },
+      "paperLink": "https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART003244700",
+      "paperTitle": {
+        "ko": "석사 논문",
+        "en": "Master's Thesis"
       }
     },
     {
@@ -264,13 +336,13 @@
         "en": "SDG Management School"
       },
       "role": {
-        "ko": "Executive MBA (석사)",
-        "en": "Executive MBA (Master)"
+        "ko": "경영학 석사 (MBA)",
+        "en": "Master of Business Administration (MBA)"
       },
       "type": "Education",
       "description": {
-        "ko": "유럽 경영대학원 Executive MBA 과정.",
-        "en": "Executive Master of Business Administration program in Europe."
+        "ko": "스위스 경영대학원 Executive MBA 과정.",
+        "en": "Executive Master of Business Administration program in Switzerland."
       }
     }
   ],

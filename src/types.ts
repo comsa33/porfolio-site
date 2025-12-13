@@ -11,6 +11,16 @@ export interface Profile {
   linkedin?: string;
   story: LocalizedString;
   intro: LocalizedString;
+  coreSkills: {
+    backend: SkillCategory;
+    ai: SkillCategory;
+    system: SkillCategory;
+  };
+}
+
+export interface SkillCategory {
+  title: LocalizedString;
+  skills: string[];
 }
 
 export type TimelineType = 'Design' | 'Education' | 'Dev' | 'Travel' | 'Career';

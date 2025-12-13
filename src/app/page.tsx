@@ -52,8 +52,81 @@ export default function Home() {
           <p className={styles.subtitle}>
             {data.profile.title}
           </p>
+          
+          {/* Core Skills */}
+          <div className={styles.skillsSection}>
+            <h4 className={styles.skillsTitle}>Core Skills</h4>
+            <div className={styles.skillsGrid}>
+              {/* Backend */}
+              <div className={styles.skillCategory}>
+                <div className={styles.categoryHeader}>
+                  <svg className={styles.categoryIcon} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                  </svg>
+                  <span className={styles.categoryTitle}>{data.profile.coreSkills.backend.title[lang]}</span>
+                </div>
+                <div className={styles.categorySkills}>
+                  {data.profile.coreSkills.backend.skills.map(skill => (
+                    <span key={skill} className={styles.skillBadge}>{skill}</span>
+                  ))}
+                </div>
+              </div>
+
+              {/* AI & LLM */}
+              <div className={styles.skillCategory}>
+                <div className={styles.categoryHeader}>
+                  <svg className={styles.categoryIcon} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 16v-4M12 8h.01"/>
+                  </svg>
+                  <span className={styles.categoryTitle}>{data.profile.coreSkills.ai.title[lang]}</span>
+                </div>
+                <div className={styles.categorySkills}>
+                  {data.profile.coreSkills.ai.skills.map(skill => (
+                    <span key={skill} className={styles.skillBadge}>{skill}</span>
+                  ))}
+                </div>
+              </div>
+
+              {/* System Design */}
+              <div className={styles.skillCategory}>
+                <div className={styles.categoryHeader}>
+                  <svg className={styles.categoryIcon} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="3" y="3" width="7" height="7"/>
+                    <rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/>
+                    <rect x="3" y="14" width="7" height="7"/>
+                  </svg>
+                  <span className={styles.categoryTitle}>{data.profile.coreSkills.system.title[lang]}</span>
+                </div>
+                <div className={styles.categorySkills}>
+                  {data.profile.coreSkills.system.skills.map(skill => (
+                    <span key={skill} className={styles.skillBadge}>{skill}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
           <p className={styles.description}>
-            {data.profile.intro[lang]}
+            {(() => {
+              const startYear = 2022;
+              const currentYear = new Date().getFullYear();
+              const years = currentYear - startYear;
+              
+              if (lang === 'ko') {
+                return data.profile.intro[lang].replace(
+                  'AI 에이전트 플랫폼 개발자',
+                  `${years}년차 AI 에이전트 플랫폼 개발자`
+                );
+              } else {
+                const yearSuffix = years === 1 ? '1st-year' : years === 2 ? '2nd-year' : years === 3 ? '3rd-year' : `${years}th-year`;
+                return data.profile.intro[lang].replace(
+                  'An AI Agent Platform Developer',
+                  `A ${yearSuffix} AI Agent Platform Developer`
+                );
+              }
+            })()}
           </p>
         </div>
       </div>
