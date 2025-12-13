@@ -30,7 +30,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang }) => {
           
           <h3 className={styles.title}>
             {project.title}
-            <span className={styles.repoIcon}>↗</span>
           </h3>
           <p className={styles.shortDesc}>{project.shortDescription[lang]}</p>
         </div>
