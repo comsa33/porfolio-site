@@ -73,7 +73,8 @@ export interface ArchitectureDiagram {
 
 // Project detailed information
 export interface ProjectDetail {
-  problemSolvingCases: ProblemSolvingCase[]; // 핵심 콘텐츠
+  problemSolvingCases?: ProblemSolvingCase[]; // 핵심 콘텐츠
+  problemSolving?: ProblemSolvingCase[];
   architecture?: ArchitectureDiagram[]; // 선택적 다이어그램
   technicalHighlights?: LocalizedString[]; // 추가 기술적 하이라이트
 }

@@ -1,0 +1,27 @@
+flowchart TD
+    Start[User Question] --> Preprocess[Question Preprocessing<br/>Keyword Extraction]
+    Preprocess --> Search1[Vector Search<br/>Initial Search]
+    Search1 --> Generate1[Answer Generation<br/>LLM]
+    
+    Generate1 --> Evaluate{Quality Evaluation<br/>GPT-4o-mini<br/>Threshold: 70}
+    
+    Evaluate -->|Satisfactory<br/>≥70| End[Return Final Answer]
+    Evaluate -->|Unsatisfactory<br/><70| CheckRetry{Check Retry<br/>Count}
+    
+    CheckRetry -->|<3| Refine[Query Refinement<br/>LLM-based Keyword Processing]
+    CheckRetry -->|≥3| ForceEnd[Return Current Answer<br/>Max Retries Reached]
+    
+    Refine --> Accumulate[Passage Accumulation<br/>Deduplication]
+    Accumulate --> Search2[Re-search<br/>Refined Query]
+    Search2 --> Merge[Context Merging<br/>Use Accumulated Passages]
+    Merge --> Generate2[Answer Regeneration<br/>Extended Context]
+    
+    Generate2 --> Evaluate
+    
+    style Start fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#000
+    style End fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000
+    style ForceEnd fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000
+    style Evaluate fill:#fff9c4,stroke:#fbc02d,stroke-width:2px,color:#000
+    style CheckRetry fill:#fff9c4,stroke:#fbc02d,stroke-width:2px,color:#000
+    style Refine fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000
+    style Accumulate fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#000

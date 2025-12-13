@@ -1,0 +1,60 @@
+flowchart TB
+    subgraph User[User Layer]
+        PM[PM/Cross-Dept]
+        B2B[B2B Stakeholders]
+        NewEmp[New Employees]
+    end
+    
+    subgraph AgentBuilder[Agent Builder UI]
+        Editor[Scenario Editor]
+        Deploy[Deployment Manager]
+    end
+    
+    subgraph Workflows[Workflow Engine]
+        Main[Main Workflow<br/>UX & Routing]
+        Prep[Preprocessing<br/>Keyword Extraction]
+        QnA[QnA Workflow<br/>Answer Generation]
+        Eval[Evaluation<br/>Quality Assessment]
+    end
+    
+    subgraph External[External Services]
+        DataMgmt[Data Management Backend<br/>Chat Logs]
+        LLMProvider[LLM Provider Server<br/>Load Balancing]
+        VectorDB[Vector DB Server<br/>Embedding & Search]
+        Storage[(MinIO<br/>File Storage)]
+    end
+    
+    PM --> Main
+    B2B --> Main
+    NewEmp --> Main
+    
+    Editor --> Deploy
+    Deploy --> Main
+    
+    Main -->|1. Question| Prep
+    Prep -->|2. Keyword Extraction| LLMProvider
+    Prep -->|3. Vector Search| VectorDB
+    
+    Prep -->|4. Preprocessing Done| QnA
+    QnA -->|5. Answer Generation| LLMProvider
+    QnA -->|6. History Retrieval| DataMgmt
+    
+    QnA -->|7. Quality Evaluation Request| Eval
+    Eval -->|8. Execute Evaluation| LLMProvider
+    
+    Eval -->|9a. Satisfactory| Main
+    Eval -->|9b. Unsatisfactory| Prep
+    
+    Main -->|10. Final Answer| PM
+    Main -->|10. Final Answer| B2B
+    Main -->|10. Final Answer| NewEmp
+    
+    QnA -.->|File Storage| Storage
+    Eval -.->|Evaluation Logs| DataMgmt
+    
+    style Main fill:#4f46e5,stroke:#818cf8,color:#fff
+    style Prep fill:#0891b2,stroke:#06b6d4,color:#fff
+    style QnA fill:#059669,stroke:#10b981,color:#fff
+    style Eval fill:#7c3aed,stroke:#a78bfa,color:#fff
+    style LLMProvider fill:#f59e0b,stroke:#fbbf24,color:#000
+    style VectorDB fill:#ec4899,stroke:#f472b6,color:#fff

@@ -1,0 +1,27 @@
+flowchart TD
+    Start[사용자 질문] --> Preprocess[질문 전처리<br/>키워드 추출]
+    Preprocess --> Search1[벡터 검색<br/>초기 검색]
+    Search1 --> Generate1[답변 생성<br/>LLM]
+    
+    Generate1 --> Evaluate{품질 평가<br/>GPT-4o-mini<br/>임계값: 70점}
+    
+    Evaluate -->|만족<br/>≥70점| End[최종 답변 반환]
+    Evaluate -->|불만족<br/><70점| CheckRetry{재시도 횟수<br/>확인}
+    
+    CheckRetry -->|<3회| Refine[검색어 개선<br/>LLM 기반 키워드 정제]
+    CheckRetry -->|≥3회| ForceEnd[현재 답변 반환<br/>최대 재시도 도달]
+    
+    Refine --> Accumulate[패시지 누적<br/>중복 제거]
+    Accumulate --> Search2[재검색<br/>개선된 쿼리]
+    Search2 --> Merge[컨텍스트 병합<br/>누적 패시지 활용]
+    Merge --> Generate2[답변 재생성<br/>확장된 컨텍스트]
+    
+    Generate2 --> Evaluate
+    
+    style Start fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#000
+    style End fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000
+    style ForceEnd fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000
+    style Evaluate fill:#fff9c4,stroke:#fbc02d,stroke-width:2px,color:#000
+    style CheckRetry fill:#fff9c4,stroke:#fbc02d,stroke-width:2px,color:#000
+    style Refine fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000
+    style Accumulate fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#000

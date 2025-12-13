@@ -31,7 +31,7 @@ export default function ProjectDetailModal({ project, lang, isOpen, onClose }: P
 
   if (!isOpen || !project.detail) return null;
 
-  const { problemSolvingCases } = project.detail;
+  const problemSolvingCases = project.detail.problemSolving;
 
   return (
     <div className={styles.overlay} onClick={onClose}>
@@ -61,7 +61,7 @@ export default function ProjectDetailModal({ project, lang, isOpen, onClose }: P
             </p>
             
             <div className={styles.casesGrid}>
-              {problemSolvingCases.map((case_: ProblemSolvingCase) => (
+              {(problemSolvingCases || []).map((case_: ProblemSolvingCase) => (
                 <div key={case_.id} className={styles.caseCard}>
                   {/* Card Header */}
                   <div className={styles.caseHeader}>
@@ -99,7 +99,15 @@ export default function ProjectDetailModal({ project, lang, isOpen, onClose }: P
                     <summary className={styles.detailsSummary}>
                       {lang === 'ko' ? '기술적 상세 보기' : 'View Technical Details'}
                     </summary>
-                    <div className={styles.syntaxHighlighterWrapper}>
+                    <div className={styles.detailsContent}>
+                      {/* DSL Note for knowledge-base project */}
+                      {project.id === 'knowledge-base' && (
+                        <div className={styles.dslNote}>
+                          {lang === 'ko' 
+                            ? '※ 실제 구현은 사내 DSL(Domain-Specific Language)로 작성되었으며, 이해를 돕기 위해 Python 코드로 표현했습니다.'
+                            : '※ The actual implementation uses an internal DSL (Domain-Specific Language), presented here as Python code for clarity.'}
+                        </div>
+                      )}
                       <SyntaxHighlighter
                         language="python"
                         style={vscDarkPlus}

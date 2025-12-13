@@ -1,0 +1,60 @@
+flowchart TB
+    subgraph User[사용자 레이어]
+        PM[PM/타부서]
+        B2B[B2B 이해관계자]
+        NewEmp[신입사원]
+    end
+    
+    subgraph AgentBuilder[Agent Builder UI]
+        Editor[시나리오 에디터]
+        Deploy[배포 관리]
+    end
+    
+    subgraph Workflows[워크플로우 엔진]
+        Main[Main Workflow<br/>UX & Routing]
+        Prep[Preprocessing<br/>키워드 추출/정제]
+        QnA[QnA Workflow<br/>답변 생성]
+        Eval[Evaluation<br/>품질 평가]
+    end
+    
+    subgraph External[외부 서비스]
+        DataMgmt[데이터 관리 백엔드<br/>대화 로그]
+        LLMProvider[LLM 프로바이더 서버<br/>로드밸런싱]
+        VectorDB[벡터 DB 서버<br/>임베딩 & 검색]
+        Storage[(MinIO<br/>파일 저장)]
+    end
+    
+    PM --> Main
+    B2B --> Main
+    NewEmp --> Main
+    
+    Editor --> Deploy
+    Deploy --> Main
+    
+    Main -->|1. 질문 전달| Prep
+    Prep -->|2. 키워드 추출| LLMProvider
+    Prep -->|3. 벡터 검색| VectorDB
+    
+    Prep -->|4. 전처리 완료| QnA
+    QnA -->|5. 답변 생성| LLMProvider
+    QnA -->|6. 대화 이력 조회| DataMgmt
+    
+    QnA -->|7. 품질 평가 요청| Eval
+    Eval -->|8. 평가 실행| LLMProvider
+    
+    Eval -->|9a. 만족| Main
+    Eval -->|9b. 불만족| Prep
+    
+    Main -->|10. 최종 답변| PM
+    Main -->|10. 최종 답변| B2B
+    Main -->|10. 최종 답변| NewEmp
+    
+    QnA -.->|파일 저장| Storage
+    Eval -.->|평가 로그| DataMgmt
+    
+    style Main fill:#4f46e5,stroke:#818cf8,color:#fff
+    style Prep fill:#0891b2,stroke:#06b6d4,color:#fff
+    style QnA fill:#059669,stroke:#10b981,color:#fff
+    style Eval fill:#7c3aed,stroke:#a78bfa,color:#fff
+    style LLMProvider fill:#f59e0b,stroke:#fbbf24,color:#000
+    style VectorDB fill:#ec4899,stroke:#f472b6,color:#fff
