@@ -1,6 +1,7 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Code2, GraduationCap, Palette, Plane, Briefcase } from 'lucide-react';
 import styles from './Timeline.module.css';
 import { TimelineItem } from '@/types';
 
@@ -9,29 +10,91 @@ interface TimelineProps {
   lang: 'ko' | 'en';
 }
 
+const categoryIcons = {
+  Dev: Code2,
+  Education: GraduationCap,
+  Design: Palette,
+  Travel: Plane,
+  Career: Briefcase,
+};
+
 const Timeline: React.FC<TimelineProps> = ({ items, lang }) => {
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add(styles.visible);
+          }
+        });
+      },
+      { threshold: 0.2, rootMargin: '0px 0px -100px 0px' }
+    );
+    
+    const timelineItems = document.querySelectorAll(`.${styles.timelineItem}`);
+    timelineItems.forEach(el => {
+      observer.observe(el);
+    });
+    
+    return () => observer.disconnect();
+  }, [items]);
+
   return (
     <div className={styles.container}>
-      <div className={styles.line} />
-      <div className={styles.scrollContainer}>
-        {items.map((item) => (
-          <div key={item.id} className={styles.item} data-type={item.type}>
-            <div className={`${styles.categoryIcon} ${styles[`icon${item.type}`]}`} />
-            <div className={styles.connector} />
-            <div className={styles.itemContent}>
-              <h3 className={styles.title}>{typeof item.title === 'string' ? item.title : item.title[lang]}</h3>
-              <p className={styles.role}>{typeof item.role === 'string' ? item.role : item.role[lang]}</p>
-              <p className={styles.description}>
-                {item.description[lang]}
-              </p>
-            </div>
-            <div className={styles.typeIndicator}>
-              <div className={styles.indicatorDot} />
+      <div className={styles.timelineLine} />
+      
+      {items.map((item, index) => {
+        const IconComponent = categoryIcons[item.type as keyof typeof categoryIcons];
+        
+        return (
+          <div 
+            key={item.id} 
+            className={styles.timelineItem} 
+            data-type={item.type}
+            style={{ transitionDelay: `${index * 100}ms` }}
+          >
+            {/* Left: Simple Dot + Date */}
+            <div className={styles.timelineDot}>
+              <div className={styles.dot} />
               <span className={styles.dateLabel}>{item.date}</span>
             </div>
+            
+            {/* Right: Card with Icon in Title */}
+            <div className={styles.card}>
+              <div className={styles.cardHeader}>
+                <div className={styles.titleRow}>
+                  {IconComponent && (
+                    <IconComponent 
+                      className={styles.titleIcon} 
+                      size={20} 
+                      strokeWidth={2}
+                    />
+                  )}
+                  <h3>{typeof item.title === 'string' ? item.title : item.title[lang]}</h3>
+                </div>
+                <span className={styles.role}>
+                  {typeof item.role === 'string' ? item.role : item.role[lang]}
+                </span>
+              </div>
+              <p className={styles.description}>{item.description[lang]}</p>
+              
+              {/* Paper Link (if exists) */}
+              {item.paperLink && item.paperTitle && (
+                <a 
+                  href={item.paperLink} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className={styles.paperLink}
+                >
+                  <span className={styles.paperIcon}>📄</span>
+                  <span className={styles.paperTitle}>{item.paperTitle[lang]}</span>
+                  <span className={styles.externalIcon}>↗</span>
+                </a>
+              )}
+            </div>
           </div>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 };

@@ -1,0 +1,86 @@
+sequenceDiagram
+    participant User as 사용자/Agent
+    participant API as API Endpoint
+    participant Proc as Processor
+    participant Track as ProgressTracker
+    participant Eval as Evaluator
+    participant MinIO as MinIO Storage
+    participant DH as DataHub API
+    
+    Note over User,DH: 1단계: QnA 데이터셋 생성
+    User->>+API: POST /generation/qna<br/>(collection_id, index_id, chat_logs_id)
+    API->>+Proc: create_task(QnAGenerator)
+    Proc->>Track: start("QnA 생성")
+    Track->>DH: 🚀 QnA 생성 0% 시작
+    
+    loop 각 문서 처리
+        Proc->>Eval: generate_qna_for_passage()
+        Eval->>Eval: LLM으로 질문/답변 생성
+        Proc->>Track: update(1)
+        alt 10% 도달
+            Track->>DH: ⏳ 10% ~ 100% 진행률 업데이트
+        end
+    end
+    
+    Proc->>MinIO: save(qna_dataset.csv)
+    MinIO-->>Proc: file_id
+    Proc->>Track: complete([file_id])
+    Track->>DH: ✅ QnA 생성 완료
+    Proc-->>-API: {status: "completed", files: [qna_dataset.csv]}
+    API-->>-User: Response
+    
+    Note over User,DH: 2단계: Recall 평가 (검색 정확도)
+    User->>+API: POST /evaluation/passage<br/>(qna_file, top_k, chat_logs_id)
+    API->>+Proc: create_task(RecallProcessor)
+    Proc->>MinIO: load(qna_dataset.csv)
+    MinIO-->>Proc: QnA data
+    
+    Proc->>Track: start("Recall 평가")
+    Track->>DH: 🚀 Recall 평가 0% 시작
+    
+    loop 각 질문 평가
+        Proc->>Eval: evaluate_recall(question)
+        Eval->>DH: search_passages(query)
+        DH-->>Eval: retrieved_passages
+        Eval->>Eval: gold_passage 순위 확인
+        Proc->>Track: update(1)
+        alt 10% 도달
+            Track->>DH: ⏳ 10% ~ 100% 진행률 업데이트
+        end
+    end
+    
+    Proc->>MinIO: save(recall_results.csv)
+    MinIO-->>Proc: recall_file_id
+    Proc->>MinIO: save(ragas_dataset.jsonl)
+    MinIO-->>Proc: ragas_file_id
+    Proc->>Track: complete([recall_file_id, ragas_file_id])
+    Track->>DH: ✅ Recall 평가 완료
+    Proc-->>-API: {status: "completed", files: [recall.csv, ragas.jsonl]}
+    API-->>-User: Response
+    
+    Note over User,DH: 3단계: Ragas 평가 (생성 품질)
+    User->>+API: POST /evaluation/ragas<br/>(ragas_file, metrics, chat_logs_id)
+    API->>+Proc: create_task(RagasProcessor)
+    Proc->>MinIO: load(ragas_dataset.jsonl)
+    MinIO-->>Proc: Ragas data
+    
+    Proc->>Track: start("Ragas 평가")
+    Track->>DH: 🚀 Ragas 평가 0% 시작
+    
+    Proc->>Eval: evaluate_ragas_batch(data, metrics)
+    Eval->>Eval: Faithfulness, Answer Relevancy,<br/>Context Precision, Context Recall 계산
+    Proc->>Track: update(batch_size)
+    Track->>DH: ⏳ 진행률 업데이트
+    
+    Proc->>MinIO: save(ragas_results.csv)
+    MinIO-->>Proc: result_file_id
+    Proc->>Track: complete([result_file_id])
+    Track->>DH: ✅ Ragas 평가 완료
+    Proc-->>-API: {status: "completed", files: [ragas_results.csv]}
+    API-->>-User: Response
+    
+    Note over User,DH: 비동기 처리 (chat_logs_id 있을 경우)
+    rect rgb(255, 245, 200)
+        Note right of Proc: asyncio.create_task()로<br/>백그라운드 실행
+        Note right of Track: 실시간 진행률을<br/>DataHub에 지속 보고
+    end

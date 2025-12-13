@@ -22,6 +22,8 @@ export interface TimelineItem {
   role: string | LocalizedString;
   type: TimelineType;
   description: LocalizedString;
+  paperLink?: string; // Optional research paper link
+  paperTitle?: LocalizedString; // Optional research paper title
 }
 
 export interface Project {

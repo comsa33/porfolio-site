@@ -22,10 +22,11 @@
     0 0 80px rgba(79, 70, 229, 0.2);
   max-width: 95vw;
   max-height: 95vh;
+  height: 95vh; /* Fixed height */
   width: 1400px;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: hidden; /* Prevent any overflow */
   animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -151,6 +152,7 @@
 /* Content */
 .content {
   flex: 1;
+  min-height: 0; /* Critical: prevent flex item from expanding beyond bounds */
   overflow-y: auto;
   padding: 2rem;
 }
@@ -168,7 +170,6 @@
   background: rgba(255, 255, 255, 0.03);
   border-radius: 16px;
   padding: 2rem;
-  min-height: 400px;
   display: flex;
   align-items: center;
   justify-content: center;

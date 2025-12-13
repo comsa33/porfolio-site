@@ -12,7 +12,7 @@ const data = portfolioData as PortfolioData;
 
 export default function Home() {
   const [lang, setLang] = useState<'ko' | 'en'>('ko');
-  const [timelineFilter, setTimelineFilter] = useState<TimelineType | 'all'>('all');
+  const [timelineFilter, setTimelineFilter] = useState<TimelineType | 'all'>('Dev'); // Default to Dev only
 
   const toggleLang = () => {
     setLang(prev => prev === 'ko' ? 'en' : 'ko');
@@ -78,15 +78,17 @@ export default function Home() {
           </h2>
           <div className={styles.filterButtons}>
             <button 
-              className={`${styles.filterBtn} ${styles.filterAll} ${timelineFilter === 'all' ? styles.active : ''}`}
+              className={`${styles.filterBtn} ${timelineFilter === 'all' ? styles.active : ''}`}
               onClick={() => setTimelineFilter('all')}
-              title={lang === 'ko' ? '전체' : 'All'}
-            />
+            >
+              {lang === 'ko' ? '전체' : 'All'}
+            </button>
             <button 
-              className={`${styles.filterBtn} ${styles.filterDev} ${timelineFilter === 'Dev' ? styles.active : ''}`}
+              className={`${styles.filterBtn} ${timelineFilter === 'Dev' ? styles.active : ''}`}
               onClick={() => setTimelineFilter('Dev')}
-              title={lang === 'ko' ? '개발만' : 'Dev Only'}
-            />
+            >
+              {lang === 'ko' ? '개발' : 'Dev'}
+            </button>
           </div>
         </div>
         <Timeline items={filteredTimeline} lang={lang} />

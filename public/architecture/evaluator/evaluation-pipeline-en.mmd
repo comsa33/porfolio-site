@@ -1,0 +1,86 @@
+sequenceDiagram
+    participant User as User/Agent
+    participant API as API Endpoint
+    participant Proc as Processor
+    participant Track as ProgressTracker
+    participant Eval as Evaluator
+    participant MinIO as MinIO Storage
+    participant DH as DataHub API
+    
+    Note over User,DH: Stage 1: QnA Dataset Generation
+    User->>+API: POST /generation/qna<br/>(collection_id, index_id, chat_logs_id)
+    API->>+Proc: create_task(QnAGenerator)
+    Proc->>Track: start("QnA Generation")
+    Track->>DH: 🚀 QnA Generation 0% started
+    
+    loop for each document
+        Proc->>Eval: generate_qna_for_passage()
+        Eval->>Eval: Generate Q&A via LLM
+        Proc->>Track: update(1)
+        alt 10% threshold reached
+            Track->>DH: ⏳ 10% ~ 100% progress update
+        end
+    end
+    
+    Proc->>MinIO: save(qna_dataset.csv)
+    MinIO-->>Proc: file_id
+    Proc->>Track: complete([file_id])
+    Track->>DH: ✅ QnA Generation completed
+    Proc-->>-API: {status: "completed", files: [qna_dataset.csv]}
+    API-->>-User: Response
+    
+    Note over User,DH: Stage 2: Recall Evaluation (Search Accuracy)
+    User->>+API: POST /evaluation/passage<br/>(qna_file, top_k, chat_logs_id)
+    API->>+Proc: create_task(RecallProcessor)
+    Proc->>MinIO: load(qna_dataset.csv)
+    MinIO-->>Proc: QnA data
+    
+    Proc->>Track: start("Recall Evaluation")
+    Track->>DH: 🚀 Recall Evaluation 0% started
+    
+    loop for each question
+        Proc->>Eval: evaluate_recall(question)
+        Eval->>DH: search_passages(query)
+        DH-->>Eval: retrieved_passages
+        Eval->>Eval: Check gold_passage rank
+        Proc->>Track: update(1)
+        alt 10% threshold reached
+            Track->>DH: ⏳ 10% ~ 100% progress update
+        end
+    end
+    
+    Proc->>MinIO: save(recall_results.csv)
+    MinIO-->>Proc: recall_file_id
+    Proc->>MinIO: save(ragas_dataset.jsonl)
+    MinIO-->>Proc: ragas_file_id
+    Proc->>Track: complete([recall_file_id, ragas_file_id])
+    Track->>DH: ✅ Recall Evaluation completed
+    Proc-->>-API: {status: "completed", files: [recall.csv, ragas.jsonl]}
+    API-->>-User: Response
+    
+    Note over User,DH: Stage 3: Ragas Evaluation (Generation Quality)
+    User->>+API: POST /evaluation/ragas<br/>(ragas_file, metrics, chat_logs_id)
+    API->>+Proc: create_task(RagasProcessor)
+    Proc->>MinIO: load(ragas_dataset.jsonl)
+    MinIO-->>Proc: Ragas data
+    
+    Proc->>Track: start("Ragas Evaluation")
+    Track->>DH: 🚀 Ragas Evaluation 0% started
+    
+    Proc->>Eval: evaluate_ragas_batch(data, metrics)
+    Eval->>Eval: Calculate Faithfulness, Answer Relevancy,<br/>Context Precision, Context Recall
+    Proc->>Track: update(batch_size)
+    Track->>DH: ⏳ progress update
+    
+    Proc->>MinIO: save(ragas_results.csv)
+    MinIO-->>Proc: result_file_id
+    Proc->>Track: complete([result_file_id])
+    Track->>DH: ✅ Ragas Evaluation completed
+    Proc-->>-API: {status: "completed", files: [ragas_results.csv]}
+    API-->>-User: Response
+    
+    Note over User,DH: Async Processing (when chat_logs_id provided)
+    rect rgb(255, 245, 200)
+        Note right of Proc: asyncio.create_task()<br/>runs in background
+        Note right of Track: Real-time progress<br/>reported to DataHub
+    end
