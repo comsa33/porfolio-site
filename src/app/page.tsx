@@ -186,9 +186,9 @@ export default function Home() {
             {lang === 'ko' ? 'Contact' : 'Contact'}
           </h3>
           <p className={styles.footerText}>
-            {lang === 'ko' 
-              ? 'AI/백엔드 개발 포지션에 관심이 있습니다. 함께 성장할 기회를 찾고 있습니다.'
-              : 'Interested in AI/Backend development positions. Looking for opportunities to grow together.'}
+            {lang === 'ko'
+              ? 'AI 관련 다양한 기회에 열려있습니다. 함께 문제를 해결하고 성장하고 싶습니다.'
+              : "Open to diverse AI opportunities. I want to solve problems and grow together."}
           </p>
           <div className={styles.contactLinks}>
             <a href={data.profile.github} target="_blank" rel="noopener noreferrer" className={styles.contactLink} aria-label="GitHub">
