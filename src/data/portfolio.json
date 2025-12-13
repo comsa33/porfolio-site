@@ -1,0 +1,586 @@
+{
+  "profile": {
+    "name": {
+      "ko": "이루오",
+      "en": "Ruo Lee"
+    },
+    "title": "AI Agent Platform Developer",
+    "email": "contact@example.com",
+    "github": "https://github.com/comsa33",
+    "linkedin": "https://www.linkedin.com/in/ruo-lee-79864522a",
+    "story": {
+      "ko": "디자이너로 시작해 34개국을 여행하며 얻은 통찰을, 이제 AI 기술로 구현합니다",
+      "en": "From Designer to World Traveler to AI Engineer — Building Intelligent Systems with Global Perspective"
+    },
+    "intro": {
+      "ko": "기술의 기본 원리로 문제의 본질을 해결하는, 3년차 AI 에이전트 플랫폼 개발자입니다. 디자인을 전공하고 세계를 여행하며 얻은 넓은 시야로, 사용자 경험과 기술의 조화를 추구합니다.",
+      "en": "I am a 3rd-year AI Agent Platform Developer who solves the essence of problems through fundamental technology principles. With a background in Visual Design and a global perspective from world travel, I strive for harmony between User Experience and Technology."
+    }
+  },
+  "timeline": [
+    {
+      "id": "edudesign",
+      "date": "2003.03 - 2012.08",
+      "title": {
+        "ko": "전남대학교",
+        "en": "Chonnam National Univ."
+      },
+      "role": {
+        "ko": "시각디자인 전공",
+        "en": "Visual Design Major"
+      },
+      "type": "Education",
+      "description": {
+        "ko": "시각디자인 전공. 디자인적 사고와 시각적 커뮤니케이션 능력 함양.",
+        "en": "Majored in Visual Design. Cultivated design thinking and visual communication skills."
+      }
+    },
+    {
+      "id": "design-biennale",
+      "date": "2009.09",
+      "title": {
+        "ko": "광주디자인비엔날레",
+        "en": "Gwangju Design Biennale"
+      },
+      "role": {
+        "ko": "작품 출품",
+        "en": "Exhibitor"
+      },
+      "type": "Design",
+      "description": {
+        "ko": "광주디자인비엔날레에 작품 2점 출품.",
+        "en": "Exhibited 2 works at Gwangju Design Biennale."
+      }
+    },
+    {
+      "id": "career-eunsik",
+      "date": "2011.05 - 2012.05",
+      "title": {
+        "ko": "이은식어학원",
+        "en": "Eunsik Language Institute"
+      },
+      "role": {
+        "ko": "토익강사 (정규직)",
+        "en": "TOEIC Instructor"
+      },
+      "type": "Career",
+      "description": {
+        "ko": "정규직 토익 강사로 재직하며 교육 경력 시작.",
+        "en": "Started teaching career as a full-time TOEIC instructor."
+      }
+    },
+    {
+      "id": "career-sungsan",
+      "date": "2012.10 - 2012.12",
+      "title": {
+        "ko": "장성성산초등학교",
+        "en": "Sungsan Elementary School"
+      },
+      "role": {
+        "ko": "영어회화 강사 (계약직)",
+        "en": "English Instructor"
+      },
+      "type": "Career",
+      "description": {
+        "ko": "초등학교 영어회화 강사로 어린 학생들 교육.",
+        "en": "Taught English conversation to elementary school students."
+      }
+    },
+    {
+      "id": "career-segye",
+      "date": "2013.03 - 2014.10",
+      "title": {
+        "ko": "세계외국어학원",
+        "en": "Segye Language Institute"
+      },
+      "role": {
+        "ko": "토익강사 (계약직)",
+        "en": "TOEIC Instructor"
+      },
+      "type": "Career",
+      "description": {
+        "ko": "토익 전문 강사로 계약직 재직.",
+        "en": "Worked as a contract TOEIC instructor."
+      }
+    },
+    {
+      "id": "career-gopa-director",
+      "date": "2014.11 - 2016.06",
+      "title": {
+        "ko": "고파토익어학원",
+        "en": "Gopa TOEIC Institute"
+      },
+      "role": {
+        "ko": "원장 (설립/운영)",
+        "en": "Director & Founder"
+      },
+      "type": "Career",
+      "description": {
+        "ko": "어학원 설립 및 운영. 강의와 함께 경영 업무 수행.",
+        "en": "Founded and operated language institute. Managed both teaching and business operations."
+      }
+    },
+    {
+      "id": "world-travel",
+      "date": "2016.07 - 2017.07",
+      "title": {
+        "ko": "세계일주",
+        "en": "World Travel"
+      },
+      "role": {
+        "ko": "배낭여행 (34개국)",
+        "en": "Backpacker (34 countries)"
+      },
+      "type": "Travel",
+      "description": {
+        "ko": "34개국 배낭여행. 다양한 문화 체험 및 글로벌 마인드셋 함양.",
+        "en": "Backpacked through 34 countries. Experienced diverse cultures and cultivated a global mindset."
+      }
+    },
+    {
+      "id": "career-nambu",
+      "date": "2017.08 - 2017.10",
+      "title": {
+        "ko": "남부대학교",
+        "en": "Nambu University"
+      },
+      "role": {
+        "ko": "토익캠프 강의 (계약직)",
+        "en": "TOEIC Camp Instructor"
+      },
+      "type": "Career",
+      "description": {
+        "ko": "대학교 토익캠프 강의 담당.",
+        "en": "Led TOEIC camp lectures at Nambu University."
+      }
+    },
+    {
+      "id": "career-toeicship-director",
+      "date": "2017.10 - 2020.08",
+      "title": {
+        "ko": "토익쉽어학원",
+        "en": "TOEIC Ship Institute"
+      },
+      "role": {
+        "ko": "원장 (설립/운영)",
+        "en": "Director & Founder"
+      },
+      "type": "Career",
+      "description": {
+        "ko": "어학원 설립 및 운영. 최종 교육 경력 단계.",
+        "en": "Founded and operated TOEIC Ship language institute. Final stage of teaching career."
+      }
+    },
+    {
+      "id": "edu-kcyber",
+      "date": "2020.03 - 2023.08",
+      "title": {
+        "ko": "고려사이버대학교",
+        "en": "Korea Cyber University"
+      },
+      "role": {
+        "ko": "인공지능 전공 (학사)",
+        "en": "AI Major (Bachelor)"
+      },
+      "type": "Education",
+      "description": {
+        "ko": "인공지능 학사 과정. 학점 4.3/4.5. AI 기초 및 응용 학습.",
+        "en": "Bachelor's in Artificial Intelligence. GPA 4.3/4.5. Studied AI fundamentals and applications."
+      }
+    },
+    {
+      "id": "dev-gravylab",
+      "date": "2022.05 - 2023.06",
+      "title": {
+        "ko": "그레이비랩",
+        "en": "GravyLab"
+      },
+      "role": {
+        "ko": "데이터엔지니어 (선임연구원)",
+        "en": "Data Engineer"
+      },
+      "type": "Dev",
+      "description": {
+        "ko": "구직자-기업 매칭 ML 모델 개발 및 특허 등록. 데이터 파이프라인 구축 및 대규모 웹크롤러 개발.",
+        "en": "Developed job seeker-company matching ML model (patent registered). Built data pipelines and large-scale web crawlers."
+      }
+    },
+    {
+      "id": "dev-illunex",
+      "date": "2023.11 - 2024.07",
+      "title": {
+        "ko": "일루넥스",
+        "en": "Illunex"
+      },
+      "role": {
+        "ko": "데이터엔지니어 (AI 팀)",
+        "en": "Data Engineer"
+      },
+      "type": "Dev",
+      "description": {
+        "ko": "특허/뉴스 챗봇을 위한 RAG 시스템 개발. ElasticSearch 기반 검색 Retriever 서버 및 ETL 파이프라인 구축.",
+        "en": "Developed RAG system for patent/news chatbot. Built ElasticSearch-based Retriever server and ETL pipelines."
+      }
+    },
+    {
+      "id": "dev-posicube",
+      "date": "2024.08 - Current",
+      "title": {
+        "ko": "포지큐브",
+        "en": "Posicube"
+      },
+      "role": {
+        "ko": "AI Agent Platform Developer",
+        "en": "AI Agent Platform Developer"
+      },
+      "type": "Dev",
+      "description": {
+        "ko": "AI 에이전트 플랫폼 개발 및 RAG 시스템 구축. Python 기반 마이크로서비스 아키텍처 설계 및 구현.",
+        "en": "Developing AI Agent Platforms, building RAG systems, and designing Python-based microservice architectures."
+      }
+    },
+    {
+      "id": "edu-aSST",
+      "date": "2024.09 - 2025.08",
+      "title": {
+        "ko": "서울과학종합대학원",
+        "en": "aSSIST"
+      },
+      "role": {
+        "ko": "AI 빅데이터 (석사)",
+        "en": "AI Big Data (Master)"
+      },
+      "type": "Education",
+      "description": {
+        "ko": "AI 빅데이터 석사 과정. 학점 4.23/4.3. 석사논문: 생성형 AI 기반 시계열 예측 자동화 연구.",
+        "en": "Master's in AI Big Data. GPA 4.23/4.3. Thesis: Generative AI-based Time Series Forecasting Automation."
+      }
+    },
+    {
+      "id": "edu-sdg",
+      "date": "2024.09 - 2025.08",
+      "title": {
+        "ko": "SDG Management School",
+        "en": "SDG Management School"
+      },
+      "role": {
+        "ko": "Executive MBA (석사)",
+        "en": "Executive MBA (Master)"
+      },
+      "type": "Education",
+      "description": {
+        "ko": "유럽 경영대학원 Executive MBA 과정.",
+        "en": "Executive Master of Business Administration program in Europe."
+      }
+    }
+  ],
+  "projects": [
+    {
+      "id": "py-runner",
+      "title": "PyRunner",
+      "shortDescription": {
+        "ko": "분산형 Python 샌드박스 & 동적 에이전트 런타임",
+        "en": "Distributed Python Sandbox & Dynamic Agent Runtime"
+      },
+      "fullDescription": {
+        "ko": "Multi-Pod 환경에서 AI 에이전트를 동적으로 배포하고 실행하는 고가용성 플랫폼입니다. Redis Pub/Sub 기반 분산 라우팅과 FastAPI Sub-app 동적 로딩을 통해 Zero-downtime 배포를 실현했습니다.",
+        "en": "High-availability platform for dynamically deploying and executing AI agents in multi-pod environments. Achieved zero-downtime deployment through Redis Pub/Sub distributed routing and FastAPI sub-app dynamic loading."
+      },
+      "techStack": ["Python 3.11", "FastAPI", "Redis Pub/Sub", "Docker", "SSE", "Multiprocessing"],
+      "keyAchievements": [
+        {
+          "ko": "Redis Pub/Sub 이벤트 버스로 Multi-Pod 실시간 배포 동기화",
+          "en": "Real-time deployment sync across multi-pods via Redis Pub/Sub event bus"
+        },
+        {
+          "ko": "Distributed Lock으로 Race Condition 해결 (배포 실패율 0% 달성)",
+          "en": "Resolved race conditions with distributed locks (achieved 0% deployment failure)"
+        },
+        {
+          "ko": "FastAPI Sub-app 동적 로딩으로 Zero-downtime 배포 구현",
+          "en": "Implemented zero-downtime deployment with FastAPI sub-app dynamic loading"
+        },
+        {
+          "ko": "SSE 스트리밍으로 LLM 토큰 실시간 중계 (ChatGPT 스타일)",
+          "en": "Real-time LLM token streaming via SSE (ChatGPT-style)"
+        },
+        {
+          "ko": "멀티프로세스 아키텍처로 Agent/Sandbox/Dev 서버 독립성 보장",
+          "en": "Guaranteed independence of Agent/Sandbox/Dev servers with multiprocess architecture"
+        }
+      ],
+      "features": [
+        "Dynamic Agent Runtime",
+        "Redis-based Distributed Routing",
+        "Zero-downtime Deployment",
+        "SSE Streaming Pipeline",
+        "Secure Sandbox Isolation"
+      ],
+      "repoPath": "py-runner",
+      "company": {
+        "ko": "(주)포지큐브",
+        "en": "PosiQube Inc."
+      },
+      "period": {
+        "ko": "2025.01 ~ 현재",
+        "en": "2025.01 ~ Present"
+      },
+      "detail": {
+        "problemSolvingCases": [
+          {
+            "id": "async-migration",
+            "title": {
+              "ko": "동시성 프로그래밍: 동기에서 비동기로의 대전환",
+              "en": "Concurrency Programming: Async/Await Migration"
+            },
+            "category": {
+              "ko": "동시성",
+              "en": "Concurrency"
+            },
+            "icon": "⚡",
+            "problem": {
+              "ko": "**이슈**: Redis 클라이언트가 동기 방식으로 작동하여 멀티팟 환경에서 블로킹 I/O 발생. 한 요청이 Redis 응답을 대기하는 동안 다른 모든 요청이 대기 상태로 전환되어 응답 시간이 급격히 증가하고 CPU가 낭비되는 문제.",
+              "en": "**Issue**: Synchronous Redis client caused blocking I/O in multi-pod environment. While one request waited for Redis response, all other requests were blocked, causing response time spikes and CPU waste."
+            },
+            "solution": {
+              "ko": "**해결**: `redis-py` → `aioredis`로 전면 마이그레이션하여 모든 Redis 작업을 `async/await` 패턴으로 전환. Event Loop 기반 아키텍처를 도입해 I/O 대기 중에도 다른 요청을 처리할 수 있도록 개선. Background Log Worker를 비동기로 구현하고, Lock Manager에 Context Manager 패턴을 적용해 자동 해제 보장.",
+              "en": "**Solution**: Migrated from `redis-py` to `aioredis`, converting all Redis operations to `async/await` pattern. Introduced event loop-based architecture to handle other requests during I/O waiting. Implemented asynchronous Background Log Worker and applied Context Manager pattern to Lock Manager for automatic release."
+            },
+            "technicalDetails": {
+              "ko": "```python\n# Before (동기)\ndef deploy_agent(agent_id):\n    lock = redis.get(f\"lock:{agent_id}\")  # 블로킹 I/O\n    result = redis.set(f\"deployed:{agent_id}\", \"true\")\n    return result\n\n# After (비동기)\nasync def deploy_agent(agent_id):\n    lock = await redis.get(f\"lock:{agent_id}\")  # Non-blocking\n    # await 중에 다른 코루틴 실행 가능\n    result = await redis.set(f\"deployed:{agent_id}\", \"true\")\n    return result\n```\n\n**핵심 변경사항**:\n- 13개 파일 수정, +704줄 / -338줄\n- RedisClient 전면 리팩토링\n- Event Loop 기반 아키텍처 구축\n- Distributed Lock을 Non-blocking으로 전환",
+              "en": "```python\n# Before (sync)\ndef deploy_agent(agent_id):\n    lock = redis.get(f\"lock:{agent_id}\")  # Blocking I/O\n    result = redis.set(f\"deployed:{agent_id}\", \"true\")\n    return result\n\n# After (async)\nasync def deploy_agent(agent_id):\n    lock = await redis.get(f\"lock:{agent_id}\")  # Non-blocking\n    # Other coroutines can run during await\n    result = await redis.set(f\"deployed:{agent_id}\", \"true\")\n    return result\n```\n\n**Key Changes**:\n- 13 files modified, +704 / -338 lines\n- Complete RedisClient refactoring\n- Event loop-based architecture\n- Distributed Lock converted to non-blocking"
+            },
+            "csFoundations": ["Async/Await", "Event Loop", "Non-blocking I/O", "Cooperative Multitasking", "Concurrency vs Parallelism"],
+            "impact": {
+              "ko": "**성과**: 멀티팟 환경에서 응답 시간 **40% 감소**. CPU 활용률 극대화로 동시 처리 용량 대폭 증가.",
+              "en": "**Impact**: **40% reduction** in response time in multi-pod environment. Significantly increased concurrent processing capacity through maximized CPU utilization."
+            },
+            "commits": ["4b7a8aa"]
+          },
+          {
+            "id": "race-condition",
+            "title": {
+              "ko": "분산 시스템: Race Condition과 데이터 일관성",
+              "en": "Distributed System: Race Condition Resolution"
+            },
+            "category": {
+              "ko": "분산시스템",
+              "en": "Distributed System"
+            },
+            "icon": "🔒",
+            "problem": {
+              "ko": "**이슈**: 여러 Pod가 동시에 Agent 버전 목록을 읽고 수정할 때 Race Condition 발생. Pod A가 v3를 추가하는 동안 Pod B가 같은 시점에 읽어서 v4만 추가하면, v3 배포가 손실되는 심각한 데이터 무결성 문제.",
+              "en": "**Issue**: Race condition occurred when multiple pods simultaneously read and modified agent version list. When Pod A added v3 while Pod B read at the same time and added only v4, v3 deployment was lost - a critical data integrity issue."
+            },
+            "solution": {
+              "ko": "**해결**: Redis 기반 Distributed Lock을 도입하여 임계 영역(Critical Section) 보호. Context Manager 패턴(`async with`)으로 Lock 획득/해제를 자동화하고, 타입 검증 로직을 추가하여 None/str/bytes 등 다양한 타입을 안전하게 처리. 반환 타입을 `set[str]`로 통일하여 일관성 확보.",
+              "en": "**Solution**: Introduced Redis-based Distributed Lock to protect critical sections. Automated lock acquisition/release with Context Manager pattern (`async with`), added type validation logic to safely handle various types (None/str/bytes). Ensured consistency by unifying return type to `set[str]`."
+            },
+            "technicalDetails": {
+              "ko": "```python\nasync def safe_deploy(agent_id, version):\n    async with RedisLock(f\"deploy:{agent_id}\") as lock:\n        # 임계 영역 시작 - 한 번에 하나의 Pod만 진입\n        versions = await redis.get(\"versions\")\n        \n        # 타입 검증 (None 체크 + 타입 변환)\n        if versions is None:\n            versions = set()\n        elif not isinstance(versions, set):\n            versions = set(versions) if versions else set()\n        \n        versions.add(version)\n        await redis.set(\"versions\", versions)\n        # 임계 영역 끝\n    \n    return versions\n```\n\n**핵심 개념**: Mutual Exclusion (상호 배제) + CAP 이론 적용",
+              "en": "```python\nasync def safe_deploy(agent_id, version):\n    async with RedisLock(f\"deploy:{agent_id}\") as lock:\n        # Critical section - only one pod can enter\n        versions = await redis.get(\"versions\")\n        \n        # Type validation (None check + type conversion)\n        if versions is None:\n            versions = set()\n        elif not isinstance(versions, set):\n            versions = set(versions) if versions else set()\n        \n        versions.add(version)\n        await redis.set(\"versions\", versions)\n        # End of critical section\n    \n    return versions\n```\n\n**Core Concepts**: Mutual Exclusion + CAP Theorem"
+            },
+            "csFoundations": ["Distributed Lock", "Race Condition", "Mutual Exclusion", "CAP Theorem", "Type Safety"],
+            "impact": {
+              "ko": "**성과**: 배포 실패율 **0%** 달성. 데이터 무결성 **100%** 보장. 멀티팟 환경에서 완벽한 일관성 확보.",
+              "en": "**Impact**: Achieved **0% deployment failure rate**. Guaranteed **100% data integrity**. Perfect consistency in multi-pod environment."
+            },
+            "commits": ["942909a", "76dfbc3"]
+          },
+          {
+            "id": "memory-optimization",
+            "title": {
+              "ko": "메모리 관리: SSE 스트리밍 최적화",
+              "en": "Memory Management: SSE Streaming Optimization"
+            },
+            "category": {
+              "ko": "메모리관리",
+              "en": "Memory Management"
+            },
+            "icon": "💾",
+            "problem": {
+              "ko": "**이슈**: LLM 토큰을 SSE로 스트리밍할 때 모든 토큰을 리스트에 누적 저장하여 메모리 누수 발생. 긴 응답(수천 토큰)의 경우 수 MB 메모리를 소비하고, 다수의 동시 요청 시 서버 메모리 고갈 위험.",
+              "en": "**Issue**: Memory leak occurred by accumulating all tokens in a list during LLM token streaming via SSE. Long responses (thousands of tokens) consumed several MB of memory, risking server memory exhaustion with multiple concurrent requests."
+            },
+            "solution": {
+              "ko": "**해결**: Generator 패턴으로 전환하여 Lazy Evaluation 구현. 각 토큰을 yield 즉시 GC(Garbage Collection) 대상으로 만들어 메모리에 누적되지 않도록 개선. 메타데이터는 처음 한 번만 전송하고, 1MB 버퍼 제한 및 Stale Request 자동 정리 로직 추가.",
+              "en": "**Solution**: Implemented Lazy Evaluation by switching to Generator pattern. Made each token eligible for GC (Garbage Collection) immediately after yield to prevent memory accumulation. Sent metadata only once at start, added 1MB buffer limit and automatic stale request cleanup logic."
+            },
+            "technicalDetails": {
+              "ko": "```python\n# Before (메모리 누수)\ndef stream_tokens():\n    all_tokens = []  # 모든 토큰을 메모리에 저장!\n    for token in llm.generate():\n        all_tokens.append(token)\n        yield token\n    # all_tokens는 끝까지 메모리에 남음\n\n# After (메모리 효율적)\nasync def stream_handler(request):\n    # 메타데이터는 한 번만\n    yield {\"type\": \"metadata\", \"headers\": {...}}\n    \n    # 토큰은 하나씩 yield (메모리 저장 안 함)\n    async for token in llm.agenerate():\n        yield {\"type\": \"data\", \"content\": token}\n        # token은 yield 후 GC 대상\n```\n\n**핵심**: Stream Processing (배치 처리 대신 실시간 처리)",
+              "en": "```python\n# Before (memory leak)\ndef stream_tokens():\n    all_tokens = []  # Stores all tokens in memory!\n    for token in llm.generate():\n        all_tokens.append(token)\n        yield token\n    # all_tokens remains in memory until end\n\n# After (memory efficient)\nasync def stream_handler(request):\n    # Metadata only once\n    yield {\"type\": \"metadata\", \"headers\": {...}}\n    \n    # Yield tokens one by one (no memory storage)\n    async for token in llm.agenerate():\n        yield {\"type\": \"data\", \"content\": token}\n        # token becomes GC target after yield\n```\n\n**Key**: Stream Processing (real-time instead of batch)"
+            },
+            "csFoundations": ["Generator Pattern", "Lazy Evaluation", "Garbage Collection", "Stream Processing", "Memory Management"],
+            "impact": {
+              "ko": "**성과**: 메모리 사용량 **70% 감소**. 장시간 스트리밍에서도 안정적인 메모리 유지. 동시 처리 가능 요청 수 대폭 증가.",
+              "en": "**Impact**: **70% reduction** in memory usage. Stable memory maintenance even during long-term streaming. Significantly increased concurrent request capacity."
+            },
+            "commits": ["346a8f5", "8c4aba6"]
+          },
+          {
+            "id": "data-normalization",
+            "title": {
+              "ko": "데이터 정규화: Agent ID 불일치 해결",
+              "en": "Data Normalization: Agent ID Unification"
+            },
+            "category": {
+              "ko": "데이터정규화",
+              "en": "Data Normalization"
+            },
+            "icon": "🎯",
+            "problem": {
+              "ko": "**이슈**: 시스템 전반에서 Agent ID 형식이 불일치('a123' vs '123')하여 같은 Agent를 다른 것으로 인식. Frontend, Backend, Redis Event에서 각각 다른 형식을 사용해 Join 연산 실패 및 중복 배포 발생.",
+              "en": "**Issue**: Inconsistent Agent ID format across system ('a123' vs '123') caused same agent to be recognized as different. Different formats used in Frontend, Backend, and Redis Events led to join operation failures and duplicate deployments."
+            },
+            "solution": {
+              "ko": "**해결**: 중앙화된 `AgentIdNormalizer` 클래스를 구현하여 단일 책임 원칙(SRP) 적용. API Entry Point에서 즉시 ID를 정규화하고, 내부 로직은 정규화된 ID만 사용하도록 통일. Integer → String 변환 및 공백 제거 로직 추가.",
+              "en": "**Solution**: Implemented centralized `AgentIdNormalizer` class applying Single Responsibility Principle (SRP). Normalized IDs immediately at API entry points, unified internal logic to use only normalized IDs. Added Integer → String conversion and whitespace trimming logic."
+            },
+            "technicalDetails": {
+              "ko": "```python\nclass AgentIdNormalizer:\n    @staticmethod\n    def normalize(agent_id: str) -> str:\n        \"\"\"모든 Agent ID를 일관된 형식으로 변환\"\"\"\n        if agent_id.startswith('a'):\n            return agent_id[1:]  # 'a123' → '123'\n        return agent_id\n    \n    @staticmethod\n    def with_prefix(agent_id: str) -> str:\n        \"\"\"필요시 접두사 추가\"\"\"\n        normalized = AgentIdNormalizer.normalize(agent_id)\n        return f\"a{normalized}\"\n\n# API 진입점에서 정규화\n@app.post(\"/deploy\")\nasync def deploy(agent_id: str):\n    normalized_id = AgentIdNormalizer.normalize(agent_id)\n    # 이후 모든 로직은 normalized_id 사용\n```\n\n**핵심 원칙**: Data Governance + Defensive Programming",
+              "en": "```python\nclass AgentIdNormalizer:\n    @staticmethod\n    def normalize(agent_id: str) -> str:\n        \"\"\"Convert all Agent IDs to consistent format\"\"\"\n        if agent_id.startswith('a'):\n            return agent_id[1:]  # 'a123' → '123'\n        return agent_id\n    \n    @staticmethod\n    def with_prefix(agent_id: str) -> str:\n        \"\"\"Add prefix if needed\"\"\"\n        normalized = AgentIdNormalizer.normalize(agent_id)\n        return f\"a{normalized}\"\n\n# Normalize at API entry point\n@app.post(\"/deploy\")\nasync def deploy(agent_id: str):\n    normalized_id = AgentIdNormalizer.normalize(agent_id)\n    # All subsequent logic uses normalized_id\n```\n\n**Core Principles**: Data Governance + Defensive Programming"
+            },
+            "csFoundations": ["Data Normalization", "Canonical Form", "Single Responsibility Principle", "Defensive Programming", "Input Validation"],
+            "impact": {
+              "ko": "**성과**: ID 관련 버그 **0건** 달성. 시스템 전반의 데이터 일관성 확보. 디버깅 시간 대폭 단축.",
+              "en": "**Impact**: Achieved **0 ID-related bugs**. Ensured data consistency across entire system. Significantly reduced debugging time."
+            },
+            "commits": ["5f21d96", "da0d614"]
+          }
+        ],
+        "architecture": [
+          {
+            "title": {
+              "ko": "PyRunner 시스템 아키텍처",
+              "en": "PyRunner System Architecture"
+            },
+            "description": {
+              "ko": "Multi-Process FastAPI 서버와 Redis 기반 분산 동기화 구조. 사용자 코드를 동적 Sub-App으로 로딩하여 독립성을 보장하며, Pub/Sub을 통해 무중단 배포를 실현합니다.",
+              "en": "Multi-process FastAPI server with Redis-based distributed synchronization. Dynamically loads user code as isolated Sub-Apps and enables zero-downtime deployment via Pub/Sub."
+            },
+            "mermaidFilePath": {
+              "ko": "/architecture/pyrunner/system-architecture.mmd",
+              "en": "/architecture/pyrunner/system-architecture-en.mmd"
+            }
+          },
+          {
+            "title": {
+              "ko": "Race Condition 해결 과정",
+              "en": "Race Condition Resolution"
+            },
+            "description": {
+              "ko": "파일 시스템 직접 감지 방식의 한계를 극복하기 위해 Redis Distributed Lock을 도입. 배포 실패율 0%를 달성했습니다.",
+              "en": "Overcame filesystem monitoring limitations by introducing Redis Distributed Lock, achieving 0% deployment failure rate."
+            },
+            "mermaidFilePath": {
+              "ko": "/architecture/pyrunner/race-condition-resolution.mmd",
+              "en": "/architecture/pyrunner/race-condition-resolution-en.mmd"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "evaluator",
+      "title": "Evaluator",
+      "shortDescription": {
+        "ko": "RAG 시스템 성능 평가 자동화 플랫폼",
+        "en": "Automated RAG System Performance Evaluation Platform"
+      },
+      "fullDescription": {
+        "ko": "LLM 기반 RAG 시스템의 정확도를 종합적으로 평가하는 자동화 플랫폼입니다. Recall/VecDash 메트릭을 활용하여 QnA 생성부터 검색 정확도, 생성 품질까지 E2E 평가 파이프라인을 구축했습니다.",
+        "en": "Comprehensive automated platform for evaluating LLM-based RAG system accuracy. Built an end-to-end evaluation pipeline from QnA generation to retrieval accuracy and generation quality using Recall/VecDash metrics."
+      },
+      "techStack": ["Python", "FastAPI", "OpenAI GPT-4o", "MinIO", "SSE", "Docker"],
+      "keyAchievements": [
+        {
+          "ko": "LLM 기반 평가 에이전트 (Intent Router + Request Builder)",
+          "en": "LLM-based evaluation agent (Intent Router + Request Builder)"
+        },
+        {
+          "ko": "Recall/VecDash 메트릭 기반 E2E 평가 시스템 (QnA 생성 → 검색 검증 → 품질 평가)",
+          "en": "E2E evaluation system based on Recall/VecDash metrics (QnA generation → retrieval validation → quality assessment)"
+        },
+        {
+          "ko": "Multi-LLM 평가 파이프라인 설계 (자연어 의도 기반 라우팅)",
+          "en": "Designed multi-LLM evaluation pipeline (natural language intent-based routing)"
+        },
+        {
+          "ko": "실시간 진행률 추적 및 에러 알림 시스템 구현",
+          "en": "Implemented real-time progress tracking and error notification system"
+        },
+        {
+          "ko": "평가 결과 Markdown 시각화 및 리포팅 자동화",
+          "en": "Automated evaluation result visualization and reporting in Markdown"
+        }
+      ],
+      "features": [
+        "Agentic RAG Evaluator",
+        "Custom Recall & VecDash Metrics",
+        "Automated QnA Generation",
+        "Real-time Progress Tracking",
+        "Markdown Result Visualization"
+      ],
+      "repoPath": "evaluator",
+      "company": {
+        "ko": "(주)포지큐브",
+        "en": "PosiQube Inc."
+      },
+      "period": {
+        "ko": "2025.01 ~ 현재",
+        "en": "2025.01 ~ Present"
+      }
+    },
+    {
+      "id": "py-editor",
+      "title": "PyEditor",
+      "shortDescription": {
+        "ko": "브라우저 기반 Python 통합 개발 환경",
+        "en": "Browser-based Python Integrated Development Environment"
+      },
+      "fullDescription": {
+        "ko": "Monaco Editor와 Python LSP를 연동한 VSCode 스타일 웹 IDE입니다. Custom Process Pool을 통해 멀티유저 환경에서도 안정적인 LSP 서비스를 제공하며, WebSocket 기반 저지연 통신으로 실시간 자동완성과 Go-to-Definition을 지원합니다.",
+        "en": "VSCode-style web IDE integrating Monaco Editor with Python LSP. Provides stable LSP service in multi-user environments through custom process pooling, and supports real-time auto-completion and go-to-definition via low-latency WebSocket communication."
+      },
+      "techStack": ["React (Vite)", "Monaco Editor", "Node.js", "Express", "WebSocket", "Python LSP", "Docker"],
+      "keyAchievements": [
+        {
+          "ko": "Custom Process Pool로 pylsp 효율적 관리 (멀티유저 메모리 최적화)",
+          "en": "Efficient pylsp management with custom process pool (multi-user memory optimization)"
+        },
+        {
+          "ko": "WebSocket 양방향 JSON-RPC 프록시 (Monaco ↔ Python LSP)",
+          "en": "Bi-directional WebSocket JSON-RPC proxy (Monaco ↔ Python LSP)"
+        },
+        {
+          "ko": "1MB 메시지 버퍼링 & Stale Request 자동 정리 (메모리 누수 방지)",
+          "en": "1MB message buffering & automatic stale request cleanup (memory leak prevention)"
+        },
+        {
+          "ko": "Context-Aware AI Copilot (코드 분석 + RAG 파이프라인)",
+          "en": "Context-aware AI Copilot (code analysis + RAG pipeline)"
+        },
+        {
+          "ko": "유휴 프로세스 자동 회수 & 좀비 프로세스 방지 로직",
+          "en": "Automatic idle process cleanup & zombie process prevention logic"
+        }
+      ],
+      "features": [
+        "Real-time LSP Integration",
+        "Multi-user Process Pooling",
+        "WebSocket JSON-RPC Proxy",
+        "Context-aware AI Copilot",
+        "Git Integration & Diff Viewer"
+      ],
+      "repoPath": "py-editor",
+      "company": {
+        "ko": "(주)포지큐브",
+        "en": "PosiQube Inc."
+      },
+      "period": {
+        "ko": "2024.08 ~ 현재",
+        "en": "2024.08 ~ Present"
+      }
+    }
+  ]
+}

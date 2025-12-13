@@ -1,0 +1,34 @@
+sequenceDiagram
+    participant P1 as Pod 1
+    participant P2 as Pod 2
+    participant Redis
+    participant FS as Shared Storage
+    
+    rect rgb(220, 38, 38, 0.1)
+        Note over P1,FS: ❌ Before: Race Condition
+        P1->>FS: Watchdog Start
+        P2->>FS: Watchdog Start
+        FS-->>P1: File Change Event
+        FS-->>P2: File Change Event
+        P1->>P1: Incomplete Read
+        P2->>P2: Incomplete Read
+        Note over P1,P2: ⚠️ Concurrent Access<br/>Deploy Failure
+    end
+    
+    rect rgb(34, 197, 94, 0.1)
+        Note over P1,Redis: ✅ After: Distributed Lock
+        P1->>Redis: Deploy Event Pub
+        Redis->>P1: Event Receive
+        Redis->>P2: Event Receive
+        P1->>Redis: LOCK Acquire Request
+        P2->>Redis: LOCK Acquire Request
+        Redis-->>P1: LOCK Acquired ✓
+        Redis-->>P2: Waiting...
+        P1->>FS: Complete Read
+        P1->>P1: Sub-App Loaded
+        P1->>Redis: LOCK Release
+        Redis-->>P2: LOCK Acquired ✓
+        P2->>FS: Complete Read
+        P2->>P2: Sub-App Loaded
+        Note over P1,P2: ✅ Atomic Deploy<br/>100% Success Rate
+    end

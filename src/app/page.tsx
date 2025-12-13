@@ -1,66 +1,138 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import { useState } from 'react';
+import styles from './page.module.css';
+import Timeline from '@/components/Timeline';
+import ProjectCard from '@/components/ProjectCard';
+import NeuralBackground from '@/components/NeuralBackground';
+import portfolioData from '@/data/portfolio.json';
+import { PortfolioData, TimelineType } from '@/types';
+
+const data = portfolioData as PortfolioData;
 
 export default function Home() {
+  const [lang, setLang] = useState<'ko' | 'en'>('ko');
+  const [timelineFilter, setTimelineFilter] = useState<TimelineType | 'all'>('all');
+
+  const toggleLang = () => {
+    setLang(prev => prev === 'ko' ? 'en' : 'ko');
+  };
+
+  // Dev-related education IDs (AI 관련 학력)
+  const devRelatedEducation = ['edu-kcyber', 'edu-aSST'];
+
+  const filteredTimeline = timelineFilter === 'all' 
+    ? data.timeline 
+    : data.timeline.filter(item => 
+        item.type === timelineFilter || 
+        (timelineFilter === 'Dev' && devRelatedEducation.includes(item.id))
+      );
+
+  // PyRunner as featured project
+  const featuredProject = data.projects.find(p => p.id === 'py-runner');
+  const otherProjects = data.projects.filter(p => p.id !== 'py-runner');
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className={styles.main}>
+      <nav className={styles.nav}>
+        <div className={styles.logo}>RUO.AI</div>
+        <button onClick={toggleLang} className={styles.langBtn}>
+          {lang.toUpperCase()}
+        </button>
+      </nav>
+
+      {/* Hero with Story */}
+      <div className={styles.hero}>
+        <NeuralBackground />
+        <div className={styles.heroContent}>
+          <p className={styles.story}>{data.profile.story[lang]}</p>
+          <h1 className={styles.title}>
+            {data.profile.name[lang]}
+          </h1>
+          <p className={styles.subtitle}>
+            {data.profile.title}
+          </p>
+          <p className={styles.description}>
+            {data.profile.intro[lang]}
           </p>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+      </div>
+
+      {/* Featured Project */}
+      {featuredProject && (
+        <section className={styles.featuredSection}>
+          <h2 className={styles.sectionTitle}>
+            {lang === 'ko' ? '주요 프로젝트' : 'Featured Project'}
+          </h2>
+          <div className={styles.featuredProject}>
+            <ProjectCard project={featuredProject} lang={lang} />
+          </div>
+        </section>
+      )}
+
+      {/* Timeline with Filter */}
+      <section className={styles.section}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>
+            {lang === 'ko' ? '경력' : 'Timeline'}
+          </h2>
+          <div className={styles.filterButtons}>
+            <button 
+              className={`${styles.filterBtn} ${styles.filterAll} ${timelineFilter === 'all' ? styles.active : ''}`}
+              onClick={() => setTimelineFilter('all')}
+              title={lang === 'ko' ? '전체' : 'All'}
             />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <button 
+              className={`${styles.filterBtn} ${styles.filterDev} ${timelineFilter === 'Dev' ? styles.active : ''}`}
+              onClick={() => setTimelineFilter('Dev')}
+              title={lang === 'ko' ? '개발만' : 'Dev Only'}
+            />
+          </div>
         </div>
-      </main>
-    </div>
+        <Timeline items={filteredTimeline} lang={lang} />
+      </section>
+
+      {/* Other Projects */}
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>
+          {lang === 'ko' ? '기타 프로젝트' : 'Other Projects'}
+        </h2>
+        <div className={styles.projectsGrid}>
+          {otherProjects.map((project) => (
+            <ProjectCard key={project.id} project={project} lang={lang} />
+          ))}
+        </div>
+      </section>
+
+      {/* Contact Footer */}
+      <footer className={styles.footer}>
+        <div className={styles.footerContent}>
+          <h3 className={styles.footerTitle}>
+            {lang === 'ko' ? '연락하기' : 'Get In Touch'}
+          </h3>
+          <p className={styles.footerText}>
+            {lang === 'ko' 
+              ? '함께 혁신적인 프로젝트를 만들어가실 분을 찾고 있습니다'
+              : 'Looking forward to building innovative projects together'}
+          </p>
+          <div className={styles.contactLinks}>
+            <a href={data.profile.github} target="_blank" rel="noopener noreferrer" className={styles.contactLink}>
+              GitHub
+            </a>
+            {data.profile.linkedin && (
+              <a href={data.profile.linkedin} target="_blank" rel="noopener noreferrer" className={styles.contactLink}>
+                LinkedIn
+              </a>
+            )}
+            <a href={`mailto:${data.profile.email}`} className={styles.contactLink}>
+              Email
+            </a>
+          </div>
+        </div>
+        <div className={styles.footerBottom}>
+          <p>© 2025 {data.profile.name[lang]}. All rights reserved.</p>
+        </div>
+      </footer>
+    </main>
   );
 }

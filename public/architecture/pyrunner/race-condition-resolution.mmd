@@ -1,0 +1,34 @@
+sequenceDiagram
+    participant P1 as Pod 1
+    participant P2 as Pod 2
+    participant Redis
+    participant FS as Shared Storage
+    
+    rect rgb(220, 38, 38, 0.1)
+        Note over P1,FS: ❌ Before: Race Condition 발생
+        P1->>FS: Watchdog 감지 시작
+        P2->>FS: Watchdog 감지 시작
+        FS-->>P1: 파일 변경 이벤트
+        FS-->>P2: 파일 변경 이벤트
+        P1->>P1: 파일 읽기 (불완전)
+        P2->>P2: 파일 읽기 (불완전)
+        Note over P1,P2: ⚠️ 동시 접근으로<br/>배포 누락/충돌 발생
+    end
+    
+    rect rgb(34, 197, 94, 0.1)
+        Note over P1,Redis: ✅ After: Distributed Lock 적용
+        P1->>Redis: 배포 이벤트 Pub
+        Redis->>P1: 이벤트 수신
+        Redis->>P2: 이벤트 수신
+        P1->>Redis: LOCK 획득 시도
+        P2->>Redis: LOCK 획득 시도
+        Redis-->>P1: LOCK 획득 성공 ✓
+        Redis-->>P2: LOCK 대기...
+        P1->>FS: 완전한 파일 읽기
+        P1->>P1: Sub-App 로딩 완료
+        P1->>Redis: LOCK 해제
+        Redis-->>P2: LOCK 획득 성공 ✓
+        P2->>FS: 완전한 파일 읽기
+        P2->>P2: Sub-App 로딩 완료
+        Note over P1,P2: ✅ 원자적 배포로<br/>100% 성공률 달성
+    end

@@ -1,0 +1,42 @@
+flowchart TB
+    subgraph Client[클라이언트 레이어]
+        IDE[웹 IDE<br/>Monaco Editor]
+        UI[어드민 UI]
+    end
+    
+    subgraph API[FastAPI Multi-Process Server]
+        direction TB
+        Agent[Agent Server<br/>Main Process]
+        Dev[Dev Server<br/>Sub Process]
+        Sandbox[Sandbox Server<br/>Sub Process]
+    end
+    
+    subgraph Redis[Redis Cluster]
+        PubSub[Pub/Sub Channel]
+        Lock[Distributed Lock]
+        Cache[Session Cache]
+    end
+    
+    subgraph Execution[실행 환경]
+        SubApp[동적 Sub-App<br/>User Code]
+        Runtime[Python Runtime]
+    end
+    
+    IDE -->|1. 코드 작성/배포| API
+    UI -->|2. 실행 요청| API
+    
+    Agent -->|3. 배포 이벤트 발행| PubSub
+    PubSub -->|4. 이벤트 수신| Dev
+    PubSub -->|4. 이벤트 수신| Sandbox
+    
+    Dev -->|5. Lock 획득| Lock
+    Dev -->|6. 동적 로딩| SubApp
+    
+    SubApp -->|7. HTTP API 생성| Runtime
+    Agent -->|8. SSE 스트리밍| UI
+    
+    style Agent fill:#4f46e5,stroke:#818cf8,color:#fff
+    style Dev fill:#0891b2,stroke:#06b6d4,color:#fff
+    style Sandbox fill:#0891b2,stroke:#06b6d4,color:#fff
+    style PubSub fill:#dc2626,stroke:#ef4444,color:#fff
+    style Lock fill:#dc2626,stroke:#ef4444,color:#fff

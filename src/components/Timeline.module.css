@@ -1,0 +1,528 @@
+.container {
+  width: 100%;
+  padding: 6rem 0 8rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.scrollContainer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 2rem 60px;
+  min-height: auto;
+  position: relative;
+  overflow: hidden;
+}
+
+/* The ACTUAL timeline - horizontal line below cards */
+.line {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: calc(var(--container-width) - 4rem);
+  height: 4px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    var(--accent-purple) 20%, 
+    var(--accent-cyan) 80%, 
+    transparent 100%
+  );
+  z-index: 0;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+}
+
+.item {
+  position: relative;
+  z-index: 1;
+  width: 70px;
+  height: 200px;
+  will-change: transform, width, height;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+              width 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+              height 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-bottom: 0;
+}
+
+/* Dev careers are taller and more prominent */
+.item[data-type="Dev"] {
+  height: 280px;
+}
+
+.item[data-type="Dev"]:hover {
+  height: 400px;
+}
+
+/* On hover, expand to show full details */
+.item:hover {
+  width: 290px;
+  height: 340px;
+  z-index: 10;
+}
+
+.itemContent {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(17, 17, 17, 0.95) 0%, rgba(17, 17, 17, 0.85) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  will-change: padding, border-color, box-shadow;
+  transition: padding 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+              border-color 0.35s ease,
+              box-shadow 0.35s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Category-specific styling */
+.item[data-type="Dev"] .itemContent {
+  background: linear-gradient(180deg, rgba(0, 240, 255, 0.15) 0%, rgba(17, 17, 17, 0.95) 100%);
+  border-color: var(--accent-cyan);
+}
+
+.item[data-type="Education"] .itemContent {
+  background: linear-gradient(180deg, rgba(112, 0, 255, 0.1) 0%, rgba(17, 17, 17, 0.85) 100%);
+}
+
+.item[data-type="Design"] .itemContent {
+  background: linear-gradient(180deg, rgba(255, 0, 128, 0.1) 0%, rgba(17, 17, 17, 0.85) 100%);
+}
+
+.item[data-type="Travel"] .itemContent {
+  background: linear-gradient(180deg, rgba(255, 200, 0, 0.1) 0%, rgba(17, 17, 17, 0.85) 100%);
+}
+
+.item[data-type="Career"] .itemContent {
+  background: linear-gradient(180deg, rgba(100, 100, 100, 0.1) 0%, rgba(17, 17, 17, 0.85) 100%);
+  opacity: 0.7;
+}
+
+.item:hover .itemContent {
+  box-shadow: 0 10px 40px rgba(0, 240, 255, 0.3);
+  padding: 1.5rem;
+}
+
+.item[data-type="Dev"]:hover .itemContent {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 20px 60px rgba(0, 240, 255, 0.5);
+}
+
+.item[data-type="Career"]:hover .itemContent {
+  opacity: 1;
+}
+
+/* Category Icon */
+.categoryIcon {
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 20px;
+  opacity: 0.6;
+  transition: all 0.3s ease;
+}
+
+.item:hover .categoryIcon {
+  top: 0.75rem;
+  width: 24px;
+  height: 24px;
+  opacity: 1;
+}
+
+/* Dev icon - circuit chip */
+.iconDev::before,
+.iconDev::after {
+  content: '';
+  position: absolute;
+  background: var(--accent-cyan);
+}
+
+.iconDev::before {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--accent-cyan);
+  border-radius: 2px;
+  top: 3px;
+  left: 3px;
+}
+
+.iconDev::after {
+  width: 2px;
+  height: 6px;
+  top: 7px;
+  left: 0;
+  box-shadow: 
+    18px 0 0 var(--accent-cyan),
+    0 6px 0 var(--accent-cyan),
+    18px 6px 0 var(--accent-cyan);
+}
+
+/* Education icon - book */
+.iconEducation::before,
+.iconEducation::after {
+  content: '';
+  position: absolute;
+  background: var(--accent-purple);
+}
+
+.iconEducation::before {
+  width: 16px;
+  height: 14px;
+  border: 2px solid var(--accent-purple);
+  border-radius: 1px;
+  top: 3px;
+  left: 2px;
+}
+
+.iconEducation::after {
+  width: 2px;
+  height: 10px;
+  top: 5px;
+  left: 9px;
+}
+
+/* Design icon - palette */
+.iconDesign::before,
+.iconDesign::after {
+  content: '';
+  position: absolute;
+}
+
+.iconDesign::before {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--accent-pink);
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+}
+
+.iconDesign::after {
+  width: 6px;
+  height: 6px;
+  background: var(--accent-pink);
+  border-radius: 50%;
+  top: 7px;
+  left: 7px;
+}
+
+/* Travel icon - location pin */
+.iconTravel::before,
+.iconTravel::after {
+  content: '';
+  position: absolute;
+}
+
+.iconTravel::before {
+  width: 12px;
+  height: 12px;
+  border: 2px solid #FFC800;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  top: 2px;
+  left: 4px;
+}
+
+.iconTravel::after {
+  width: 4px;
+  height: 4px;
+  background: #FFC800;
+  border-radius: 50%;
+  top: 5px;
+  left: 8px;
+}
+
+/* Career icon - briefcase */
+.iconCareer::before,
+.iconCareer::after {
+  content: '';
+  position: absolute;
+  background: #999;
+}
+
+.iconCareer::before {
+  width: 14px;
+  height: 10px;
+  border: 2px solid #999;
+  border-radius: 2px;
+  top: 6px;
+  left: 3px;
+}
+
+.iconCareer::after {
+  width: 6px;
+  height: 3px;
+  border-radius: 2px 2px 0 0;
+  top: 3px;
+  left: 7px;
+}
+
+/* Connector line from card bottom to timeline */
+.connector {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 30px;
+  background: var(--border-color);
+  transition: all 0.35s ease;
+  z-index: 1;
+}
+
+.item[data-type="Dev"] .connector {
+  background: var(--accent-cyan);
+  box-shadow: 0 0 8px var(--accent-cyan);
+}
+
+.item[data-type="Education"] .connector {
+  background: var(--accent-purple);
+}
+
+.item[data-type="Design"] .connector {
+  background: var(--accent-pink);
+}
+
+.item[data-type="Travel"] .connector {
+  background: #FFC800;
+}
+
+.item[data-type="Career"] .connector {
+  background: #666;
+}
+
+.item:hover .connector {
+  width: 4px;
+  box-shadow: 0 0 12px currentColor;
+}
+
+/* Text elements */
+.title,
+.role,
+.description {
+  transition: all 0.3s ease;
+}
+
+.title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  margin: 0 auto;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 100px;
+}
+
+.item[data-type="Dev"] .title {
+  font-size: 0.85rem;
+  color: var(--accent-cyan);
+}
+
+.item:hover .title {
+  writing-mode: horizontal-tb;
+  text-orientation: initial;
+  font-size: 1.35rem;
+  max-height: none;
+  margin: 0 0 0.5rem 0;
+}
+
+.item[data-type="Dev"]:hover .title {
+  font-size: 1.5rem;
+}
+
+.role {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  margin: 0 auto;
+  opacity: 0.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 60px;
+}
+
+.item:hover .role {
+  writing-mode: horizontal-tb;
+  text-orientation: initial;
+  font-size: 0.95rem;
+  opacity: 1;
+  max-height: none;
+  margin: 0 0 1rem 0;
+}
+
+.description {
+  opacity: 0;
+  height: 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  overflow: hidden;
+}
+
+.item:hover .description {
+  opacity: 1;
+  height: auto;
+  margin-top: auto;
+}
+
+/* Timeline marker - sits ON the timeline */
+.typeIndicator {
+  position: absolute;
+  bottom: -34px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.indicatorDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-secondary);
+  border: 2px solid var(--bg-primary);
+  transition: all 0.3s ease;
+}
+
+/* Color-coded indicators by type */
+.item[data-type="Dev"] .indicatorDot {
+  background: var(--accent-cyan);
+  box-shadow: 0 0 15px var(--accent-cyan);
+}
+
+.item[data-type="Education"] .indicatorDot {
+  background: var(--accent-purple);
+}
+
+.item[data-type="Design"] .indicatorDot {
+  background: var(--accent-pink);
+}
+
+.item[data-type="Travel"] .indicatorDot {
+  background: #FFC800;
+}
+
+.item[data-type="Career"] .indicatorDot {
+  background: #666;
+}
+
+.item:hover .indicatorDot {
+  width: 14px;
+  height: 14px;
+  border-width: 3px;
+}
+
+.item[data-type="Dev"]:hover .indicatorDot {
+  box-shadow: 0 0 25px var(--accent-cyan);
+  width: 16px;
+  height: 16px;
+}
+
+/* Date label BELOW the timeline */
+.dateLabel {
+  position: absolute;
+  bottom: -52px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-15deg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+  text-align: center;
+  min-width: 80px;
+}
+
+.item:hover .dateLabel {
+  opacity: 1;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transform: translateX(-50%) rotate(0deg);
+  bottom: -55px;
+}
+
+.item[data-type="Dev"] .dateLabel {
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+/* Mobile: stack vertically */
+@media (max-width: 768px) {
+  .scrollContainer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.5rem;
+    min-height: auto;
+    padding: 2rem;
+  }
+  
+  .line {
+    display: none;
+  }
+  
+  .item,
+  .item[data-type="Dev"] {
+    width: 100%;
+    height: auto;
+    min-height: 120px;
+  }
+  
+  .item:hover,
+  .item[data-type="Dev"]:hover {
+    width: 100%;
+    height: auto;
+  }
+  
+  .itemContent .date,
+  .itemContent .title,
+  .itemContent .role {
+    writing-mode: horizontal-tb;
+    text-orientation: initial;
+    margin: 0 0 0.5rem 0;
+  }
+  
+  .date {
+    font-size: 0.85rem;
+  }
+  
+  .title {
+    font-size: 1.2rem;
+    max-height: none;
+  }
+  
+  .role {
+    font-size: 0.95rem;
+    opacity: 1;
+    max-height: none;
+  }
+  
+  .description {
+    opacity: 1;
+    height: auto;
+  }
+  
+  .typeIndicator,
+  .connector,
+  .categoryIcon,
+  .dateLabel {
+    display: none;
+  }
+}

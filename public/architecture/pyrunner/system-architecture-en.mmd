@@ -1,0 +1,42 @@
+flowchart TB
+    subgraph Client[Client Layer]
+        IDE[Web IDE<br/>Monaco Editor]
+        UI[Admin UI]
+    end
+    
+    subgraph API[FastAPI Multi-Process Server]
+        direction TB
+        Agent[Agent Server<br/>Main Process]
+        Dev[Dev Server<br/>Sub Process]
+        Sandbox[Sandbox Server<br/>Sub Process]
+    end
+    
+    subgraph Redis[Redis Cluster]
+        PubSub[Pub/Sub Channel]
+        Lock[Distributed Lock]
+        Cache[Session Cache]
+    end
+    
+    subgraph Execution[Execution Environment]
+        SubApp[Dynamic Sub-App<br/>User Code]
+        Runtime[Python Runtime]
+    end
+    
+    IDE -->|1. Code Write/Deploy| API
+    UI -->|2. Execution Request| API
+    
+    Agent -->|3. Deploy Event Publish| PubSub
+    PubSub -->|4. Event Receive| Dev
+    PubSub -->|4. Event Receive| Sandbox
+    
+    Dev -->|5. Lock Acquire| Lock
+    Dev -->|6. Dynamic Loading| SubApp
+    
+    SubApp -->|7. HTTP API Creation| Runtime
+    Agent -->|8. SSE Streaming| UI
+    
+    style Agent fill:#4f46e5,stroke:#818cf8,color:#fff
+    style Dev fill:#0891b2,stroke:#06b6d4,color:#fff
+    style Sandbox fill:#0891b2,stroke:#06b6d4,color:#fff
+    style PubSub fill:#dc2626,stroke:#ef4444,color:#fff
+    style Lock fill:#dc2626,stroke:#ef4444,color:#fff

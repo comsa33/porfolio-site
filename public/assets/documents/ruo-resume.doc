@@ -1,0 +1,720 @@
+<html>
+<head>
+    <base href="https://www.saramin.co.kr">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="robots" content="noindex,nofollow">
+    <title>이력서 보기</title>
+    <style type="text/css">
+        /* reset css */
+        html {
+            color: #000;
+            background: #fff
+        }
+
+        body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, blockquote, button {
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            width: 100%;
+            min-width: 1260px;
+            font-size: 13px;
+            color: #444;
+            font-family: "Malgun Gothic", dotum, gulim, sans-serif
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-size: 100%;
+            font-weight: normal;
+            margin: 0;
+            padding: 0
+        }
+
+        ol, ul, li {
+            list-style: none
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        th, td {
+            padding: 0;
+            margin: 0;
+        }
+
+        address, caption, cite, code, dfn, em, strong, th, var {
+            font-style: inherit;
+            font-weight: inherit
+        }
+
+        p {
+            margin: 0
+        }
+
+        strong {
+            font-weight: bold
+        }
+
+        caption, legend, .hidden, .blind {
+            overflow: hidden;
+            position: absolute;
+            top: 0;
+            left: -1000%;
+            z-index: -1;
+            width: 1px;
+            height: 1px;
+            font-size: 0;
+            line-height: 0
+        }
+
+        .print_wrap div, p, ul, td, input, a, span, em {
+            font-style: normal;
+            font-family: "Malgun Gothic", dotum, gulim, sans-serif;
+            word-break: break-all;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+<div class="print_wrap">
+    <table style="width:600px;">
+    <tr>
+        <td>
+            <table style="width:600px;">
+                <tr>
+                    <td style="width:500px">
+                        <table>
+                            <tr>
+                                <td style="color:#292e41;font-size:16px;font-weight:bold;word-break: break-all">
+                                    이루오                                </td>
+                                <td style="padding-left:8px;">
+                                    <span style="background:#f4f6fa;color:#475067;font-size:10px;font-weight:bold;word-break: break-all">
+                                        경력                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td rowspan="3" style="width:53px;vertical-align:top;">
+						<span style="display:inline-block;width:53px;border:1px solid #eaedf4;overflow:hidden;">
+							<img width="53" height="75" alt="" src="https://www.saramin.co.kr/zf_user/persons/picture?idx=17524236|0d157544a39f3aae230f1a8a45a1130430e7d6e3c6aae5d5b69298b170527fa0" border="0" />						</span>
+                    </td>
+                </tr>
+                                    <tr>
+                        <td style="padding-top:8px;">
+                            <p style="color:#67738e;font-size:10px;line-height:24px;word-break: break-all">
+                                남, 1985 (40세)                            </p>
+                        </td>
+                    </tr>
+                                    <tr>
+                    <td style="padding-top:8px;">
+                        <table style="width:500px;color:#292e41;font-size:12px;word-break: break-all">
+                            <tr>
+                                <td style="width:166px;">com*****@gmail.com</td>
+                                <td style="width:166px;">010-****-0579</td>
+                                <td style="width:166px;"></td>
+                            </tr>
+                                                            <tr>
+                                    <td colspan="3" style="color:#292e41;font-size:10px;word-break: break-all">(16917) 경기 용인시 기흥구 용인향교로</td>
+                                </tr>
+                                                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <!-- DashBoard -->
+    <tr>
+        <td style="padding-top:40px;">
+            <table style="width:600px;background:#f8fafc;">
+                <tr>
+                    <td style="padding:12px 0;vertical-align:top;">
+                        <table>
+                            <tr>
+                                                                    <td style="padding-left:12px;width:150px;vertical-align:top;">
+                                        <strong style="font-size:10px;color:#67738e;font-weight:bold;margin-bottom:4px;">경력</strong>
+                                        <p style="color:#292e41;font-size:10px;">총  3년 4개월 (재직중)<br>포지큐브</p>
+                                    </td>
+                                                                        <td style="padding-left:12px;width:150px;vertical-align:top;border-left:1px solid #eaedf4;">
+                                        <strong style="font-size:10px;color:#67738e;font-weight:bold;margin-bottom:4px;">학력</strong>
+                                        <p style="color:#292e41;font-size:10px;">대학원(석사) 졸업<br>서울과학종합대학원</p>
+                                    </td>
+                                                                        <td style="padding-left:12px;width:150px;vertical-align:top;border-left:1px solid #eaedf4;">
+                                        <strong style="font-size:10px;color:#67738e;font-weight:bold;margin-bottom:4px;">희망연봉</strong>
+                                        <p style="color:#292e41;font-size:10px;">회사내규에 따름<br>직전 연봉 : 5,450&nbsp;만원</p>
+                                    </td>
+                                                                        <td style="padding-left:12px;width:150px;vertical-align:top;border-left:1px solid #eaedf4;">
+                                        <strong style="font-size:10px;color:#67738e;font-weight:bold;margin-bottom:4px;">포트폴리오</strong>
+                                        <p style="color:#292e41;font-size:10px;">-</p>
+                                    </td>
+                                                                </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>    <table style="width:600px;">
+        <tr>
+            <td style="padding-top:40px;">
+
+                <table style="width:600px;">
+                                            <tr>
+                            <td style="word-break:break-all;word-wrap:break-word">
+                                <p style="margin-top:14px;font-size:14px;color:#292e41;word-break: break-all">기술이 작동하는 근본 원리를 이해할 때 비로소 복잡한 문제를 해결할 수 있다고 믿는, 기본기에 충실한 개발자입니다. 디자이너와 영어 강사라는 이력을 통해 얻은 유연한 소통 능력을 바탕으로, 현재는 스타트업에서 생성형 AI Agent 플랫폼 개발에 몰입하고 있습니다.<br />
+<br />
+실무에서 마주하는 난제들을 단순히 '작동하는 코드'로 넘기기보다, 원인을 깊이 있게 파고들어 구조적으로 해결하려 노력합니다. 일례로 Python 동적 샌드박스 서버를 개발하며 라이브러리만으로는 해결되지 않는 동시성 이슈를 겪었습니다. 이를 해결하기 위해 Python 인터프리터의 내부 동작과 OS 레벨의 원자성(Atomicity) 개념을 치열하게 학습하여 적용했고, 결과적으로 대기업 상용 서비스 수준의 안정성을 확보하는 값진 경험을 했습니다.<br />
+<br />
+이러한 과정은 저에게 '기본기의 힘'을 일깨워주었습니다. 여전히 배워야 할 것이 많지만, 화려한 기술 트렌드 속에서도 중심을 잡고, 깊이 있는 분석과 끈기로 팀과 서비스에 실질적인 가치를 더하는 '단단한 엔지니어'로 성장하고 싶습니다.</p><p style="margin-top:14px;font-size:14px;color:#292e41;word-break: break-all">[핵심역량]<br>- Python/FastAPI 기반 비동기 백엔드 서버 개발<br>- LLM 에이전트 오케스트레이션 및 RAG 파이프라인 구축<br>- Redis를 활용한 데이터 캐싱 및 동시성 이슈(Race Condition) 해결<br>- Docker/Kubernetes 환경에서의 서비스 배포 및 운영<br>- 타 직군(기획/인프라)과의 협업을 위한 기술 문서화 및 커뮤니케이션<br></p>                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td style="word-break:break-all;word-wrap:break-word">
+                                <p style="margin-top:14px;font-size:12px;color:#292e41;">저에 대해 더 자세히 알고싶다면?</p>
+                                                                    <p style="margin-top:14px;word-break:break-all;word-wrap:break-word">
+                                        <a href="https://www.linkedin.com/in/ruo-lee-79864522a" style="display:block;font-size:10px;color:#2d65f2;word-break: break-all;word-wrap:break-word">https://www.linkedin.com/in/ruo-lee-79864522a</a>
+                                    </p>
+                                                                        <p style="margin-top:14px;word-break:break-all;word-wrap:break-word">
+                                        <a href="https://github.com/comsa33" style="display:block;font-size:10px;color:#2d65f2;word-break: break-all;word-wrap:break-word">https://github.com/comsa33</a>
+                                    </p>
+                                                                </td>
+                        </tr>
+                                        </table>
+            </td>
+        </tr>
+    </table>
+        <!-- skill -->
+    <table style="width:600px;">
+                    <tr>
+                <td style="padding-top:40px;">
+                    <h3 style="font-size:16px;font-weight:bold;color:#292e41">나의 스킬</h3>
+                    <p style="line-height:43px;word-break: break-all">
+                                                    <span style="border:1px solid #d7dce5;padding:7px 11px;color:#475067;font-size:13px;word-break: break-all">Python</span>
+                                                        <span style="border:1px solid #d7dce5;padding:7px 11px;color:#475067;font-size:13px;word-break: break-all">LLM</span>
+                                                        <span style="border:1px solid #d7dce5;padding:7px 11px;color:#475067;font-size:13px;word-break: break-all">fastapi</span>
+                                                        <span style="border:1px solid #d7dce5;padding:7px 11px;color:#475067;font-size:13px;word-break: break-all">Flask</span>
+                                                        <span style="border:1px solid #d7dce5;padding:7px 11px;color:#475067;font-size:13px;word-break: break-all">PostgreSQL</span>
+                                                        <span style="border:1px solid #d7dce5;padding:7px 11px;color:#475067;font-size:13px;word-break: break-all">MariaDB</span>
+                                                        <span style="border:1px solid #d7dce5;padding:7px 11px;color:#475067;font-size:13px;word-break: break-all">MongoDB</span>
+                                                        <span style="border:1px solid #d7dce5;padding:7px 11px;color:#475067;font-size:13px;word-break: break-all">PyTorch</span>
+                                                        <span style="border:1px solid #d7dce5;padding:7px 11px;color:#475067;font-size:13px;word-break: break-all">TensorFlow</span>
+                                                        <span style="border:1px solid #d7dce5;padding:7px 11px;color:#475067;font-size:13px;word-break: break-all">Pandas</span>
+                                                        <span style="border:1px solid #d7dce5;padding:7px 11px;color:#475067;font-size:13px;word-break: break-all">Elasticsearch</span>
+                                                        <span style="border:1px solid #d7dce5;padding:7px 11px;color:#475067;font-size:13px;word-break: break-all">Apache Airflow</span>
+                                                        <span style="border:1px solid #d7dce5;padding:7px 11px;color:#475067;font-size:13px;word-break: break-all">MySQL</span>
+                                                        <span style="border:1px solid #d7dce5;padding:7px 11px;color:#475067;font-size:13px;word-break: break-all">docker</span>
+                                                        <span style="border:1px solid #d7dce5;padding:7px 11px;color:#475067;font-size:13px;word-break: break-all">Kubernets</span>
+                                                        <span style="border:1px solid #d7dce5;padding:7px 11px;color:#475067;font-size:13px;word-break: break-all">AWS</span>
+                                                        <span style="border:1px solid #d7dce5;padding:7px 11px;color:#475067;font-size:13px;word-break: break-all">git</span>
+                                                        <span style="border:1px solid #d7dce5;padding:7px 11px;color:#475067;font-size:13px;word-break: break-all">Microsoft Azure</span>
+                                                        <span style="border:1px solid #d7dce5;padding:7px 11px;color:#475067;font-size:13px;word-break: break-all">Redis</span>
+                                                        <span style="border:1px solid #d7dce5;padding:7px 11px;color:#475067;font-size:13px;word-break: break-all">백엔드/서버개발</span>
+                                                        <span style="border:1px solid #d7dce5;padding:7px 11px;color:#475067;font-size:13px;word-break: break-all">RestAPI</span>
+                                                </p>
+                </td>
+            </tr>
+                </table>
+        <table style="width:600px;">
+        <tr>
+            <td style="padding-top:60px;"></td>
+        </tr>
+            <tr>
+        <td>
+            <table style="border-top:1px solid #8491a7;">
+                <tr>
+                    <td style="width:110px;vertical-align:top;">
+                        <h2 style="font-size:12px;margin-top:28px;word-break:break-all">경력</h2>
+                        <p style="margin-top:4px;font-size:10px;color:#67738e;word-break: break-all">
+                            <span>총 <em>3</em>년<em>4</em>개월</span>                        </p>
+                                            </td>
+                    <td style="width:490px;vertical-align:top;padding-bottom:32px;">
+                        <table>
+                                                            <tr>
+                                    <td style="padding:28px 0;">
+                                        <table style="width:490px;">
+                                            <tr>
+                                                <td style="text-align:left;">
+                                                    <h3 style="font-size:12px;font-weight:bold;color:#292e41;word-break:break-all">포지큐브</h3>
+                                                </td>
+                                                <td style="text-align:right;font-size:10px;color:#292e41;word-break: break-all">
+                                                    2024.08 ~ <span style="color:#2d65f2;">재직중</span>                                                </td>
+                                            </tr>
+                                                                                            <tr>
+                                                    <td colspan="2">
+                                                                                                                    <p style="margin:4px 0 12px 0;font-size:10px;color:#292e41;word-break:break-all">AI(인공지능) · AI 개발 1팀&nbsp;/&nbsp;사원/팀원 2년차</p>
+                                                                                                                        <p style="margin:4px 0 12px 0;font-size:10px;color:#292e41;word-break:break-all">주요 프로젝트<br />
+- 고객사 경***엔 AI Tutor PDF, DB 연동 기반 자동화 서비스<br />
+- 고객사 에**일 GPT 사내 임직원 업무 어시스트<br />
+- 고객사 멀***스 B2B 고객용 AI Advisor/Tutor 서비스<br />
+- 고객사 대**설 PoC 건설부문 대용량 전문 메뉴얼 문서 기반 Agent<br />
+<br />
+담당업무<br />
+[PyRunner: Distributed Python Sandbox & Dynamic Router]<br />
+- Skills: Python, FastAPI, Redis(Pub/Sub, Lock), Multiprocessing, Docker, SSE<br />
+- Redis Pub/Sub 기반 분산형 동적 라우팅 아키텍처 설계 및 구현:<br />
+      - Multi-Pod 환경에서 실시간 배포 동기화를 위해 Redis Pub/Sub 이벤트 버스 구축<br />
+      - Distributed Lock을 도입하여 동시 배포 시 발생하는 Race Condition 및 데이터 정합성 문제 해결<br />
+- LLM 에이전트 런타임 및 SSE(Server-Sent Events) 스트리밍 파이프라인 개발:<br />
+      - FastAPI Sub-app을 활용한 Zero-downtime 동적 코드 로딩/언로딩 매커니즘 구현<br />
+      - LLM의 실시간 토큰 생성을 클라이언트로 중계하는 비동기 SSE 프록시 및 에러 핸들링 로직 구현<br />
+- 멀티 프로세스 기반 고성능 서버 아키텍처 구축:<br />
+      - Agent, Sandbox, Dev 서버를 개별 프로세스로 분리하여 안정성 확보 및 리소스 격리<br />
+<br />
+[Evaluator: RAG 평가 시스템 및 에이전트 파이프라인 고도화]<br />
+- Skills: Python, FastAPI, RAGAS, OpenAI(GPT-4o), Docker, Agent DSL<br />
+- LLM 기반 평가 에이전트(Agentic Evaluator) 개발: 자연어 의도 기반 라우팅(Intent Router) 및 요청 자동 생성(Request Builder)을 통한 Multi-LLM 평가 파이프라인 설계 및 구축<br />
+- RAG 품질 평가 자동화: Ragas/Recall 메트릭 기반의 E2E 평가 시스템 구현 (QnA 데이터셋 생성  검색 정확도 검증  생성 품질 평가)<br />
+- 에이전트 UX/운영 최적화: 실시간 진행률 추적 및 에러 알림 시스템 구현, LLM API 재시도 로직 강화, 평가 결과 리포팅 시각화(Markdown Rendering) 개선<br />
+<br />
+[PyEditor: 컨테이너 기반 Python 웹 IDE 및 Copilot 솔루션]<br />
+- Skills: Node.js, Express, WebSocket, Monaco Editor API, Docker, Python LSP<br />
+- Multi-User LSP 프로세스 풀링 아키텍처 설계:<br />
+      - pylsp 프로세스를 효율적으로 관리하기 위한 Custom Process Pool을 구현하여, 단일 서버에서 다수 사용자의 동시 접속 시에도 안정적인 메모리 사용량과 빠른 응답 속도를 보장<br />
+      - 유휴 프로세스 자동 회수(Idle Timeout) 및 좀비 프로세스 방지 로직을 통해 서버 리소스 효율성 개선 및 안정성 확보<br />
+- WebSocket 기반 저지연 통신 프로토콜 구현:<br />
+      - 브라우저(Monaco)와 Python Language Server 간의 JSON-RPC 통신을 중계하는 Bi-directional WebSocket Proxy 개발<br />
+      - 1MB 메시지 버퍼링 제한 및 Stale Request 자동 정리 로직을 도입하여 Long-running 연결에서의 메모리 누수 방지<br />
+- Context-Aware AI Copilot 엔진 개발:<br />
+      - 단순 챗봇이 아닌, 현재 편집 중인 코드와 프로젝트 구조를 분석하여 프롬프트에 주입하는 Context-Aware RAG 파이프라인 구축<br />
+      - Server-Sent Events(SSE)를 활용한 스트리밍 응답 처리로 ChatGPT와 유사한 실시간 타이핑 경험 제공</p>
+                                                                                                                        <table>
+                                                                                                                                    <tr>
+                                                                        <td style="width:100px;font-size:10px;vertical-align:top;">연봉</td>
+                                                                        <td style="width:10px;font-size:10px;color:#d7dce5;vertical-align:top;">|</td>
+                                                                        <td style="width:350px;font-size:10px;vertical-align:top;">5,450만원</td>
+                                                                    </tr>
+                                                                                                                                        <tr>
+                                                                        <td style="width:100px;font-size:10px;vertical-align:top;">근무지역</td>
+                                                                        <td style="width:10px;font-size:10px;color:#d7dce5;vertical-align:top;">|</td>
+                                                                        <td style="width:350px;font-size:10px;vertical-align:top;">서울</td>
+                                                                    </tr>
+                                                                                                                                </table>
+                                                                                                                </td>
+                                                </tr>
+                                                                                        </table>
+                                    </td>
+                                </tr>
+                                                                <tr>
+                                    <td style="padding:28px 0;border-top:1px solid #d7dce5;">
+                                        <table style="width:490px;">
+                                            <tr>
+                                                <td style="text-align:left;">
+                                                    <h3 style="font-size:12px;font-weight:bold;color:#292e41;word-break:break-all">일루넥스</h3>
+                                                </td>
+                                                <td style="text-align:right;font-size:10px;color:#292e41;word-break: break-all">
+                                                    2023.11 ~ 2024.07 · 9개월                                                </td>
+                                            </tr>
+                                                                                            <tr>
+                                                    <td colspan="2">
+                                                                                                                    <p style="margin:4px 0 12px 0;font-size:10px;color:#292e41;word-break:break-all">데이터엔지니어 · 인공지능 팀&nbsp;/&nbsp;사원/팀원 1년차</p>
+                                                                                                                        <p style="margin:4px 0 12px 0;font-size:10px;color:#292e41;word-break:break-all">[EM-GPT: 특허/뉴스 챗봇을 위한 RAG 시스템 개발]<br />
+- Skills: Python, LangChain, FastApi, Airflow, ElasticSearch, MySQL, Docker, Git<br />
+- 특허/논문/기업정보 검색 Retriever 서버 개발<br />
+- 생성형AI를 통한 ElasticSearch 쿼리 동적 생성기 개발<br />
+- 기업 데이터 ETL 파이프라인 개발<br />
+<br />
+</p>
+                                                                                                                        <table>
+                                                                                                                                    <tr>
+                                                                        <td style="width:100px;font-size:10px;vertical-align:top;">연봉</td>
+                                                                        <td style="width:10px;font-size:10px;color:#d7dce5;vertical-align:top;">|</td>
+                                                                        <td style="width:350px;font-size:10px;vertical-align:top;">4,000만원</td>
+                                                                    </tr>
+                                                                                                                                        <tr>
+                                                                        <td style="width:100px;font-size:10px;vertical-align:top;">근무지역</td>
+                                                                        <td style="width:10px;font-size:10px;color:#d7dce5;vertical-align:top;">|</td>
+                                                                        <td style="width:350px;font-size:10px;vertical-align:top;">서울</td>
+                                                                    </tr>
+                                                                                                                                        <tr>
+                                                                        <td style="width:100px;font-size:10px;vertical-align:top;">퇴사사유</td>
+                                                                        <td style="width:10px;font-size:10px;color:#d7dce5;vertical-align:top;">|</td>
+                                                                        <td style="width:350px;font-size:10px;vertical-align:top;">회사 이전으로 인한 출퇴근 거리 증가</td>
+                                                                    </tr>
+                                                                                                                                </table>
+                                                                                                                </td>
+                                                </tr>
+                                                                                        </table>
+                                    </td>
+                                </tr>
+                                                                <tr>
+                                    <td style="padding:28px 0;border-top:1px solid #d7dce5;">
+                                        <table style="width:490px;">
+                                            <tr>
+                                                <td style="text-align:left;">
+                                                    <h3 style="font-size:12px;font-weight:bold;color:#292e41;word-break:break-all">그레이비랩</h3>
+                                                </td>
+                                                <td style="text-align:right;font-size:10px;color:#292e41;word-break: break-all">
+                                                    2022.05 ~ 2023.06 · 1년 2개월                                                </td>
+                                            </tr>
+                                                                                            <tr>
+                                                    <td colspan="2">
+                                                                                                                    <p style="margin:4px 0 12px 0;font-size:10px;color:#292e41;word-break:break-all">데이터엔지니어 · 기업부설연구소 Ai lab.&nbsp;/&nbsp;선임연구원/팀장 2년차</p>
+                                                                                                                        <p style="margin:4px 0 12px 0;font-size:10px;color:#292e41;word-break:break-all">1. 구직자-기업 매칭 ML 모델 개발<br />
+  - Skills: Python, K-means, Zero-shot Classification<br />
+  - [등록특허] 기계학습을 이용한 구직자-구인자 컬쳐핏 매칭 방법, 특허등록번호: KR102721044B1 (등록일: 2024.10.23)<br />
+<br />
+2. 데이터 엔지니어링<br />
+- Skills: Python, FastApi, Selenium, BeautifulSoup, PostgreSQL, MongoDB, Docker, Git<br />
+- 대규모 기업 평가 데이터 웹크롤러 개발<br />
+- 데이터 파이프라인 구축 및 관리</p>
+                                                                                                                        <table>
+                                                                                                                                    <tr>
+                                                                        <td style="width:100px;font-size:10px;vertical-align:top;">연봉</td>
+                                                                        <td style="width:10px;font-size:10px;color:#d7dce5;vertical-align:top;">|</td>
+                                                                        <td style="width:350px;font-size:10px;vertical-align:top;">4,750만원</td>
+                                                                    </tr>
+                                                                                                                                        <tr>
+                                                                        <td style="width:100px;font-size:10px;vertical-align:top;">근무지역</td>
+                                                                        <td style="width:10px;font-size:10px;color:#d7dce5;vertical-align:top;">|</td>
+                                                                        <td style="width:350px;font-size:10px;vertical-align:top;">서울</td>
+                                                                    </tr>
+                                                                                                                                        <tr>
+                                                                        <td style="width:100px;font-size:10px;vertical-align:top;">퇴사사유</td>
+                                                                        <td style="width:10px;font-size:10px;color:#d7dce5;vertical-align:top;">|</td>
+                                                                        <td style="width:350px;font-size:10px;vertical-align:top;">경영악화</td>
+                                                                    </tr>
+                                                                                                                                </table>
+                                                                                                                </td>
+                                                </tr>
+                                                                                        </table>
+                                    </td>
+                                </tr>
+                                                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+<tr>
+    <td>
+        <table style="border-top:1px solid #8491a7;">
+            <tr>
+                <td style="width:110px;vertical-align:top;">
+                    <h2 style="font-size:12px;margin-top:28px;">학력</h2>
+                    <p style="margin-top:4px;font-size:10px;color:#67738e;word-break:break-all">
+                        대학원<em>석사</em>졸업                    </p>
+                </td>
+                <td style="width:490px;vertical-align:top;padding-bottom:32px;">
+                    <table>
+                                                    <tr>
+                                <td style="padding:28px 0;">
+                                    <table style="width:490px;">
+                                        <tr>
+                                            <td style="text-align:left;word-break:break-all;word-wrap:break-word">
+                                                <h3 style="font-size:12px;font-weight:bold;color:#292e41;word-break:break-all">
+                                                    서울과학종합대학원(석사)                                                </h3>
+                                            </td>
+                                            <td style="text-align:right;font-size:10px;color:#292e41;word-break: break-all;word-wrap:break-word">
+                                                2024.09 ~ 2025.08 (졸업)                                            </td>
+                                        </tr>
+                                                                                    <tr>
+                                                <td colspan="2" style="word-break: break-all;word-wrap:break-word">
+                                                                                                            <p style="margin:4px 0 12px 0;font-size:10px;color:#292e41;word-break: break-all">Ai 빅데이터</p>
+                                                                                                                <table>
+                                                                                                                            <tr>
+                                                                    <td style="width:100px;font-size:10px;vertical-align:top;">학점</td>
+                                                                    <td style="width:10px;font-size:10px;color:#d7dce5;vertical-align:top;">|</td>
+                                                                    <td style="width:350px;font-size:10px;vertical-align:top;word-break: break-all;word-wrap:break-word">4.23/4.3</td>
+                                                                </tr>
+                                                                                                                                <tr>
+                                                                    <td style="width:100px;font-size:10px;vertical-align:top;">지역</td>
+                                                                    <td style="width:10px;font-size:10px;color:#d7dce5;vertical-align:top;">|</td>
+                                                                    <td style="width:350px;font-size:10px;vertical-align:top;word-break: break-all;word-wrap:break-word">서울</td>
+                                                                </tr>
+                                                                                                                                <tr>
+                                                                    <td style="width:100px;font-size:10px;vertical-align:top;">논문/작품</td>
+                                                                    <td style="width:10px;font-size:10px;color:#d7dce5;vertical-align:top;">|</td>
+                                                                    <td style="width:350px;font-size:10px;vertical-align:top;word-break: break-all;word-wrap:break-word">석사논문: 생성형 AI 기반 시계열 예측 자동화 연구</td>
+                                                                </tr>
+                                                                                                                        </table>
+                                                                                                        </td>
+                                            </tr>
+                                                                                </table>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td style="padding:28px 0;border-top:1px solid #d7dce5;">
+                                    <table style="width:490px;">
+                                        <tr>
+                                            <td style="text-align:left;word-break:break-all;word-wrap:break-word">
+                                                <h3 style="font-size:12px;font-weight:bold;color:#292e41;word-break:break-all">
+                                                    SDG Management School대학원(석사)                                                </h3>
+                                            </td>
+                                            <td style="text-align:right;font-size:10px;color:#292e41;word-break: break-all;word-wrap:break-word">
+                                                2024.09 ~ 2025.08 (졸업)                                            </td>
+                                        </tr>
+                                                                                    <tr>
+                                                <td colspan="2" style="word-break: break-all;word-wrap:break-word">
+                                                                                                            <p style="margin:4px 0 12px 0;font-size:10px;color:#292e41;word-break: break-all">Executive Master of Business Administration</p>
+                                                                                                                <table>
+                                                                                                                            <tr>
+                                                                    <td style="width:100px;font-size:10px;vertical-align:top;">지역</td>
+                                                                    <td style="width:10px;font-size:10px;color:#d7dce5;vertical-align:top;">|</td>
+                                                                    <td style="width:350px;font-size:10px;vertical-align:top;word-break: break-all;word-wrap:break-word">유럽</td>
+                                                                </tr>
+                                                                                                                        </table>
+                                                                                                        </td>
+                                            </tr>
+                                                                                </table>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td style="padding:28px 0;border-top:1px solid #d7dce5;">
+                                    <table style="width:490px;">
+                                        <tr>
+                                            <td style="text-align:left;word-break:break-all;word-wrap:break-word">
+                                                <h3 style="font-size:12px;font-weight:bold;color:#292e41;word-break:break-all">
+                                                    고려사이버대학교(4년제)                                                </h3>
+                                            </td>
+                                            <td style="text-align:right;font-size:10px;color:#292e41;word-break: break-all;word-wrap:break-word">
+                                                2020.03 ~ 2023.08 (졸업)                                            </td>
+                                        </tr>
+                                                                                    <tr>
+                                                <td colspan="2" style="word-break: break-all;word-wrap:break-word">
+                                                                                                            <p style="margin:4px 0 12px 0;font-size:10px;color:#292e41;word-break: break-all">인공지능</p>
+                                                                                                                <table>
+                                                                                                                            <tr>
+                                                                    <td style="width:100px;font-size:10px;vertical-align:top;">주야간</td>
+                                                                    <td style="width:10px;font-size:10px;color:#d7dce5;vertical-align:top;">|</td>
+                                                                    <td style="width:350px;font-size:10px;vertical-align:top;word-break: break-all;word-wrap:break-word">주간</td>
+                                                                </tr>
+                                                                                                                                <tr>
+                                                                    <td style="width:100px;font-size:10px;vertical-align:top;">학점</td>
+                                                                    <td style="width:10px;font-size:10px;color:#d7dce5;vertical-align:top;">|</td>
+                                                                    <td style="width:350px;font-size:10px;vertical-align:top;word-break: break-all;word-wrap:break-word">4.3/4.5</td>
+                                                                </tr>
+                                                                                                                                <tr>
+                                                                    <td style="width:100px;font-size:10px;vertical-align:top;">지역</td>
+                                                                    <td style="width:10px;font-size:10px;color:#d7dce5;vertical-align:top;">|</td>
+                                                                    <td style="width:350px;font-size:10px;vertical-align:top;word-break: break-all;word-wrap:break-word">서울</td>
+                                                                </tr>
+                                                                                                                                <tr>
+                                                                    <td style="width:100px;font-size:10px;vertical-align:top;">논문/작품</td>
+                                                                    <td style="width:10px;font-size:10px;color:#d7dce5;vertical-align:top;">|</td>
+                                                                    <td style="width:350px;font-size:10px;vertical-align:top;word-break: break-all;word-wrap:break-word">GPT-4 기반 채용공고별 AI 자기소개서 작성 가이드 개인화 서비스<br />
+(https://github.com/comsa33/GPT4-AI-resume/blob/main/KIPS_3.pdf)</td>
+                                                                </tr>
+                                                                                                                        </table>
+                                                                                                        </td>
+                                            </tr>
+                                                                                </table>
+                                </td>
+                            </tr>
+                                                </table>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr><tr>
+    <td>
+        <table style="border-top:1px solid #8491a7;">
+            <tr>
+                <td style="width:110px;vertical-align:top;">
+                    <h2 style="font-size:12px;margin-top:28px;word-break: break-all">경험/활동/교육</h2>
+                </td>
+                <td style="width:490px;vertical-align:top;padding-bottom:32px;">
+                    <table>
+                                                    <tr>
+                                <td style="padding:28px 0;">
+                                    <table style="width:460px;">
+                                        <tr>
+                                            <td style="text-align:left;">
+                                                <h3 style="font-size:12px;font-weight:bold;color:#292e41;word-break:break-all">
+                                                    Langchain                                                </h3>
+                                            </td>
+                                            <td style="text-align:right;font-size:10px;color:#292e41;word-break:break-all">
+                                                2024.06.12 ~ 2024.06.14                                            </td>
+                                        </tr>
+                                                                                    <tr>
+                                                <td colspan="2">
+                                                    <p style="margin:4px 0 12px 0;font-size:10px;color:#292e41;word-break: break-all">오픈소스 기여<br />
+- https://github.com/langchain-ai/langchain/pull/22801<br />
+- MongoDB 문서에서 중첩된 필드를 올바르게 추출하도록 MongodbLoader를 수정함.</p>
+                                                </td>
+                                            </tr>
+                                                                                </table>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td style="padding:28px 0;border-top:1px solid #d7dce5;">
+                                    <table style="width:460px;">
+                                        <tr>
+                                            <td style="text-align:left;">
+                                                <h3 style="font-size:12px;font-weight:bold;color:#292e41;word-break:break-all">
+                                                    코드스테이츠                                                </h3>
+                                            </td>
+                                            <td style="text-align:right;font-size:10px;color:#292e41;word-break:break-all">
+                                                2021.09 ~ 2022.04                                            </td>
+                                        </tr>
+                                                                                    <tr>
+                                                <td colspan="2">
+                                                    <p style="margin:4px 0 12px 0;font-size:10px;color:#292e41;word-break: break-all">[AI 부트캠프]<br />
+- 통계 및 데이터 분석 관련 프로젝트 참여<br />
+- 머신러닝, 딥러닝 관련 프로젝트 참여<br />
+- SQL, NoSQL, Data Engineering, MlOps 관련 프로젝트 참여<br />
+- REST API, 컨테이너 환경 구축 관련 프로젝트 참여<br />
+- 추천 시스템 관련 기업 협업 프로젝트 참여<br />
+- python문법, 데이터 자료, 알고리즘 학습</p>
+                                                </td>
+                                            </tr>
+                                                                                </table>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td style="padding:28px 0;border-top:1px solid #d7dce5;">
+                                    <table style="width:460px;">
+                                        <tr>
+                                            <td style="text-align:left;">
+                                                <h3 style="font-size:12px;font-weight:bold;color:#292e41;word-break:break-all">
+                                                    상공회의소                                                </h3>
+                                            </td>
+                                            <td style="text-align:right;font-size:10px;color:#292e41;word-break:break-all">
+                                                2021.03 ~ 2021.07                                            </td>
+                                        </tr>
+                                                                                    <tr>
+                                                <td colspan="2">
+                                                    <p style="margin:4px 0 12px 0;font-size:10px;color:#292e41;word-break: break-all">[AI 소프트웨어 프로그래밍]<br />
+- python 기반 응용 프로그램 프로젝트 참여<br />
+- 데이터 수집 &amp; 분석<br />
+- SQL, RDBMS<br />
+- NLP 프로젝트 참여</p>
+                                                </td>
+                                            </tr>
+                                                                                </table>
+                                </td>
+                            </tr>
+                                                </table>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr><tr>
+    <td>
+        <table style="border-top:1px solid #8491a7;">
+            <tr>
+                <td style="width:110px;vertical-align:top;">
+                    <h2 style="font-size:12px;margin-top:28px;">자격/어학/수상</h2>
+                </td>
+                <td style="width:490px;vertical-align:top;padding-bottom:32px;">
+                    <table>
+                                                    <tr>
+                                <td style="padding:28px 0;">
+                                    <table style="width:490px;">
+                                        <tr>
+                                            <td style="text-align:left;">
+                                                <h3 style="font-size:12px;font-weight:bold;color:#292e41;word-break:break-all">
+                                                    Prediction of H1N1 vaccination / 1등 (참여명 'while True:')                                                </h3>
+                                            </td>
+                                            <td style="text-align:right;font-size:10px;color:#292e41;word-break: break-all">
+                                                2021.10                                             </td>
+                                        </tr>
+                                                                                    <tr>
+                                                <td colspan="2">
+                                                    <p style="margin:4px 0 12px 0;font-size:10px;color:#292e41;word-break: break-all">Kaggle</p>
+                                                </td>
+                                            </tr>
+                                                                                </table>
+                                </td>
+                            </tr>
+                                                </table>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr><tr>
+    <td>
+        <table style="border-top:1px solid #8491a7;">
+            <tr>
+                <td style="width:110px;vertical-align:top;">
+                    <h2 style="font-size:12px;margin-top:28px;word-break:break-all">자기소개서</h2>
+                </td>
+                <td style="width:490px;vertical-align:top;padding-bottom:32px;">
+                    <table>
+
+                                                    <tr>
+                                <td style="padding:28px 0;">
+                                    <table style="width:490px;overflow-wrap:break-word;word-break:break-all;word-wrap:break-word;white-space:normal">
+                                        <tr>
+                                            <td style="text-align:left;">
+                                                <h3 style="font-size:12px;font-weight:bold;color:#292e41;word-break:break-all">
+                                                    원리에 대한 호기심으로 완성도를 높이는 'Agile'한 AI 엔지니어                                                </h3>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <p style="margin:4px 0 12px 0;font-size:10px;color:#292e41;overflow-wrap:break-word;word-break:break-all;word-wrap:break-word;white-space:normal">기술 발전의 흐름 속에서 변하지 않는 근본 원리를 탐구하며, 이를 실무에 적용해 가치를 만드는 3년차 인공지능 개발자입니다. 디자이너와 영어강사를 거쳐 개발자로 커리어 전환을 하며 유연한 사고와 소통 능력을 길렀고, 현재는 8년차 스타트업에서 LLM Agent와 기업 데이터를 결합한 솔루션을 개발하며 기술적 깊이를 다지고 있습니다.<br />
+<br />
+저의 업무 스타일은 '철저한 분석에 기반한 선제적 실행'입니다. 개발 착수 전, 이해관계자 인터뷰를 통해 &quot;이 기능이 왜 필요한가&quot;에 대한 근본 니즈를 파악하고 기획 의도에 맞는 설계를 우선시합니다. 이후 몰입도 높게 개발하여 마감 기한보다 20~30% 일찍 1차 산출물을 만들고, 남은 시간은 테스트와 피드백 반영에 투자합니다. 빠르게 구현하고 반복적으로 개선하는 이러한 루틴은 프로젝트의 시행착오를 최소화 하고, 예측 가능한 범위 내에서 안정적으로 서비스를 구축하는 데 큰 도움이 되었습니다.<br />
+<br />
+저의 업무 가치관은 '기본 원리에 대한 치열한 고민'입니다. 단순히 라이브러리를 가져다 쓰는 것에 그치지 않고, 동시성 처리를 위한 비동기와 멀티프로세싱의 차이, 데이터 무결성을 위한 원자적 실행의 개념 등 기술의 작동 원리를 명확히 이해하고 적용하려 노력합니다. 이러한 접근은 RAG 시스템 설계나 원격 샌드박스 환경 개발 등 복잡한 문제를 마주했을 때, 문제의 핵심을 뚫고 최적의 해결책을 찾는 나침반에 되어주었습니다.<br />
+<br />
+앞으로 제가 합류하게 될 조직에서도 이러한 '기본기의 힘'은 변함없이 발휘될 것입니다. 빠르게 변화하는 AI 기술 트렌드 속에서도 중심을 잃지 않고, 견고한 기술적 토대 위에 비즈니스 가치를 쌓아 올리는 개발자가 되겠습니다. 동료에게는 신뢰할 수 있는 기술적 파트너가, 사용자에게는 혁신적인 경험을 제공하는 메이커가 되어, 회사의 비전 달성을 위한 가장 단단한 디딤돌이 되고 싶습니다.</p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td style="padding:28px 0;border-top:1px solid #d7dce5;word-break:break-all">
+                                    <table style="width:490px;overflow-wrap:break-word;word-break:break-all;word-wrap:break-word;white-space:normal">
+                                        <tr>
+                                            <td style="text-align:left;">
+                                                <h3 style="font-size:12px;font-weight:bold;color:#292e41;word-break:break-all">
+                                                    기여한 대표 프로젝트: 동적 서브 앱 기반의 AI 에이전트 오케스트레이션 플랫폼                                                </h3>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <p style="margin:4px 0 12px 0;font-size:10px;color:#292e41;overflow-wrap:break-word;word-break:break-all;word-wrap:break-word;white-space:normal">1. 핵심 고민과 도전<br />
+기존 사내 솔루션은 Node-to-Node 방식으로 실행되는 JS 기반의 자체 DSL을 사용했으나, 복잡해지는 AI 에이전트의 요구사항을 수용하기에는 한계가 있었습니다. 특히 RAG 시스템 구축이나 대규모 데이터 전처리와 같이 입체적이고 정교한 작업을 수행하기 위해서는 풍부한 라이브러리를 갖춘 Python 생태계가 필수적이었습니다. 따라서 기존 DSL의 경직성을 탈피하고, 파이썬을 통해 다양한 비즈니스 로직을 자유롭게 구현하며 이를 즉시 서비스화할 수 있는 유연한 환경 구축이 필요했습니다.<br />
+<br />
+2. 해결 과정과 기술적 구현<br />
+유연성과 접근성을 극대화하기 위해 FastAPI를 활용한 동적 라우팅 및 서브 앱(Sub-app) 아키텍처를 설계했습니다.<br />
+<br />
+- 동적 서브 앱 생성 및 독립성 보장: 무중단 애플리케이션 내에서 사용자 스크립트를 독립된 서브 앱으로 동적으로 생성하여 실행하는 방식을 구현했습니다. 이를 통해 사용자 간 간섭을 방지하는 논리적 독립성을 확보하면서도, Python의 다양한 라이브러리를 제약 없이 활용할 수 있게 했습니다.<br />
+<br />
+- 실시간 HTTP API 자동화: 사용자가 작성한 기능은 즉시 실행 가능한 HTTP API로 변환되도록 설계했습니다. 이를 통해 내부 시스템뿐만 아니라 외부의 어떤 환경에서도 개발된 기능을 손쉽게 호출하고 연동할 수 있는 확장성을 확보했습니다.<br />
+<br />
+- 상태 관리 및 확장성: Redis를 통해 인스턴스 간 상태(State)를 외부화하여 Stateless한 구조를 만듦으로써, 오토스케일링이 가능한 안정적인 인프라를 마련했습니다.<br />
+<br />
+3. 기여도와 성과 (핵심 로직 개발 100%, 아키텍처 설계 전담)<br />
+기능 정의와 요구사항 구체화 단계에서는 팀 동료 및 이해관계자들과 치열하게 논의하며 기술적 실현 방안을 모색했습니다. 확정된 스펙을 바탕으로 전체 시스템 아키텍처 설계와 FastAPI 기반의 핵심 코드 구현은 100% 전담하여 수행했습니다. 그 결과, 현재 대기업 3곳을 포함한 다수 고객사에서 도입하여 운영 중입니다. 웹 IDE를 통해 다중 사용자가 동시에 에이전트 기능을 개발하고, 이를 실시간 API로 배포하여 즉각적으로 활용할 수 있는 플랫폼을 완성함으로써, AI 에이전트 개발의 자유도와 서비스 연결성을 획기적으로 향상시켰습니다.</p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td style="padding:28px 0;border-top:1px solid #d7dce5;word-break:break-all">
+                                    <table style="width:490px;overflow-wrap:break-word;word-break:break-all;word-wrap:break-word;white-space:normal">
+                                        <tr>
+                                            <td style="text-align:left;">
+                                                <h3 style="font-size:12px;font-weight:bold;color:#292e41;word-break:break-all">
+                                                    협업과 성과: 동료들이 신뢰할 수 있는 '무기'를 만드는 엔지니어                                                </h3>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <p style="margin:4px 0 12px 0;font-size:10px;color:#292e41;overflow-wrap:break-word;word-break:break-all;word-wrap:break-word;white-space:normal">저는 에이전트 개발자들이 비즈니스 로직이라는 '전장'에서 최고의 성과를 낼 수 있도록, 강력하고 안전한 플랫폼을 제공하는 역할을 수행했습니다. 백엔드, 프론트, 인프라, PM 등과 협업하며 단순 요청 처리를 넘어, 기술적 깊이로 병목을 해결하고 팀의 생산성을 높이는 데 주력했습니다.<br />
+<br />
+1. 레이스 컨디션 해결과 배포 안정화: 사용자 기능 배포 누락으로 타 팀의 검증이 지연되는 문제가 있었습니다. 정밀 분석 결과, Watchdog 감지 타이밍과 파일 복사 간의 경쟁 상태(Race Condition)가 원인임을 밝혀냈습니다. 저는 불안정한 파일 시스템 직접 접근 의존성을 제거하고, 관리 서버를 별도로 분리하여 배포 과정을 원자적(Atomic)으로 처리하는 아키텍처로 재설계했습니다. 이를 통해 '배포 실패율 0%'를 달성했고, 동료들이 검증 업무에만 집중할 수 있는 환경을 만들었습니다.<br />
+<br />
+2. Python 심층 분석을 통한 환경 개선 &quot;로컬에서는 되는데 서버에선 안 돼요&quot;와 같은 환경 간 동작 불일치 문제를 해결하여 개발 신뢰성을 높였습니다. 동적 로딩 시 sys.modules 관리 미흡으로 인한 싱글톤 깨짐 현상을 제어하고, 모듈 검색 경로(Module Search Path) 메커니즘을 기반으로 실행 경로를 동적으로 주입하여 sys.path 참조 오류를 바로잡았습니다. 덕분에 개발자들은 환경 설정에 시간을 뺏기지 않고 로직 구현에만 몰입할 수 있었습니다.<br />
+<br />
+또한, 시스템 확장을 위해 상태 관리를 Redis로 외부화하는 Stateless 구조로 리팩토링하여, 인프라팀과 함께 오토스케일링 환경을 성공적으로 구현했습니다. 이를 통해, 시스템의 예외를 기술적으로 사전에 방지할수록 소통은 명확해지고 협업 속도는 빨라짐을 배웠습니다.</p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                                                </table>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>    </table>
+</div>
+</body>
+</html>
