@@ -1,0 +1,45 @@
+sequenceDiagram
+    participant Client as Browser<br/>Monaco Editor
+    participant WS as WebSocket<br/>Server
+    participant Pool as LSP Process<br/>Pool
+    participant LSP as Python LSP<br/>Process
+    participant FileWatch as File Watch<br/>Service
+    participant GitWatch as Git Watch<br/>Service
+    participant Cache as LSP Cache<br/>Manager
+    
+    Note over Client,Cache: Connection Phase
+    Client->>WS: WebSocket connect<br/>?folder=workspace
+    WS->>Pool: Request process<br/>getOrCreateProcess(userId)
+    Pool->>LSP: Assign idle process<br/>or create new
+    LSP-->>Pool: Process ready
+    Pool-->>WS: pylsp instance
+    WS->>FileWatch: Register client<br/>registerClient(basePath, ws)
+    WS->>GitWatch: Register client<br/>registerClient(agentId, ws)
+    WS->>Cache: Register connection<br/>registerConnection(userId)
+    WS-->>Client: Send userId
+    
+    Note over Client,Cache: LSP Request/Response
+    Client->>WS: LSP request<br/>textDocument/completion
+    WS->>LSP: Forward LSP message
+    LSP->>LSP: Calculate completion
+    LSP-->>WS: LSP response
+    WS->>Cache: Cache result<br/>cacheResponse(method, params)
+    WS-->>Client: Completion list
+    
+    Note over Client,Cache: File Change Detection
+    FileWatch->>FileWatch: Detect file change<br/>chokidar
+    FileWatch->>Cache: Invalidate cache<br/>invalidate(filePath)
+    FileWatch-->>Client: File change notification<br/>fileChanged event
+    
+    Note over Client,Cache: Git Synchronization
+    GitWatch->>GitWatch: Detect HEAD change<br/>external commit
+    GitWatch-->>Client: Git change notification<br/>gitChanged event
+    Client->>Client: Reload files
+    
+    Note over Client,Cache: Connection Cleanup
+    Client->>WS: WebSocket close
+    WS->>Pool: Release process<br/>releaseProcess(userId)
+    Pool->>LSP: Set to idle state<br/>auto-kill after 5min
+    WS->>FileWatch: Remove client
+    WS->>GitWatch: Remove client
+    WS->>Cache: Unregister connection<br/>unregisterConnection(userId)

@@ -1,0 +1,45 @@
+sequenceDiagram
+    participant Client as 브라우저<br/>Monaco Editor
+    participant WS as WebSocket<br/>Server
+    participant Pool as LSP Process<br/>Pool
+    participant LSP as Python LSP<br/>Process
+    participant FileWatch as File Watch<br/>Service
+    participant GitWatch as Git Watch<br/>Service
+    participant Cache as LSP Cache<br/>Manager
+    
+    Note over Client,Cache: 연결 단계
+    Client->>WS: WebSocket 연결<br/>?folder=workspace
+    WS->>Pool: 프로세스 요청<br/>getOrCreateProcess(userId)
+    Pool->>LSP: 유휴 프로세스 할당<br/>또는 새 프로세스 생성
+    LSP-->>Pool: 프로세스 준비 완료
+    Pool-->>WS: pylsp 인스턴스
+    WS->>FileWatch: 클라이언트 등록<br/>registerClient(basePath, ws)
+    WS->>GitWatch: 클라이언트 등록<br/>registerClient(agentId, ws)
+    WS->>Cache: 연결 등록<br/>registerConnection(userId)
+    WS-->>Client: userId 전송
+    
+    Note over Client,Cache: LSP 요청/응답
+    Client->>WS: LSP 요청<br/>textDocument/completion
+    WS->>LSP: LSP 메시지 전달
+    LSP->>LSP: 자동완성 계산
+    LSP-->>WS: LSP 응답
+    WS->>Cache: 결과 캐싱<br/>cacheResponse(method, params)
+    WS-->>Client: 자동완성 목록
+    
+    Note over Client,Cache: 파일 변경 감지
+    FileWatch->>FileWatch: 파일 변경 감지<br/>chokidar
+    FileWatch->>Cache: 캐시 무효화<br/>invalidate(filePath)
+    FileWatch-->>Client: 파일 변경 알림<br/>fileChanged event
+    
+    Note over Client,Cache: Git 동기화
+    GitWatch->>GitWatch: HEAD 변경 감지<br/>외부 커밋
+    GitWatch-->>Client: Git 변경 알림<br/>gitChanged event
+    Client->>Client: 파일 다시 로드
+    
+    Note over Client,Cache: 연결 종료
+    Client->>WS: WebSocket 종료
+    WS->>Pool: 프로세스 반환<br/>releaseProcess(userId)
+    Pool->>LSP: 유휴 상태로 전환<br/>5분 후 자동 종료
+    WS->>FileWatch: 클라이언트 제거
+    WS->>GitWatch: 클라이언트 제거
+    WS->>Cache: 연결 해제<br/>unregisterConnection(userId)

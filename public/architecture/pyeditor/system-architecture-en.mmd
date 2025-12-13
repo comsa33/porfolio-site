@@ -1,0 +1,85 @@
+graph TB
+    subgraph "Client Layer"
+        A[Monaco Editor]
+        A1[File Explorer]
+        A2[Split View]
+        A3[Terminal Output]
+    end
+    
+    subgraph "WebSocket Layer"
+        B[WebSocket Server]
+        B1[LSP Protocol Handler]
+        B2[File Change Notifier]
+        B3[Git Sync Handler]
+    end
+    
+    subgraph "Middleware Layer"
+        C[Express Middleware]
+        C1[Path Access Control]
+        C2[Concurrency Limiter]
+    end
+    
+    subgraph "Service Layer"
+        D1[LSP Process Pool<br/>Max 20 Processes]
+        D2[File Watch Service<br/>Real-time Detection]
+        D3[Git Watch Service<br/>Version Sync]
+        D4[File Lock Service<br/>Concurrent Edit Control]
+        D5[LSP Cache Manager<br/>Cache Invalidation]
+    end
+    
+    subgraph "API Layer"
+        E1["/api/files"]
+        E2["/api/execution"]
+        E3["/api/git"]
+        E4["/api/copilot"]
+    end
+    
+    subgraph "External Resources"
+        F1[(File System<br/>workspace)]
+        F2[Python LSP<br/>pylsp]
+        F3[LLM API<br/>GPT-4]
+    end
+    
+    A --> B
+    A1 --> E1
+    A2 --> E1
+    A3 --> E2
+    
+    B --> B1
+    B --> B2
+    B --> B3
+    
+    B1 --> D1
+    B2 --> D2
+    B3 --> D3
+    
+    E1 --> C
+    E2 --> C
+    E3 --> C
+    E4 --> C
+    
+    C --> C1
+    C --> C2
+    
+    C1 --> F1
+    C2 --> E4
+    
+    D1 --> F2
+    D1 --> D5
+    D2 --> F1
+    D3 --> F1
+    D4 --> F1
+    
+    E4 --> F3
+    
+    style A fill:#e1f5ff,stroke:#333,stroke-width:2px,color:#000
+    style B fill:#fff9c4,stroke:#333,stroke-width:2px,color:#000
+    style C fill:#f3e5f5,stroke:#333,stroke-width:2px,color:#000
+    style D1 fill:#e8f5e9,stroke:#333,stroke-width:2px,color:#000
+    style D2 fill:#e8f5e9,stroke:#333,stroke-width:2px,color:#000
+    style D3 fill:#e8f5e9,stroke:#333,stroke-width:2px,color:#000
+    style D4 fill:#e8f5e9,stroke:#333,stroke-width:2px,color:#000
+    style D5 fill:#e8f5e9,stroke:#333,stroke-width:2px,color:#000
+    style F1 fill:#ffe0b2,stroke:#333,stroke-width:2px,color:#000
+    style F2 fill:#ffe0b2,stroke:#333,stroke-width:2px,color:#000
+    style F3 fill:#ffe0b2,stroke:#333,stroke-width:2px,color:#000

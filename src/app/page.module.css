@@ -252,54 +252,34 @@
 }
 
 .contactLink {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 2rem;
-  background: rgba(17, 17, 17, 0.8);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  color: var(--text-primary);
+  justify-content: center;
+  color: var(--text-secondary);
   text-decoration: none;
-  font-size: 1.1rem;
   transition: all 0.3s;
-  font-family: 'JetBrains Mono', monospace;
-  position: relative;
+  padding: 0.5rem;
 }
 
-.contactLink::before {
-  content: '';
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-}
-
-/* GitHub icon */
-.contactLink[href*="github"]::before {
-  border: 2px solid currentColor;
-  border-radius: 50%;
-  background: linear-gradient(45deg, transparent 40%, currentColor 40%, currentColor 60%, transparent 60%);
-}
-
-/* LinkedIn icon */
-.contactLink[href*="linkedin"]::before {
-  border: 2px solid currentColor;
-  border-radius: 2px;
-  background: linear-gradient(to bottom, transparent 45%, currentColor 45%, currentColor 55%, transparent 55%);
-}
-
-/* Email icon */
-.contactLink[href^="mailto"]::before {
-  border: 2px solid currentColor;
-  border-radius: 2px;
-  background: linear-gradient(135deg, transparent 48%, currentColor 48%, currentColor 52%, transparent 52%);
+.contactLink svg {
+  transition: all 0.3s;
 }
 
 .contactLink:hover {
-  border-color: var(--accent-cyan);
-  background: rgba(0, 240, 255, 0.1);
+  color: var(--accent-cyan);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 240, 255, 0.2);
+}
+
+.contactLink:hover svg {
+  filter: drop-shadow(0 4px 12px rgba(0, 240, 255, 0.4));
+}
+
+.emailText {
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.02em;
 }
 
 .footerBottom {
