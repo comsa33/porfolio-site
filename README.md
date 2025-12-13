@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 👋 Hi, I'm Ruo
 
-## Getting Started
+**AI Developer** building intelligent systems with LLMs and modern infrastructure.
 
-First, run the development server:
+[![Portfolio](https://img.shields.io/badge/Portfolio-po24lio.com-00F0FF?style=for-the-badge&logo=vercel&logoColor=white)](https://po24lio.com)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-ruo--lee-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ruo-lee-79864522a/)
+[![Email](https://img.shields.io/badge/Email-comsa333@gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:comsa333@gmail.com)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 💼 Currently
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**AI Developer** @ Posicube (AI Dev Team 1)  
+Building AI agent platforms and solving real-world problems with LLMs.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔧 Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Backend & Infrastructure
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)
 
-## Learn More
+### AI & LLM
+![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white)
+![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?style=for-the-badge&logo=chainlink&logoColor=white)
+![RAG](https://img.shields.io/badge/RAG-FF6B6B?style=for-the-badge&logo=ai&logoColor=white)
 
-To learn more about Next.js, take a look at the following resources:
+### System Design
+![Async](https://img.shields.io/badge/Async/Await-000000?style=for-the-badge&logo=python&logoColor=white)
+![WebSocket](https://img.shields.io/badge/WebSocket-010101?style=for-the-badge&logo=socketdotio&logoColor=white)
+![Multiprocessing](https://img.shields.io/badge/Multiprocessing-4B8BBE?style=for-the-badge&logo=python&logoColor=white)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+<div align="center">
+  <i>3rd-year developer passionate about AI, UX, and clean code.</i>
+</div>
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
