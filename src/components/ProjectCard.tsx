@@ -54,9 +54,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang }) => {
               </h4>
               <ul className={styles.achievementsList}>
                 {project.keyAchievements.map((achievement, idx) => (
-                  <li key={idx} className={styles.achievementItem}>
-                    {achievement[lang]}
-                  </li>
+                  <li 
+                    key={idx} 
+                    className={styles.achievementItem}
+                    dangerouslySetInnerHTML={{ 
+                      __html: achievement[lang].replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') 
+                    }}
+                  />
                 ))}
               </ul>
             </div>

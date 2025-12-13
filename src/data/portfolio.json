@@ -398,7 +398,7 @@
         "en": "2025.01 ~ Present"
       },
       "detail": {
-        "problemSolvingCases": [
+        "problemSolving": [
           {
             "id": "async-migration",
             "title": {
@@ -603,7 +603,7 @@
         "en": "Feb 2025 ~ Present"
       },
       "detail": {
-        "problemSolvingCases": [
+        "problemSolving": [
           {
             "id": "progress-tracker",
             "title": {
@@ -772,7 +772,7 @@
         "en": "Jun 2025 ~ Present"
       },
       "detail": {
-        "problemSolvingCases": [
+        "problemSolving": [
           {
             "id": "lsp-process-pool",
             "title": {
