@@ -1,10 +1,10 @@
 graph TB
     subgraph "API Layer"
         A[FastAPI Router]
-        A1["/api/v1/generation/qna"]
-        A2["/api/v1/evaluation/passage"]
-        A3["/api/v1/evaluation/ragas"]
-        A4["/api/v1/evaluation/pipeline"]
+        A1[QnA 생성 API]
+        A2[검색 평가 API]
+        A3[생성 평가 API]
+        A4[통합 평가 API]
     end
     
     subgraph "Processor Factory"
@@ -12,7 +12,7 @@ graph TB
         B --> C1[RecallProcessor]
         B --> C2[RagasProcessor]
         B --> C3[PipelineProcessor]
-        B --> C4[VecDashProcessor]
+        B --> C4[VectorDBProcessor]
     end
     
     subgraph "Base Processor Pattern"
@@ -26,7 +26,7 @@ graph TB
     subgraph "Evaluation Layer"
         F1[RecallEvaluator<br/>검색 정확도]
         F2[RagasEvaluator<br/>생성 품질]
-        F3[VecDashEvaluator<br/>검색 성능]
+        F3[VectorDBEvaluator<br/>벡터 검색 성능]
         F4[QnAGenerator<br/>데이터셋 생성]
     end
     
@@ -38,9 +38,9 @@ graph TB
     
     subgraph "External Services"
         H1[(MinIO<br/>File Storage)]
-        H2[DataHub API<br/>Chat Logs]
-        H3[Robi-G API<br/>Agent Services]
-        H4[LexiHub API<br/>RAG Search]
+        H2[데이터 관리 백엔드<br/>Chat Logs]
+        H3[LLM 에이전트 서비스<br/>Agent Services]
+        H4[LLM 프로바이더 서버<br/>로드밸런싱]
     end
     
     A1 --> B

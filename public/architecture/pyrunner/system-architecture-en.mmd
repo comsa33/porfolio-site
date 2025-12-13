@@ -1,42 +1,46 @@
 flowchart TB
     subgraph Client[Client Layer]
-        IDE[Web IDE<br/>Monaco Editor]
-        UI[Admin UI]
+        IDE[PyEditor<br/>Code Writing]
+        AdminUI[Admin UI<br/>Scenario Editor]
+        External[External App<br/>Agent API Call]
     end
     
-    subgraph API[FastAPI Multi-Process Server]
-        direction TB
-        Agent[Agent Server<br/>Main Process]
-        Dev[Dev Server<br/>Sub Process]
-        Sandbox[Sandbox Server<br/>Sub Process]
+    subgraph AgentSystem[Agent System]
+        AgentServer[Agent Server<br/>Custom API Wrapper<br/>Dynamic Sub-Apps]
+        Orchestrator[Agent Orchestrator<br/>Scenario Execution]
     end
     
-    subgraph Redis[Redis Cluster]
-        PubSub[Pub/Sub Channel]
-        Lock[Distributed Lock]
-        Cache[Session Cache]
+    subgraph PyRuntime[Python Runtime Environment]
+        DevServer[Dev Server<br/>Validation/Playground<br/>NFS Shared]
+        SandboxServer[Sandbox Server<br/>Production Deploy<br/>Actual Logic Execution]
     end
     
-    subgraph Execution[Execution Environment]
-        SubApp[Dynamic Sub-App<br/>User Code]
-        Runtime[Python Runtime]
+    subgraph Storage[Storage]
+        NFS[NFS Shared Storage<br/>PyEditor ↔ Dev Bridge]
+        Redis[Redis<br/>Distributed Lock]
     end
     
-    IDE -->|1. Code Write/Deploy| API
-    UI -->|2. Execution Request| API
+    AdminUI -->|1. Create Agent| AgentServer
+    AgentServer -->|2. Generate Custom API<br/>Dynamic Sub-Apps| AgentSystem
     
-    Agent -->|3. Deploy Event Publish| PubSub
-    PubSub -->|4. Event Receive| Dev
-    PubSub -->|4. Event Receive| Sandbox
+    IDE -->|3. Write Python Code| NFS
+    NFS -->|4. Share Code| DevServer
+    DevServer -->|5. Validate/Test| IDE
     
-    Dev -->|5. Lock Acquire| Lock
-    Dev -->|6. Dynamic Loading| SubApp
+    AdminUI -->|6. Deploy Scenario| DevServer
+    DevServer -->|7. Dev → Sandbox Deploy| SandboxServer
     
-    SubApp -->|7. HTTP API Creation| Runtime
-    Agent -->|8. SSE Streaming| UI
+    Orchestrator -->|8. Call Agent API| AgentServer
+    External -->|8. Call Agent API| AgentServer
     
-    style Agent fill:#4f46e5,stroke:#818cf8,color:#fff
-    style Dev fill:#0891b2,stroke:#06b6d4,color:#fff
-    style Sandbox fill:#0891b2,stroke:#06b6d4,color:#fff
-    style PubSub fill:#dc2626,stroke:#ef4444,color:#fff
-    style Lock fill:#dc2626,stroke:#ef4444,color:#fff
+    AgentServer -->|9. Call Python Function| SandboxServer
+    SandboxServer -->|10. Execution Result| AgentServer
+    
+    DevServer -.->|Lock| Redis
+    SandboxServer -.->|Lock| Redis
+    
+    style AgentServer fill:#4f46e5,stroke:#818cf8,color:#fff
+    style DevServer fill:#0891b2,stroke:#06b6d4,color:#fff
+    style SandboxServer fill:#059669,stroke:#10b981,color:#fff
+    style Orchestrator fill:#7c3aed,stroke:#a78bfa,color:#fff
+    style NFS fill:#f59e0b,stroke:#fbbf24,color:#fff

@@ -1,10 +1,10 @@
 graph TB
     subgraph "API Layer"
         A[FastAPI Router]
-        A1["/api/v1/generation/qna"]
-        A2["/api/v1/evaluation/passage"]
-        A3["/api/v1/evaluation/ragas"]
-        A4["/api/v1/evaluation/pipeline"]
+        A1[QnA Generation]
+        A2[Passage Evaluation]
+        A3[RAG Evaluation]
+        A4[Pipeline Evaluation]
     end
     
     subgraph "Processor Factory"
@@ -12,7 +12,7 @@ graph TB
         B --> C1[RecallProcessor]
         B --> C2[RagasProcessor]
         B --> C3[PipelineProcessor]
-        B --> C4[VecDashProcessor]
+        B --> C4[VectorDBProcessor]
     end
     
     subgraph "Base Processor Pattern"
@@ -26,7 +26,7 @@ graph TB
     subgraph "Evaluation Layer"
         F1[RecallEvaluator<br/>Search Accuracy]
         F2[RagasEvaluator<br/>Generation Quality]
-        F3[VecDashEvaluator<br/>Search Performance]
+        F3[VectorDBEvaluator<br/>Vector Search Performance]
         F4[QnAGenerator<br/>Dataset Creation]
     end
     
@@ -38,9 +38,9 @@ graph TB
     
     subgraph "External Services"
         H1[(MinIO<br/>File Storage)]
-        H2[DataHub API<br/>Chat Logs]
-        H3[Robi-G API<br/>Agent Services]
-        H4[LexiHub API<br/>RAG Search]
+        H2[Data Management Backend<br/>Chat Logs]
+        H3[LLM Agent Service<br/>Agent Services]
+        H4[LLM Provider Server<br/>Load Balancing]
     end
     
     A1 --> B

@@ -1,42 +1,46 @@
 flowchart TB
     subgraph Client[클라이언트 레이어]
-        IDE[웹 IDE<br/>Monaco Editor]
-        UI[어드민 UI]
+        IDE[PyEditor<br/>코드 작성]
+        AdminUI[관리자 UI<br/>시나리오 에디터]
+        External[외부 앱<br/>Agent API 호출]
     end
     
-    subgraph API[FastAPI Multi-Process Server]
-        direction TB
-        Agent[Agent Server<br/>Main Process]
-        Dev[Dev Server<br/>Sub Process]
-        Sandbox[Sandbox Server<br/>Sub Process]
+    subgraph AgentSystem[Agent 시스템]
+        AgentServer[Agent Server<br/>사용자 맞춤 API 래핑<br/>동적 서브앱]
+        Orchestrator[Agent Orchestrator<br/>시나리오 실행]
     end
     
-    subgraph Redis[Redis Cluster]
-        PubSub[Pub/Sub Channel]
-        Lock[Distributed Lock]
-        Cache[Session Cache]
+    subgraph PyRuntime[Python 실행 환경]
+        DevServer[Dev Server<br/>검증/Playground<br/>NFS 공유]
+        SandboxServer[Sandbox Server<br/>Production 배포<br/>실제 로직 실행]
     end
     
-    subgraph Execution[실행 환경]
-        SubApp[동적 Sub-App<br/>User Code]
-        Runtime[Python Runtime]
+    subgraph Storage[저장소]
+        NFS[NFS 공유 스토리지<br/>PyEditor ↔ Dev 연결]
+        Redis[Redis<br/>Distributed Lock]
     end
     
-    IDE -->|1. 코드 작성/배포| API
-    UI -->|2. 실행 요청| API
+    AdminUI -->|1. Agent 생성| AgentServer
+    AgentServer -->|2. 맞춤 API 생성<br/>동적 서브앱| AgentSystem
     
-    Agent -->|3. 배포 이벤트 발행| PubSub
-    PubSub -->|4. 이벤트 수신| Dev
-    PubSub -->|4. 이벤트 수신| Sandbox
+    IDE -->|3. Python 코드 작성| NFS
+    NFS -->|4. 코드 공유| DevServer
+    DevServer -->|5. 검증/테스트| IDE
     
-    Dev -->|5. Lock 획득| Lock
-    Dev -->|6. 동적 로딩| SubApp
+    AdminUI -->|6. 시나리오 배포| DevServer
+    DevServer -->|7. Dev → Sandbox 배포| SandboxServer
     
-    SubApp -->|7. HTTP API 생성| Runtime
-    Agent -->|8. SSE 스트리밍| UI
+    Orchestrator -->|8. Agent API 호출| AgentServer
+    External -->|8. Agent API 호출| AgentServer
     
-    style Agent fill:#4f46e5,stroke:#818cf8,color:#fff
-    style Dev fill:#0891b2,stroke:#06b6d4,color:#fff
-    style Sandbox fill:#0891b2,stroke:#06b6d4,color:#fff
-    style PubSub fill:#dc2626,stroke:#ef4444,color:#fff
-    style Lock fill:#dc2626,stroke:#ef4444,color:#fff
+    AgentServer -->|9. Python 함수 호출| SandboxServer
+    SandboxServer -->|10. 실행 결과| AgentServer
+    
+    DevServer -.->|Lock| Redis
+    SandboxServer -.->|Lock| Redis
+    
+    style AgentServer fill:#4f46e5,stroke:#818cf8,color:#fff
+    style DevServer fill:#0891b2,stroke:#06b6d4,color:#fff
+    style SandboxServer fill:#059669,stroke:#10b981,color:#fff
+    style Orchestrator fill:#7c3aed,stroke:#a78bfa,color:#fff
+    style NFS fill:#f59e0b,stroke:#fbbf24,color:#fff
