@@ -28,14 +28,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang }) => {
             </div>
           )}
 
-          <h3 className={styles.title}>{project.title}</h3>
+          <h3 className={styles.title}>
+            {typeof project.title === 'string' ? project.title : project.title[lang]}
+          </h3>
           <p className={styles.shortDesc}>{project.shortDescription[lang]}</p>
         </div>
 
         <div className={styles.body}>
           <div className={styles.techStack}>
             {project.techStack.map((tech) => (
-              <span key={tech} className={styles.techTag}>
+              <span key={tech} className={styles.techBadge}>
                 {tech}
               </span>
             ))}
@@ -46,7 +48,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang }) => {
           {project.keyAchievements && project.keyAchievements.length > 0 && (
             <div className={styles.achievements}>
               <h4 className={styles.achievementsTitle}>
-                {lang === 'ko' ? '핵심 성과' : 'Key Achievements'}
+                {lang === 'ko' ? '주요 성과' : 'Key Achievements'}
               </h4>
               <ul className={styles.achievementsList}>
                 {project.keyAchievements.map((achievement, idx) => (
@@ -67,7 +69,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang }) => {
             <ul className={styles.featuresList}>
               {project.features.map((feature, idx) => (
                 <li key={idx} className={styles.featureItem}>
-                  {feature}
+                  {typeof feature === 'string' ? feature : feature[lang]}
                 </li>
               ))}
             </ul>
@@ -104,14 +106,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang }) => {
         />
       )}
 
-      {/* Architecture Modal */}
       {showArchitecture && project.detail?.architecture && project.company && (
         <ArchitectureModal
+          onClose={() => setShowArchitecture(false)}
           diagrams={project.detail.architecture}
-          projectTitle={project.title}
+          projectTitle={typeof project.title === 'string' ? project.title : project.title[lang]}
           company={project.company}
           lang={lang}
-          onClose={() => setShowArchitecture(false)}
         />
       )}
     </>

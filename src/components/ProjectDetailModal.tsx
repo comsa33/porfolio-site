@@ -39,7 +39,7 @@ export default function ProjectDetailModal({ project, lang, isOpen, onClose }: P
         {/* Header */}
         <div className={styles.header}>
           <h2 className={styles.title}>
-            {project.title}
+            {typeof project.title === 'string' ? project.title : project.title[lang]}
             <span className={styles.tag}>Deep Dive</span>
           </h2>
           <button className={styles.closeBtn} onClick={onClose} arial-label="Close">
@@ -139,7 +139,7 @@ export default function ProjectDetailModal({ project, lang, isOpen, onClose }: P
                   {/* CS Foundations */}
                   <div className={styles.csFoundations}>
                     <div className={styles.caseSectionLabel}>
-                      {lang === 'ko' ? 'CS 기본기' : 'CS Fundamentals'}
+                      {lang === 'ko' ? '활용 기술 개념' : 'Key Concepts'}
                     </div>
                     <div className={styles.tagList}>
                       {case_.csFoundations.map((foundation, idx) => (

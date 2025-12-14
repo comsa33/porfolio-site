@@ -38,7 +38,7 @@ export interface TimelineItem {
 
 export interface Project {
   id: string;
-  title: string;
+  title: string | LocalizedString;
   shortDescription: LocalizedString;
   fullDescription: LocalizedString;
   techStack: string[];
@@ -46,7 +46,7 @@ export interface Project {
   company?: LocalizedString; // Company name (optional)
   period?: LocalizedString; // Project period (optional)
   keyAchievements?: LocalizedString[];
-  features: string[];
+  features: (string | LocalizedString)[];
   detail?: ProjectDetail; // Optional detailed showcase
 }
 

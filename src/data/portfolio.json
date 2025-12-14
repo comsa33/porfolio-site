@@ -395,7 +395,7 @@
       },
       "period": {
         "ko": "2025.01 ~ 현재",
-        "en": "2025.01 ~ Present"
+        "en": "Jan 2025 ~ Present"
       },
       "detail": {
         "problemSolving": [
@@ -422,7 +422,13 @@
               "ko": "```python\n# Before (동기)\ndef deploy_agent(agent_id):\n    lock = redis.get(f\"lock:{agent_id}\")  # 블로킹 I/O\n    result = redis.set(f\"deployed:{agent_id}\", \"true\")\n    return result\n\n# After (비동기)\nasync def deploy_agent(agent_id):\n    lock = await redis.get(f\"lock:{agent_id}\")  # Non-blocking\n    # await 중에 다른 코루틴 실행 가능\n    result = await redis.set(f\"deployed:{agent_id}\", \"true\")\n    return result\n```\n\n**핵심 변경사항**:\n- 13개 파일 수정, +704줄 / -338줄\n- RedisClient 전면 리팩토링\n- Event Loop 기반 아키텍처 구축\n- Distributed Lock을 Non-blocking으로 전환",
               "en": "```python\n# Before (sync)\ndef deploy_agent(agent_id):\n    lock = redis.get(f\"lock:{agent_id}\")  # Blocking I/O\n    result = redis.set(f\"deployed:{agent_id}\", \"true\")\n    return result\n\n# After (async)\nasync def deploy_agent(agent_id):\n    lock = await redis.get(f\"lock:{agent_id}\")  # Non-blocking\n    # Other coroutines can run during await\n    result = await redis.set(f\"deployed:{agent_id}\", \"true\")\n    return result\n```\n\n**Key Changes**:\n- 13 files modified, +704 / -338 lines\n- Complete RedisClient refactoring\n- Event loop-based architecture\n- Distributed Lock converted to non-blocking"
             },
-            "csFoundations": ["Async/Await", "Event Loop", "Non-blocking I/O", "Cooperative Multitasking", "Concurrency vs Parallelism"],
+            "csFoundations": [
+              "Async/Await",
+              "Event Loop",
+              "Non-blocking I/O",
+              "Cooperative Multitasking",
+              "Concurrency vs Parallelism"
+            ],
             "impact": {
               "ko": "**성과**: 멀티팟 환경에서 응답 시간 **40% 감소**. CPU 활용률 극대화로 동시 처리 용량 대폭 증가.",
               "en": "**Impact**: **40% reduction** in response time in multi-pod environment. Significantly increased concurrent processing capacity through maximized CPU utilization."
@@ -452,7 +458,13 @@
               "ko": "```python\nasync def safe_deploy(agent_id, version):\n    async with RedisLock(f\"deploy:{agent_id}\") as lock:\n        # 임계 영역 시작 - 한 번에 하나의 Pod만 진입\n        versions = await redis.get(\"versions\")\n        \n        # 타입 검증 (None 체크 + 타입 변환)\n        if versions is None:\n            versions = set()\n        elif not isinstance(versions, set):\n            versions = set(versions) if versions else set()\n        \n        versions.add(version)\n        await redis.set(\"versions\", versions)\n        # 임계 영역 끝\n    \n    return versions\n```\n\n**핵심 개념**: Mutual Exclusion (상호 배제) + CAP 이론 적용",
               "en": "```python\nasync def safe_deploy(agent_id, version):\n    async with RedisLock(f\"deploy:{agent_id}\") as lock:\n        # Critical section - only one pod can enter\n        versions = await redis.get(\"versions\")\n        \n        # Type validation (None check + type conversion)\n        if versions is None:\n            versions = set()\n        elif not isinstance(versions, set):\n            versions = set(versions) if versions else set()\n        \n        versions.add(version)\n        await redis.set(\"versions\", versions)\n        # End of critical section\n    \n    return versions\n```\n\n**Core Concepts**: Mutual Exclusion + CAP Theorem"
             },
-            "csFoundations": ["Distributed Lock", "Race Condition", "Mutual Exclusion", "CAP Theorem", "Type Safety"],
+            "csFoundations": [
+              "Distributed Lock",
+              "Race Condition",
+              "Mutual Exclusion",
+              "CAP Theorem",
+              "Type Safety"
+            ],
             "impact": {
               "ko": "**성과**: 배포 실패율 **0%** 달성. 데이터 무결성 **100%** 보장. 멀티팟 환경에서 완벽한 일관성 확보.",
               "en": "**Impact**: Achieved **0% deployment failure rate**. Guaranteed **100% data integrity**. Perfect consistency in multi-pod environment."
@@ -482,7 +494,13 @@
               "ko": "```python\n# Before (메모리 누수)\ndef stream_tokens():\n    all_tokens = []  # 모든 토큰을 메모리에 저장!\n    for token in llm.generate():\n        all_tokens.append(token)\n        yield token\n    # all_tokens는 끝까지 메모리에 남음\n\n# After (메모리 효율적)\nasync def stream_handler(request):\n    # 메타데이터는 한 번만\n    yield {\"type\": \"metadata\", \"headers\": {...}}\n    \n    # 토큰은 하나씩 yield (메모리 저장 안 함)\n    async for token in llm.agenerate():\n        yield {\"type\": \"data\", \"content\": token}\n        # token은 yield 후 GC 대상\n```\n\n**핵심**: Stream Processing (배치 처리 대신 실시간 처리)",
               "en": "```python\n# Before (memory leak)\ndef stream_tokens():\n    all_tokens = []  # Stores all tokens in memory!\n    for token in llm.generate():\n        all_tokens.append(token)\n        yield token\n    # all_tokens remains in memory until end\n\n# After (memory efficient)\nasync def stream_handler(request):\n    # Metadata only once\n    yield {\"type\": \"metadata\", \"headers\": {...}}\n    \n    # Yield tokens one by one (no memory storage)\n    async for token in llm.agenerate():\n        yield {\"type\": \"data\", \"content\": token}\n        # token becomes GC target after yield\n```\n\n**Key**: Stream Processing (real-time instead of batch)"
             },
-            "csFoundations": ["Generator Pattern", "Lazy Evaluation", "Garbage Collection", "Stream Processing", "Memory Management"],
+            "csFoundations": [
+              "Generator Pattern",
+              "Lazy Evaluation",
+              "Garbage Collection",
+              "Stream Processing",
+              "Memory Management"
+            ],
             "impact": {
               "ko": "**성과**: 메모리 사용량 **70% 감소**. 장시간 스트리밍에서도 안정적인 메모리 유지. 동시 처리 가능 요청 수 대폭 증가.",
               "en": "**Impact**: **70% reduction** in memory usage. Stable memory maintenance even during long-term streaming. Significantly increased concurrent request capacity."
@@ -512,7 +530,13 @@
               "ko": "```python\nclass AgentIdNormalizer:\n    @staticmethod\n    def normalize(agent_id: str) -> str:\n        \"\"\"모든 Agent ID를 일관된 형식으로 변환\"\"\"\n        if agent_id.startswith('a'):\n            return agent_id[1:]  # 'a123' → '123'\n        return agent_id\n    \n    @staticmethod\n    def with_prefix(agent_id: str) -> str:\n        \"\"\"필요시 접두사 추가\"\"\"\n        normalized = AgentIdNormalizer.normalize(agent_id)\n        return f\"a{normalized}\"\n\n# API 진입점에서 정규화\n@app.post(\"/deploy\")\nasync def deploy(agent_id: str):\n    normalized_id = AgentIdNormalizer.normalize(agent_id)\n    # 이후 모든 로직은 normalized_id 사용\n```\n\n**핵심 원칙**: Data Governance + Defensive Programming",
               "en": "```python\nclass AgentIdNormalizer:\n    @staticmethod\n    def normalize(agent_id: str) -> str:\n        \"\"\"Convert all Agent IDs to consistent format\"\"\"\n        if agent_id.startswith('a'):\n            return agent_id[1:]  # 'a123' → '123'\n        return agent_id\n    \n    @staticmethod\n    def with_prefix(agent_id: str) -> str:\n        \"\"\"Add prefix if needed\"\"\"\n        normalized = AgentIdNormalizer.normalize(agent_id)\n        return f\"a{normalized}\"\n\n# Normalize at API entry point\n@app.post(\"/deploy\")\nasync def deploy(agent_id: str):\n    normalized_id = AgentIdNormalizer.normalize(agent_id)\n    # All subsequent logic uses normalized_id\n```\n\n**Core Principles**: Data Governance + Defensive Programming"
             },
-            "csFoundations": ["Data Normalization", "Canonical Form", "Single Responsibility Principle", "Defensive Programming", "Input Validation"],
+            "csFoundations": [
+              "Data Normalization",
+              "Canonical Form",
+              "Single Responsibility Principle",
+              "Defensive Programming",
+              "Input Validation"
+            ],
             "impact": {
               "ko": "**성과**: ID 관련 버그 **0건** 달성. 시스템 전반의 데이터 일관성 확보. 디버깅 시간 대폭 단축.",
               "en": "**Impact**: Achieved **0 ID-related bugs**. Ensured data consistency across entire system. Significantly reduced debugging time."
@@ -614,6 +638,7 @@
               "ko": "동시성",
               "en": "Concurrency"
             },
+            "icon": "📊",
             "problem": {
               "ko": "대규모 평가 작업(수백~수천 개 QnA) 실행 시 사용자는 진행 상황을 알 수 없고, 매 작업마다 상태 업데이트 시 API 서버 부하 과다 발생. 또한 이전 단계 평가 결과가 유실되는 문제가 있었습니다.",
               "en": "During large-scale evaluation tasks (hundreds to thousands of QnAs), users had no visibility into progress, and updating status for every task caused excessive API server load. Additionally, previous stage evaluation results were being lost."
@@ -626,7 +651,12 @@
               "ko": "```python\nclass ProgressTracker:\n    def __init__(self, total, interval=10):\n        self.total = total\n        self.interval = interval\n        self.current = 0\n        self.last_percent = 0\n    \n    async def update(self, inc=1):\n        self.current += inc\n        percent = int((self.current / self.total) * 100)\n        \n        # Decile-based: 10% 단위로만 API 호출\n        if percent // self.interval > self.last_percent // self.interval:\n            self.last_percent = percent\n            await self._send_update()  # 1000개 → 10번만\n```\n\n**핵심**: API 호출 1000번 → 10번 (99% 감소)",
               "en": "```python\nclass ProgressTracker:\n    def __init__(self, total, interval=10):\n        self.total = total\n        self.interval = interval\n        self.current = 0\n        self.last_percent = 0\n    \n    async def update(self, inc=1):\n        self.current += inc\n        percent = int((self.current / self.total) * 100)\n        \n        # Decile-based: API calls only at 10% intervals\n        if percent // self.interval > self.last_percent // self.interval:\n            self.last_percent = percent\n            await self._send_update()  # 1000 tasks → 10 calls\n```\n\n**Key**: API calls 1000 → 10 (99% reduction)"
             },
-            "csFoundations": ["Rate Limiting", "State Accumulation", "Progress Tracking", "API Optimization"],
+            "csFoundations": [
+              "Rate Limiting",
+              "State Accumulation",
+              "Progress Tracking",
+              "API Optimization"
+            ],
             "impact": {
               "ko": "API 서버 부하 **99% 감소**, 평가 결과 손실 **제로화**, 사용자 경험 개선",
               "en": "API server load reduced by **99%**, evaluation result loss **eliminated**, improved UX"
@@ -642,6 +672,7 @@
               "ko": "설계패턴",
               "en": "Design Pattern"
             },
+            "icon": "🏭",
             "problem": {
               "ko": "Recall, Ragas, VecDash, Pipeline 등 4가지 평가 타입마다 중복된 파일 로딩, 에러 처리, 로깅 로직이 반복 구현되어 있었고, 신규 평가 방식 추가 시 보일러플레이트 코드가 증가했습니다.",
               "en": "For four evaluation types (Recall, Ragas, VecDash, Pipeline), duplicate file loading, error handling, and logging logic was repeatedly implemented."
@@ -654,7 +685,12 @@
               "ko": "```python\nfrom abc import ABC, abstractmethod\n\nclass BaseEvaluationProcessor(ABC):\n    async def run(self):\n        try:\n            data = await self._load_input()  # 추상\n            result = await self._process(data)\n            return await self._save_output(result)\n        except Exception as e:\n            logger.error(f\"Failed: {e}\")\n            raise\n    \n    @abstractmethod\n    async def _load_input(self): pass\n    \n    @abstractmethod\n    async def _process(self, data): pass\n```\n\n**핵심**: Template Method + Factory로 코드 중복 70% 감소",
               "en": "```python\nfrom abc import ABC, abstractmethod\n\nclass BaseEvaluationProcessor(ABC):\n    async def run(self):\n        try:\n            data = await self._load_input()  # abstract\n            result = await self._process(data)\n            return await self._save_output(result)\n        except Exception as e:\n            logger.error(f\"Failed: {e}\")\n            raise\n    \n    @abstractmethod\n    async def _load_input(self): pass\n    \n    @abstractmethod\n    async def _process(self, data): pass\n```\n\n**Key**: Template Method + Factory reduced duplication by 70%"
             },
-            "csFoundations": ["Template Method Pattern", "Factory Pattern", "Dependency Injection", "Abstract Base Class"],
+            "csFoundations": [
+              "Template Method Pattern",
+              "Factory Pattern",
+              "Dependency Injection",
+              "Abstract Base Class"
+            ],
             "impact": {
               "ko": "코드 중복 **70% 감소**, 신규 평가 타입 추가 시간 **3일 → 4시간**, 테스트 커버리지 **45% → 85%**",
               "en": "Code duplication reduced by **70%**, new evaluation type time **3 days → 4 hours**, test coverage **45% → 85%**"
@@ -670,6 +706,7 @@
               "ko": "성능최적화",
               "en": "Performance"
             },
+            "icon": "⏱️",
             "problem": {
               "ko": "수백 개의 QnA 평가 작업을 동기식으로 처리하면 API 타임아웃이 발생하고, 사용자는 작업 완료까지 브라우저를 닫을 수 없어 UX가 저하되었습니다.",
               "en": "Processing hundreds of QnA evaluation tasks synchronously caused API timeouts, and users couldn't close their browsers until completion."
@@ -682,7 +719,12 @@
               "ko": "```python\n@router.post(\"/evaluation/ragas\")\nasync def submit_evaluation(request, chat_logs_id: Optional[int]):\n    processor = get_processor(\"ragas\", request)\n    \n    if chat_logs_id:\n        # 비동기: 백그라운드 실행\n        asyncio.create_task(run_job(processor, chat_logs_id))\n        return {\"status\": \"queued\"}\n    else:\n        # 동기: 즉시 완료\n        await processor.run()\n        return {\"status\": \"completed\"}\n```\n\n**핵심**: Event Loop에서 독립 실행, 즉시 응답",
               "en": "```python\n@router.post(\"/evaluation/ragas\")\nasync def submit_evaluation(request, chat_logs_id: Optional[int]):\n    processor = get_processor(\"ragas\", request)\n    \n    if chat_logs_id:\n        # Async: background execution\n        asyncio.create_task(run_job(processor, chat_logs_id))\n        return {\"status\": \"queued\"}\n    else:\n        # Sync: immediate completion\n        await processor.run()\n        return {\"status\": \"completed\"}\n```\n\n**Key**: Independent execution in Event Loop"
             },
-            "csFoundations": ["Async Programming", "Event Loop", "Graceful Error Handling", "Background Tasks"],
+            "csFoundations": [
+              "Async Programming",
+              "Event Loop",
+              "Graceful Error Handling",
+              "Background Tasks"
+            ],
             "impact": {
               "ko": "API 타임아웃 **제로화**, 사용자 대기 시간 **95% 감소**, 운영 효율성 **150% 향상**",
               "en": "API timeouts **eliminated**, user wait time reduced by **95%**, operational efficiency improved by **150%**"
@@ -732,7 +774,15 @@
         "ko": "Monaco Editor와 Python LSP를 연동한 VSCode 스타일 웹 IDE입니다. Custom Process Pool을 통해 멀티유저 환경에서도 안정적인 LSP 서비스를 제공하며, WebSocket 기반 저지연 통신으로 실시간 자동완성과 Go-to-Definition을 지원합니다.",
         "en": "VSCode-style web IDE integrating Monaco Editor with Python LSP. Provides stable LSP service in multi-user environments through custom process pooling, and supports real-time auto-completion and go-to-definition via low-latency WebSocket communication."
       },
-      "techStack": ["React (Vite)", "Monaco Editor", "Node.js", "Express", "WebSocket", "Python LSP", "Docker"],
+      "techStack": [
+        "React (Vite)",
+        "Monaco Editor",
+        "Node.js",
+        "Express",
+        "WebSocket",
+        "Python LSP",
+        "Docker"
+      ],
       "keyAchievements": [
         {
           "ko": "Custom Process Pool로 pylsp 효율적 관리 (멀티유저 메모리 최적화)",
@@ -783,6 +833,7 @@
               "ko": "성능최적화",
               "en": "Performance"
             },
+            "icon": "🏊",
             "problem": {
               "ko": "멀티유저 환경에서 각 사용자마다 Python LSP 프로세스를 생성하면 메모리 사용량이 폭발적으로 증가합니다. 20명이 동시 접속하면 20개 pylsp 프로세스 × 150MB = 3GB 메모리 소비.",
               "en": "Creating a Python LSP process for each user in a multi-user environment causes explosive memory growth. 20 concurrent users = 20 pylsp processes × 150MB = 3GB memory consumption."
@@ -795,7 +846,12 @@
               "ko": "```\nclass LSPProcessPool {\n  constructor(maxProcesses = 20, idleTimeout = 300000) {\n    this.maxProcesses = maxProcesses;\n    this.idleTimeout = idleTimeout;\n    this.processes = new Map(); // userId -> process\n    this.idleProcesses = [];\n  }\n\n  async getOrCreateProcess(userId) {\n    // 1. 기존 프로세스 재사용\n    if (this.processes.has(userId)) {\n      return this.processes.get(userId);\n    }\n    \n    // 2. Idle 프로세스 재활용\n    if (this.idleProcesses.length > 0) {\n      const process = this.idleProcesses.pop();\n      this.processes.set(userId, process);\n      return process;\n    }\n    \n    // 3. 새 프로세스 생성 (최대 20개)\n    if (this.processes.size < this.maxProcesses) {\n      const process = await this.createProcess();\n      this.processes.set(userId, process);\n      return process;\n    }\n    \n    throw new Error('Process pool exhausted');\n  }\n  \n  releaseProcess(userId) {\n    const process = this.processes.get(userId);\n    this.processes.delete(userId);\n    this.idleProcesses.push(process);\n    \n    // 5분 후 자동 종료\n    setTimeout(() => this.killIdleProcess(process), this.idleTimeout);\n  }\n}\n```\n\n**핵심**: 프로세스 재사용으로 메모리 70% 감소",
               "en": "```\nclass LSPProcessPool {\n  constructor(maxProcesses = 20, idleTimeout = 300000) {\n    this.maxProcesses = maxProcesses;\n    this.idleTimeout = idleTimeout;\n    this.processes = new Map(); // userId -> process\n    this.idleProcesses = [];\n  }\n\n  async getOrCreateProcess(userId) {\n    // 1. Reuse existing process\n    if (this.processes.has(userId)) {\n      return this.processes.get(userId);\n    }\n    \n    // 2. Recycle idle process\n    if (this.idleProcesses.length > 0) {\n      const process = this.idleProcesses.pop();\n      this.processes.set(userId, process);\n      return process;\n    }\n    \n    // 3. Create new process (max 20)\n    if (this.processes.size < this.maxProcesses) {\n      const process = await this.createProcess();\n      this.processes.set(userId, process);\n      return process;\n    }\n    \n    throw new Error('Process pool exhausted');\n  }\n  \n  releaseProcess(userId) {\n    const process = this.processes.get(userId);\n    this.processes.delete(userId);\n    this.idleProcesses.push(process);\n    \n    // Auto-kill after 5 min\n    setTimeout(() => this.killIdleProcess(process), this.idleTimeout);\n  }\n}\n```\n\n**Key**: Process reuse reduced memory by 70%"
             },
-            "csFoundations": ["Object Pool Pattern", "Resource Management", "Lazy Initialization", "Cache Eviction"],
+            "csFoundations": [
+              "Object Pool Pattern",
+              "Resource Management",
+              "Lazy Initialization",
+              "Cache Eviction"
+            ],
             "impact": {
               "ko": "메모리 사용량 **70% 감소**, 20명 동시 사용자 지원, LSP 응답 시간 **40% 단축**",
               "en": "Memory usage reduced by **70%**, supports 20 concurrent users, LSP response time improved by **40%**"
@@ -811,6 +867,7 @@
               "ko": "동시성",
               "en": "Concurrency"
             },
+            "icon": "🚦",
             "problem": {
               "ko": "100개의 동시 AI Copilot 요청이 발생하면 각 요청마다 context building(메모리 집약적)이 실행되어 서버 메모리 스파이크 발생. 백엔드 LB로도 해결 불가.",
               "en": "100 concurrent AI Copilot requests trigger context building (memory intensive) for each request, causing server memory spikes. Backend LB cannot prevent this."
@@ -839,6 +896,7 @@
               "ko": "보안",
               "en": "Security"
             },
+            "icon": "🛡️",
             "problem": {
               "ko": "브라우저 클라이언트가 시스템 경로(/constants, /llms)에 접근하면 민감한 설정 파일이 노출됩니다. 외부 FastAPI 서비스는 모든 경로 접근이 필요하지만, 브라우저는 /workspace만 허용해야 합니다.",
               "en": "Browser clients accessing system paths (/constants, /llms) exposes sensitive configuration files. External FastAPI services need full path access, but browsers should only access /workspace."
@@ -851,7 +909,12 @@
               "ko": "```\nfunction pathAccessControl(req, res, next) {\n  const authHeader = req.headers['x-service-auth'];\n  const isService = authHeader === process.env.SERVICE_AUTH_TOKEN;\n  \n  // External service: full access\n  if (isService) {\n    return next();\n  }\n  \n  // Browser client: check restricted paths\n  const folder = req.query.folder || '';\n  const RESTRICTED = ['/constants', '/llms'];\n  \n  for (const restricted of RESTRICTED) {\n    const normalized = restricted.replace(/^\\/+/, '');\n    const folderPath = folder.replace(/^\\/+/, '');\n    \n    if (folderPath === normalized || \n        folderPath.startsWith(normalized + '/')) {\n      return res.status(403).json({\n        error: 'Access denied',\n        message: 'Browser clients cannot access system paths'\n      });\n    }\n  }\n  \n  next();\n}\n\napp.use('/api/files', pathAccessControl);\n```\n\n**핵심**: Middleware로 경로 기반 격리 구현",
               "en": "```\nfunction pathAccessControl(req, res, next) {\n  const authHeader = req.headers['x-service-auth'];\n  const isService = authHeader === process.env.SERVICE_AUTH_TOKEN;\n  \n  // External service: full access\n  if (isService) {\n    return next();\n  }\n  \n  // Browser client: check restricted paths\n  const folder = req.query.folder || '';\n  const RESTRICTED = ['/constants', '/llms'];\n  \n  for (const restricted of RESTRICTED) {\n    const normalized = restricted.replace(/^\\/+/, '');\n    const folderPath = folder.replace(/^\\/+/, '');\n    \n    if (folderPath === normalized || \n        folderPath.startsWith(normalized + '/')) {\n      return res.status(403).json({\n        error: 'Access denied',\n        message: 'Browser clients cannot access system paths'\n      });\n    }\n  }\n  \n  next();\n}\n\napp.use('/api/files', pathAccessControl);\n```\n\n**Key**: Path-based isolation via middleware"
             },
-            "csFoundations": ["Authorization", "Middleware Pattern", "Principle of Least Privilege", "Multi-tenancy"],
+            "csFoundations": [
+              "Authorization",
+              "Middleware Pattern",
+              "Principle of Least Privilege",
+              "Multi-tenancy"
+            ],
             "impact": {
               "ko": "보안 취약점 **제로화**, 멀티테넌시 격리 완벽화, 외부 서비스 연동 유연성 확보",
               "en": "Security vulnerabilities **eliminated**, perfect multi-tenancy isolation, flexible external service integration"
@@ -892,7 +955,10 @@
     },
     {
       "id": "knowledge-base",
-      "title": "사내 지식베이스 RAG",
+      "title": {
+        "ko": "사내 지식베이스 RAG",
+        "en": "Internal Knowledge Base RAG"
+      },
       "shortDescription": {
         "ko": "Self-Corrective RAG 구조로 사내 분산 지식 통합 및 고품질 답변 제공",
         "en": "Self-Corrective RAG system integrating distributed internal knowledge"
@@ -902,33 +968,52 @@
         "en": "Self-Corrective RAG system for PMs, cross-department teams, B2B stakeholders, and new employees. Achieved higher accuracy than standard RAG through quality-driven iterative search and accumulated context."
       },
       "period": {
-        "ko": "2024.10 ~",
-        "en": "2024.10 ~"
+        "ko": "2024.10 ~ 현재",
+        "en": "Oct 2024 ~ Present"
       },
       "company": {
-        "ko": "포지큐브",
-        "en": "Posicube"
+        "ko": "(주)포지큐브",
+        "en": "PosiQube Inc."
       },
-      "techStack": ["Python", "FastAPI", "Agent Builder", "RAG", "GPT-4o", "Vector DB", "Redis"],
+      "techStack": ["Python", "LangChain", "OpenAI GPT-4o", "Faiss", "Streamlit", "FastAPI"],
       "features": [
-        "Self-Corrective RAG (품질 평가 기반 반복 개선)",
-        "Progressive Context Accumulation (패시지 누적)",
-        "Intelligent Query Refinement (LLM 기반 검색어 정제)",
-        "Multi-Source Integration (분산 지식 통합)",
-        "Conversation History Management (대화 이력 관리)"
+        {
+          "ko": "Self-Corrective RAG Loop",
+          "en": "Self-Corrective RAG Loop"
+        },
+        {
+          "ko": "Progressive Context Accumulation",
+          "en": "Progressive Context Accumulation"
+        },
+        {
+          "ko": "Intelligent Query Refinement",
+          "en": "Intelligent Query Refinement"
+        },
+        {
+          "ko": "Hallucination Detection",
+          "en": "Hallucination Detection"
+        },
+        {
+          "ko": "Source Attribution",
+          "en": "Source Attribution"
+        }
       ],
       "keyAchievements": [
         {
-          "ko": "답변 정확도 **85% → 95%** 향상",
-          "en": "Answer accuracy improved **85% → 95%**"
+          "ko": "답변 정확도 **85% → 95%** 향상 (Self-Correction 도입)",
+          "en": "Improved answer accuracy **85% → 95%** (Introduced Self-Correction)"
         },
         {
-          "ko": "검색 성공률 **70% → 90%** 향상",
-          "en": "Search success rate improved **70% → 90%**"
+          "ko": "검색 성공률 **70% → 90%** 개선 (Query Refinement 적용)",
+          "en": "Improved retrieval success rate **70% → 90%** (Applied Query Refinement)"
         },
         {
-          "ko": "복잡한 질문 답변 완성도 **40% 향상**",
-          "en": "Complex query answer completeness **+40%**"
+          "ko": "복잡한 질문 답변 완성도 **+40%** (Context Accumulation)",
+          "en": "Completeness for complex queries **+40%** (Context Accumulation)"
+        },
+        {
+          "ko": "신입사원 온보딩 시간 **50% 단축**",
+          "en": "Reduced new employee onboarding time by **50%**"
         }
       ],
       "repoPath": "knowledge-base",
@@ -957,7 +1042,12 @@
               "ko": "```python\\n# 품질 평가 루프\\nQUALITY_THRESHOLD = 70\\nMAX_RETRY = 3\\ncurrent_retry = 0\\n\\nwhile current_retry < MAX_RETRY:\\n    # 답변 생성\\n    answer = generate_answer(passages, question)\\n    \\n    # 품질 평가 (GPT-4o-mini)\\n    eval_result = evaluate_quality(answer, question)\\n    \\n    if eval_result.score >= QUALITY_THRESHOLD:\\n        return answer  # 만족\\n    \\n    # 검색어 개선\\n    refined_query = refine_keywords(\\n        question,\\n        eval_result.suggestions,\\n        accumulated_passages\\n    )\\n    \\n    # 재검색 (누적)\\n    new_passages = search(refined_query)\\n    accumulated_passages.extend(new_passages)\\n    current_retry += 1\\n```\\n\\n**핵심**: Quality Assurance Loop + Progressive Retrieval",
               "en": "```python\\n# Quality evaluation loop\\nQUALITY_THRESHOLD = 70\\nMAX_RETRY = 3\\ncurrent_retry = 0\\n\\nwhile current_retry < MAX_RETRY:\\n    # Generate answer\\n    answer = generate_answer(passages, question)\\n    \\n    # Quality evaluation (GPT-4o-mini)\\n    eval_result = evaluate_quality(answer, question)\\n    \\n    if eval_result.score >= QUALITY_THRESHOLD:\\n        return answer  # Satisfactory\\n    \\n    # Refine query\\n    refined_query = refine_keywords(\\n        question,\\n        eval_result.suggestions,\\n        accumulated_passages\\n    )\\n    \\n    # Re-search (accumulate)\\n    new_passages = search(refined_query)\\n    accumulated_passages.extend(new_passages)\\n    current_retry += 1\\n```\\n\\n**Core**: Quality Assurance Loop + Progressive Retrieval"
             },
-            "csFoundations": ["Quality Assurance", "Feedback Loop", "Progressive Enhancement", "RAG Optimization"],
+            "csFoundations": [
+              "Quality Assurance",
+              "Feedback Loop",
+              "Progressive Enhancement",
+              "RAG Optimization"
+            ],
             "impact": {
               "ko": "**성과**: 답변 정확도 **85% → 95%** (10%p ↑). 오답률 **15% → 5%** (67% 감소).",
               "en": "**Impact**: Answer accuracy **85% → 95%** (+10%p). Error rate **15% → 5%** (67% reduction)."
@@ -987,7 +1077,12 @@
               "ko": "```python\\naccumulated_passages = []\\nused_passage_ids = set()\\n\\ndef search_and_accumulate(query):\\n    # 벡터 검색\\n    new_passages = vector_search(query, top_k=5)\\n    \\n    for passage in new_passages:\\n        # 중복 체크\\n        if passage.id not in used_passage_ids:\\n            accumulated_passages.append(passage)\\n            used_passage_ids.add(passage.id)\\n    \\n    return accumulated_passages\\n\\n# 최종 답변 생성\\nanswer = llm.generate(\\n    question=user_question,\\n    context=accumulated_passages  # 누적된 모든 패시지\\n)\\n```\\n\\n**핵심**: Stateful Retrieval + Deduplication",
               "en": "```python\\naccumulated_passages = []\\nused_passage_ids = set()\\n\\ndef search_and_accumulate(query):\\n    # Vector search\\n    new_passages = vector_search(query, top_k=5)\\n    \\n    for passage in new_passages:\\n        # Deduplication\\n        if passage.id not in used_passage_ids:\\n            accumulated_passages.append(passage)\\n            used_passage_ids.add(passage.id)\\n    \\n    return accumulated_passages\\n\\n# Final answer generation\\nanswer = llm.generate(\\n    question=user_question,\\n    context=accumulated_passages  # All accumulated passages\\n)\\n```\\n\\n**Core**: Stateful Retrieval + Deduplication"
             },
-            "csFoundations": ["Stateful Processing", "Deduplication", "Set Data Structure", "Context Window Management"],
+            "csFoundations": [
+              "Stateful Processing",
+              "Deduplication",
+              "Set Data Structure",
+              "Context Window Management"
+            ],
             "impact": {
               "ko": "**성과**: 복잡한 질문 답변 완성도 **40% 향상**. 평균 컨텍스트 크기 3개 → 7개 패시지로 확대.",
               "en": "**Impact**: Complex query answer completeness **+40%**. Average context size expanded from 3 to 7 passages."
@@ -1017,7 +1112,12 @@
               "ko": "```python\\n# 키워드 추출 및 정제\\nrefinement_prompt = \\\"\\\"\\\"\\n사용자 질문: {user_question}\\n이전 검색 실패: {eval_feedback}\\n\\n다음을 JSON으로 반환:\\n1. keywords_to_add: 추가할 기술 용어\\n2. keywords_to_remove: 제거할 일상어\\n3. suggested_query: 개선된 검색 쿼리\\n\\\"\\\"\\\"\\n\\nrefined = llm.generate(refinement_prompt)\\n# {\\n#   \\\"keywords_to_add\\\": [\\\"FastAPI\\\", \\\"subprocess\\\"],\\n#   \\\"keywords_to_remove\\\": [\\\"안돌아가요\\\"],\\n#   \\\"suggested_query\\\": \\\"FastAPI subprocess 실행 오류\\\"\\n# }\\n\\n# 개선된 쿼리로 재검색\\npassages = vector_search(refined.suggested_query)\\n```\\n\\n**핵심**: Semantic Query Expansion + Domain Adaptation",
               "en": "```python\\n# Keyword extraction and refinement\\nrefinement_prompt = \\\"\\\"\\\"\\nUser question: {user_question}\\nPrevious search failure: {eval_feedback}\\n\\nReturn JSON with:\\n1. keywords_to_add: technical terms to add\\n2. keywords_to_remove: casual words to remove\\n3. suggested_query: refined search query\\n\\\"\\\"\\\"\\n\\nrefined = llm.generate(refinement_prompt)\\n# {\\n#   \\\"keywords_to_add\\\": [\\\"FastAPI\\\", \\\"subprocess\\\"],\\n#   \\\"keywords_to_remove\\\": [\\\"not working\\\"],\\n#   \\\"suggested_query\\\": \\\"FastAPI subprocess execution error\\\"\\n# }\\n\\n# Re-search with refined query\\npassages = vector_search(refined.suggested_query)\\n```\\n\\n**Core**: Semantic Query Expansion + Domain Adaptation"
             },
-            "csFoundations": ["Query Rewriting", "Semantic Search", "Natural Language Processing", "Domain Adaptation"],
+            "csFoundations": [
+              "Query Rewriting",
+              "Semantic Search",
+              "Natural Language Processing",
+              "Domain Adaptation"
+            ],
             "impact": {
               "ko": "**성과**: 검색 성공률 **70% → 90%** (20%p ↑). 모호한 질문 처리 성공률 **3배 향상**.",
               "en": "**Impact**: Search success rate **70% → 90%** (+20%p). Ambiguous question handling success rate **3x improvement**."
