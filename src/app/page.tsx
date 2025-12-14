@@ -5,6 +5,8 @@ import styles from './page.module.css';
 import Timeline from '@/components/Timeline';
 import ProjectCard from '@/components/ProjectCard';
 import NeuralBackground from '@/components/NeuralBackground';
+import TimelineBackground from '@/components/TimelineBackground';
+import FooterBackground from '@/components/FooterBackground';
 import portfolioData from '@/data/portfolio.json';
 import { PortfolioData, TimelineType } from '@/types';
 
@@ -228,6 +230,7 @@ export default function Home() {
 
       {/* Timeline with Filter */}
       <section id="timeline" className={styles.section}>
+        <TimelineBackground />
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>{SECTION_TITLES.timeline[lang]}</h2>
           <div className={styles.filterButtons}>
@@ -260,6 +263,7 @@ export default function Home() {
 
       {/* Contact Footer */}
       <footer id="contact" className={styles.footer}>
+        <FooterBackground />
         <div className={styles.footerContent}>
           <h3 className={styles.footerTitle}>{SECTION_TITLES.contact[lang]}</h3>
           <p className={styles.footerText}>

@@ -121,7 +121,7 @@
 
 /* Right: Card */
 .card {
-  background: linear-gradient(135deg, rgba(17, 17, 17, 0.9), rgba(31, 41, 55, 0.8));
+  background: rgba(17, 17, 17, 0.95);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
@@ -137,7 +137,7 @@
 
 /* Dev cards: Premium styling */
 .timelineItem[data-type='Dev'] .card {
-  background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(17, 17, 17, 0.9));
+  background: rgba(0, 240, 255, 0.08);
   border-color: rgba(0, 240, 255, 0.3);
   box-shadow: 0 10px 30px rgba(0, 240, 255, 0.15);
 }

@@ -1,19 +1,19 @@
 :root {
   /* Colors */
   --bg-primary: #050505;
-  --bg-secondary: #0A0A0A;
+  --bg-secondary: #0a0a0a;
   --bg-card: #111111;
-  
-  --text-primary: #EDEDED;
-  --text-secondary: #A1A1AA;
-  --text-accent: #00F0FF;
-  
-  --accent-cyan: #00F0FF;
-  --accent-purple: #7000FF;
-  --accent-pink: #FF0080;
-  
+
+  --text-primary: #ededed;
+  --text-secondary: #a1a1aa;
+  --text-accent: #00f0ff;
+
+  --accent-cyan: #00f0ff;
+  --accent-purple: #7000ff;
+  --accent-pink: #ff0080;
+
   --border-color: #333333;
-  
+
   /* Spacing */
   --container-width: 1400px;
   --header-height: 80px;
@@ -34,6 +34,8 @@ body {
   font-family: var(--font-outfit), 'Outfit', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 
 a {
@@ -41,7 +43,8 @@ a {
   text-decoration: none;
 }
 
-code, pre {
+code,
+pre {
   /* Font family handled by next/font */
   font-family: var(--font-jetbrains-mono), monospace;
 }
