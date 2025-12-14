@@ -1,0 +1,138 @@
+/* Wrapper for Timeline + Minimap */
+.timelineWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* 3D Carousel Scroll Container */
+.scrollerContainer {
+  width: 100%;
+  height: 65vh;
+  max-width: 900px;
+  margin: 0 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  perspective: 1200px;
+  perspective-origin: center center;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.scrollerContainer::-webkit-scrollbar {
+  display: none; /* Hide scrollbar */
+}
+
+.scrollerContainer {
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+/* 3D Transform Track */
+.timelineTrack {
+  padding: 25vh 2rem;
+  transform-style: preserve-3d;
+  position: relative;
+}
+
+/* Timeline Item - 3D Carousel Style */
+.timelineItem {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 2.5rem;
+  margin-bottom: 5rem;
+  position: relative;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  transform-origin: center center;
+  transition:
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+/* Minimap Navigator */
+.minimap {
+  position: absolute;
+  right: -60px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  z-index: 10;
+}
+
+.minimapLine {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--accent-cyan) 10%,
+    var(--accent-purple) 90%,
+    transparent
+  );
+  opacity: 0.3;
+}
+
+.minimapDot {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.minimapDot:hover {
+  background: rgba(0, 240, 255, 0.3);
+  border-color: var(--accent-cyan);
+  transform: scale(1.3);
+}
+
+.minimapDotActive {
+  background: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+  transform: scale(1.5);
+}
+
+/* Dev dots in minimap */
+.minimapDot[data-type='Dev'] {
+  border-color: rgba(0, 240, 255, 0.5);
+}
+
+.minimapDot[data-type='Dev'].minimapDotActive {
+  background: var(--accent-cyan);
+  animation: minimapPulse 2s infinite;
+}
+
+@keyframes minimapPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.8);
+  }
+}
+
+/* Responsive: Hide minimap on smaller screens */
+@media (max-width: 1024px) {
+  .minimap {
+    display: none;
+  }
+}
+
+/* Continue with existing styles below... */

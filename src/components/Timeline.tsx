@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Code2, GraduationCap, Palette, Plane, Briefcase, FileText, Award } from 'lucide-react';
 import styles from './Timeline.module.css';
 import { TimelineItem } from '@/types';
@@ -19,78 +19,177 @@ const categoryIcons = {
 };
 
 const Timeline: React.FC<TimelineProps> = ({ items, lang }) => {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add(styles.visible);
-          }
-        });
-      },
-      { threshold: 0.2, rootMargin: '0px 0px -100px 0px' },
-    );
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
 
-    const timelineItems = document.querySelectorAll(`.${styles.timelineItem}`);
-    timelineItems.forEach((el) => {
-      observer.observe(el);
-    });
+    const updateTransforms = () => {
+      const scrollerRect = scroller.getBoundingClientRect();
+      const scrollerCenter = scrollerRect.top + scrollerRect.height / 2;
+      let closestIndex = 0;
+      let closestDistance = Infinity;
 
-    return () => observer.disconnect();
+      itemRefs.current.forEach((item, index) => {
+        if (!item) return;
+
+        const itemRect = item.getBoundingClientRect();
+        const itemCenter = itemRect.top + itemRect.height / 2;
+        const distanceFromCenter = itemCenter - scrollerCenter;
+
+        // Track closest item to center
+        const absDistance = Math.abs(distanceFromCenter);
+        if (absDistance < closestDistance) {
+          closestDistance = absDistance;
+          closestIndex = index;
+        }
+
+        // Adjust transform intensity based on screen size
+        const isMobile = window.innerWidth <= 768;
+        const isSmallMobile = window.innerWidth <= 480;
+
+        const rotationMultiplier = isSmallMobile ? 0.02 : isMobile ? 0.03 : 0.05;
+        const scaleMultiplier = isSmallMobile ? 0.0004 : isMobile ? 0.0006 : 0.0008;
+        const opacityMultiplier = isSmallMobile ? 0.001 : isMobile ? 0.0012 : 0.0015;
+
+        // Calculate transforms based on distance from center
+        const rotation = distanceFromCenter * rotationMultiplier;
+        const scale = Math.max(0.75, 1 - Math.abs(distanceFromCenter) * scaleMultiplier);
+        const opacity = Math.max(0.3, 1 - Math.abs(distanceFromCenter) * opacityMultiplier);
+
+        // Apply transforms
+        item.style.transform = `rotateX(${rotation}deg) scale(${scale})`;
+        item.style.opacity = opacity.toString();
+      });
+
+      setActiveIndex(closestIndex);
+    };
+
+    // Initial update
+    updateTransforms();
+
+    // Update on scroll
+    scroller.addEventListener('scroll', updateTransforms);
+    window.addEventListener('resize', updateTransforms);
+
+    return () => {
+      scroller.removeEventListener('scroll', updateTransforms);
+      window.removeEventListener('resize', updateTransforms);
+    };
   }, [items]);
 
+  const scrollToItem = (index: number) => {
+    const item = itemRefs.current[index];
+    if (!item || !scrollerRef.current) return;
+
+    const scroller = scrollerRef.current;
+
+    // Calculate absolute position to center the item
+    const scrollerHeight = scroller.clientHeight;
+    const itemOffsetTop = item.offsetTop;
+    const itemHeight = item.clientHeight;
+
+    // Center the item in the viewport
+    const scrollPosition = itemOffsetTop - scrollerHeight / 2 + itemHeight / 2;
+
+    scroller.scrollTo({
+      top: scrollPosition,
+      behavior: 'smooth',
+    });
+  };
+
   return (
-    <div className={styles.container}>
-      <div className={styles.timelineLine} />
+    <div className={styles.timelineWrapper}>
+      <div className={styles.scrollerContainer} ref={scrollerRef}>
+        <div className={styles.timelineTrack}>
+          {items.map((item, index) => {
+            const IconComponent = categoryIcons[item.type as keyof typeof categoryIcons];
 
-      {items.map((item, index) => {
-        const IconComponent = categoryIcons[item.type as keyof typeof categoryIcons];
+            return (
+              <div
+                key={item.id}
+                ref={(el) => {
+                  itemRefs.current[index] = el;
+                }}
+                className={`${styles.timelineItem} ${index === activeIndex ? styles.activeItem : ''}`}
+                data-type={item.type}
+              >
+                {/* Date badge - outside card, top-left */}
+                <div className={styles.dateBadge}>{item.date}</div>
 
-        return (
-          <div key={item.id} className={styles.timelineItem} data-type={item.type}>
-            {/* Left: Simple Dot + Date */}
-            <div className={styles.timelineDot}>
-              <div className={styles.dot} />
-              <span className={styles.dateLabel}>{item.date}</span>
-            </div>
+                {/* Card */}
+                <div className={styles.card}>
+                  <div className={styles.cardHeader}>
+                    <div className={styles.titleRow}>
+                      {IconComponent && (
+                        <IconComponent className={styles.titleIcon} size={20} strokeWidth={2} />
+                      )}
+                      <h3>{typeof item.title === 'string' ? item.title : item.title[lang]}</h3>
+                    </div>
+                    <span className={styles.role}>
+                      {typeof item.role === 'string' ? item.role : item.role[lang]}
+                    </span>
+                  </div>
+                  <p className={styles.description}>{item.description[lang]}</p>
 
-            {/* Right: Card with Icon in Title */}
-            <div className={styles.card}>
-              <div className={styles.cardHeader}>
-                <div className={styles.titleRow}>
-                  {IconComponent && (
-                    <IconComponent className={styles.titleIcon} size={20} strokeWidth={2} />
+                  {/* Paper Link (if exists) */}
+                  {item.paperLink && item.paperTitle && (
+                    <a
+                      href={item.paperLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.paperLink}
+                    >
+                      {item.paperTitle['en']?.toLowerCase().includes('patent') ||
+                      item.paperTitle[lang]?.includes('특허') ? (
+                        <Award size={16} className={styles.paperIcon} />
+                      ) : (
+                        <FileText size={16} className={styles.paperIcon} />
+                      )}
+                      <span className={styles.paperTitle}>{item.paperTitle[lang]}</span>
+                      <span className={styles.externalIcon}>↗</span>
+                    </a>
                   )}
-                  <h3>{typeof item.title === 'string' ? item.title : item.title[lang]}</h3>
                 </div>
-                <span className={styles.role}>
-                  {typeof item.role === 'string' ? item.role : item.role[lang]}
-                </span>
               </div>
-              <p className={styles.description}>{item.description[lang]}</p>
+            );
+          })}
+        </div>
+      </div>
 
-              {/* Paper Link (if exists) */}
-              {item.paperLink && item.paperTitle && (
-                <a
-                  href={item.paperLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.paperLink}
-                >
-                  {item.paperTitle['en']?.toLowerCase().includes('patent') ||
-                  item.paperTitle[lang]?.includes('특허') ? (
-                    <Award size={16} className={styles.paperIcon} />
-                  ) : (
-                    <FileText size={16} className={styles.paperIcon} />
-                  )}
-                  <span className={styles.paperTitle}>{item.paperTitle[lang]}</span>
-                  <span className={styles.externalIcon}>↗</span>
-                </a>
-              )}
-            </div>
+      {/* Minimap Navigator with Dates */}
+      <div className={styles.minimap}>
+        <div className={styles.minimapLine} />
+        {items.map((item, index) => (
+          <div
+            key={item.id}
+            className={styles.minimapItem}
+            onClick={() => scrollToItem(index)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                scrollToItem(index);
+              }
+            }}
+            aria-label={`Go to ${typeof item.title === 'string' ? item.title : item.title[lang]}`}
+          >
+            <div
+              className={`${styles.minimapDot} ${index === activeIndex ? styles.minimapDotActive : ''}`}
+              data-type={item.type}
+            />
+            <span
+              className={`${styles.minimapDate} ${index === activeIndex ? styles.minimapDateActive : ''}`}
+            >
+              {item.date}
+            </span>
           </div>
-        );
-      })}
+        ))}
+      </div>
     </div>
   );
 };

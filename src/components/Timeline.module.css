@@ -1,44 +1,58 @@
-/* Container */
-.container {
+/* Wrapper for Timeline + Minimap */
+.timelineWrapper {
+  position: relative;
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
-  padding: 4rem 2rem;
+}
+
+/* 3D Carousel Scroll Container */
+.scrollerContainer {
+  width: 100%;
+  height: 65vh;
+  max-width: 900px;
+  margin: 0 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  perspective: 1200px;
+  perspective-origin: center center;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+
+  /* Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 240, 255, 0.3) transparent;
+}
+
+.scrollerContainer::-webkit-scrollbar {
+  display: none; /* Hide scrollbar */
+}
+
+.scrollerContainer {
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+/* 3D Transform Track */
+.timelineTrack {
+  padding: 25vh 2rem;
+  transform-style: preserve-3d;
   position: relative;
 }
 
-/* Vertical Timeline Line */
-.timelineLine {
-  position: absolute;
-  left: 2rem; /* Aligned with dots */
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: linear-gradient(
-    to bottom,
-    transparent,
-    var(--accent-cyan) 10%,
-    var(--accent-purple) 90%,
-    transparent
-  );
-  box-shadow: 0 0 4px rgba(0, 240, 255, 0.3);
-}
-
-/* Timeline Item */
+/* Timeline Item - 3D Carousel Style */
 .timelineItem {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 2.5rem;
-  margin-bottom: 3rem;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto 5rem;
   position: relative;
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.timelineItem.visible {
-  opacity: 1;
-  transform: translateY(0);
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  transform-origin: center center;
+  transition:
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
 }
 
 /* Left: Simple Dot + Date */
@@ -100,7 +114,7 @@
     box-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
   }
   50% {
-    transform: scale(1.1);
+    transform: scale(1.05);
     box-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
   }
 }
@@ -140,6 +154,11 @@
   background: rgba(0, 240, 255, 0.08);
   border-color: rgba(0, 240, 255, 0.3);
   box-shadow: 0 10px 30px rgba(0, 240, 255, 0.15);
+}
+
+/* Date badge - hidden on desktop, shown on mobile */
+.dateBadge {
+  display: none;
 }
 
 .timelineItem[data-type='Dev']:hover .card {
@@ -290,7 +309,6 @@
 
   .card {
     padding: 1rem;
-    margin-left: 1.5rem; /* Prevent covering timeline line */
   }
 
   .card:hover {
@@ -326,5 +344,344 @@
   .paperIcon,
   .externalIcon {
     font-size: 0.9rem;
+  }
+}
+
+/* ===== Minimap Navigator ===== */
+.minimap {
+  position: absolute;
+  right: -120px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  z-index: 10;
+  height: 100%; /* Full height */
+}
+
+.minimapItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.minimapItem:hover {
+  transform: translateX(2px);
+}
+
+.minimapItem:hover .minimapDate {
+  opacity: 0.8;
+}
+
+.minimapLine {
+  position: absolute;
+  top: -50%;
+  left: 5px;
+  width: 2px;
+  height: 200%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 5%,
+    var(--accent-cyan) 15%,
+    var(--accent-purple) 85%,
+    transparent 95%,
+    transparent 100%
+  );
+  opacity: 0.3;
+}
+
+.minimapDot {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.minimapItem:hover .minimapDot {
+  background: rgba(0, 240, 255, 0.3);
+  border-color: var(--accent-cyan);
+  transform: scale(1.3);
+}
+
+.minimapDotActive {
+  background: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+  transform: scale(1.5);
+}
+
+/* Date labels on minimap */
+.minimapDate {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0.5;
+  font-weight: 400;
+}
+
+.minimapDateActive {
+  color: var(--accent-cyan);
+  opacity: 1;
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+}
+
+/* Dev dots in minimap */
+.minimapDot[data-type='Dev'] {
+  border-color: rgba(0, 240, 255, 0.5);
+}
+
+.minimapDot[data-type='Dev'].minimapDotActive {
+  background: var(--accent-cyan);
+  animation: minimapPulse 2s infinite;
+}
+
+@keyframes minimapPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.8);
+  }
+}
+
+/* Responsive: Hide minimap on smaller screens */
+@media (max-width: 1024px) {
+  .minimap {
+    display: none;
+  }
+
+  /* Adjust wrapper for mobile */
+  .timelineWrapper {
+    max-width: 100%;
+  }
+
+  /* Reduce 3D effect intensity on tablets */
+  .scrollerContainer {
+    perspective: 800px;
+    height: 70vh;
+  }
+}
+
+/* Mobile optimizations - 3D Carousel with left minimap */
+@media (max-width: 768px) {
+  /* 3D carousel with stronger perspective */
+  .scrollerContainer {
+    height: 55vh;
+    perspective: 350px; /* Reduced from 400px for stronger effect */
+    scroll-snap-type: y mandatory;
+    overflow-y: auto;
+  }
+
+  .timelineTrack {
+    padding: 20vh 1.5rem 20vh 1rem; /* Reduced top/bottom padding */
+    position: relative;
+  }
+
+  /* Timeline items - increased spacing */
+  .timelineItem {
+    margin: 0 0 2.5rem 5rem; /* Increased from 1.5rem */
+    max-width: 77%;
+    scroll-snap-align: center;
+  }
+
+  .card {
+    padding: 1rem; /* Reduced from 1.25rem */
+    width: 100%;
+    position: relative;
+  }
+
+  /* Date badge - outside card, no box */
+  .dateBadge {
+    display: block;
+    position: absolute;
+    top: -1.5rem;
+    left: 0;
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-weight: 400;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+  }
+
+  /* Active card date badge - emphasized */
+  .activeItem .dateBadge {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff; /* White like card title */
+    opacity: 1;
+  }
+
+  /* Dev type active date badge */
+  .activeItem[data-type='Dev'] .dateBadge {
+    color: var(--accent-cyan); /* Cyan like Dev title */
+  }
+
+  /* Show minimap on left for mobile - further shifted right */
+  .minimap {
+    display: flex;
+    left: 2.5rem; /* Increased from 1.5rem */
+    right: auto;
+    height: 60%;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .minimapLine {
+    left: 50%;
+    transform: translateX(-50%);
+    top: -50%; /* Maximum extension */
+    height: 200%; /* Double height */
+    opacity: 0.4;
+  }
+
+  .minimapItem {
+    gap: 0;
+    justify-content: center; /* Center dot on line */
+  }
+
+  /* Hide dates in minimap on mobile (shown in card badge) */
+  .minimapDate {
+    display: none;
+  }
+
+  /* Adjust dot size for mobile */
+  .minimapDot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .minimapDotActive {
+    transform: scale(1.3);
+  }
+
+  /* Typography adjustments - compact */
+  .cardHeader h3 {
+    font-size: 1rem; /* Reduced from 1.1rem */
+    margin-bottom: 0.25rem; /* Tighter spacing */
+  }
+
+  .role {
+    font-size: 0.8rem; /* Reduced from 0.85rem */
+    margin-bottom: 0.5rem; /* Tighter */
+  }
+
+  .description {
+    font-size: 0.8rem; /* Reduced from 0.85rem */
+    line-height: 1.45; /* Tighter from 1.5 */
+  }
+
+  /* Paper link - much more compact */
+  .paperLink {
+    padding: 0.5rem 0.65rem; /* Further reduced */
+    margin-top: 0.4rem;
+    font-size: 0.75rem; /* Smaller font */
+  }
+
+  .paperTitle {
+    font-size: 0.75rem; /* Reduced from 0.85rem */
+  }
+
+  .paperIcon,
+  .externalIcon {
+    width: 12px; /* Smaller icons */
+    height: 12px;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  /* Further reduce perspective and increase spacing */
+  .scrollerContainer {
+    height: 60vh;
+    perspective: 250px; /* Reduced from 300px for stronger effect */
+  }
+
+  .timelineTrack {
+    padding: 18vh 1.25rem 18vh 0.75rem;
+  }
+
+  /* Card adjustments - increased spacing */
+  .timelineItem {
+    margin: 0 0 2rem 4rem; /* Increased from 1.25rem */
+    max-width: 82%;
+  }
+
+  .card {
+    padding: 0.85rem; /* Reduced from 1rem */
+  }
+
+  .dateBadge {
+    font-size: 0.6rem;
+    top: -1.25rem;
+    transition: all 0.3s ease;
+  }
+
+  /* Active card date badge on small mobile */
+  .activeItem .dateBadge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fff; /* White */
+    opacity: 1;
+  }
+
+  /* Dev type active date badge */
+  .activeItem[data-type='Dev'] .dateBadge {
+    color: var(--accent-cyan);
+  }
+
+  /* Minimap adjustments - further shifted right */
+  .minimap {
+    left: 2rem; /* Increased from 1.25rem */
+    height: 50%;
+  }
+
+  .minimapLine {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .minimapDot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .cardHeader h3 {
+    font-size: 1rem;
+  }
+
+  .titleIcon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .role {
+    font-size: 0.8rem;
+  }
+
+  .description {
+    font-size: 0.85rem;
+  }
+
+  /* Reduce gaps */
+  .titleRow {
+    gap: 0.4rem;
   }
 }
