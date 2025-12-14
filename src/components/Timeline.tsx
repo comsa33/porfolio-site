@@ -1,7 +1,16 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Code2, GraduationCap, Palette, Plane, Briefcase, FileText, Award } from 'lucide-react';
+import {
+  Code2,
+  GraduationCap,
+  Palette,
+  Plane,
+  Briefcase,
+  FileText,
+  Award,
+  Laptop,
+} from 'lucide-react';
 import styles from './Timeline.module.css';
 import { TimelineItem } from '@/types';
 
@@ -107,7 +116,13 @@ const Timeline: React.FC<TimelineProps> = ({ items, lang }) => {
       <div className={styles.scrollerContainer} ref={scrollerRef}>
         <div className={styles.timelineTrack}>
           {items.map((item, index) => {
-            const IconComponent = categoryIcons[item.type as keyof typeof categoryIcons];
+            // Custom Icon Logic for IT Training (Bootcamps)
+            let IconComponent = categoryIcons[item.type as keyof typeof categoryIcons];
+
+            // Override for specific IT education items
+            if (['edu-kcci', 'edu-codestates'].includes(item.id)) {
+              IconComponent = Laptop;
+            }
 
             return (
               <div
@@ -117,6 +132,7 @@ const Timeline: React.FC<TimelineProps> = ({ items, lang }) => {
                 }}
                 className={`${styles.timelineItem} ${index === activeIndex ? styles.activeItem : ''}`}
                 data-type={item.type}
+                data-id={item.id} // Add data-id for specific styling override
               >
                 {/* Date badge - outside card, top-left */}
                 <div className={styles.dateBadge}>{item.date}</div>

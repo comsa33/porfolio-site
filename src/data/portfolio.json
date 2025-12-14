@@ -229,8 +229,8 @@
       },
       "type": "Education",
       "description": {
-        "ko": "• Python 응용 프로그래밍\n• 데이터 수집 & 분석\n• SQL & RDBMS\n• NLP 프로젝트",
-        "en": "• Python application programming\n• Data collection & analysis\n• SQL & RDBMS\n• NLP projects"
+        "ko": "Python 프로그래밍, 데이터 수집/분석 및 RDBMS 활용 능력 습득.",
+        "en": "Learned Python programming, data collection/analysis, and RDBMS skills."
       }
     },
     {
@@ -246,8 +246,8 @@
       },
       "type": "Education",
       "description": {
-        "ko": "• 머신러닝/딥러닝 프로젝트\n• Data Engineering & MLOps\n• REST API & 컨테이너 환경 구축\n• 추천 시스템 기업 협업",
-        "en": "• ML/DL projects\n• Data Engineering & MLOps\n• REST API & Container setup\n• Recommendation system collaboration"
+        "ko": "머신러닝/딥러닝 프로젝트 및 Data Engineering/MLOps 실무 경험.",
+        "en": "Practical experience in ML/DL projects and Data Engineering/MLOps."
       }
     },
     {

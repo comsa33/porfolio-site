@@ -163,6 +163,21 @@
   box-shadow: 0 10px 30px rgba(112, 0, 255, 0.15);
 }
 
+/* IT Bootcamp cards: Subtle styling (Darker/Subtle Purple) - Non-degree */
+.timelineItem[data-id='edu-kcci'] .card,
+.timelineItem[data-id='edu-codestates'] .card {
+  background: rgba(112, 0, 255, 0.03); /* Much subtler background */
+  border-color: rgba(112, 0, 255, 0.15); /* More transparent border */
+  box-shadow: none; /* No shadow by default to look less prominent */
+}
+
+/* Hover override for bootcamps */
+.timelineItem[data-id='edu-kcci']:hover .card,
+.timelineItem[data-id='edu-codestates']:hover .card {
+  border-color: rgba(112, 0, 255, 0.4);
+  box-shadow: 0 5px 20px rgba(112, 0, 255, 0.1);
+}
+
 /* Travel cards: Premium styling (Gold/Amber) */
 .timelineItem[data-type='Travel'] .card {
   background: rgba(255, 200, 0, 0.08);
@@ -175,6 +190,13 @@
   background: rgba(255, 0, 128, 0.08);
   border-color: rgba(255, 0, 128, 0.3);
   box-shadow: 0 10px 30px rgba(255, 0, 128, 0.15);
+}
+
+/* Career cards: Soft styling (Emerald/Mint) - Subtler than Dev */
+.timelineItem[data-type='Career'] .card {
+  background: rgba(16, 185, 129, 0.05);
+  border-color: rgba(16, 185, 129, 0.2);
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
 }
 
 /* Date badge - hidden on desktop, shown on mobile */
@@ -208,6 +230,13 @@
   box-shadow:
     0 15px 50px rgba(255, 0, 128, 0.3),
     inset 0 1px 0 rgba(255, 0, 128, 0.2);
+}
+
+.timelineItem[data-type='Career']:hover .card {
+  border-color: #34d399; /* Soft Emerald */
+  box-shadow:
+    0 15px 50px rgba(16, 185, 129, 0.25),
+    inset 0 1px 0 rgba(16, 185, 129, 0.15);
 }
 
 /* Card Content */
@@ -249,7 +278,8 @@
 }
 
 .timelineItem[data-type='Career'] .titleIcon {
-  color: #999;
+  color: #34d399; /* Soft Emerald */
+  opacity: 1;
 }
 
 .cardHeader h3 {
@@ -280,6 +310,11 @@
   color: #ff70a6; /* Bright Pink */
 }
 
+.timelineItem[data-type='Career'] .cardHeader h3 {
+  font-size: 1.4rem;
+  color: #34d399; /* Soft Emerald */
+}
+
 .role {
   font-size: 0.95rem;
   color: #94a3b8; /* Slate gray for better readability */
@@ -300,6 +335,10 @@
 
 .timelineItem[data-type='Design'] .role {
   color: #ff70a6; /* Bright Pink */
+}
+
+.timelineItem[data-type='Career'] .role {
+  color: #34d399; /* Soft Emerald */
 }
 
 /* Desktop: Flex layout for description + button */
@@ -726,6 +765,11 @@
   /* Design type active date badge */
   .activeItem[data-type='Design'] .dateBadge {
     color: var(--accent-pink);
+  }
+
+  /* Career type active date badge */
+  .activeItem[data-type='Career'] .dateBadge {
+    color: #34d399;
   }
 
   /* Minimap adjustments - further shifted right */
