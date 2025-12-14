@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
 import React, { useEffect } from 'react';
-import { Code2, GraduationCap, Palette, Plane, Briefcase } from 'lucide-react';
+import { Code2, GraduationCap, Palette, Plane, Briefcase, FileText, Award } from 'lucide-react';
 import styles from './Timeline.module.css';
 import { TimelineItem } from '@/types';
 
@@ -22,34 +22,34 @@ const Timeline: React.FC<TimelineProps> = ({ items, lang }) => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach(entry => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add(styles.visible);
           }
         });
       },
-      { threshold: 0.2, rootMargin: '0px 0px -100px 0px' }
+      { threshold: 0.2, rootMargin: '0px 0px -100px 0px' },
     );
-    
+
     const timelineItems = document.querySelectorAll(`.${styles.timelineItem}`);
-    timelineItems.forEach(el => {
+    timelineItems.forEach((el) => {
       observer.observe(el);
     });
-    
+
     return () => observer.disconnect();
   }, [items]);
 
   return (
     <div className={styles.container}>
       <div className={styles.timelineLine} />
-      
+
       {items.map((item, index) => {
         const IconComponent = categoryIcons[item.type as keyof typeof categoryIcons];
-        
+
         return (
-          <div 
-            key={item.id} 
-            className={styles.timelineItem} 
+          <div
+            key={item.id}
+            className={styles.timelineItem}
             data-type={item.type}
             style={{ transitionDelay: `${index * 100}ms` }}
           >
@@ -58,17 +58,13 @@ const Timeline: React.FC<TimelineProps> = ({ items, lang }) => {
               <div className={styles.dot} />
               <span className={styles.dateLabel}>{item.date}</span>
             </div>
-            
+
             {/* Right: Card with Icon in Title */}
             <div className={styles.card}>
               <div className={styles.cardHeader}>
                 <div className={styles.titleRow}>
                   {IconComponent && (
-                    <IconComponent 
-                      className={styles.titleIcon} 
-                      size={20} 
-                      strokeWidth={2}
-                    />
+                    <IconComponent className={styles.titleIcon} size={20} strokeWidth={2} />
                   )}
                   <h3>{typeof item.title === 'string' ? item.title : item.title[lang]}</h3>
                 </div>
@@ -77,16 +73,21 @@ const Timeline: React.FC<TimelineProps> = ({ items, lang }) => {
                 </span>
               </div>
               <p className={styles.description}>{item.description[lang]}</p>
-              
+
               {/* Paper Link (if exists) */}
               {item.paperLink && item.paperTitle && (
-                <a 
-                  href={item.paperLink} 
-                  target="_blank" 
+                <a
+                  href={item.paperLink}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className={styles.paperLink}
                 >
-                  <span className={styles.paperIcon}>📄</span>
+                  {item.paperTitle['en']?.toLowerCase().includes('patent') ||
+                  item.paperTitle[lang]?.includes('특허') ? (
+                    <Award size={16} className={styles.paperIcon} />
+                  ) : (
+                    <FileText size={16} className={styles.paperIcon} />
+                  )}
                   <span className={styles.paperTitle}>{item.paperTitle[lang]}</span>
                   <span className={styles.externalIcon}>↗</span>
                 </a>

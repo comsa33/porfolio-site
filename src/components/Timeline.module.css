@@ -64,7 +64,7 @@
 }
 
 /* Dev dots: larger with subtle glow and pulse */
-.timelineItem[data-type="Dev"] .dot {
+.timelineItem[data-type='Dev'] .dot {
   width: 16px;
   height: 16px;
   background: var(--accent-cyan);
@@ -73,33 +73,34 @@
 }
 
 /* Other category colors */
-.timelineItem[data-type="Education"] .dot {
+.timelineItem[data-type='Education'] .dot {
   background: var(--accent-purple);
   box-shadow: 0 0 6px rgba(112, 0, 255, 0.3);
 }
 
-.timelineItem[data-type="Design"] .dot {
+.timelineItem[data-type='Design'] .dot {
   background: var(--accent-pink);
   box-shadow: 0 0 6px rgba(255, 0, 128, 0.3);
 }
 
-.timelineItem[data-type="Travel"] .dot {
-  background: #FFC800;
+.timelineItem[data-type='Travel'] .dot {
+  background: #ffc800;
   box-shadow: 0 0 6px rgba(255, 200, 0, 0.3);
 }
 
-.timelineItem[data-type="Career"] .dot {
+.timelineItem[data-type='Career'] .dot {
   background: #666;
   box-shadow: 0 0 4px rgba(102, 102, 102, 0.2);
 }
 
 @keyframes pulse {
-  0%, 100% { 
-    transform: scale(1); 
+  0%,
+  100% {
+    transform: scale(1);
     box-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
   }
-  50% { 
-    transform: scale(1.1); 
+  50% {
+    transform: scale(1.1);
     box-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
   }
 }
@@ -113,7 +114,7 @@
   min-width: 120px;
 }
 
-.timelineItem[data-type="Dev"] .dateLabel {
+.timelineItem[data-type='Dev'] .dateLabel {
   color: var(--accent-cyan);
   font-weight: 600;
 }
@@ -135,15 +136,15 @@
 }
 
 /* Dev cards: Premium styling */
-.timelineItem[data-type="Dev"] .card {
+.timelineItem[data-type='Dev'] .card {
   background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(17, 17, 17, 0.9));
   border-color: rgba(0, 240, 255, 0.3);
   box-shadow: 0 10px 30px rgba(0, 240, 255, 0.15);
 }
 
-.timelineItem[data-type="Dev"]:hover .card {
+.timelineItem[data-type='Dev']:hover .card {
   border-color: var(--accent-cyan);
-  box-shadow: 
+  box-shadow:
     0 15px 50px rgba(0, 240, 255, 0.3),
     inset 0 1px 0 rgba(0, 240, 255, 0.2);
 }
@@ -166,24 +167,24 @@
   opacity: 0.7;
 }
 
-.timelineItem[data-type="Dev"] .titleIcon {
+.timelineItem[data-type='Dev'] .titleIcon {
   color: var(--accent-cyan);
   opacity: 1;
 }
 
-.timelineItem[data-type="Education"] .titleIcon {
+.timelineItem[data-type='Education'] .titleIcon {
   color: var(--accent-purple);
 }
 
-.timelineItem[data-type="Design"] .titleIcon {
+.timelineItem[data-type='Design'] .titleIcon {
   color: var(--accent-pink);
 }
 
-.timelineItem[data-type="Travel"] .titleIcon {
-  color: #FFC800;
+.timelineItem[data-type='Travel'] .titleIcon {
+  color: #ffc800;
 }
 
-.timelineItem[data-type="Career"] .titleIcon {
+.timelineItem[data-type='Career'] .titleIcon {
   color: #999;
 }
 
@@ -195,7 +196,7 @@
   line-height: 1.3;
 }
 
-.timelineItem[data-type="Dev"] .cardHeader h3 {
+.timelineItem[data-type='Dev'] .cardHeader h3 {
   font-size: 1.4rem;
   color: var(--accent-cyan);
 }
@@ -206,7 +207,7 @@
   font-weight: 500;
 }
 
-.timelineItem[data-type="Dev"] .role {
+.timelineItem[data-type='Dev'] .role {
   color: rgba(0, 240, 255, 0.8);
 }
 
@@ -241,6 +242,7 @@
 .paperIcon {
   font-size: 1rem;
   flex-shrink: 0;
+  color: var(--accent-cyan);
 }
 
 .paperTitle {
@@ -265,13 +267,13 @@
   .timelineLine {
     left: 1rem;
   }
-  
+
   .timelineItem {
     grid-template-columns: 1fr;
     gap: 0;
     margin-bottom: 2rem;
   }
-  
+
   .timelineDot {
     grid-row: 1;
     margin-bottom: 1rem;
@@ -285,7 +287,7 @@
   .dateLabel {
     font-size: 0.75rem;
   }
-  
+
   .card {
     padding: 1rem;
     margin-left: 1.5rem; /* Prevent covering timeline line */
@@ -299,7 +301,7 @@
     font-size: 1.1rem;
   }
 
-  .timelineItem[data-type="Dev"] .cardHeader h3 {
+  .timelineItem[data-type='Dev'] .cardHeader h3 {
     font-size: 1.2rem;
   }
 
