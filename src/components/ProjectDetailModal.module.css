@@ -16,8 +16,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Modal Container */
@@ -35,11 +39,11 @@
 }
 
 @keyframes slideUp {
-  from { 
+  from {
     opacity: 0;
     transform: translateY(20px);
   }
-  to { 
+  to {
     opacity: 1;
     transform: translateY(0);
   }
@@ -273,6 +277,30 @@
   color: var(--accent-cyan);
   user-select: none;
   transition: background 0.2s;
+  /* Custom marker styles */
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.detailsSummary::-webkit-details-marker {
+  display: none;
+}
+
+.detailsSummary::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--accent-cyan);
+  border-bottom: 2px solid var(--accent-cyan);
+  transform: rotate(45deg);
+  transition: transform 0.3s ease;
+  margin-right: 0.5rem;
+}
+
+.detailsExpander[open] .detailsSummary::after {
+  transform: rotate(-135deg);
 }
 
 .detailsSummary:hover {
@@ -364,29 +392,29 @@
   .overlay {
     padding: 0;
   }
-  
+
   .modal {
     max-height: 100vh;
     border-radius: 0;
     max-width: 100%;
   }
-  
+
   .header {
     padding: 1.5rem;
   }
-  
+
   .title {
     font-size: 1.5rem;
   }
-  
+
   .content {
     padding: 1.5rem;
   }
-  
+
   .caseCard {
     padding: 1.5rem;
   }
-  
+
   .casesGrid {
     grid-template-columns: 1fr;
     gap: 1.5rem;

@@ -55,11 +55,11 @@ export default function ProjectDetailModal({ project, lang, isOpen, onClose }: P
               {lang === 'ko' ? '🔥 핵심 문제 해결 사례' : '🔥 Core Problem-Solving Cases'}
             </h3>
             <p className={styles.sectionDesc}>
-              {lang === 'ko' 
+              {lang === 'ko'
                 ? '개발 과정에서 직면한 기술적 문제와 해결 방법'
                 : 'Technical challenges encountered and solutions implemented during development'}
             </p>
-            
+
             <div className={styles.casesGrid}>
               {(problemSolvingCases || []).map((case_: ProblemSolvingCase) => (
                 <div key={case_.id} className={styles.caseCard}>
@@ -77,9 +77,14 @@ export default function ProjectDetailModal({ project, lang, isOpen, onClose }: P
                     <div className={styles.caseSectionLabel}>
                       {lang === 'ko' ? '문제 (Issue)' : 'Problem'}
                     </div>
-                    <div 
+                    <div
                       className={styles.caseSectionContent}
-                      dangerouslySetInnerHTML={{ __html: case_.problem[lang].replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }}
+                      dangerouslySetInnerHTML={{
+                        __html: case_.problem[lang].replace(
+                          /\*\*(.*?)\*\*/g,
+                          '<strong>$1</strong>',
+                        ),
+                      }}
                     />
                   </div>
 
@@ -88,22 +93,26 @@ export default function ProjectDetailModal({ project, lang, isOpen, onClose }: P
                     <div className={styles.caseSectionLabel}>
                       {lang === 'ko' ? '해결 (Solution)' : 'Solution'}
                     </div>
-                    <div 
+                    <div
                       className={styles.caseSectionContent}
-                      dangerouslySetInnerHTML={{ __html: case_.solution[lang].replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/`(.*?)`/g, '<code>$1</code>') }}
+                      dangerouslySetInnerHTML={{
+                        __html: case_.solution[lang]
+                          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                          .replace(/`(.*?)`/g, '<code>$1</code>'),
+                      }}
                     />
                   </div>
 
                   {/* Technical Details (Collapsible with Syntax Highlighting) */}
                   <details className={styles.detailsExpander}>
                     <summary className={styles.detailsSummary}>
-                      {lang === 'ko' ? '기술적 상세 보기' : 'View Technical Details'}
+                      {lang === 'ko' ? '기술 구현 상세' : 'Technical Implementation Details'}
                     </summary>
                     <div className={styles.detailsContent}>
                       {/* DSL Note for knowledge-base project */}
                       {project.id === 'knowledge-base' && (
                         <div className={styles.dslNote}>
-                          {lang === 'ko' 
+                          {lang === 'ko'
                             ? '※ 실제 구현은 사내 DSL(Domain-Specific Language)로 작성되었으며, 이해를 돕기 위해 Python 코드로 표현했습니다.'
                             : '※ The actual implementation uses an internal DSL (Domain-Specific Language), presented here as Python code for clarity.'}
                         </div>
@@ -146,9 +155,14 @@ export default function ProjectDetailModal({ project, lang, isOpen, onClose }: P
                     <div className={styles.caseSectionLabel}>
                       {lang === 'ko' ? '성과 (Impact)' : 'Impact'}
                     </div>
-                    <div 
+                    <div
                       className={`${styles.caseSectionContent} ${styles.impactContent}`}
-                      dangerouslySetInnerHTML={{ __html: case_.impact[lang].replace(/\*\*(.*?)\*\*/g, '<strong class="highlight">$1</strong>') }}
+                      dangerouslySetInnerHTML={{
+                        __html: case_.impact[lang].replace(
+                          /\*\*(.*?)\*\*/g,
+                          '<strong class="highlight">$1</strong>',
+                        ),
+                      }}
                     />
                   </div>
                 </div>
