@@ -46,10 +46,12 @@ function getCareerIntro(lang: 'ko' | 'en', introText: string): string {
 
 export default function Home() {
   const [lang, setLang] = useState<'ko' | 'en'>('ko');
+  /* Timeline Filter State (Default: Career) */
   const [timelineFilter, setTimelineFilter] = useState<'all' | 'education' | 'career' | 'other'>(
-    'all',
+    'career',
   );
   const [showHeader, setShowHeader] = useState(true);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const lastScrollY = useRef(0);
   const mainRef = useRef<HTMLDivElement>(null);
 
@@ -58,8 +60,15 @@ export default function Home() {
   };
 
   useEffect(() => {
+    const mainElement = mainRef.current;
+
     const handleScroll = () => {
-      const currentScrollY = mainRef.current?.scrollTop || 0;
+      if (!mainElement) return;
+
+      const currentScrollY = mainElement.scrollTop;
+      const totalHeight = mainElement.scrollHeight - mainElement.clientHeight;
+      const progress = totalHeight > 0 ? (currentScrollY / totalHeight) * 100 : 0;
+      setScrollProgress(progress);
 
       if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
         // Scrolling down & passed threshold -> Hide Header
@@ -72,7 +81,6 @@ export default function Home() {
       lastScrollY.current = currentScrollY;
     };
 
-    const mainElement = mainRef.current;
     if (mainElement) {
       mainElement.addEventListener('scroll', handleScroll);
     }
@@ -124,13 +132,19 @@ export default function Home() {
         </button>
       </nav>
 
+      {/* Scroll Progress Bar */}
+      <div
+        className={`${styles.progressBar} ${!showHeader ? styles.progressBarHidden : ''}`}
+        style={{ width: `${scrollProgress}%` }}
+      />
+
       {/* Hero with Story */}
       <section id="hero" className={styles.hero}>
         <NeuralBackground />
         <div className={styles.heroContent}>
-          <p className={styles.story}>{data.profile.story[lang]}</p>
-          <h1 className={styles.title}>{data.profile.name[lang]}</h1>
           <p className={styles.subtitle}>{data.profile.title}</p>
+          <h1 className={styles.title}>{data.profile.name[lang]}</h1>
+          <p className={styles.description}>{getCareerIntro(lang, data.profile.intro[lang])}</p>
 
           {/* Core Skills */}
           <div className={styles.skillsSection}>
@@ -222,8 +236,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-
-          <p className={styles.description}>{getCareerIntro(lang, data.profile.intro[lang])}</p>
         </div>
 
         {/* Scroll Indicator */}
@@ -244,6 +256,16 @@ export default function Home() {
           </div>
         </section>
       )}
+
+      {/* Other Projects */}
+      <section id="other-projects" className={styles.section}>
+        <h2 className={styles.sectionTitle}>{SECTION_TITLES.otherProjects[lang]}</h2>
+        <div className={styles.projectsGrid}>
+          {otherProjects.map((project) => (
+            <ProjectCard key={project.id} project={project} lang={lang} />
+          ))}
+        </div>
+      </section>
 
       {/* Timeline with Filter */}
       <section id="timeline" className={styles.section}>
@@ -279,16 +301,6 @@ export default function Home() {
           </div>
         </div>
         <Timeline items={filteredTimeline} lang={lang} />
-      </section>
-
-      {/* Other Projects */}
-      <section id="other-projects" className={styles.section}>
-        <h2 className={styles.sectionTitle}>{SECTION_TITLES.otherProjects[lang]}</h2>
-        <div className={styles.projectsGrid}>
-          {otherProjects.map((project) => (
-            <ProjectCard key={project.id} project={project} lang={lang} />
-          ))}
-        </div>
       </section>
 
       {/* Contact Footer */}

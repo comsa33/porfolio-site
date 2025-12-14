@@ -592,7 +592,7 @@
 
   /* 3D carousel with stronger perspective */
   .scrollerContainer {
-    height: 55vh;
+    height: 80vh;
     perspective: 250px; /* Reduced from 400px for stronger effect */
     scroll-snap-type: y mandatory;
     overflow-y: auto;
@@ -643,12 +643,16 @@
     gap: 0;
   }
 
-  .cardHeader h3 {
-    font-size: 1.1rem;
+  .cardHeader h3,
+  .timelineItem[data-type='Education'] .cardHeader h3,
+  .timelineItem[data-type='Travel'] .cardHeader h3,
+  .timelineItem[data-type='Design'] .cardHeader h3,
+  .timelineItem[data-type='Career'] .cardHeader h3 {
+    font-size: 0.9rem;
   }
 
   .timelineItem[data-type='Dev'] .cardHeader h3 {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 
   .role {
@@ -740,7 +744,7 @@
 @media (max-width: 480px) {
   /* Further reduce perspective and increase spacing */
   .scrollerContainer {
-    height: 60vh;
+    height: 82vh;
     perspective: 250px; /* Reduced from 300px for stronger effect */
   }
 

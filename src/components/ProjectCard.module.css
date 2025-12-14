@@ -233,7 +233,7 @@
 
 .achievements {
   background: rgba(0, 240, 255, 0.05);
-  border-left: 3px solid var(--accent-cyan);
+  border-left: 1px solid var(--accent-cyan);
   padding: 1rem 1.5rem;
   border-radius: 4px;
 }
@@ -260,21 +260,31 @@
   line-height: 1.6;
   color: var(--text-primary);
   position: relative;
-  padding-left: 0;
+  padding-left: 1.2rem;
+}
+
+.achievementItem::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--accent-cyan);
+  font-weight: 700;
 }
 
 .features {
   background: rgba(112, 0, 255, 0.05);
-  border-left: 3px solid var(--accent-purple);
+  border-left: 1px solid var(--accent-purple);
   padding: 1rem 1.5rem;
   border-radius: 4px;
 }
 
 .featuresTitle {
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 0.9rem;
+  font-weight: 700;
   color: var(--accent-purple);
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .featuresList {
@@ -300,21 +310,33 @@
   }
 
   .title {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
 
   .shortDesc {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   .achievementItem,
   .fullDesc {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
 
-  /* Stack buttons on mobile */
+  .techBadge {
+    font-size: 0.6rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  /* Horizontal buttons on mobile */
   .buttonGroup {
-    flex-direction: column;
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .detailBtn,
+  .architectureBtn {
+    padding: 0.7rem 0.5rem;
+    font-size: 0.8rem;
   }
 
   .companyInfo {
