@@ -47,12 +47,7 @@ const Timeline: React.FC<TimelineProps> = ({ items, lang }) => {
         const IconComponent = categoryIcons[item.type as keyof typeof categoryIcons];
 
         return (
-          <div
-            key={item.id}
-            className={styles.timelineItem}
-            data-type={item.type}
-            style={{ transitionDelay: `${index * 100}ms` }}
-          >
+          <div key={item.id} className={styles.timelineItem} data-type={item.type}>
             {/* Left: Simple Dot + Date */}
             <div className={styles.timelineDot}>
               <div className={styles.dot} />
