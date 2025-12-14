@@ -297,7 +297,8 @@
 
 .sectionHeader {
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
   max-width: var(--container-width);
@@ -312,11 +313,19 @@
   color: var(--text-primary);
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 1rem;
   margin: 0 auto 2rem;
   width: 100%;
   max-width: var(--container-width);
   padding: 0 2rem;
+}
+
+.sectionHeader .sectionTitle {
+  margin: 0;
+  padding: 0;
+  width: auto;
+  max-width: none;
 }
 
 .sectionTitle::before {
@@ -329,7 +338,9 @@
 
 .filterButtons {
   display: flex;
-  position: relative;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   background: rgba(255, 255, 255, 0.05);
   border-radius: 9999px; /* Capsule shape */
   padding: 4px;
@@ -342,7 +353,7 @@
   position: absolute;
   top: 4px;
   left: 4px;
-  width: calc(50% - 4px);
+  width: calc(25% - 4px);
   height: calc(100% - 8px);
   border-radius: 9999px;
   background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(112, 0, 255, 0.2));
@@ -357,15 +368,23 @@
   transform: translateX(0);
 }
 
-.Dev .glider {
+.education .glider {
   transform: translateX(100%);
+}
+
+.career .glider {
+  transform: translateX(200%);
+}
+
+.other .glider {
+  transform: translateX(300%);
 }
 
 .filterBtn {
   position: relative;
   z-index: 1;
-  padding: 0.5rem 1.5rem;
-  min-width: 80px;
+  padding: 0.5rem 0;
+  width: 90px;
   background: transparent;
   border: none;
   color: var(--text-secondary);
@@ -560,15 +579,18 @@
   }
 
   .filterButtons {
+    position: static;
+    transform: none;
+    left: auto;
     width: 100%;
-    margin: 0 auto;
+    margin: 1rem auto 0;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .filterBtn {
     flex: 1;
-    width: 50%; /* Ensure equal width for glider calculation */
+    width: 25%; /* 4 buttons */
   }
 
   .projectsGrid {

@@ -81,13 +81,25 @@ const Timeline: React.FC<TimelineProps> = ({ items, lang }) => {
     // Initial update
     updateTransforms();
 
+    // Optimized scroll handler using requestAnimationFrame
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateTransforms();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
     // Update on scroll
-    scroller.addEventListener('scroll', updateTransforms);
-    window.addEventListener('resize', updateTransforms);
+    scroller.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
 
     return () => {
-      scroller.removeEventListener('scroll', updateTransforms);
-      window.removeEventListener('resize', updateTransforms);
+      scroller.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
     };
   }, [items]);
 

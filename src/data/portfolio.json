@@ -76,71 +76,20 @@
       }
     },
     {
-      "id": "career-eunsik",
-      "date": "2011.05 - 2012.05",
+      "id": "career-english-edu",
+      "date": "2011.05 - 2020.08",
       "title": {
-        "ko": "이은식어학원",
-        "en": "Eunsik Language Institute"
+        "ko": "영어 교육 분야 경력",
+        "en": "English Education Career"
       },
       "role": {
-        "ko": "토익강사 (정규직)",
-        "en": "TOEIC Instructor"
+        "ko": "어학원 설립/운영 및 전임강사",
+        "en": "Founder & Instructor"
       },
       "type": "Career",
       "description": {
-        "ko": "정규직 토익 강사로 재직하며 교육 경력 시작.",
-        "en": "Started teaching career as a full-time TOEIC instructor."
-      }
-    },
-    {
-      "id": "career-sungsan",
-      "date": "2012.10 - 2012.12",
-      "title": {
-        "ko": "장성성산초등학교",
-        "en": "Sungsan Elementary School"
-      },
-      "role": {
-        "ko": "영어회화 강사 (계약직)",
-        "en": "English Instructor"
-      },
-      "type": "Career",
-      "description": {
-        "ko": "초등학교 영어회화 강사.",
-        "en": "Taught English conversation to elementary school students."
-      }
-    },
-    {
-      "id": "career-segye",
-      "date": "2013.03 - 2014.10",
-      "title": {
-        "ko": "세계외국어학원",
-        "en": "Segye Language Institute"
-      },
-      "role": {
-        "ko": "토익강사 (계약직)",
-        "en": "TOEIC Instructor"
-      },
-      "type": "Career",
-      "description": {
-        "ko": "토익 전문 강사로 계약직 재직.",
-        "en": "Worked as a contract TOEIC instructor."
-      }
-    },
-    {
-      "id": "career-gopa-director",
-      "date": "2014.11 - 2016.06",
-      "title": {
-        "ko": "고파토익어학원",
-        "en": "Gopa TOEIC Institute"
-      },
-      "role": {
-        "ko": "원장 (설립/운영)",
-        "en": "Director & Founder"
-      },
-      "type": "Career",
-      "description": {
-        "ko": "어학원 설립 및 운영. 강의와 함께 경영 업무 수행.",
-        "en": "Founded and operated language institute. Managed both teaching and business operations."
+        "ko": "토익쉽/고파토익 어학원 설립 및 운영. 대학 및 교육기관에서 영어 회화 및 토익 강의 (9년).",
+        "en": "Founded and operated 2 language institutes. Taught TOEIC and English conversation at universities (9 years)."
       }
     },
     {
@@ -158,40 +107,6 @@
       "description": {
         "ko": "34개국 배낭여행. 다양한 문화 체험 및 글로벌 마인드셋 함양.",
         "en": "Backpacked through 34 countries. Experienced diverse cultures and cultivated a global mindset."
-      }
-    },
-    {
-      "id": "career-nambu",
-      "date": "2017.08 - 2017.10",
-      "title": {
-        "ko": "광주보건대학교",
-        "en": "Gwangju Health University"
-      },
-      "role": {
-        "ko": "토익캠프 강의 (계약직)",
-        "en": "TOEIC Camp Instructor"
-      },
-      "type": "Career",
-      "description": {
-        "ko": "대학교 토익캠프 강의 담당.",
-        "en": "Led TOEIC camp lectures at the university."
-      }
-    },
-    {
-      "id": "career-toeicship-director",
-      "date": "2017.10 - 2020.08",
-      "title": {
-        "ko": "토익쉽어학원",
-        "en": "TOEIC Ship Institute"
-      },
-      "role": {
-        "ko": "원장 (설립/운영)",
-        "en": "Director & Founder"
-      },
-      "type": "Career",
-      "description": {
-        "ko": "어학원 설립 및 운영.",
-        "en": "Founded and operated TOEIC Ship language institute."
       }
     },
     {

@@ -15,7 +15,7 @@ const data = portfolioData as PortfolioData;
 // Section Title Constants
 const SECTION_TITLES = {
   featured: { ko: '주요 프로젝트', en: 'Featured Project' },
-  timeline: { ko: '경력', en: 'Timeline' },
+  timeline: { ko: '여정', en: 'Journey' },
   otherProjects: { ko: '기타 프로젝트', en: 'Other Projects' },
   contact: { ko: 'Contact', en: 'Contact' },
 } as const;
@@ -46,7 +46,9 @@ function getCareerIntro(lang: 'ko' | 'en', introText: string): string {
 
 export default function Home() {
   const [lang, setLang] = useState<'ko' | 'en'>('ko');
-  const [timelineFilter, setTimelineFilter] = useState<TimelineType | 'all'>('Dev'); // Default to Dev only
+  const [timelineFilter, setTimelineFilter] = useState<'all' | 'education' | 'career' | 'other'>(
+    'all',
+  );
   const [showHeader, setShowHeader] = useState(true);
   const lastScrollY = useRef(0);
   const mainRef = useRef<HTMLDivElement>(null);
@@ -82,17 +84,32 @@ export default function Home() {
     };
   }, []);
 
-  // Dev-related education IDs (AI 관련 학력)
-  const devRelatedEducation = ['edu-kcyber', 'edu-aSST'];
+  // Sort timeline: Reverse chronological (Newest first)
+  const sortedTimeline = [...data.timeline].reverse();
 
-  const filteredTimeline =
-    timelineFilter === 'all'
-      ? data.timeline
-      : data.timeline.filter(
-          (item) =>
-            item.type === timelineFilter ||
-            (timelineFilter === 'Dev' && devRelatedEducation.includes(item.id)),
-        );
+  // Bootcamp IDs to be moved to "Other"
+  const bootcampIds = ['edu-kcci', 'edu-codestates'];
+
+  const filteredTimeline = sortedTimeline.filter((item) => {
+    if (timelineFilter === 'all') return true;
+
+    if (timelineFilter === 'education') {
+      // Education: Type is Education AND NOT a bootcamp
+      return item.type === 'Education' && !bootcampIds.includes(item.id);
+    }
+
+    if (timelineFilter === 'career') {
+      // Career: Dev or Career types
+      return ['Dev', 'Career'].includes(item.type);
+    }
+
+    if (timelineFilter === 'other') {
+      // Other: Design, Travel OR Bootcamps
+      return ['Design', 'Travel'].includes(item.type) || bootcampIds.includes(item.id);
+    }
+
+    return false;
+  });
 
   // PyRunner as featured project
   const featuredProject = data.projects.find((p) => p.id === 'py-runner');
@@ -242,10 +259,22 @@ export default function Home() {
               {lang === 'ko' ? '전체' : 'All'}
             </button>
             <button
-              className={`${styles.filterBtn} ${timelineFilter === 'Dev' ? styles.active : ''}`}
-              onClick={() => setTimelineFilter('Dev')}
+              className={`${styles.filterBtn} ${timelineFilter === 'education' ? styles.active : ''}`}
+              onClick={() => setTimelineFilter('education')}
             >
-              {lang === 'ko' ? '개발' : 'Dev'}
+              {lang === 'ko' ? '학력' : 'Education'}
+            </button>
+            <button
+              className={`${styles.filterBtn} ${timelineFilter === 'career' ? styles.active : ''}`}
+              onClick={() => setTimelineFilter('career')}
+            >
+              {lang === 'ko' ? '경력' : 'Career'}
+            </button>
+            <button
+              className={`${styles.filterBtn} ${timelineFilter === 'other' ? styles.active : ''}`}
+              onClick={() => setTimelineFilter('other')}
+            >
+              {lang === 'ko' ? '기타' : 'Other'}
             </button>
           </div>
         </div>

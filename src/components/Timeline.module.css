@@ -49,10 +49,9 @@
   scroll-snap-align: center;
   scroll-snap-stop: always;
   transform-origin: center center;
-  transition:
-    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Removed transition to prevent conflict with JS scroll-updates */
   will-change: transform, opacity;
+  backface-visibility: hidden; /* Hardware acceleration hint */
 }
 
 /* Left: Simple Dot + Date */
@@ -537,8 +536,34 @@
 
 /* Responsive: Hide minimap on smaller screens (Tablet) */
 @media (max-width: 1024px) {
+  /* Minimap visible on tablet - moved to left as requested */
   .minimap {
-    display: none;
+    left: 3rem;
+    right: auto;
+    align-items: flex-start;
+  }
+
+  /* Push timeline items right to clear the minimap */
+  .timelineItem {
+    margin-left: 12rem; /* Clear space for left-side minimap */
+    margin-right: 2rem;
+    width: auto;
+    max-width: 75%;
+  }
+
+  /* Minimap line adjustments for tablet: start from top of container, not screen top */
+  .minimapLine {
+    top: 0;
+    height: 100%;
+    /* Ensure nice fade in/out within the container height */
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      var(--accent-cyan) 15%,
+      var(--accent-purple) 50%,
+      var(--accent-cyan) 85%,
+      transparent 100%
+    );
   }
 
   /* Adjust wrapper for mobile */
