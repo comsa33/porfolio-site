@@ -51,14 +51,15 @@ const Timeline: React.FC<TimelineProps> = ({ items, lang }) => {
         const isMobile = window.innerWidth <= 768;
         const isSmallMobile = window.innerWidth <= 480;
 
-        const rotationMultiplier = isSmallMobile ? 0.02 : isMobile ? 0.03 : 0.05;
-        const scaleMultiplier = isSmallMobile ? 0.0004 : isMobile ? 0.0006 : 0.0008;
-        const opacityMultiplier = isSmallMobile ? 0.001 : isMobile ? 0.0012 : 0.0015;
+        const rotationMultiplier = isSmallMobile ? 0.03 : isMobile ? 0.04 : 0.035; // Increased mobile rotation
+        const scaleMultiplier = isSmallMobile ? 0.0005 : isMobile ? 0.0007 : 0.0006; // Increased mobile scale
+        const opacityMultiplier = isSmallMobile ? 0.001 : isMobile ? 0.0012 : 0.001;
 
         // Calculate transforms based on distance from center
         const rotation = distanceFromCenter * rotationMultiplier;
         const scale = Math.max(0.75, 1 - Math.abs(distanceFromCenter) * scaleMultiplier);
-        const opacity = Math.max(0.3, 1 - Math.abs(distanceFromCenter) * opacityMultiplier);
+        // Smoother opacity drop-off for higher density
+        const opacity = Math.max(0.2, 1 - Math.abs(distanceFromCenter) * opacityMultiplier);
 
         // Apply transforms
         item.style.transform = `rotateX(${rotation}deg) scale(${scale})`;
@@ -133,26 +134,29 @@ const Timeline: React.FC<TimelineProps> = ({ items, lang }) => {
                       {typeof item.role === 'string' ? item.role : item.role[lang]}
                     </span>
                   </div>
-                  <p className={styles.description}>{item.description[lang]}</p>
 
-                  {/* Paper Link (if exists) */}
-                  {item.paperLink && item.paperTitle && (
-                    <a
-                      href={item.paperLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles.paperLink}
-                    >
-                      {item.paperTitle['en']?.toLowerCase().includes('patent') ||
-                      item.paperTitle[lang]?.includes('특허') ? (
-                        <Award size={16} className={styles.paperIcon} />
-                      ) : (
-                        <FileText size={16} className={styles.paperIcon} />
-                      )}
-                      <span className={styles.paperTitle}>{item.paperTitle[lang]}</span>
-                      <span className={styles.externalIcon}>↗</span>
-                    </a>
-                  )}
+                  <div className={styles.cardBody}>
+                    <p className={styles.description}>{item.description[lang]}</p>
+
+                    {/* Paper Link (if exists) */}
+                    {item.paperLink && item.paperTitle && (
+                      <a
+                        href={item.paperLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.paperLink}
+                      >
+                        {item.paperTitle['en']?.toLowerCase().includes('patent') ||
+                        item.paperTitle[lang]?.includes('특허') ? (
+                          <Award size={16} className={styles.paperIcon} />
+                        ) : (
+                          <FileText size={16} className={styles.paperIcon} />
+                        )}
+                        <span className={styles.paperTitle}>{item.paperTitle[lang]}</span>
+                        <span className={styles.externalIcon}>↗</span>
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
             );

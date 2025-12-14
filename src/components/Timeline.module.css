@@ -44,7 +44,7 @@
 .timelineItem {
   width: 100%;
   max-width: 800px;
-  margin: 0 auto 5rem;
+  margin: 0 auto 3.5rem; /* Reduced from 5rem for density */
   position: relative;
   scroll-snap-align: center;
   scroll-snap-stop: always;
@@ -139,7 +139,7 @@
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 1.5rem 1.5rem 1.25rem 1.5rem; /* Reduced bottom padding */
   transition: all 0.3s ease;
 }
 
@@ -230,12 +230,22 @@
   color: rgba(0, 240, 255, 0.8);
 }
 
+/* Desktop: Flex layout for description + button */
+.cardBody {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
 .description {
   font-size: 0.9rem;
   line-height: 1.6;
   color: var(--text-secondary);
-  margin: 0 0 1rem 0;
+  margin: 0;
   white-space: pre-line; /* Preserve line breaks */
+  flex: 1;
 }
 
 /* Paper Link */
@@ -249,7 +259,8 @@
   border-radius: 6px;
   text-decoration: none;
   transition: all 0.3s ease;
-  margin-top: 0.75rem;
+  flex-shrink: 0; /* Prevent shrinking */
+  margin-top: 0;
 }
 
 .paperLink:hover {
@@ -277,80 +288,10 @@
   flex-shrink: 0;
 }
 
-/* Mobile Responsive */
-@media (max-width: 768px) {
-  .container {
-    padding: 2rem 0.75rem;
-  }
-
-  .timelineLine {
-    left: 1rem;
-  }
-
-  .timelineItem {
-    grid-template-columns: 1fr;
-    gap: 0;
-    margin-bottom: 2rem;
-  }
-
-  .timelineDot {
-    grid-row: 1;
-    margin-bottom: 1rem;
-    padding-left: 2rem;
-  }
-
-  .dot {
-    left: 0;
-  }
-
-  .dateLabel {
-    font-size: 0.75rem;
-  }
-
-  .card {
-    padding: 1rem;
-  }
-
-  .card:hover {
-    transform: none;
-  }
-
-  .cardHeader h3 {
-    font-size: 1.1rem;
-  }
-
-  .timelineItem[data-type='Dev'] .cardHeader h3 {
-    font-size: 1.2rem;
-  }
-
-  .role {
-    font-size: 0.85rem;
-  }
-
-  .description {
-    font-size: 0.85rem;
-    line-height: 1.5;
-  }
-
-  .paperLink {
-    padding: 0.6rem 0.85rem;
-    margin-top: 0.5rem;
-  }
-
-  .paperTitle {
-    font-size: 0.8rem;
-  }
-
-  .paperIcon,
-  .externalIcon {
-    font-size: 0.9rem;
-  }
-}
-
-/* ===== Minimap Navigator ===== */
+/* ===== Minimap Navigator (Base Styles) ===== */
 .minimap {
   position: absolute;
-  right: -120px;
+  right: -120px; /* Hidden off-screen in desktop default 3D view if not wanted, but normally visible */
   top: 50%;
   transform: translateY(-50%);
   display: flex;
@@ -378,6 +319,7 @@
   opacity: 0.8;
 }
 
+/* Gradient Line */
 .minimapLine {
   position: absolute;
   top: -50%;
@@ -387,10 +329,14 @@
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    transparent 5%,
-    var(--accent-cyan) 15%,
-    var(--accent-purple) 85%,
-    transparent 95%,
+    transparent 8%,
+    rgba(0, 240, 255, 0.2) 12%,
+    var(--accent-cyan) 20%,
+    rgba(0, 240, 255, 0.8) 40%,
+    rgba(112, 0, 255, 0.8) 60%,
+    var(--accent-purple) 80%,
+    rgba(112, 0, 255, 0.1) 88%,
+    transparent 92%,
     transparent 100%
   );
   opacity: 0.3;
@@ -458,7 +404,11 @@
   }
 }
 
-/* Responsive: Hide minimap on smaller screens */
+/* ================================================================ */
+/* MEDIA QUERIES - MUST COME AFTER BASE STYLES TO OVERRIDE */
+/* ================================================================ */
+
+/* Responsive: Hide minimap on smaller screens (Tablet) */
 @media (max-width: 1024px) {
   .minimap {
     display: none;
@@ -478,10 +428,20 @@
 
 /* Mobile optimizations - 3D Carousel with left minimap */
 @media (max-width: 768px) {
+  /* Fix: Ensure Minimap shows on mobile (overrides the 1024px hide rule) */
+  .minimap {
+    display: flex;
+    left: 2.5rem; /* Increased from 1.5rem */
+    right: auto;
+    height: 60%;
+    align-items: center;
+    justify-content: center;
+  }
+
   /* 3D carousel with stronger perspective */
   .scrollerContainer {
     height: 55vh;
-    perspective: 350px; /* Reduced from 400px for stronger effect */
+    perspective: 250px; /* Reduced from 400px for stronger effect */
     scroll-snap-type: y mandatory;
     overflow-y: auto;
   }
@@ -491,17 +451,77 @@
     position: relative;
   }
 
-  /* Timeline items - increased spacing */
   .timelineItem {
-    margin: 0 0 2.5rem 5rem; /* Increased from 1.5rem */
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-bottom: 2rem;
+    margin-left: 5rem; /* Re-added margin-left from original */
+    margin-right: 0;
     max-width: 77%;
-    scroll-snap-align: center;
+  }
+
+  .timelineDot {
+    grid-row: 1;
+    margin-bottom: 1rem;
+    padding-left: 2rem;
+  }
+
+  .dot {
+    left: 0;
+  }
+
+  .dateLabel {
+    font-size: 0.75rem;
   }
 
   .card {
-    padding: 1rem; /* Reduced from 1.25rem */
+    padding: 1rem;
     width: 100%;
     position: relative;
+  }
+
+  .card:hover {
+    transform: none;
+  }
+
+  /* Card Body Reset for Mobile */
+  .cardBody {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .cardHeader h3 {
+    font-size: 1.1rem;
+  }
+
+  .timelineItem[data-type='Dev'] .cardHeader h3 {
+    font-size: 1.2rem;
+  }
+
+  .role {
+    font-size: 0.85rem;
+  }
+
+  .description {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+
+  .paperLink {
+    padding: 0.6rem 0.85rem;
+    margin-top: 0.5rem;
+    width: 100%; /* Full width on mobile */
+  }
+
+  .paperTitle {
+    font-size: 0.8rem;
+  }
+
+  .paperIcon,
+  .externalIcon {
+    font-size: 0.9rem;
   }
 
   /* Date badge - outside card, no box */
@@ -534,21 +554,12 @@
     color: var(--accent-cyan); /* Cyan like Dev title */
   }
 
-  /* Show minimap on left for mobile - further shifted right */
-  .minimap {
-    display: flex;
-    left: 2.5rem; /* Increased from 1.5rem */
-    right: auto;
-    height: 60%;
-    align-items: center;
-    justify-content: center;
-  }
-
+  /* Minimap Positioning in Mobile */
   .minimapLine {
     left: 50%;
     transform: translateX(-50%);
-    top: -50%; /* Maximum extension */
-    height: 200%; /* Double height */
+    top: -50%;
+    height: 200%;
     opacity: 0.4;
   }
 
@@ -570,39 +581,6 @@
 
   .minimapDotActive {
     transform: scale(1.3);
-  }
-
-  /* Typography adjustments - compact */
-  .cardHeader h3 {
-    font-size: 1rem; /* Reduced from 1.1rem */
-    margin-bottom: 0.25rem; /* Tighter spacing */
-  }
-
-  .role {
-    font-size: 0.8rem; /* Reduced from 0.85rem */
-    margin-bottom: 0.5rem; /* Tighter */
-  }
-
-  .description {
-    font-size: 0.8rem; /* Reduced from 0.85rem */
-    line-height: 1.45; /* Tighter from 1.5 */
-  }
-
-  /* Paper link - much more compact */
-  .paperLink {
-    padding: 0.5rem 0.65rem; /* Further reduced */
-    margin-top: 0.4rem;
-    font-size: 0.75rem; /* Smaller font */
-  }
-
-  .paperTitle {
-    font-size: 0.75rem; /* Reduced from 0.85rem */
-  }
-
-  .paperIcon,
-  .externalIcon {
-    width: 12px; /* Smaller icons */
-    height: 12px;
   }
 }
 

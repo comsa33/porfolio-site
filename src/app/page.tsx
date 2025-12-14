@@ -233,7 +233,8 @@ export default function Home() {
         <TimelineBackground />
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>{SECTION_TITLES.timeline[lang]}</h2>
-          <div className={styles.filterButtons}>
+          <div className={`${styles.filterButtons} ${styles[timelineFilter]}`}>
+            <div className={styles.glider} />
             <button
               className={`${styles.filterBtn} ${timelineFilter === 'all' ? styles.active : ''}`}
               onClick={() => setTimelineFilter('all')}
