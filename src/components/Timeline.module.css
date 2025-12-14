@@ -156,6 +156,27 @@
   box-shadow: 0 10px 30px rgba(0, 240, 255, 0.15);
 }
 
+/* Education cards: Premium styling (Purple) */
+.timelineItem[data-type='Education'] .card {
+  background: rgba(112, 0, 255, 0.08);
+  border-color: rgba(112, 0, 255, 0.3);
+  box-shadow: 0 10px 30px rgba(112, 0, 255, 0.15);
+}
+
+/* Travel cards: Premium styling (Gold/Amber) */
+.timelineItem[data-type='Travel'] .card {
+  background: rgba(255, 200, 0, 0.08);
+  border-color: rgba(255, 200, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(255, 200, 0, 0.15);
+}
+
+/* Design cards: Premium styling (Pink/Magenta) */
+.timelineItem[data-type='Design'] .card {
+  background: rgba(255, 0, 128, 0.08);
+  border-color: rgba(255, 0, 128, 0.3);
+  box-shadow: 0 10px 30px rgba(255, 0, 128, 0.15);
+}
+
 /* Date badge - hidden on desktop, shown on mobile */
 .dateBadge {
   display: none;
@@ -166,6 +187,27 @@
   box-shadow:
     0 15px 50px rgba(0, 240, 255, 0.3),
     inset 0 1px 0 rgba(0, 240, 255, 0.2);
+}
+
+.timelineItem[data-type='Education']:hover .card {
+  border-color: var(--accent-purple);
+  box-shadow:
+    0 15px 50px rgba(112, 0, 255, 0.3),
+    inset 0 1px 0 rgba(112, 0, 255, 0.2);
+}
+
+.timelineItem[data-type='Travel']:hover .card {
+  border-color: #ffc800;
+  box-shadow:
+    0 15px 50px rgba(255, 200, 0, 0.3),
+    inset 0 1px 0 rgba(255, 200, 0, 0.2);
+}
+
+.timelineItem[data-type='Design']:hover .card {
+  border-color: var(--accent-pink);
+  box-shadow:
+    0 15px 50px rgba(255, 0, 128, 0.3),
+    inset 0 1px 0 rgba(255, 0, 128, 0.2);
 }
 
 /* Card Content */
@@ -192,15 +234,18 @@
 }
 
 .timelineItem[data-type='Education'] .titleIcon {
-  color: var(--accent-purple);
+  color: #d8b4fe; /* Bright lavender matching button icons */
+  opacity: 1; /* Ensure full opacity for visibility */
 }
 
 .timelineItem[data-type='Design'] .titleIcon {
-  color: var(--accent-pink);
+  color: #ff70a6; /* Bright Pink for better contrast */
+  opacity: 1;
 }
 
 .timelineItem[data-type='Travel'] .titleIcon {
-  color: #ffc800;
+  color: #fbbf24; /* Bright Amber for better contrast */
+  opacity: 1;
 }
 
 .timelineItem[data-type='Career'] .titleIcon {
@@ -220,6 +265,21 @@
   color: var(--accent-cyan);
 }
 
+.timelineItem[data-type='Education'] .cardHeader h3 {
+  font-size: 1.4rem;
+  color: #d8b4fe; /* Bright lavender matching icon */
+}
+
+.timelineItem[data-type='Travel'] .cardHeader h3 {
+  font-size: 1.4rem;
+  color: #fbbf24; /* Bright Amber */
+}
+
+.timelineItem[data-type='Design'] .cardHeader h3 {
+  font-size: 1.4rem;
+  color: #ff70a6; /* Bright Pink */
+}
+
 .role {
   font-size: 0.95rem;
   color: #94a3b8; /* Slate gray for better readability */
@@ -228,6 +288,18 @@
 
 .timelineItem[data-type='Dev'] .role {
   color: rgba(0, 240, 255, 0.8);
+}
+
+.timelineItem[data-type='Education'] .role {
+  color: #c084fc; /* Bright lavender for better contrast on dark bg */
+}
+
+.timelineItem[data-type='Travel'] .role {
+  color: #fbbf24; /* Bright Amber */
+}
+
+.timelineItem[data-type='Design'] .role {
+  color: #ff70a6; /* Bright Pink */
 }
 
 /* Desktop: Flex layout for description + button */
@@ -279,6 +351,22 @@
   font-size: 0.85rem;
   color: var(--text-primary);
   line-height: 1.4;
+}
+
+/* Education Paper Link Styling */
+.timelineItem[data-type='Education'] .paperLink {
+  background: rgba(112, 0, 255, 0.05);
+  border-color: rgba(112, 0, 255, 0.2);
+}
+
+.timelineItem[data-type='Education'] .paperLink:hover {
+  background: rgba(112, 0, 255, 0.1);
+  border-color: var(--accent-purple);
+}
+
+.timelineItem[data-type='Education'] .paperIcon,
+.timelineItem[data-type='Education'] .externalIcon {
+  color: #d8b4fe; /* Brighter lavender icon for better visibility */
 }
 
 .externalIcon {
@@ -623,6 +711,21 @@
   /* Dev type active date badge */
   .activeItem[data-type='Dev'] .dateBadge {
     color: var(--accent-cyan);
+  }
+
+  /* Education type active date badge */
+  .activeItem[data-type='Education'] .dateBadge {
+    color: var(--accent-purple);
+  }
+
+  /* Travel type active date badge */
+  .activeItem[data-type='Travel'] .dateBadge {
+    color: #ffc800;
+  }
+
+  /* Design type active date badge */
+  .activeItem[data-type='Design'] .dateBadge {
+    color: var(--accent-pink);
   }
 
   /* Minimap adjustments - further shifted right */

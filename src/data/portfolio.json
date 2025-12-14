@@ -151,8 +151,8 @@
         "en": "World Travel"
       },
       "role": {
-        "ko": "배낭여행 (34개국)",
-        "en": "Backpacker (34 countries)"
+        "ko": "경력 휴식기",
+        "en": "Career Break"
       },
       "type": "Travel",
       "description": {
@@ -207,8 +207,8 @@
       },
       "type": "Education",
       "description": {
-        "ko": "• 인공지능 학사 과정\n• 학점 4.3/4.5",
-        "en": "• AI Bachelor's program\n• GPA 4.3/4.5"
+        "ko": "• 학점 4.3/4.5",
+        "en": "• GPA 4.3/4.5"
       },
       "paperLink": "https://kiss.kstudy.com/Detail/Ar?key=4028402",
       "paperTitle": {
