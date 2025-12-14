@@ -3,13 +3,14 @@
   position: relative;
   width: 100%;
   max-width: 900px;
-  margin: 0 auto;
+  margin: -25vh auto 0; /* Move up by 25% */
+  /* Mask removed to allow Minimap overflow */
 }
 
 /* 3D Carousel Scroll Container */
 .scrollerContainer {
   width: 100%;
-  height: 65vh;
+  height: 100vh;
   max-width: 900px;
   margin: 0 auto;
   overflow-y: auto;
@@ -19,6 +20,14 @@
   perspective-origin: center center;
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 25%,
+    black 85%,
+    transparent 100%
+  );
 
   /* Custom scrollbar */
   scrollbar-width: thin;
@@ -35,7 +44,7 @@
 
 /* 3D Transform Track */
 .timelineTrack {
-  padding: 25vh 2rem;
+  padding: 45vh 2rem; /* Increased to allow centering of first/last items */
   transform-style: preserve-3d;
   position: relative;
 }
@@ -417,15 +426,45 @@
 /* ===== Minimap Navigator (Base Styles) ===== */
 .minimap {
   position: absolute;
-  right: -120px; /* Hidden off-screen in desktop default 3D view if not wanted, but normally visible */
+  right: -180px; /* Outside content area */
   top: 50%;
   transform: translateY(-50%);
+  z-index: 10;
+  height: 100vh; /* Full height */
+  width: 150px; /* Explicit width */
+  overflow: hidden; /* Mask out-of-view dots */
+  pointer-events: none; /* Let clicks pass to track/items if needed, but track handles it */
+  mask-image: linear-gradient(to bottom, transparent 0%, black 45%, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 45%,
+    black 85%,
+    transparent 100%
+  );
+}
+
+/* Allow pointer events on content */
+.minimapTrack,
+.minimapLine {
+  pointer-events: auto;
+}
+
+.minimapAnchor {
+  position: absolute;
+  top: 50%;
+  left: 15px; /* Shifted to prevent clipping */
+  width: 100%;
+  height: 0;
+}
+
+.minimapTrack {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1rem;
-  z-index: 10;
-  height: 100%; /* Full height */
+  width: 100%;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
 }
 
 .minimapItem {
@@ -434,7 +473,10 @@
   gap: 1rem;
   position: relative;
   cursor: pointer;
+  height: 24px; /* Fixed height for calc */
+  margin-bottom: 40px; /* Wider spacing (Total stride 64px) */
   transition: transform 0.2s ease;
+  flex-shrink: 0;
 }
 
 .minimapItem:hover {
@@ -449,16 +491,16 @@
 .minimapLine {
   position: absolute;
   top: -50%;
-  left: 5px;
+  left: 19px; /* Aligned with dot center (15px + 5px - 1px) */
   width: 2px;
   height: 200%;
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    transparent 8%,
-    rgba(0, 240, 255, 0.2) 12%,
-    var(--accent-cyan) 20%,
-    rgba(0, 240, 255, 0.8) 40%,
+    transparent 20%,
+    rgba(0, 240, 255, 0.2) 30%,
+    var(--accent-cyan) 40%,
+    rgba(0, 240, 255, 0.8) 50%,
     rgba(112, 0, 255, 0.8) 60%,
     var(--accent-purple) 80%,
     rgba(112, 0, 255, 0.1) 88%,
@@ -540,6 +582,10 @@
   .minimap {
     left: 3rem;
     right: auto;
+    /* align-items removed, handled by track */
+  }
+
+  .minimapTrack {
     align-items: flex-start;
   }
 
@@ -559,9 +605,10 @@
     background: linear-gradient(
       to bottom,
       transparent 0%,
-      var(--accent-cyan) 15%,
-      var(--accent-purple) 50%,
-      var(--accent-cyan) 85%,
+      transparent 20%,
+      var(--accent-cyan) 30%,
+      var(--accent-purple) 60%,
+      var(--accent-cyan) 90%,
       transparent 100%
     );
   }
@@ -580,14 +627,32 @@
 
 /* Mobile optimizations - 3D Carousel with left minimap */
 @media (max-width: 768px) {
-  /* Fix: Ensure Minimap shows on mobile (overrides the 1024px hide rule) */
   .minimap {
     display: flex;
-    left: 2.5rem; /* Increased from 1.5rem */
+    flex-direction: column;
+    left: 1rem; /* Close to edge */
     right: auto;
-    height: 60%;
-    align-items: center;
-    justify-content: center;
+    width: 30px; /* Restrict width to force alignment */
+    height: 90vh;
+    align-items: center; /* Center everything in the strip */
+    overflow: hidden;
+    padding-left: 0; /* Reset desktop padding */
+    mask-image: linear-gradient(to bottom, transparent 0%, black 55%, black 85%, transparent 100%);
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 55%,
+      black 85%,
+      transparent 100%
+    );
+  }
+
+  .minimapTrack {
+    align-items: center; /* Center dots */
+  }
+
+  .minimapAnchor {
+    left: 0; /* Align anchor to left 0 for centering */
   }
 
   /* 3D carousel with stronger perspective */
@@ -596,10 +661,19 @@
     perspective: 250px; /* Reduced from 400px for stronger effect */
     scroll-snap-type: y mandatory;
     overflow-y: auto;
+    /* Stronger fade for mobile cards as requested */
+    mask-image: linear-gradient(to bottom, transparent 0%, black 55%, black 85%, transparent 100%);
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 55%,
+      black 85%,
+      transparent 100%
+    );
   }
 
   .timelineTrack {
-    padding: 20vh 1.5rem 20vh 1rem; /* Reduced top/bottom padding */
+    padding: 40vh 1.5rem 40vh 1rem; /* Increased padding */
     position: relative;
   }
 
@@ -716,12 +790,13 @@
     transform: translateX(-50%);
     top: -50%;
     height: 200%;
-    opacity: 0.4;
+    opacity: 0.3;
   }
 
   .minimapItem {
     gap: 0;
-    justify-content: center; /* Center dot on line */
+    justify-content: center; /* Center items */
+    margin-bottom: 40px;
   }
 
   /* Hide dates in minimap on mobile (shown in card badge) */
@@ -729,14 +804,14 @@
     display: none;
   }
 
-  /* Adjust dot size for mobile */
+  /* Reset dot size for mobile to match Desktop */
   .minimapDot {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
   }
 
   .minimapDotActive {
-    transform: scale(1.3);
+    transform: scale(1.5); /* Match desktop active scale */
   }
 }
 
@@ -749,7 +824,7 @@
   }
 
   .timelineTrack {
-    padding: 18vh 1.25rem 18vh 0.75rem;
+    padding: 40vh 1.25rem 40vh 0.75rem;
   }
 
   /* Card adjustments - increased spacing */
@@ -799,22 +874,6 @@
   /* Career type active date badge */
   .activeItem[data-type='Career'] .dateBadge {
     color: #34d399;
-  }
-
-  /* Minimap adjustments - further shifted right */
-  .minimap {
-    left: 2rem; /* Increased from 1.25rem */
-    height: 50%;
-  }
-
-  .minimapLine {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .minimapDot {
-    width: 6px;
-    height: 6px;
   }
 
   .cardHeader h3 {

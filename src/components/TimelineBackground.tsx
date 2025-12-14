@@ -22,8 +22,8 @@ const TimelineBackground: React.FC = () => {
 
     // Minimal Grid Pattern
     const gridSize = 40; // Distance between dots
-    const dotRadius = 1.5;
-    const baseOpacity = 0.4;
+    const dotRadius = 1.2;
+    const baseOpacity = 0.25;
 
     let animationFrame: number;
     let time = 0;

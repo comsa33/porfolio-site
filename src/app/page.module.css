@@ -621,29 +621,37 @@
   }
 
   .sectionHeader {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0;
+    margin-bottom: 2rem;
+    margin-top: -10rem; /* Move up significantly as requested */
   }
 
   .sectionTitle {
     font-size: 1.3rem;
-    padding: 0 1.5rem;
+    padding: 0;
+    margin: 0;
+    width: auto;
   }
 
   .filterButtons {
     position: static;
     transform: none;
     left: auto;
-    width: 100%;
-    margin: 1rem auto 0;
+    width: auto;
+    margin: 0;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    transform: scale(0.85); /* Scale down to fit */
+    transform-origin: right center;
   }
 
   .filterBtn {
-    flex: 1;
-    width: 25%; /* 4 buttons */
+    flex: none;
+    width: 62px; /* Compact width for mobile */
+    font-size: 0.75rem;
   }
 
   .projectsGrid {

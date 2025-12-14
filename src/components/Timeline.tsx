@@ -36,6 +36,9 @@ const Timeline: React.FC<TimelineProps> = ({ items, lang }) => {
     const scroller = scrollerRef.current;
     if (!scroller) return;
 
+    // Cleanup stale refs from previous renders (filtering)
+    itemRefs.current = itemRefs.current.slice(0, items.length);
+
     const updateTransforms = () => {
       const scrollerRect = scroller.getBoundingClientRect();
       const scrollerCenter = scrollerRect.top + scrollerRect.height / 2;
@@ -195,32 +198,39 @@ const Timeline: React.FC<TimelineProps> = ({ items, lang }) => {
       {/* Minimap Navigator with Dates */}
       <div className={styles.minimap}>
         <div className={styles.minimapLine} />
-        {items.map((item, index) => (
+        <div className={styles.minimapAnchor}>
           <div
-            key={item.id}
-            className={styles.minimapItem}
-            onClick={() => scrollToItem(index)}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                scrollToItem(index);
-              }
-            }}
-            aria-label={`Go to ${typeof item.title === 'string' ? item.title : item.title[lang]}`}
+            className={styles.minimapTrack}
+            style={{ transform: `translateY(calc(-1 * (${activeIndex * 64}px + 12px)))` }}
           >
-            <div
-              className={`${styles.minimapDot} ${index === activeIndex ? styles.minimapDotActive : ''}`}
-              data-type={item.type}
-            />
-            <span
-              className={`${styles.minimapDate} ${index === activeIndex ? styles.minimapDateActive : ''}`}
-            >
-              {item.date}
-            </span>
+            {items.map((item, index) => (
+              <div
+                key={item.id}
+                className={styles.minimapItem}
+                onClick={() => scrollToItem(index)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    scrollToItem(index);
+                  }
+                }}
+                aria-label={`Go to ${typeof item.title === 'string' ? item.title : item.title[lang]}`}
+              >
+                <div
+                  className={`${styles.minimapDot} ${index === activeIndex ? styles.minimapDotActive : ''}`}
+                  data-type={item.type}
+                />
+                <span
+                  className={`${styles.minimapDate} ${index === activeIndex ? styles.minimapDateActive : ''}`}
+                >
+                  {item.date}
+                </span>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );
