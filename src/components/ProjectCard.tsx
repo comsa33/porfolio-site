@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import styles from './ProjectCard.module.css';
@@ -27,10 +27,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang }) => {
               <span className={styles.period}>{project.period[lang]}</span>
             </div>
           )}
-          
-          <h3 className={styles.title}>
-            {project.title}
-          </h3>
+
+          <h3 className={styles.title}>{project.title}</h3>
           <p className={styles.shortDesc}>{project.shortDescription[lang]}</p>
         </div>
 
@@ -43,9 +41,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang }) => {
             ))}
           </div>
 
-          <div className={styles.fullDesc}>
-            {project.fullDescription[lang]}
-          </div>
+          <div className={styles.fullDesc}>{project.fullDescription[lang]}</div>
 
           {project.keyAchievements && project.keyAchievements.length > 0 && (
             <div className={styles.achievements}>
@@ -54,22 +50,20 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang }) => {
               </h4>
               <ul className={styles.achievementsList}>
                 {project.keyAchievements.map((achievement, idx) => (
-                  <li 
-                    key={idx} 
+                  <li
+                    key={idx}
                     className={styles.achievementItem}
-                    dangerouslySetInnerHTML={{ 
-                      __html: achievement[lang].replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') 
+                    dangerouslySetInnerHTML={{
+                      __html: achievement[lang].replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'),
                     }}
                   />
                 ))}
               </ul>
             </div>
           )}
-          
+
           <div className={styles.features}>
-            <h4 className={styles.featuresTitle}>
-              {lang === 'ko' ? '주요 기능' : 'Features'}
-            </h4>
+            <h4 className={styles.featuresTitle}>{lang === 'ko' ? '주요 기능' : 'Features'}</h4>
             <ul className={styles.featuresList}>
               {project.features.map((feature, idx) => (
                 <li key={idx} className={styles.featureItem}>
@@ -83,22 +77,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang }) => {
           <div className={styles.buttonGroup}>
             {/* Problem-Solving Cases Button */}
             {project.detail && (
-              <button 
-                className={styles.detailBtn}
-                onClick={() => setShowDetail(true)}
-              >
-                <span>{lang === 'ko' ? '문제 해결 사례 보기' : 'View Problem-Solving Cases'}</span>
+              <button className={styles.detailBtn} onClick={() => setShowDetail(true)}>
+                <span>{lang === 'ko' ? '문제 해결 과정' : 'Key Solutions'}</span>
                 <span className={styles.arrow}>→</span>
               </button>
             )}
-            
+
             {/* Architecture Button */}
             {project.detail?.architecture && project.detail.architecture.length > 0 && (
-              <button 
-                className={styles.architectureBtn}
-                onClick={() => setShowArchitecture(true)}
-              >
-                <span>{lang === 'ko' ? '아키텍처 보기' : 'View Architecture'}</span>
+              <button className={styles.architectureBtn} onClick={() => setShowArchitecture(true)}>
+                <span>{lang === 'ko' ? '시스템 아키텍처' : 'System Architecture'}</span>
                 <span className={styles.arrow}>→</span>
               </button>
             )}
@@ -115,7 +103,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang }) => {
           onClose={() => setShowDetail(false)}
         />
       )}
-      
+
       {/* Architecture Modal */}
       {showArchitecture && project.detail?.architecture && project.company && (
         <ArchitectureModal

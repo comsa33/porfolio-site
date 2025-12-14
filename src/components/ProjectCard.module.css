@@ -39,22 +39,11 @@
 }
 
 /* Detail Button */
+/* Detail Button */
 .detailBtn {
-  margin-top: 1.5rem;
-  width: 100%;
-  padding: 1rem 1.5rem;
   background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
   border: none;
-  border-radius: 6px;
   color: white;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  transition: all 0.3s;
   position: relative;
   overflow: hidden;
 }
@@ -87,36 +76,41 @@
   transform: translateX(4px);
 }
 
-/* Button Group */
+/* Action Buttons */
 .buttonGroup {
   display: flex;
-  gap: 0.75rem;
+  gap: 1rem;
   margin-top: 1.5rem;
 }
 
-.buttonGroup .detailBtn,
-.buttonGroup .architectureBtn {
-  margin-top: 0;
+.detailBtn,
+.architectureBtn {
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
 }
 
 /* Architecture Button */
+/* Architecture Button Style Overrides */
 .architectureBtn {
-  padding: 1rem 1.5rem;
   background: linear-gradient(135deg, var(--accent-purple), #dc2626);
   border: none;
-  border-radius: 6px;
   color: white;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  transition: all 0.3s;
   position: relative;
   overflow: hidden;
+}
+
+.architectureBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
 }
 
 .architectureBtn::before {
@@ -315,12 +309,12 @@
   .fullDesc {
     font-size: 0.9rem;
   }
-  
+
   /* Stack buttons on mobile */
   .buttonGroup {
     flex-direction: column;
   }
-  
+
   .companyInfo {
     font-size: 0.8rem;
   }
