@@ -391,7 +391,7 @@
       "repoPath": "py-runner",
       "company": {
         "ko": "(주)포지큐브",
-        "en": "PosiQube Inc."
+        "en": "Posicube Inc."
       },
       "period": {
         "ko": "2025.01 ~ 현재",
@@ -620,7 +620,7 @@
       "repoPath": "evaluator",
       "company": {
         "ko": "(주)포지큐브",
-        "en": "PosiQube Inc."
+        "en": "Posicube Inc."
       },
       "period": {
         "ko": "2025.02 ~ 현재",
@@ -815,7 +815,7 @@
       "repoPath": "py-editor",
       "company": {
         "ko": "(주)포지큐브",
-        "en": "PosiQube Inc."
+        "en": "Posicube Inc."
       },
       "period": {
         "ko": "2025.06 ~ 현재",
@@ -973,7 +973,7 @@
       },
       "company": {
         "ko": "(주)포지큐브",
-        "en": "PosiQube Inc."
+        "en": "Posicube Inc."
       },
       "techStack": ["Python", "LangChain", "OpenAI GPT-4o", "Faiss", "Streamlit", "FastAPI"],
       "features": [

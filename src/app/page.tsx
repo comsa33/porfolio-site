@@ -10,6 +10,38 @@ import { PortfolioData, TimelineType } from '@/types';
 
 const data = portfolioData as PortfolioData;
 
+// Section Title Constants
+const SECTION_TITLES = {
+  featured: { ko: '주요 프로젝트', en: 'Featured Project' },
+  timeline: { ko: '경력', en: 'Timeline' },
+  otherProjects: { ko: '기타 프로젝트', en: 'Other Projects' },
+  contact: { ko: 'Contact', en: 'Contact' },
+} as const;
+
+// Helper: Get career experience text with years
+function getCareerIntro(lang: 'ko' | 'en', introText: string): string {
+  const startYear = 2022;
+  const currentYear = new Date().getFullYear();
+  const years = currentYear - startYear;
+
+  if (lang === 'ko') {
+    return introText.replace('AI 에이전트 플랫폼 개발자', `${years}년차 AI 에이전트 플랫폼 개발자`);
+  } else {
+    const yearSuffix =
+      years === 1
+        ? '1st-year'
+        : years === 2
+          ? '2nd-year'
+          : years === 3
+            ? '3rd-year'
+            : `${years}th-year`;
+    return introText.replace(
+      'An AI Agent Platform Developer',
+      `A ${yearSuffix} AI Agent Platform Developer`,
+    );
+  }
+}
+
 export default function Home() {
   const [lang, setLang] = useState<'ko' | 'en'>('ko');
   const [timelineFilter, setTimelineFilter] = useState<TimelineType | 'all'>('Dev'); // Default to Dev only
@@ -74,7 +106,7 @@ export default function Home() {
       </nav>
 
       {/* Hero with Story */}
-      <div className={styles.hero}>
+      <section id="hero" className={styles.hero}>
         <NeuralBackground />
         <div className={styles.heroContent}>
           <p className={styles.story}>{data.profile.story[lang]}</p>
@@ -103,7 +135,7 @@ export default function Home() {
                     {data.profile.coreSkills.backend.title[lang]}
                   </span>
                 </div>
-                <div className={styles.categorySkills}>
+                <div className={styles.skillList}>
                   {data.profile.coreSkills.backend.skills.map((skill) => (
                     <span key={skill} className={styles.skillBadge}>
                       {skill}
@@ -131,7 +163,7 @@ export default function Home() {
                     {data.profile.coreSkills.ai.title[lang]}
                   </span>
                 </div>
-                <div className={styles.categorySkills}>
+                <div className={styles.skillList}>
                   {data.profile.coreSkills.ai.skills.map((skill) => (
                     <span key={skill} className={styles.skillBadge}>
                       {skill}
@@ -161,7 +193,7 @@ export default function Home() {
                     {data.profile.coreSkills.system.title[lang]}
                   </span>
                 </div>
-                <div className={styles.categorySkills}>
+                <div className={styles.skillList}>
                   {data.profile.coreSkills.system.skills.map((skill) => (
                     <span key={skill} className={styles.skillBadge}>
                       {skill}
@@ -172,42 +204,22 @@ export default function Home() {
             </div>
           </div>
 
-          <p className={styles.description}>
-            {(() => {
-              const startYear = 2022;
-              const currentYear = new Date().getFullYear();
-              const years = currentYear - startYear;
-
-              if (lang === 'ko') {
-                return data.profile.intro[lang].replace(
-                  'AI 에이전트 플랫폼 개발자',
-                  `${years}년차 AI 에이전트 플랫폼 개발자`,
-                );
-              } else {
-                const yearSuffix =
-                  years === 1
-                    ? '1st-year'
-                    : years === 2
-                      ? '2nd-year'
-                      : years === 3
-                        ? '3rd-year'
-                        : `${years}th-year`;
-                return data.profile.intro[lang].replace(
-                  'An AI Agent Platform Developer',
-                  `A ${yearSuffix} AI Agent Platform Developer`,
-                );
-              }
-            })()}
-          </p>
+          <p className={styles.description}>{getCareerIntro(lang, data.profile.intro[lang])}</p>
         </div>
-      </div>
+
+        {/* Scroll Indicator */}
+        <div className={styles.scrollIndicator}>
+          <div className={styles.mouse}>
+            <div className={styles.wheel} />
+          </div>
+          <span className={styles.scrollText}>SCROLL TO EXPLORE</span>
+        </div>
+      </section>
 
       {/* Featured Project */}
       {featuredProject && (
-        <section className={styles.featuredSection}>
-          <h2 className={styles.sectionTitle}>
-            {lang === 'ko' ? '주요 프로젝트' : 'Featured Project'}
-          </h2>
+        <section id="featured" className={styles.featuredSection}>
+          <h2 className={styles.sectionTitle}>{SECTION_TITLES.featured[lang]}</h2>
           <div className={styles.featuredProject}>
             <ProjectCard project={featuredProject} lang={lang} />
           </div>
@@ -215,9 +227,9 @@ export default function Home() {
       )}
 
       {/* Timeline with Filter */}
-      <section className={styles.section}>
+      <section id="timeline" className={styles.section}>
         <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>{lang === 'ko' ? '경력' : 'Timeline'}</h2>
+          <h2 className={styles.sectionTitle}>{SECTION_TITLES.timeline[lang]}</h2>
           <div className={styles.filterButtons}>
             <button
               className={`${styles.filterBtn} ${timelineFilter === 'all' ? styles.active : ''}`}
@@ -237,10 +249,8 @@ export default function Home() {
       </section>
 
       {/* Other Projects */}
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>
-          {lang === 'ko' ? '기타 프로젝트' : 'Other Projects'}
-        </h2>
+      <section id="other-projects" className={styles.section}>
+        <h2 className={styles.sectionTitle}>{SECTION_TITLES.otherProjects[lang]}</h2>
         <div className={styles.projectsGrid}>
           {otherProjects.map((project) => (
             <ProjectCard key={project.id} project={project} lang={lang} />
@@ -249,9 +259,9 @@ export default function Home() {
       </section>
 
       {/* Contact Footer */}
-      <footer className={styles.footer}>
+      <footer id="contact" className={styles.footer}>
         <div className={styles.footerContent}>
-          <h3 className={styles.footerTitle}>{lang === 'ko' ? 'Contact' : 'Contact'}</h3>
+          <h3 className={styles.footerTitle}>{SECTION_TITLES.contact[lang]}</h3>
           <p className={styles.footerText}>
             {lang === 'ko'
               ? 'AI 관련 다양한 기회에 열려있습니다. 함께 문제를 해결하고 성장하고 싶습니다.'
