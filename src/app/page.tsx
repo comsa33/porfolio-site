@@ -7,6 +7,7 @@ import ProjectCard from '@/components/ProjectCard';
 import NeuralBackground from '@/components/NeuralBackground';
 import TimelineBackground from '@/components/TimelineBackground';
 import FooterBackground from '@/components/FooterBackground';
+import WaveBackground from '@/components/WaveBackground';
 import portfolioData from '@/data/portfolio.json';
 import { PortfolioData, TimelineType } from '@/types';
 
@@ -254,6 +255,7 @@ export default function Home() {
       {/* Featured Projects */}
       {featuredProjects.length > 0 && (
         <section id="featured" className={styles.featuredSection}>
+          <WaveBackground />
           <h2 className={styles.sectionTitle}>{SECTION_TITLES.featured[lang]}</h2>
           <div className={styles.featuredProject}>
             {featuredProjects.map((project) => (
@@ -265,6 +267,7 @@ export default function Home() {
 
       {/* Other Projects */}
       <section id="other-projects" className={styles.section}>
+        <WaveBackground />
         <h2 className={styles.sectionTitle}>{SECTION_TITLES.otherProjects[lang]}</h2>
         <div className={styles.projectsGrid}>
           {otherProjects.map((project) => (
