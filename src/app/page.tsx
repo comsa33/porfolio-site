@@ -318,9 +318,18 @@ export default function Home() {
         <div className={styles.footerContent}>
           <h3 className={styles.footerTitle}>{SECTION_TITLES.contact[lang]}</h3>
           <p className={styles.footerText}>
-            {lang === 'ko'
-              ? 'AI 관련 다양한 기회에 열려있습니다. 함께 문제를 해결하고 성장하고 싶습니다.'
-              : 'Open to diverse AI opportunities. I want to solve problems and grow together.'}
+            {lang === 'ko' ? (
+              <>
+                AI 관련 다양한 기회에 열려있습니다.
+                <br />
+                함께 문제를 해결하고 성장하고 싶습니다.
+              </>
+            ) : (
+              <>
+                Open to diverse AI opportunities.
+                <br />I want to solve problems and grow together.
+              </>
+            )}
           </p>
           <div className={styles.contactLinks}>
             <a

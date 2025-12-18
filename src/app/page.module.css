@@ -91,6 +91,12 @@
   position: relative;
   overflow: hidden;
   scroll-snap-align: start;
+  background: linear-gradient(
+    180deg,
+    rgba(5, 5, 5, 1) 0%,
+    rgba(25, 25, 28, 1) 50%,
+    rgba(5, 5, 5, 1) 100%
+  );
 }
 
 .heroContent {
@@ -336,6 +342,12 @@
   justify-content: center;
   position: relative;
   overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    rgba(5, 5, 5, 1) 0%,
+    rgba(25, 25, 28, 1) 50%,
+    rgba(5, 5, 5, 1) 100%
+  );
 }
 
 .sectionHeader {
@@ -464,7 +476,12 @@
 /* Footer / Contact Section */
 .footer {
   min-height: 100vh;
-  background: linear-gradient(180deg, rgba(5, 5, 5, 0.5), rgba(5, 5, 5, 1));
+  background: linear-gradient(
+    180deg,
+    rgba(5, 5, 5, 1) 0%,
+    rgba(25, 25, 28, 1) 50%,
+    rgba(5, 5, 5, 1) 100%
+  );
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -497,12 +514,13 @@
 }
 
 .footerText {
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   color: var(--text-secondary);
   margin-bottom: 3rem;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  line-height: 1.8;
 }
 
 .contactLinks {
