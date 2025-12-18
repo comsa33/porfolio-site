@@ -10,6 +10,7 @@ import {
   FileText,
   Award,
   Laptop,
+  ExternalLink,
 } from 'lucide-react';
 import styles from './Timeline.module.css';
 import { TimelineItem } from '@/types';
@@ -184,7 +185,7 @@ const Timeline: React.FC<TimelineProps> = ({ items, lang }) => {
                           <FileText size={16} className={styles.paperIcon} />
                         )}
                         <span className={styles.paperTitle}>{item.paperTitle[lang]}</span>
-                        <span className={styles.externalIcon}>↗</span>
+                        <ExternalLink size={14} className={styles.externalIcon} />
                       </a>
                     )}
                   </div>

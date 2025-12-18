@@ -416,6 +416,22 @@
   color: #d8b4fe; /* Brighter lavender icon for better visibility */
 }
 
+/* Travel Paper Link Styling (Gold/Amber) */
+.timelineItem[data-type='Travel'] .paperLink {
+  background: rgba(255, 200, 0, 0.05);
+  border-color: rgba(255, 200, 0, 0.2);
+}
+
+.timelineItem[data-type='Travel'] .paperLink:hover {
+  background: rgba(255, 200, 0, 0.1);
+  border-color: #ffc800;
+}
+
+.timelineItem[data-type='Travel'] .paperIcon,
+.timelineItem[data-type='Travel'] .externalIcon {
+  color: #fbbf24; /* Bright Amber matching Travel card */
+}
+
 .externalIcon {
   font-size: 1rem;
   color: var(--accent-cyan);
