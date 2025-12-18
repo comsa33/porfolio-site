@@ -315,6 +315,9 @@
   max-width: calc(var(--container-width) * 0.9);
   margin: 0 auto;
   padding: 0 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2.5rem;
 }
 
 /* Timeline Section with Filter */
@@ -672,6 +675,7 @@
   }
 
   .featuredProject {
+    grid-template-columns: 1fr;
     padding: 0 1.5rem;
   }
 
