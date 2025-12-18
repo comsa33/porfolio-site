@@ -545,6 +545,18 @@
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
+  /* Disable scroll-snap on mobile for smooth scrolling */
+  .main {
+    scroll-snap-type: none;
+  }
+
+  .hero,
+  .featuredSection,
+  .section,
+  .footer {
+    scroll-snap-align: none;
+  }
+
   .nav {
     padding: 0 1.5rem;
     height: 50px;

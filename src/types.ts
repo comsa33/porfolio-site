@@ -48,6 +48,8 @@ export interface Project {
   keyAchievements?: LocalizedString[];
   features: (string | LocalizedString)[];
   detail?: ProjectDetail; // Optional detailed showcase
+  featured?: boolean; // Featured project flag (default: false)
+  order?: number; // Display order (lower = first, default: 999)
 }
 
 // Problem-solving case study (핵심: 이슈 → 해결 과정)

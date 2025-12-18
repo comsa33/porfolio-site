@@ -14,7 +14,7 @@ const data = portfolioData as PortfolioData;
 
 // Section Title Constants
 const SECTION_TITLES = {
-  featured: { ko: '주요 프로젝트', en: 'Featured Project' },
+  featured: { ko: '주요 프로젝트', en: 'Featured Projects' },
   timeline: { ko: '여정', en: 'Journey' },
   otherProjects: { ko: '기타 프로젝트', en: 'Other Projects' },
   contact: { ko: 'Contact', en: 'Contact' },
@@ -119,9 +119,13 @@ export default function Home() {
     return false;
   });
 
-  // PyRunner as featured project
-  const featuredProject = data.projects.find((p) => p.id === 'py-runner');
-  const otherProjects = data.projects.filter((p) => p.id !== 'py-runner');
+  // Featured & Other projects based on data
+  const sortByOrder = (a: (typeof data.projects)[0], b: (typeof data.projects)[0]) =>
+    (a.order ?? 999) - (b.order ?? 999);
+
+  const featuredProjects = data.projects.filter((p) => p.featured === true).sort(sortByOrder);
+
+  const otherProjects = data.projects.filter((p) => p.featured !== true).sort(sortByOrder);
 
   return (
     <main ref={mainRef} className={styles.main}>
@@ -247,12 +251,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Project */}
-      {featuredProject && (
+      {/* Featured Projects */}
+      {featuredProjects.length > 0 && (
         <section id="featured" className={styles.featuredSection}>
           <h2 className={styles.sectionTitle}>{SECTION_TITLES.featured[lang]}</h2>
           <div className={styles.featuredProject}>
-            <ProjectCard project={featuredProject} lang={lang} />
+            {featuredProjects.map((project) => (
+              <ProjectCard key={project.id} project={project} lang={lang} />
+            ))}
           </div>
         </section>
       )}
