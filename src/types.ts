@@ -45,6 +45,11 @@ export interface Project {
   repoPath: string;
   company?: LocalizedString; // Company name (optional)
   period?: LocalizedString; // Project period (optional)
+  platformLinks?: {
+    web?: string;
+    ios?: string;
+    android?: string;
+  };
   keyAchievements?: LocalizedString[];
   features: (string | LocalizedString)[];
   detail?: ProjectDetail; // Optional detailed showcase

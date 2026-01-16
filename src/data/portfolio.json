@@ -729,6 +729,11 @@
         "Structured Shadowing"
       ],
       "repoPath": "opic-master",
+      "platformLinks": {
+        "web": "https://opic.po24lio.com",
+        "ios": "https://apps.apple.com/kr/app/%EC%98%A4%ED%94%BD-%EB%A7%88%EC%8A%A4%ED%84%B0/id6757357743",
+        "android": "https://play.google.com/store/apps/details?id=com.ruiboss.opic"
+      },
       "company": {
         "ko": "개인 프로젝트 (루이보스)",
         "en": "Personal Project (Rooibos)"
