@@ -880,7 +880,7 @@
         "en": "VSCode-style web IDE integrating Monaco Editor with Python LSP. Provides stable LSP service in multi-user environments through custom process pooling, and supports real-time auto-completion and go-to-definition via low-latency WebSocket communication."
       },
       "techStack": [
-        "React (Vite)",
+        "Vanilla JS (Vite)",
         "Monaco Editor",
         "Node.js",
         "Express",
