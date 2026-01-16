@@ -828,7 +828,7 @@
   }
 
   .projectsGrid {
-    padding: 0 1rem;
+    padding: 0.5rem 1rem 0;
     gap: 1rem;
   }
 
@@ -841,7 +841,7 @@
   }
 
   .featuredProject {
-    padding: 0 1rem;
+    padding: 0.5rem 1rem 0;
     gap: 1rem;
   }
 
