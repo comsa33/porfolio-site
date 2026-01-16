@@ -1,0 +1,72 @@
+graph TB
+    subgraph "Web Application"
+        A[Next.js 16<br/>App Router]
+        A1[React 19<br/>Server Components]
+        A2[Prisma ORM]
+    end
+    
+    subgraph "Native Wrapper"
+        B[Capacitor 6]
+        B1[iOS WebView<br/>WKWebView]
+        B2[Android WebView<br/>WebView]
+    end
+    
+    subgraph "Native Plugins"
+        C1[Social Login<br/>Google/Apple/Kakao]
+        C2[In-App Purchase<br/>StoreKit/Billing]
+        C3[Status Bar<br/>Safe Area]
+        C4[Browser<br/>외부 링크]
+    end
+    
+    subgraph "Payment Flow"
+        D1[Web<br/>TossPayments]
+        D2[iOS<br/>App Store IAP]
+        D3[Android<br/>Google Play Billing]
+    end
+    
+    subgraph "API Routes"
+        E1["/api/auth/native-*"<br/>네이티브 인증]
+        E2["/api/payments/ios/*"<br/>iOS 결제 검증]
+        E3["/api/payments/android/*"<br/>Android 결제 검증]
+        E4["/api/payments/complete"<br/>Web 결제]
+    end
+    
+    subgraph "Backend"
+        F[(PostgreSQL)]
+        F1[NextAuth.js<br/>세션 관리]
+        F2[Webhook 처리<br/>환불 동기화]
+    end
+    
+    A --> B
+    A1 --> A
+    A2 --> F
+    
+    B --> B1
+    B --> B2
+    
+    B1 --> C1
+    B1 --> C2
+    B2 --> C1
+    B2 --> C2
+    
+    C1 --> E1
+    C2 --> D2
+    C2 --> D3
+    
+    D1 --> E4
+    D2 --> E2
+    D3 --> E3
+    
+    E1 --> F1
+    E2 --> F
+    E3 --> F
+    E4 --> F
+    
+    F2 --> F
+    
+    style A fill:#e1f5ff,stroke:#333,stroke-width:2px,color:#000
+    style B fill:#fff9c4,stroke:#333,stroke-width:2px,color:#000
+    style C1 fill:#f3e5f5,stroke:#333,stroke-width:2px,color:#000
+    style D1 fill:#e8f5e9,stroke:#333,stroke-width:2px,color:#000
+    style E1 fill:#ffebee,stroke:#333,stroke-width:2px,color:#000
+    style F fill:#ffe0b2,stroke:#333,stroke-width:2px,color:#000

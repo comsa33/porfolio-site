@@ -117,22 +117,32 @@ export default function ProjectDetailModal({ project, lang, isOpen, onClose }: P
                             : '※ The actual implementation uses an internal DSL (Domain-Specific Language), presented here as Python code for clarity.'}
                         </div>
                       )}
-                      <SyntaxHighlighter
-                        language="python"
-                        style={vscDarkPlus}
-                        customStyle={{
-                          margin: 0,
-                          padding: '1.5rem',
-                          background: 'rgba(0, 0, 0, 0.5)',
-                          fontSize: '0.875rem',
-                          borderRadius: '0 0 6px 6px',
-                        }}
-                      >
-                        {case_.technicalDetails[lang]
-                          .replace(/```python\n|```\n|```python\\n|```\\n/g, '')
+                      {(() => {
+                        const codeText = case_.technicalDetails[lang];
+                        // Extract language from code fence (```tsx, ```typescript, ```python, etc.)
+                        const langMatch = codeText.match(/^```(\w+)/);
+                        const codeLanguage = langMatch ? langMatch[1] : 'python';
+                        const cleanedCode = codeText
+                          .replace(/^```\w*\n?/, '')
+                          .replace(/```\n?$/, '')
                           .replace(/\\n/g, '\n')
-                          .trim()}
-                      </SyntaxHighlighter>
+                          .trim();
+                        return (
+                          <SyntaxHighlighter
+                            language={codeLanguage}
+                            style={vscDarkPlus}
+                            customStyle={{
+                              margin: 0,
+                              padding: '1.5rem',
+                              background: 'rgba(0, 0, 0, 0.5)',
+                              fontSize: '0.875rem',
+                              borderRadius: '0 0 6px 6px',
+                            }}
+                          >
+                            {cleanedCode}
+                          </SyntaxHighlighter>
+                        );
+                      })()}
                     </div>
                   </details>
 

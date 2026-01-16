@@ -1,0 +1,74 @@
+graph TB
+    subgraph "Client Layer"
+        A[Audio Recording<br/>MediaRecorder]
+        A1[Play/Pause]
+        A2[Recording Timer]
+    end
+    
+    subgraph "Audio Processing"
+        B[MP3 Encoding<br/>lamejs]
+        B1[Blob Creation]
+        B2[Base64 Conversion]
+    end
+    
+    subgraph "API Layer"
+        C["/api/analyze"]
+        C1[Credit Deduction]
+        C2[Usage Logging]
+    end
+    
+    subgraph "AI Analysis"
+        D[Gemini 3.5 Flash<br/>multimodal]
+        D1[STT Transcription]
+        D2[Grammar/Vocab Analysis]
+        D3[Pronunciation/Fluency]
+        D4[Model Answer Gen]
+    end
+    
+    subgraph "Feedback Rendering"
+        E[InlineCorrection<br/>Inline Grammar Fix]
+        E1[SuggestionList<br/>Category Feedback]
+        E2[StructuredModelAnswer<br/>Template Mapping]
+        E3[ScoreGrid<br/>5-Domain Scores]
+    end
+    
+    subgraph "Data Storage"
+        F[(PostgreSQL<br/>Prisma)]
+        F1[(IndexedDB<br/>Local Recording)]
+    end
+    
+    A --> B
+    A1 --> A
+    A2 --> A
+    
+    B --> B1
+    B1 --> B2
+    B2 --> C
+    
+    C --> C1
+    C --> C2
+    C1 --> D
+    
+    D --> D1
+    D --> D2
+    D --> D3
+    D --> D4
+    
+    D1 --> E
+    D2 --> E
+    D3 --> E1
+    D4 --> E2
+    
+    E --> E3
+    E1 --> E3
+    E2 --> E3
+    
+    C2 --> F
+    B1 --> F1
+    
+    style A fill:#e1f5ff,stroke:#333,stroke-width:2px,color:#000
+    style B fill:#fff9c4,stroke:#333,stroke-width:2px,color:#000
+    style C fill:#f3e5f5,stroke:#333,stroke-width:2px,color:#000
+    style D fill:#e8f5e9,stroke:#333,stroke-width:2px,color:#000
+    style E fill:#ffebee,stroke:#333,stroke-width:2px,color:#000
+    style F fill:#ffe0b2,stroke:#333,stroke-width:2px,color:#000
