@@ -324,12 +324,124 @@
 
 .featuredProject {
   width: 100%;
-  max-width: calc(var(--container-width) * 0.9);
   margin: 0 auto;
-  padding: 0 2rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 2.5rem;
+  padding: 0.5rem calc(50vw - 300px) 0; /* Top padding for hover effect visibility */
+  display: flex;
+  gap: 2rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+}
+
+.featuredProject::-webkit-scrollbar {
+  display: none;
+}
+
+.featuredProject > * {
+  flex: 0 0 600px;
+  max-width: 600px;
+  scroll-snap-align: center;
+  transition:
+    filter 0.4s ease,
+    opacity 0.4s ease;
+  filter: blur(3px) brightness(0.5);
+  opacity: 0.6;
+}
+
+.featuredProject > *.active {
+  filter: blur(0) brightness(1);
+  opacity: 1;
+}
+
+/* Scroll Container Wrapper (for indicators) */
+.scrollContainer {
+  position: relative;
+}
+
+/* Scroll Indicators */
+.scrollIndicatorLeft,
+.scrollIndicatorRight {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0;
+  transition:
+    opacity 0.3s ease,
+    transform 0.2s ease;
+  pointer-events: none;
+}
+
+.scrollIndicatorLeft {
+  left: 0.5rem;
+}
+
+.scrollIndicatorRight {
+  right: 0.5rem;
+}
+
+.scrollIndicatorLeft.visible,
+.scrollIndicatorRight.visible {
+  opacity: 0.7;
+  pointer-events: auto;
+}
+
+.scrollIndicatorLeft:hover,
+.scrollIndicatorRight:hover {
+  opacity: 1;
+  transform: translateY(-50%) scale(1.05);
+  background: rgba(0, 240, 255, 0.15);
+  border-color: rgba(0, 240, 255, 0.3);
+}
+
+.scrollIndicatorLeft svg,
+.scrollIndicatorRight svg {
+  width: 20px;
+  height: 20px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Dot Indicators (Pagination) */
+.dotIndicators {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.dot:hover {
+  background: rgba(0, 240, 255, 0.4);
+  transform: scale(1.2);
+}
+
+.dot.active {
+  background: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+  transform: scale(1.1);
 }
 
 /* Timeline Section with Filter */
@@ -461,16 +573,38 @@
   text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
 }
 
-/* Projects Grid */
+/* Projects Grid - Horizontal Scroll */
 .projectsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 2.5rem;
+  display: flex;
+  gap: 2rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
   width: 100%;
-  max-width: var(--container-width);
   margin: 0 auto;
-  padding: 0 2rem;
-  align-items: start;
+  padding: 0.5rem calc(50vw - 300px) 0; /* Top padding for hover effect visibility */
+}
+
+.projectsGrid::-webkit-scrollbar {
+  display: none;
+}
+
+.projectsGrid > * {
+  flex: 0 0 600px;
+  max-width: 600px;
+  scroll-snap-align: center;
+  transition:
+    filter 0.4s ease,
+    opacity 0.4s ease;
+  filter: blur(3px) brightness(0.5);
+  opacity: 0.6;
+}
+
+.projectsGrid > *.active {
+  filter: blur(0) brightness(1);
+  opacity: 1;
 }
 
 /* Footer / Contact Section */
@@ -694,13 +828,49 @@
   }
 
   .projectsGrid {
-    grid-template-columns: 1fr;
-    padding: 0 1.5rem;
+    padding: 0 1rem;
+    gap: 1rem;
+  }
+
+  .projectsGrid > * {
+    flex: 0 0 calc(100vw - 2rem);
+    max-width: calc(100vw - 2rem);
+    filter: none;
+    opacity: 1;
+    transform: none;
   }
 
   .featuredProject {
-    grid-template-columns: 1fr;
-    padding: 0 1.5rem;
+    padding: 0 1rem;
+    gap: 1rem;
+  }
+
+  .featuredProject > * {
+    flex: 0 0 calc(100vw - 2rem);
+    max-width: calc(100vw - 2rem);
+    filter: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .sectionTitle {
+    padding: 0 1rem;
+  }
+
+  .dotIndicators {
+    padding: 0 1rem;
+  }
+
+  .scrollIndicatorLeft,
+  .scrollIndicatorRight {
+    width: 36px;
+    height: 36px;
+  }
+
+  .scrollIndicatorLeft svg,
+  .scrollIndicatorRight svg {
+    width: 16px;
+    height: 16px;
   }
 
   .footerTitle {

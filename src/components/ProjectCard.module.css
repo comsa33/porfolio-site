@@ -2,7 +2,7 @@
   background: linear-gradient(135deg, rgba(17, 17, 17, 0.98) 0%, rgba(17, 17, 17, 0.95) 100%);
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  padding: 2rem;
+  padding: 1.5rem;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -79,8 +79,8 @@
 /* Action Buttons */
 .buttonGroup {
   display: flex;
-  gap: 1rem;
-  margin-top: 1.5rem;
+  gap: 0.75rem;
+  margin-top: 1rem;
 }
 
 .detailBtn,
@@ -89,10 +89,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.25rem;
-  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s;
   text-decoration: none;
@@ -138,9 +138,9 @@
 }
 
 .header {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding-bottom: 1rem;
+  padding-bottom: 0.75rem;
 }
 
 /* Company Info */
@@ -148,8 +148,8 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.75rem;
-  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
 }
 
 .company {
@@ -168,10 +168,10 @@
 }
 
 .title {
-  font-size: 1.75rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.35rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -189,7 +189,7 @@
 }
 
 .shortDesc {
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   color: var(--accent-cyan);
   font-weight: 500;
 }
@@ -197,7 +197,7 @@
 .body {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
   flex: 1;
 }
 
@@ -208,11 +208,11 @@
 }
 
 .techBadge {
-  padding: 0.4rem 0.8rem;
+  padding: 0.3rem 0.6rem;
   background: rgba(0, 240, 255, 0.1);
   border: 1px solid var(--accent-cyan);
   border-radius: 4px;
-  font-size: 0.85rem;
+  font-size: 0.7rem;
   color: var(--accent-cyan);
   font-family: 'JetBrains Mono', monospace;
   transition: all 0.2s;
@@ -225,8 +225,8 @@
 }
 
 .fullDesc {
-  font-size: 1rem;
-  line-height: 1.8;
+  font-size: 0.85rem;
+  line-height: 1.7;
   color: var(--text-secondary);
   opacity: 0.95;
 }
@@ -234,7 +234,7 @@
 .achievements {
   background: rgba(0, 240, 255, 0.05);
   border-left: 1px solid var(--accent-cyan);
-  padding: 1rem 1.5rem;
+  padding: 0.75rem 1rem;
   border-radius: 4px;
 }
 

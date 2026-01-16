@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import mermaid from 'mermaid';
 import type { ArchitectureDiagram, LocalizedString } from '@/types';
 import styles from './ArchitectureModal.module.css';
@@ -13,17 +14,24 @@ interface ArchitectureModalProps {
   onClose: () => void;
 }
 
-export default function ArchitectureModal({ 
-  diagrams, 
-  projectTitle, 
+export default function ArchitectureModal({
+  diagrams,
+  projectTitle,
   company,
-  lang, 
-  onClose 
+  lang,
+  onClose,
 }: ArchitectureModalProps) {
   const [activeTab, setActiveTab] = useState(0);
   const [diagramCodes, setDiagramCodes] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
   const diagramRef = useRef<HTMLDivElement>(null);
+
+  // Client-side mount check for portal
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
 
   // Initialize Mermaid
   useEffect(() => {
@@ -51,7 +59,7 @@ export default function ArchitectureModal({
             const response = await fetch(filePath);
             if (!response.ok) throw new Error(`Failed to load ${filePath}`);
             return await response.text();
-          })
+          }),
         );
         setDiagramCodes(codes);
         setLoading(false);
@@ -70,7 +78,7 @@ export default function ArchitectureModal({
       if (code) {
         // Clear previous diagram
         diagramRef.current.innerHTML = '';
-        
+
         // Create unique ID for this diagram
         const id = `mermaid-${Date.now()}`;
         const div = document.createElement('div');
@@ -78,15 +86,18 @@ export default function ArchitectureModal({
         diagramRef.current.appendChild(div);
 
         // Render mermaid
-        mermaid.render(id, code).then(({ svg }) => {
-          div.innerHTML = svg;
-        }).catch(error => {
-          console.error('Mermaid rendering error:', error);
-          div.innerHTML = `<p>${lang === 'ko' ? '다이어그램 렌더링 실패' : 'Diagram rendering failed'}</p>`;
-        });
+        mermaid
+          .render(id, code)
+          .then(({ svg }) => {
+            div.innerHTML = svg;
+          })
+          .catch((error) => {
+            console.error('Mermaid rendering error:', error);
+            div.innerHTML = `<p>${lang === 'ko' ? '다이어그램 렌더링 실패' : 'Diagram rendering failed'}</p>`;
+          });
       }
     }
-  }, [activeTab, diagramCodes, loading]);
+  }, [activeTab, diagramCodes, loading, lang]);
 
   // Keyboard shortcut (ESC to close)
   useEffect(() => {
@@ -111,13 +122,17 @@ export default function ArchitectureModal({
     }
   };
 
-  return (
+  if (!mounted) return null;
+
+  const modalContent = (
     <div className={styles.overlay} onClick={handleBackdropClick}>
       <div className={styles.modal}>
         {/* Header */}
         <div className={styles.header}>
           <div>
-            <h2 className={styles.title}>{projectTitle} - {lang === 'ko' ? '아키텍처' : 'Architecture'}</h2>
+            <h2 className={styles.title}>
+              {projectTitle} - {lang === 'ko' ? '아키텍처' : 'Architecture'}
+            </h2>
             <p className={styles.company}>{company[lang]}</p>
           </div>
           <button onClick={onClose} className={styles.closeBtn} aria-label="Close">
@@ -129,7 +144,7 @@ export default function ArchitectureModal({
         <div className={styles.privacyNotice}>
           <span className={styles.icon}>⚠️</span>
           <p>
-            {lang === 'ko' 
+            {lang === 'ko'
               ? '전체 소스코드는 회사 소유의 자산으로 공개가 불가능합니다. 아키텍처 구조와 문제 해결 사례만 공유합니다.'
               : 'Full source code is proprietary and cannot be publicly shared. Only architecture and problem-solving insights are showcased.'}
           </p>
@@ -161,9 +176,7 @@ export default function ArchitectureModal({
             <>
               {/* Description */}
               {diagrams[activeTab]?.description && (
-                <p className={styles.description}>
-                  {diagrams[activeTab].description[lang]}
-                </p>
+                <p className={styles.description}>{diagrams[activeTab].description[lang]}</p>
               )}
 
               {/* Diagram */}
@@ -174,4 +187,6 @@ export default function ArchitectureModal({
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }

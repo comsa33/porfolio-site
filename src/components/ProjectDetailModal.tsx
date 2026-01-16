@@ -1,7 +1,8 @@
 'use client';
 
 import { Project, ProblemSolvingCase } from '@/types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import styles from './ProjectDetailModal.module.css';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -14,6 +15,14 @@ interface Props {
 }
 
 export default function ProjectDetailModal({ project, lang, isOpen, onClose }: Props) {
+  const [mounted, setMounted] = useState(false);
+
+  // Client-side mount check for portal
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+
   // ESC 키로 닫기
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -29,11 +38,11 @@ export default function ProjectDetailModal({ project, lang, isOpen, onClose }: P
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen || !project.detail) return null;
+  if (!isOpen || !project.detail || !mounted) return null;
 
   const problemSolvingCases = project.detail.problemSolving;
 
-  return (
+  const modalContent = (
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         {/* Header */}
@@ -183,4 +192,6 @@ export default function ProjectDetailModal({ project, lang, isOpen, onClose }: P
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }

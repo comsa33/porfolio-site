@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import styles from './page.module.css';
 import Timeline from '@/components/Timeline';
 import ProjectCard from '@/components/ProjectCard';
@@ -9,7 +9,7 @@ import TimelineBackground from '@/components/TimelineBackground';
 import FooterBackground from '@/components/FooterBackground';
 import WaveBackground from '@/components/WaveBackground';
 import portfolioData from '@/data/portfolio.json';
-import { PortfolioData, TimelineType } from '@/types';
+import { PortfolioData } from '@/types';
 
 const data = portfolioData as PortfolioData;
 
@@ -127,6 +127,79 @@ export default function Home() {
   const featuredProjects = data.projects.filter((p) => p.featured === true).sort(sortByOrder);
 
   const otherProjects = data.projects.filter((p) => p.featured !== true).sort(sortByOrder);
+
+  // Scroll containers
+  const featuredScrollRef = useRef<HTMLDivElement>(null);
+  const otherScrollRef = useRef<HTMLDivElement>(null);
+  const [featuredScroll, setFeaturedScroll] = useState({
+    canScrollLeft: false,
+    canScrollRight: false,
+  });
+  const [otherScroll, setOtherScroll] = useState({ canScrollLeft: false, canScrollRight: false });
+  const [featuredActiveIndex, setFeaturedActiveIndex] = useState(0);
+  const [otherActiveIndex, setOtherActiveIndex] = useState(0);
+
+  // Check scroll state and active index
+  const updateScrollState = useCallback(
+    (
+      ref: React.RefObject<HTMLDivElement | null>,
+      setState: React.Dispatch<
+        React.SetStateAction<{ canScrollLeft: boolean; canScrollRight: boolean }>
+      >,
+      setActiveIndex: React.Dispatch<React.SetStateAction<number>>,
+    ) => {
+      if (!ref.current) return;
+      const { scrollLeft, scrollWidth, clientWidth } = ref.current;
+      setState({
+        canScrollLeft: scrollLeft > 5,
+        canScrollRight: scrollLeft < scrollWidth - clientWidth - 5,
+      });
+      // Calculate active index based on scroll position
+      const cardWidth = ref.current.firstElementChild?.clientWidth || 400;
+      const gap = 32; // 2rem gap
+      const activeIdx = Math.round(scrollLeft / (cardWidth + gap));
+      setActiveIndex(activeIdx);
+    },
+    [],
+  );
+
+  // Initialize scroll state
+  useEffect(() => {
+    updateScrollState(featuredScrollRef, setFeaturedScroll, setFeaturedActiveIndex);
+    updateScrollState(otherScrollRef, setOtherScroll, setOtherActiveIndex);
+
+    // Also update on resize
+    const handleResize = () => {
+      updateScrollState(featuredScrollRef, setFeaturedScroll, setFeaturedActiveIndex);
+      updateScrollState(otherScrollRef, setOtherScroll, setOtherActiveIndex);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [updateScrollState]);
+
+  // Scroll to specific card by index
+  const scrollToCard = (ref: React.RefObject<HTMLDivElement | null>, index: number) => {
+    if (!ref.current) return;
+    const cardWidth = ref.current.firstElementChild?.clientWidth || 400;
+    const gap = 32;
+    ref.current.scrollTo({
+      left: index * (cardWidth + gap),
+      behavior: 'smooth',
+    });
+  };
+
+  // Scroll handler
+  const handleScrollClick = (
+    ref: React.RefObject<HTMLDivElement | null>,
+    direction: 'left' | 'right',
+  ) => {
+    if (!ref.current) return;
+    const scrollAmount = ref.current.clientWidth * 0.8;
+    ref.current.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth',
+    });
+  };
 
   return (
     <main ref={mainRef} className={styles.main}>
@@ -257,10 +330,63 @@ export default function Home() {
         <section id="featured" className={styles.featuredSection}>
           <WaveBackground />
           <h2 className={styles.sectionTitle}>{SECTION_TITLES.featured[lang]}</h2>
-          <div className={styles.featuredProject}>
-            {featuredProjects.map((project) => (
-              <ProjectCard key={project.id} project={project} lang={lang} />
+          {/* Dot Indicators */}
+          <div className={styles.dotIndicators}>
+            {featuredProjects.map((_, idx) => (
+              <button
+                key={idx}
+                className={`${styles.dot} ${featuredActiveIndex === idx ? styles.active : ''}`}
+                onClick={() => scrollToCard(featuredScrollRef, idx)}
+                aria-label={`Go to project ${idx + 1}`}
+              />
             ))}
+          </div>
+          <div className={styles.scrollContainer}>
+            <button
+              className={`${styles.scrollIndicatorLeft} ${featuredScroll.canScrollLeft ? styles.visible : ''}`}
+              onClick={() => handleScrollClick(featuredScrollRef, 'left')}
+              aria-label="Scroll left"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+            <div
+              ref={featuredScrollRef}
+              className={styles.featuredProject}
+              onScroll={() =>
+                updateScrollState(featuredScrollRef, setFeaturedScroll, setFeaturedActiveIndex)
+              }
+            >
+              {featuredProjects.map((project, idx) => (
+                <div key={project.id} className={featuredActiveIndex === idx ? styles.active : ''}>
+                  <ProjectCard project={project} lang={lang} />
+                </div>
+              ))}
+            </div>
+            <button
+              className={`${styles.scrollIndicatorRight} ${featuredScroll.canScrollRight ? styles.visible : ''}`}
+              onClick={() => handleScrollClick(featuredScrollRef, 'right')}
+              aria-label="Scroll right"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
           </div>
         </section>
       )}
@@ -269,10 +395,61 @@ export default function Home() {
       <section id="other-projects" className={styles.section}>
         <WaveBackground />
         <h2 className={styles.sectionTitle}>{SECTION_TITLES.otherProjects[lang]}</h2>
-        <div className={styles.projectsGrid}>
-          {otherProjects.map((project) => (
-            <ProjectCard key={project.id} project={project} lang={lang} />
+        {/* Dot Indicators */}
+        <div className={styles.dotIndicators}>
+          {otherProjects.map((_, idx) => (
+            <button
+              key={idx}
+              className={`${styles.dot} ${otherActiveIndex === idx ? styles.active : ''}`}
+              onClick={() => scrollToCard(otherScrollRef, idx)}
+              aria-label={`Go to project ${idx + 1}`}
+            />
           ))}
+        </div>
+        <div className={styles.scrollContainer}>
+          <button
+            className={`${styles.scrollIndicatorLeft} ${otherScroll.canScrollLeft ? styles.visible : ''}`}
+            onClick={() => handleScrollClick(otherScrollRef, 'left')}
+            aria-label="Scroll left"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+          <div
+            ref={otherScrollRef}
+            className={styles.projectsGrid}
+            onScroll={() => updateScrollState(otherScrollRef, setOtherScroll, setOtherActiveIndex)}
+          >
+            {otherProjects.map((project, idx) => (
+              <div key={project.id} className={otherActiveIndex === idx ? styles.active : ''}>
+                <ProjectCard project={project} lang={lang} />
+              </div>
+            ))}
+          </div>
+          <button
+            className={`${styles.scrollIndicatorRight} ${otherScroll.canScrollRight ? styles.visible : ''}`}
+            onClick={() => handleScrollClick(otherScrollRef, 'right')}
+            aria-label="Scroll right"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
         </div>
       </section>
 
