@@ -507,7 +507,7 @@ export default function Home() {
               </button>
             </div>
           </div>
-          <Timeline items={filteredTimeline} lang={lang} />
+          <Timeline items={filteredTimeline} lang={lang} onCertClick={setCertModalImage} />
         </section>
 
         {/* Contact Footer */}

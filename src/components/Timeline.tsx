@@ -18,6 +18,7 @@ import { TimelineItem } from '@/types';
 interface TimelineProps {
   items: TimelineItem[];
   lang: 'ko' | 'en';
+  onCertClick?: (imagePath: string) => void;
 }
 
 const categoryIcons = {
@@ -29,7 +30,7 @@ const categoryIcons = {
   Certification: Award,
 };
 
-const Timeline: React.FC<TimelineProps> = ({ items, lang }) => {
+const Timeline: React.FC<TimelineProps> = ({ items, lang, onCertClick }) => {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -128,6 +129,11 @@ const Timeline: React.FC<TimelineProps> = ({ items, lang }) => {
     });
   };
 
+  // Check if this is a certification item (for image modal)
+  const isCertificationImage = (link: string) => {
+    return link.endsWith('.png') || link.endsWith('.jpg') || link.endsWith('.webp');
+  };
+
   return (
     <div className={styles.timelineWrapper}>
       <div className={styles.scrollerContainer} ref={scrollerRef}>
@@ -173,21 +179,39 @@ const Timeline: React.FC<TimelineProps> = ({ items, lang }) => {
 
                     {/* Paper Link (if exists) */}
                     {item.paperLink && item.paperTitle && (
-                      <a
-                        href={item.paperLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles.paperLink}
-                      >
-                        {item.paperTitle['en']?.toLowerCase().includes('patent') ||
-                        item.paperTitle[lang]?.includes('특허') ? (
-                          <Award size={16} className={styles.paperIcon} />
+                      <>
+                        {onCertClick && isCertificationImage(item.paperLink) ? (
+                          <button
+                            onClick={() => onCertClick(item.paperLink!)}
+                            className={styles.paperLink}
+                          >
+                            {item.paperTitle['en']?.toLowerCase().includes('patent') ||
+                            item.paperTitle[lang]?.includes('특허') ? (
+                              <Award size={16} className={styles.paperIcon} />
+                            ) : (
+                              <FileText size={16} className={styles.paperIcon} />
+                            )}
+                            <span className={styles.paperTitle}>{item.paperTitle[lang]}</span>
+                            <ExternalLink size={14} className={styles.externalIcon} />
+                          </button>
                         ) : (
-                          <FileText size={16} className={styles.paperIcon} />
+                          <a
+                            href={item.paperLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.paperLink}
+                          >
+                            {item.paperTitle['en']?.toLowerCase().includes('patent') ||
+                            item.paperTitle[lang]?.includes('특허') ? (
+                              <Award size={16} className={styles.paperIcon} />
+                            ) : (
+                              <FileText size={16} className={styles.paperIcon} />
+                            )}
+                            <span className={styles.paperTitle}>{item.paperTitle[lang]}</span>
+                            <ExternalLink size={14} className={styles.externalIcon} />
+                          </a>
                         )}
-                        <span className={styles.paperTitle}>{item.paperTitle[lang]}</span>
-                        <ExternalLink size={14} className={styles.externalIcon} />
-                      </a>
+                      </>
                     )}
                   </div>
                 </div>
