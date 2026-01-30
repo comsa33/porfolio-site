@@ -16,6 +16,7 @@ export interface Profile {
     ai: SkillCategory;
     system: SkillCategory;
   };
+  certifications?: Certification[];
 }
 
 export interface SkillCategory {
@@ -23,7 +24,16 @@ export interface SkillCategory {
   skills: string[];
 }
 
-export type TimelineType = 'Design' | 'Education' | 'Dev' | 'Travel' | 'Career';
+export interface Certification {
+  id: string;
+  name: LocalizedString;
+  issuer: string;
+  date: string;
+  certificateNumber: string;
+  pdfPath?: string;
+}
+
+export type TimelineType = 'Design' | 'Education' | 'Dev' | 'Travel' | 'Career' | 'Certification';
 
 export interface TimelineItem {
   id: string;

@@ -26,6 +26,7 @@ const categoryIcons = {
   Design: Palette,
   Travel: Plane,
   Career: Briefcase,
+  Certification: Award,
 };
 
 const Timeline: React.FC<TimelineProps> = ({ items, lang }) => {

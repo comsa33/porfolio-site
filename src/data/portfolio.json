@@ -38,7 +38,31 @@
         },
         "skills": ["Async/Await", "Multiprocessing", "WebSocket", "Concurrency"]
       }
-    }
+    },
+    "certifications": [
+      {
+        "id": "iso-42001",
+        "name": {
+          "ko": "ISO/IEC 42001 AI 경영시스템 심사원",
+          "en": "ISO/IEC 42001 AI MS Auditor"
+        },
+        "issuer": "ISOC (ISO Certification)",
+        "date": "2026.01",
+        "certificateNumber": "ISOC-AI-26006",
+        "pdfPath": "/certificates/iso_42001_certificate.png"
+      },
+      {
+        "id": "iso-19011",
+        "name": {
+          "ko": "ISO 19011 경영시스템 심사원",
+          "en": "ISO 19011 MS Auditor"
+        },
+        "issuer": "ISOC (ISO Certification)",
+        "date": "2026.01",
+        "certificateNumber": "ISOC-AS-26009",
+        "pdfPath": "/certificates/iso_19011_certificate.png"
+      }
+    ]
   },
   "timeline": [
     {
@@ -263,6 +287,50 @@
       "description": {
         "ko": "스위스 경영대학원 Executive MBA 과정.",
         "en": "Executive Master of Business Administration program in Switzerland."
+      }
+    },
+    {
+      "id": "cert-iso-19011",
+      "date": "2026.01",
+      "title": {
+        "ko": "ISO 19011 심사원 자격 취득",
+        "en": "ISO 19011 Auditor Certification"
+      },
+      "role": {
+        "ko": "경영시스템 심사원/선임심사원 과정",
+        "en": "Management Systems Auditor/Lead Auditor"
+      },
+      "type": "Certification",
+      "description": {
+        "ko": "ISO 19011:2018 경영시스템 심사 가이드라인에 따른 심사원 자격. 모든 ISO 경영시스템 심사의 기반이 되는 핵심 자격증.",
+        "en": "Auditor qualification based on ISO 19011:2018 guidelines for auditing management systems. Core certification for all ISO management system audits."
+      },
+      "paperLink": "/certificates/iso_19011_certificate.png",
+      "paperTitle": {
+        "ko": "자격증 보기",
+        "en": "View Certificate"
+      }
+    },
+    {
+      "id": "cert-iso-42001",
+      "date": "2026.01",
+      "title": {
+        "ko": "ISO/IEC 42001 AI 심사원 자격 취득",
+        "en": "ISO/IEC 42001 AI Auditor Certification"
+      },
+      "role": {
+        "ko": "AI 경영시스템 심사원/선임심사원 과정",
+        "en": "AI Management Systems Auditor/Lead Auditor"
+      },
+      "type": "Certification",
+      "description": {
+        "ko": "세계 최초의 AI 관리 국제 표준 ISO/IEC 42001:2023 심사원 자격. AI 시스템의 거버넌스, 리스크 관리, 윤리적 개발에 대한 전문성 인증.",
+        "en": "Auditor qualification for ISO/IEC 42001:2023, the world's first international standard for AI management systems. Expertise in AI governance, risk management, and ethical development."
+      },
+      "paperLink": "/certificates/iso_42001_certificate.png",
+      "paperTitle": {
+        "ko": "자격증 보기",
+        "en": "View Certificate"
       }
     }
   ],

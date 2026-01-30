@@ -115,6 +115,11 @@
   box-shadow: 0 0 4px rgba(102, 102, 102, 0.2);
 }
 
+.timelineItem[data-type='Certification'] .dot {
+  background: #f59e0b; /* Amber/Gold for certification */
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+}
+
 @keyframes pulse {
   0%,
   100% {
@@ -207,6 +212,13 @@
   box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
 }
 
+/* Certification cards: Premium Gold styling */
+.timelineItem[data-type='Certification'] .card {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.3);
+  box-shadow: 0 10px 30px rgba(245, 158, 11, 0.15);
+}
+
 /* Date badge - hidden on desktop, shown on mobile */
 .dateBadge {
   display: none;
@@ -245,6 +257,13 @@
   box-shadow:
     0 15px 50px rgba(16, 185, 129, 0.25),
     inset 0 1px 0 rgba(16, 185, 129, 0.15);
+}
+
+.timelineItem[data-type='Certification']:hover .card {
+  border-color: #f59e0b; /* Amber/Gold */
+  box-shadow:
+    0 15px 50px rgba(245, 158, 11, 0.3),
+    inset 0 1px 0 rgba(245, 158, 11, 0.2);
 }
 
 /* Card Content */
@@ -290,6 +309,11 @@
   opacity: 1;
 }
 
+.timelineItem[data-type='Certification'] .titleIcon {
+  color: #f59e0b; /* Amber/Gold */
+  opacity: 1;
+}
+
 .cardHeader h3 {
   font-size: 1.25rem;
   font-weight: 700;
@@ -323,6 +347,11 @@
   color: #34d399; /* Soft Emerald */
 }
 
+.timelineItem[data-type='Certification'] .cardHeader h3 {
+  font-size: 1.4rem;
+  color: #f59e0b; /* Amber/Gold */
+}
+
 .role {
   font-size: 0.95rem;
   color: #94a3b8; /* Slate gray for better readability */
@@ -347,6 +376,10 @@
 
 .timelineItem[data-type='Career'] .role {
   color: #34d399; /* Soft Emerald */
+}
+
+.timelineItem[data-type='Certification'] .role {
+  color: #f59e0b; /* Amber/Gold */
 }
 
 /* Desktop: Flex layout for description + button */
@@ -430,6 +463,22 @@
 .timelineItem[data-type='Travel'] .paperIcon,
 .timelineItem[data-type='Travel'] .externalIcon {
   color: #fbbf24; /* Bright Amber matching Travel card */
+}
+
+/* Certification Paper Link Styling (Gold/Amber) */
+.timelineItem[data-type='Certification'] .paperLink {
+  background: rgba(245, 158, 11, 0.05);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.timelineItem[data-type='Certification'] .paperLink:hover {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: #f59e0b;
+}
+
+.timelineItem[data-type='Certification'] .paperIcon,
+.timelineItem[data-type='Certification'] .externalIcon {
+  color: #f59e0b; /* Amber/Gold matching Certification card */
 }
 
 .externalIcon {
@@ -890,6 +939,11 @@
   /* Career type active date badge */
   .activeItem[data-type='Career'] .dateBadge {
     color: #34d399;
+  }
+
+  /* Certification type active date badge */
+  .activeItem[data-type='Certification'] .dateBadge {
+    color: #f59e0b;
   }
 
   .cardHeader h3 {
