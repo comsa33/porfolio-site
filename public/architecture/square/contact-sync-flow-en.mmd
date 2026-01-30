@@ -1,0 +1,31 @@
+sequenceDiagram
+    participant 📱 as Client
+    participant 🔐 as SHA-256 Hash
+    participant ☁️ as Cloud Functions
+    participant 🗂️ as phoneHashes
+    participant 📊 as Firestore
+
+    📱->>📱: Normalize Contacts (E.164)
+    📱->>🔐: Request Phone Hashing
+    🔐-->>📱: Return SHA-256 Hash
+    
+    Note over 📱: Raw phone numbers stay on client only
+    
+    📱->>☁️: syncContacts(hash array)
+    
+    loop For Each Hash
+        ☁️->>🗂️: Query Reverse Index
+        🗂️-->>☁️: Return Matched userId
+        
+        alt User Match Found
+            ☁️->>📊: Check User Settings
+            
+            alt allowPhoneSearch = true
+                ☁️->>📊: Update contactFriends
+            end
+        end
+    end
+    
+    ☁️-->>📱: Return Sync Results
+    
+    Note over 🗂️: Firestore Rules:<br/>allow read, write: if false<br/>(Blocks direct client access)

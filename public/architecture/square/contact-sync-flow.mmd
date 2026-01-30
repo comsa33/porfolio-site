@@ -1,0 +1,31 @@
+sequenceDiagram
+    participant 📱 as 클라이언트
+    participant 🔐 as SHA-256 해싱
+    participant ☁️ as Cloud Functions
+    participant 🗂️ as phoneHashes
+    participant 📊 as Firestore
+
+    📱->>📱: 연락처 정규화 (E.164)
+    📱->>🔐: 전화번호 해싱 요청
+    🔐-->>📱: SHA-256 해시 반환
+    
+    Note over 📱: 원본 전화번호는 클라이언트에만 존재
+    
+    📱->>☁️: syncContacts(해시 배열)
+    
+    loop 각 해시에 대해
+        ☁️->>🗂️: 역인덱스 조회
+        🗂️-->>☁️: 매칭 userId 반환
+        
+        alt 매칭된 사용자 존재
+            ☁️->>📊: 사용자 설정 확인
+            
+            alt allowPhoneSearch = true
+                ☁️->>📊: contactFriends 업데이트
+            end
+        end
+    end
+    
+    ☁️-->>📱: 동기화 결과 반환
+    
+    Note over 🗂️: Firestore Rules:<br/>allow read, write: if false<br/>(클라이언트 직접 접근 차단)
