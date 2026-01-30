@@ -194,13 +194,15 @@ export default function Home() {
     });
   };
 
-  // Scroll handler
+  // Scroll handler - scroll by one card at a time
   const handleScrollClick = (
     ref: React.RefObject<HTMLDivElement | null>,
     direction: 'left' | 'right',
   ) => {
     if (!ref.current) return;
-    const scrollAmount = ref.current.clientWidth * 0.8;
+    const cardWidth = ref.current.firstElementChild?.clientWidth || 400;
+    const gap = 32;
+    const scrollAmount = cardWidth + gap;
     ref.current.scrollBy({
       left: direction === 'left' ? -scrollAmount : scrollAmount,
       behavior: 'smooth',
@@ -558,7 +560,9 @@ export default function Home() {
             <p className={styles.emailText}>{data.profile.email}</p>
           </div>
           <div className={styles.footerBottom}>
-            <p>© 2025 {data.profile.name[lang]}. All rights reserved.</p>
+            <p>
+              © {new Date().getFullYear()} {data.profile.name[lang]}. All rights reserved.
+            </p>
           </div>
         </footer>
       </main>
