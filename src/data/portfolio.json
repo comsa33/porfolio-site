@@ -1634,8 +1634,8 @@
               "Firestore Security Rules"
             ],
             "impact": {
-              "ko": "**성과**: 서버에 원본 전화번호 **0건** 저장. 데이터 유출 시에도 전화번호 복원 **불가능**. 사용자 신뢰 확보.",
-              "en": "**Impact**: **Zero** raw phone numbers stored on server. Phone number recovery **impossible** even in data breach. User trust established."
+              "ko": "**성과**: 서버에 원본 전화번호 **0건** 저장. 해커가 DB 탈취해도 전화번호 **역추적 불가**. 사용자 프라이버시 완벽 보호.",
+              "en": "**Impact**: **Zero** raw phone numbers stored on server. Even if hackers breach DB, phone numbers **cannot be reverse-engineered**. User privacy fully protected."
             }
           },
           {
