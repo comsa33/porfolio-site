@@ -125,6 +125,7 @@
   margin: 0 auto 1.5rem;
   letter-spacing: -0.05em;
   white-space: nowrap;
+  text-transform: uppercase;
 }
 
 .subtitle {
@@ -911,7 +912,7 @@
   }
 
   .title {
-    font-size: 7.5rem;
+    font-size: 6rem;
   }
 
   .subtitle {
