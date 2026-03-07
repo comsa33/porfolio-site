@@ -290,6 +290,23 @@
       }
     },
     {
+      "id": "edu-assist-phd",
+      "date": "2026.03 -",
+      "title": {
+        "ko": "서울과학종합대학원",
+        "en": "aSSIST"
+      },
+      "role": {
+        "ko": "AI 공학박사 (PhD)",
+        "en": "AI Engineering (PhD)"
+      },
+      "type": "Education",
+      "description": {
+        "ko": "• AI 공학박사 과정",
+        "en": "• PhD in AI Engineering"
+      }
+    },
+    {
       "id": "cert-iso-19011",
       "date": "2026.01",
       "title": {
