@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import styles from './page.module.css';
 import Timeline from '@/components/Timeline';
+import Publications from '@/components/Publications';
 import ProjectCard from '@/components/ProjectCard';
 import NeuralBackground from '@/components/NeuralBackground';
 import TimelineBackground from '@/components/TimelineBackground';
@@ -18,14 +19,29 @@ const SECTION_TITLES = {
   featured: { ko: '주요 프로젝트', en: 'Featured Projects' },
   timeline: { ko: '여정', en: 'Journey' },
   otherProjects: { ko: '기타 프로젝트', en: 'Other Projects' },
+  publications: { ko: '연구', en: 'Research' },
   contact: { ko: 'Contact', en: 'Contact' },
 } as const;
 
+/**
+ * Career length is anchored to the measured figure (46 months of employment as of
+ * 2026-07, which excludes the 2023.06–2023.11 gap) and accrues from there, so it
+ * stays accurate instead of gaining a year every January.
+ */
+const CAREER_ANCHOR = { year: 2026, month: 7, months: 46 };
+
+function getCareerYears(): number {
+  const now = new Date();
+  const elapsedMonths =
+    (now.getFullYear() - CAREER_ANCHOR.year) * 12 + (now.getMonth() + 1 - CAREER_ANCHOR.month);
+  const totalMonths = CAREER_ANCHOR.months + Math.max(0, elapsedMonths);
+  // Korean "N년차" counts the year in progress, hence the +1.
+  return Math.floor(totalMonths / 12) + 1;
+}
+
 // Helper: Get career experience text with years
 function getCareerIntro(lang: 'ko' | 'en', introText: string): string {
-  const startYear = 2022;
-  const currentYear = new Date().getFullYear();
-  const years = currentYear - startYear;
+  const years = getCareerYears();
 
   if (lang === 'ko') {
     return introText.replace('AI 에이전트 플랫폼 개발자', `${years}년차 AI 에이전트 플랫폼 개발자`);
@@ -511,6 +527,15 @@ export default function Home() {
           </div>
           <Timeline items={filteredTimeline} lang={lang} onCertClick={setCertModalImage} />
         </section>
+
+        {/* Research / Publications */}
+        {data.publications?.length > 0 && (
+          <section id="publications" className={styles.section}>
+            <WaveBackground />
+            <h2 className={styles.sectionTitle}>{SECTION_TITLES.publications[lang]}</h2>
+            <Publications items={data.publications} lang={lang} />
+          </section>
+        )}
 
         {/* Contact Footer */}
         <footer id="contact" className={styles.footer}>

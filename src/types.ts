@@ -33,6 +33,23 @@ export interface Certification {
   pdfPath?: string;
 }
 
+export type PublicationStatus = 'published' | 'under-review' | 'presented';
+
+export interface Publication {
+  id: string;
+  title: string; // Paper title (kept in its original language)
+  venue: LocalizedString; // Journal / conference
+  year: string;
+  status: PublicationStatus;
+  statusLabel: LocalizedString; // e.g. "심사 중" / "Under review"
+  authorRole: LocalizedString; // e.g. "제1저자" / "단독저자"
+  indexing?: string; // SCIE, SCOPUS, KCI, ...
+  summary: LocalizedString;
+  link?: string;
+  codeLink?: string;
+  doi?: string;
+}
+
 export type TimelineType = 'Design' | 'Education' | 'Dev' | 'Travel' | 'Career' | 'Certification';
 
 export interface TimelineItem {
@@ -100,4 +117,5 @@ export interface PortfolioData {
   profile: Profile;
   timeline: TimelineItem[];
   projects: Project[];
+  publications: Publication[];
 }

@@ -22,21 +22,26 @@
           "ko": "Backend & Infrastructure",
           "en": "Backend & Infrastructure"
         },
-        "skills": ["Python", "FastAPI", "Redis", "Docker", "Kubernetes"]
+        "skills": ["Python", "FastAPI", "Kubernetes", "Redis", "Elasticsearch", "PostgreSQL"]
       },
       "ai": {
         "title": {
           "ko": "AI & LLM",
           "en": "AI & LLM"
         },
-        "skills": ["LLM Agent", "RAG Pipeline", "LLM Integration", "Prompt Eng."]
+        "skills": ["LLM Agent", "MCP", "RAG Pipeline", "DSPy", "QLoRA Fine-tuning"]
       },
       "system": {
         "title": {
           "ko": "System Design",
           "en": "System Design"
         },
-        "skills": ["Async/Await", "Multiprocessing", "WebSocket", "Concurrency"]
+        "skills": [
+          "Multi-Agent Orchestration",
+          "Async/Concurrency",
+          "Distributed Systems",
+          "OpenTelemetry"
+        ]
       }
     },
     "certifications": [
@@ -67,14 +72,14 @@
   "timeline": [
     {
       "id": "edudesign",
-      "date": "2003.03 - 2012.08",
+      "date": "2003.03 - 2013.02",
       "title": {
         "ko": "전남대학교",
         "en": "Chonnam National Univ."
       },
       "role": {
-        "ko": "시각디자인 전공",
-        "en": "Visual Design Major"
+        "ko": "미술학과 시각디자인전공 (미술학사)",
+        "en": "Visual Design, BFA"
       },
       "type": "Education",
       "description": {
@@ -241,13 +246,13 @@
         "en": "Posicube"
       },
       "role": {
-        "ko": "AI 개발자 (AI 개발1팀)",
-        "en": "AI Developer (AI Dev Team 1)"
+        "ko": "매니저 · AI 개발1팀",
+        "en": "Manager · AI Dev Team 1"
       },
       "type": "Dev",
       "description": {
-        "ko": "• LLM 에이전트 플랫폼 핵심 백엔드 개발\n• Python 샌드박스 서비스 (PyRunner)\n• RAG 평가 시스템 (Evaluator)\n• 웹 IDE (PyEditor)",
-        "en": "• Developing core backend for LLM Agent Platform\n• Python sandbox service (PyRunner)\n• RAG evaluation system (Evaluator)\n• Web IDE (PyEditor)"
+        "ko": "• AI Agent 실행 런타임 설계/개발 (주 개발자)\n• 멀티에이전트 오케스트레이션 및 자율 에이전트 구현\n• 에이전트 메모리·컨텍스트 관리 시스템 구축\n• RAG/Agent 품질 평가 서비스 단독 개발",
+        "en": "• Designed/built the AI agent execution runtime (lead developer)\n• Implemented multi-agent orchestration and autonomous agents\n• Built the agent memory & context management system\n• Sole developer of the RAG/Agent quality evaluation service"
       }
     },
     {
@@ -353,6 +358,76 @@
   ],
   "projects": [
     {
+      "id": "agentic-harness",
+      "title": {
+        "ko": "멀티에이전트 오케스트레이션 & 자율 에이전트",
+        "en": "Multi-Agent Orchestration & Agentic Harness"
+      },
+      "shortDescription": {
+        "ko": "에이전트가 에이전트를 만들고 배포·검증하는 자율 제어 체계",
+        "en": "A self-driving control plane where agents build, deploy, and verify agents"
+      },
+      "fullDescription": {
+        "ko": "에이전트가 여러 도구·서브에이전트를 조율하고, 나아가 에이전트가 스스로 에이전트를 만들어 배포·검증·디버깅하는 자율 제어 체계를 설계·구현했습니다. 관리 플레인(저작·배포)과 런타임 플레인(실행·스트리밍)을 분리한 2-플레인 아키텍처로 인증·권한 경계를 확보하고, 되돌릴 수 없는 상용 배포만 사람이 승인하도록(HITL) 자율성과 통제의 경계를 명시적으로 그었습니다.",
+        "en": "Designed and built a control system in which an agent orchestrates tools and sub-agents — and ultimately authors, deploys, verifies, and debugs other agents. A two-plane architecture separates the management plane (authoring/deployment) from the runtime plane (execution/streaming) to establish clear auth boundaries, with human approval (HITL) required only for irreversible production deployments."
+      },
+      "techStack": [
+        "Python",
+        "MCP (Model Context Protocol)",
+        "Kubernetes",
+        "Redis Stream",
+        "SSE",
+        "TypeScript/React",
+        "Loki",
+        "Prometheus"
+      ],
+      "keyAchievements": [
+        {
+          "ko": "오케스트레이션 계층 설계·구현 — 의도 분류 → 도구 선택 → 병렬 실행 → 서브에이전트 위임",
+          "en": "Built the orchestration layer — intent classification → tool selection → parallel execution → sub-agent delegation"
+        },
+        {
+          "ko": "추론 모델/일반 모델별 도구 선택 전략을 이원화해 백본 모델 교체 시 시나리오 무수정 대응",
+          "en": "Split tool-selection strategy by reasoning vs. general models so scenarios survive a backbone swap unchanged"
+        },
+        {
+          "ko": "외부 MCP 서버 30종 이상(쿠버네티스 제어, 관측성, 코드 편집 등)을 표준 규약으로 에이전트 도구화",
+          "en": "Standardized 30+ external MCP servers (Kubernetes control, observability, code editing) into agent tools"
+        },
+        {
+          "ko": "자율 에이전트 하네스 — 저작 → 검증 → 배포 → 실행 테스트 → 로그 기반 디버깅까지 스스로 도는 풀 라이프사이클 루프",
+          "en": "An agentic harness that closes the full lifecycle loop on its own: author → verify → deploy → smoke-test → log-driven debugging"
+        },
+        {
+          "ko": "컨텍스트·비용 효율화 — 작업별 절차 문서를 온디맨드 로드하는 스킬 체계로 시스템 프롬프트 26% 감축 (69,943자 → 51,449자), 기능 회귀 0",
+          "en": "Context and cost efficiency — an on-demand skill system for per-task procedure docs cut the system prompt 26% (69,943 → 51,449 chars) with zero functional regression"
+        },
+        {
+          "ko": "글래스박스 — 추론 과정·도구 호출·코드 diff를 실시간 스트리밍으로 노출, 추론 요약을 2경로 하이브리드로 추출해 프로바이더 무관하게 제공",
+          "en": "Glass-box execution — streams reasoning, tool calls, and code diffs live, extracting reasoning summaries through a dual-path hybrid that stays provider-agnostic"
+        }
+      ],
+      "features": [
+        "Multi-Agent Orchestration",
+        "MCP Tool Integration (30+)",
+        "Autonomous Agent Harness",
+        "Two-Plane Architecture",
+        "Human-in-the-Loop Gating",
+        "Glass-box Streaming"
+      ],
+      "repoPath": "agentic-harness",
+      "company": {
+        "ko": "(주)포지큐브",
+        "en": "Posicube Inc."
+      },
+      "period": {
+        "ko": "2025.06 ~ 2026.07",
+        "en": "Jun 2025 ~ Jul 2026"
+      },
+      "featured": true,
+      "order": 1
+    },
+    {
       "id": "py-runner",
       "title": "PyRunner",
       "shortDescription": {
@@ -363,27 +438,40 @@
         "ko": "Multi-Pod 환경에서 AI 에이전트를 동적으로 배포하고 실행하는 고가용성 플랫폼입니다. Redis Pub/Sub 기반 분산 라우팅과 FastAPI Sub-app 동적 로딩을 통해 Zero-downtime 배포를 실현했습니다.",
         "en": "High-availability platform for dynamically deploying and executing AI agents in multi-pod environments. Achieved zero-downtime deployment through Redis Pub/Sub distributed routing and FastAPI sub-app dynamic loading."
       },
-      "techStack": ["Python 3.11", "FastAPI", "Redis Pub/Sub", "Docker", "SSE", "Multiprocessing"],
+      "techStack": [
+        "Python",
+        "FastAPI",
+        "Kubernetes",
+        "Redis (Pub/Sub·Stream)",
+        "Elasticsearch",
+        "MongoDB",
+        "OpenTelemetry",
+        "pytest"
+      ],
       "keyAchievements": [
         {
-          "ko": "Redis Pub/Sub 이벤트 버스로 Multi-Pod 실시간 배포 동기화",
-          "en": "Real-time deployment sync across multi-pods via Redis Pub/Sub event bus"
+          "ko": "금융·공공·엔터프라이즈 7개 고객사 / 9개 프로젝트에 적용된 실행 런타임 (주 개발자, 커밋 71% · 코드 라인 63%)",
+          "en": "Execution runtime adopted by 9 projects across 7 finance/public/enterprise clients (lead developer — 71% of commits, 63% of lines)"
         },
         {
-          "ko": "Distributed Lock으로 Race Condition 해결 (배포 실패율 0% 달성)",
-          "en": "Resolved race conditions with distributed locks (achieved 0% deployment failure)"
+          "ko": "도구를 이름·스키마·실행부 3요소로 규약화해 코어 수정 없이 신규 도구를 편입하는 플러그인 구조 확립",
+          "en": "Standardized tools around a name/schema/executor contract so new tools plug in without core changes"
         },
         {
-          "ko": "FastAPI Sub-app 동적 로딩으로 Zero-downtime 배포 구현",
-          "en": "Implemented zero-downtime deployment with FastAPI sub-app dynamic loading"
+          "ko": "Redis Pub/Sub 이벤트 버스로 Multi-Pod 실시간 배포 동기화 + Distributed Lock으로 배포 실패율 0% 달성",
+          "en": "Real-time multi-pod deployment sync via a Redis Pub/Sub event bus, with distributed locks achieving 0% deployment failure"
         },
         {
-          "ko": "SSE 스트리밍으로 LLM 토큰 실시간 중계 (ChatGPT 스타일)",
-          "en": "Real-time LLM token streaming via SSE (ChatGPT-style)"
+          "ko": "FastAPI Sub-app 동적 로딩으로 서버 재시작 없이 기능 추가·교체 (Zero-downtime 배포)",
+          "en": "Zero-downtime deployment — FastAPI sub-app dynamic loading adds or swaps features without a server restart"
         },
         {
-          "ko": "멀티프로세스 아키텍처로 Agent/Sandbox/Dev 서버 독립성 보장",
-          "en": "Guaranteed independence of Agent/Sandbox/Dev servers with multiprocess architecture"
+          "ko": "프로바이더 무관 LLM 어댑터 계층 (Azure/AWS Bedrock/Anthropic/Google/OpenAI) + Redis Stream 기반 SSE 토큰 스트리밍",
+          "en": "Provider-agnostic LLM adapter layer (Azure/AWS Bedrock/Anthropic/Google/OpenAI) with Redis Stream-backed SSE token streaming"
+        },
+        {
+          "ko": "구조화 로깅·OTLP 트레이싱 등 관측성 계층과 로그 수집 워커를 단독 개발, 핵심 모듈 테스트 1.6만 줄 이상 작성",
+          "en": "Solely built the observability layer (structured logging, OTLP tracing) and log-collection worker; wrote 16k+ lines of core-module tests"
         }
       ],
       "features": [
@@ -399,8 +487,8 @@
         "en": "Posicube Inc."
       },
       "period": {
-        "ko": "2025.01 ~ 현재",
-        "en": "Jan 2025 ~ Present"
+        "ko": "2024.12 ~ 2026.07",
+        "en": "Dec 2024 ~ Jul 2026"
       },
       "detail": {
         "problemSolving": [
@@ -581,7 +669,7 @@
         ]
       },
       "featured": true,
-      "order": 1
+      "order": 2
     },
     {
       "id": "log-collector",
@@ -762,7 +850,7 @@
         ]
       },
       "featured": false,
-      "order": 4
+      "order": 6
     },
     {
       "id": "opic-master",
@@ -967,40 +1055,48 @@
         ]
       },
       "featured": true,
-      "order": 2
+      "order": 3
     },
     {
       "id": "evaluator",
       "title": "Evaluator",
       "shortDescription": {
-        "ko": "RAG 시스템 성능 평가 자동화 플랫폼",
-        "en": "Automated RAG System Performance Evaluation Platform"
+        "ko": "RAG/Agent 품질 평가 벤치마크 자동화 서비스 (단독 개발)",
+        "en": "Automated RAG/Agent quality benchmarking service (sole developer)"
       },
       "fullDescription": {
-        "ko": "LLM 기반 RAG 시스템의 정확도를 종합적으로 평가하는 자동화 플랫폼입니다. Recall/VecDash 메트릭을 활용하여 QnA 생성부터 검색 정확도, 생성 품질까지 E2E 평가 파이프라인을 구축했습니다.",
-        "en": "Comprehensive automated platform for evaluating LLM-based RAG system accuracy. Built an end-to-end evaluation pipeline from QnA generation to retrieval accuracy and generation quality using Recall/VecDash metrics."
+        "ko": "에이전트·RAG 품질을 정량 측정하는 평가 서비스를 단독 개발했습니다(코드 라인 100%, 커밋 95% — git 실측). 검색 정확도(Recall)와 생성 품질(RAGAS 계열 메트릭)을 자동 측정하고, 평가용 QnA 데이터셋 자동 생성 파이프라인까지 구축해 전 고객사 서비스의 품질 검증에 사용됩니다.",
+        "en": "Sole developer of a service that quantifies agent and RAG quality (100% of lines, 95% of commits by git measurement). It automatically measures retrieval accuracy (Recall) and generation quality (RAGAS-family metrics) and includes a pipeline that generates evaluation QnA datasets — now used to validate quality across every client service."
       },
-      "techStack": ["Python", "FastAPI", "OpenAI GPT-4o", "MinIO", "SSE", "Docker"],
+      "techStack": [
+        "Python",
+        "DSPy 3.1.3",
+        "Elasticsearch",
+        "httpx",
+        "Redis",
+        "Kubernetes",
+        "pytest"
+      ],
       "keyAchievements": [
         {
-          "ko": "LLM 기반 평가 에이전트 (Intent Router + Request Builder)",
-          "en": "LLM-based evaluation agent (Intent Router + Request Builder)"
+          "ko": "RAGAS 라이브러리 직접 의존 없이 경량 자체 구현 (프롬프트 규격은 준수) — 버전·프로바이더 종속 제거",
+          "en": "Reimplemented RAGAS metrics in-house (keeping prompt specifications) to remove version and provider lock-in"
         },
         {
-          "ko": "Recall/VecDash 메트릭 기반 E2E 평가 시스템 (QnA 생성 → 검색 검증 → 품질 평가)",
-          "en": "E2E evaluation system based on Recall/VecDash metrics (QnA generation → retrieval validation → quality assessment)"
+          "ko": "평가 재현성을 위한 의도적 탈-LLM 설계 — LLM 호출을 의도 추출 1회로 한정하고 요청 조립을 결정론적 상태머신으로 전환, 파싱 실패 원천 제거",
+          "en": "Deliberately de-LLM'd for reproducibility — one LLM call for intent extraction, with request assembly moved to a deterministic state machine, eliminating parse failures"
         },
         {
-          "ko": "Multi-LLM 평가 파이프라인 설계 (자연어 의도 기반 라우팅)",
-          "en": "Designed multi-LLM evaluation pipeline (natural language intent-based routing)"
+          "ko": "LLM-as-judge self-bias 회피 원칙 수립 — 평가 모델과 대상 모델의 패밀리 분리를 가이드하고 모델별 점수 차이가 정상임을 문서화",
+          "en": "Established an LLM-as-judge self-bias policy — judge and target models must come from different families, with expected score variation documented"
         },
         {
-          "ko": "실시간 진행률 추적 및 에러 알림 시스템 구현",
-          "en": "Implemented real-time progress tracking and error notification system"
+          "ko": "측정값 자체가 틀렸던 결함을 근본 수정 — 특정 서비스 Recall이 0으로 오측정되던 문제를 규명·수정, 실데이터 97/100건 교정 및 기존 정상 케이스 회귀 0",
+          "en": "Root-caused a defect in the measurements themselves — fixed Recall misreporting as 0 for certain services, correcting 97 of 100 real records with zero regression"
         },
         {
-          "ko": "평가 결과 Markdown 시각화 및 리포팅 자동화",
-          "en": "Automated evaluation result visualization and reporting in Markdown"
+          "ko": "LLMOps — 사내 LLM 게이트웨이용 커스텀 DSPy LM 어댑터 구현, BootstrapFewShot·MIPROv2로 프롬프트 자동 최적화, 배포 산출물 번들 369KB → 175KB 감축",
+          "en": "LLMOps — built a custom DSPy LM adapter for the in-house gateway, automated prompt optimization with BootstrapFewShot/MIPROv2, and cut the deployment bundle from 369KB to 175KB"
         }
       ],
       "features": [
@@ -1016,8 +1112,8 @@
         "en": "Posicube Inc."
       },
       "period": {
-        "ko": "2025.02 ~ 현재",
-        "en": "Feb 2025 ~ Present"
+        "ko": "2025.02 ~ 2026.07",
+        "en": "Feb 2025 ~ Jul 2026"
       },
       "detail": {
         "problemSolving": [
@@ -1156,7 +1252,7 @@
         ]
       },
       "featured": false,
-      "order": 1
+      "order": 2
     },
     {
       "id": "py-editor",
@@ -1348,7 +1444,7 @@
         ]
       },
       "featured": false,
-      "order": 2
+      "order": 4
     },
     {
       "id": "knowledge-base",
@@ -1554,7 +1650,7 @@
         ]
       },
       "featured": false,
-      "order": 3
+      "order": 5
     },
     {
       "id": "square-messenger",
@@ -1776,7 +1872,275 @@
         ]
       },
       "featured": true,
-      "order": 2
+      "order": 4
+    },
+    {
+      "id": "agent-memory",
+      "title": {
+        "ko": "AI Agent 메모리 · 컨텍스트 관리 시스템",
+        "en": "AI Agent Memory & Context Management"
+      },
+      "shortDescription": {
+        "ko": "턴·세션을 넘어 사용자 맥락을 유지하는 장기 메모리 아키텍처",
+        "en": "Long-term memory that carries user context across turns and sessions"
+      },
+      "fullDescription": {
+        "ko": "에이전트가 턴·세션을 넘어 사용자 맥락을 유지하도록 장기 메모리와 단기 컨텍스트 관리 체계를 설계·구현했습니다. 무한 누적(append-only) 구조가 컨텍스트를 오염시키고 비용을 키우는 문제를 실사용 로그로 진단한 뒤, 카테고리 기반 관리형 구조로 재설계했습니다.",
+        "en": "Designed and implemented long-term memory and short-term context management so agents retain user context across turns and sessions. After diagnosing from production logs how an append-only structure pollutes context and inflates cost, the store was redesigned around managed, categorized memory."
+      },
+      "techStack": ["Elasticsearch", "PostgreSQL", "MongoDB", "Redis", "mem0", "Knowledge Graph"],
+      "keyAchievements": [
+        {
+          "ko": "관리형 사용자 메모리 구현 — 무한 누적 구조를 선호·대상·환경·교훈 4축 카테고리 관리형 구조로 재설계",
+          "en": "Managed user memory — replaced unbounded accumulation with four managed categories (preference, subject, environment, lesson)"
+        },
+        {
+          "ko": "에이전트가 저장뿐 아니라 낡은 항목의 갱신·삭제까지 자율 수행하는 메모리 CRUD 도구 설계",
+          "en": "Memory CRUD tools that let the agent update and delete stale entries autonomously, not merely write"
+        },
+        {
+          "ko": "시점 종속 정보 저장 금지를 프롬프트 계약으로 명문화 — 시간이 지나면 거짓이 되는 기록을 원천 차단",
+          "en": "Codified a prompt-level contract banning time-dependent facts, blocking records that become false over time"
+        },
+        {
+          "ko": "단기 컨텍스트 recency-tier 압축 — 최근 턴은 원문 보존, 과거 턴은 절삭하여 LLM 호출 0으로 비용 절감",
+          "en": "Recency-tier compression for short-term context — recent turns verbatim, older turns truncated, at zero LLM cost"
+        },
+        {
+          "ko": "차세대 아키텍처 설계 — 사용자 global / 에이전트 local 스코프 분리와 저장소 역할 분리 하이브리드 권고안 수립 (Elasticsearch·PostgreSQL·Knowledge Graph)",
+          "en": "Next-generation design — separated user-global from agent-local scope and produced a hybrid storage recommendation (Elasticsearch / PostgreSQL / Knowledge Graph)"
+        },
+        {
+          "ko": "사내 메모리 3세대 이력을 커밋 단위로 실측 분석하고 외부 레퍼런스(mem0, Cognee, Claude Memory Tool, LongMemEval)를 교차 검증 → 그래프 전면 도입 대신 질의 유형 라우팅형 하이브리드로 결론",
+          "en": "Measured three in-house memory generations commit by commit and cross-checked external references (mem0, Cognee, Claude Memory Tool, LongMemEval), concluding on query-type routing over a full graph rollout"
+        }
+      ],
+      "features": [
+        "Managed Long-term Memory",
+        "Memory CRUD Tools",
+        "Recency-tier Compression",
+        "Global/Local Scope Separation",
+        "Hybrid Storage Design"
+      ],
+      "repoPath": "agent-memory",
+      "company": {
+        "ko": "(주)포지큐브",
+        "en": "Posicube Inc."
+      },
+      "period": {
+        "ko": "2026.03 ~ 2026.07",
+        "en": "Mar 2026 ~ Jul 2026"
+      },
+      "featured": false,
+      "order": 1
+    },
+    {
+      "id": "llm-finetuning",
+      "title": {
+        "ko": "오픈소스 LLM/SLM 파인튜닝 & 평가 벤치마크",
+        "en": "Open-source LLM/SLM Fine-tuning & Benchmarks"
+      },
+      "shortDescription": {
+        "ko": "모델·데이터셋·코드를 공개한 개인 R&D (단일 GPU QLoRA)",
+        "en": "Personal R&D with openly released models, datasets, and code (single-GPU QLoRA)"
+      },
+      "fullDescription": {
+        "ko": "업무와 별개로 오픈소스 모델을 직접 파인튜닝하고, LLM·에이전트 품질을 측정하는 평가 벤치마크를 구축해 공개해 온 개인 연구입니다. 모델과 데이터셋은 Hugging Face, 코드는 GitHub에 공개되어 있어 결과를 직접 확인할 수 있습니다.",
+        "en": "Personal research, separate from day-to-day work, fine-tuning open-source models and building public benchmarks for LLM and agent quality. Models and datasets are on Hugging Face and the code is on GitHub, so the results are directly verifiable."
+      },
+      "techStack": [
+        "PyTorch",
+        "Unsloth",
+        "TRL (SFTTrainer)",
+        "PEFT/QLoRA",
+        "Hugging Face Transformers·Hub",
+        "GGUF (llama.cpp)",
+        "Flutter"
+      ],
+      "keyAchievements": [
+        {
+          "ko": "Llama-3-Open-Ko-8B(8B)와 Gemma-ko-2b(2B)를 영어 시험 문항 생성 태스크로 도메인 특화 파인튜닝 후 공개",
+          "en": "Fine-tuned and released Llama-3-Open-Ko-8B (8B) and Gemma-ko-2b (2B) for English exam-item generation"
+        },
+        {
+          "ko": "RTX 3090 24GB 단일 GPU 제약에서 4bit 양자화 로딩 기반 QLoRA로 SFT 수행 (LoRA r=32 / α=64 / dropout 0.05)",
+          "en": "Ran SFT via 4-bit QLoRA under a single RTX 3090 24GB (LoRA r=32 / α=64 / dropout 0.05)"
+        },
+        {
+          "ko": "어댑터를 어텐션과 MLP 전 프로젝션에 임베딩·출력층까지 포함해 적용, gradient checkpointing·accumulation으로 메모리 한계 아래 학습 성립",
+          "en": "Applied adapters across all attention and MLP projections including embedding and output layers, fitting training under the memory ceiling with gradient checkpointing and accumulation"
+        },
+        {
+          "ko": "학습 데이터셋 직접 구축 — 문항 생성 태스크용 QA 데이터셋을 설계·구축하고 모델 출력이 JSON 스키마를 지키도록 학습 데이터 형식(Alpaca 계열 지시 포맷)을 규정",
+          "en": "Built the training data from scratch — designed a QA dataset for item generation and specified an Alpaca-style instruction format that enforces JSON-schema-conformant output"
+        },
+        {
+          "ko": "학습 모델을 GGUF(q8_0)로 양자화해 로컬 추론이 가능한 형태로 배포, 문항 생성 관리자 백엔드·조회 API·인증 서버·모바일 앱(Flutter)까지 연결해 엔드투엔드 서비스로 완성",
+          "en": "Quantized to GGUF (q8_0) for local inference and wired it end-to-end — item-generation admin backend, query API, auth server, and a Flutter mobile app"
+        }
+      ],
+      "features": [
+        "QLoRA Fine-tuning (single GPU)",
+        "Custom Instruction Dataset",
+        "GGUF Quantization",
+        "Open Model & Dataset Release",
+        "End-to-end Service Integration"
+      ],
+      "repoPath": "llm-finetuning",
+      "company": {
+        "ko": "개인 연구 (오픈소스 공개)",
+        "en": "Personal R&D (open-sourced)"
+      },
+      "period": {
+        "ko": "2024.05 ~ 2026.07",
+        "en": "May 2024 ~ Jul 2026"
+      },
+      "platformLinks": {
+        "web": "https://huggingface.co/comsa33"
+      },
+      "featured": false,
+      "order": 3
+    }
+  ],
+  "publications": [
+    {
+      "id": "tara-knosys",
+      "title": "TARA: Tool-Augmented Retrieval Agents for Self-Corrective RAG",
+      "venue": {
+        "ko": "Knowledge-Based Systems (Elsevier)",
+        "en": "Knowledge-Based Systems (Elsevier)"
+      },
+      "year": "2026",
+      "status": "under-review",
+      "statusLabel": {
+        "ko": "심사 완료 · 편집자 결정 대기",
+        "en": "Review complete · awaiting editor decision"
+      },
+      "authorRole": {
+        "ko": "제1저자 (주저자)",
+        "en": "First author"
+      },
+      "indexing": "SCIE",
+      "summary": {
+        "ko": "고정 루프 기반 Self-Corrective RAG를 6개 도구(검색·질의분해·품질평가·본문조회·문서구조탐색·용어매핑)를 갖춘 ReAct 에이전트로 대체한 프레임워크. 전체 파이프라인을 DSPy 선언적 프로그램으로 구현해 프롬프트 자동 최적화를 적용했고, 4개 데이터셋에서 2WikiMultiHopQA F1 +0.089 (p<0.001)를 달성했습니다. 교차 모델 검증을 통해 추론형 모델의 거부 비대칭(Reasoning Model Refusal Asymmetry) 현상을 규명했습니다.",
+        "en": "Replaces fixed-loop Self-Corrective RAG with a ReAct agent equipped with six tools (retrieval, query decomposition, quality assessment, passage lookup, document-structure exploration, terminology mapping). The full pipeline is written as a declarative DSPy program with automatic prompt optimization, achieving +0.089 F1 on 2WikiMultiHopQA (p<0.001) across four datasets. Cross-model validation identified a Reasoning Model Refusal Asymmetry."
+      },
+      "codeLink": "https://github.com/comsa33/self-corrective-rag"
+    },
+    {
+      "id": "hgc-acl",
+      "title": "HGC: Hint-Gated Cache for Contamination-Resilient Information-Seeking LLM Agents",
+      "venue": {
+        "ko": "ACL Rolling Review 2026 (May Cycle)",
+        "en": "ACL Rolling Review 2026 (May Cycle)"
+      },
+      "year": "2026",
+      "status": "under-review",
+      "statusLabel": {
+        "ko": "심사 진행 중",
+        "en": "Under review"
+      },
+      "authorRole": {
+        "ko": "단독저자",
+        "en": "Sole author"
+      },
+      "summary": {
+        "ko": "LLM 에이전트의 응답 캐시(에이전트 메모리) 오염 문제를 다룬 단독 저자 연구. 스코프 필터·문서 ID 검증·근거 검증기의 3단계 게이트로 캐시 답변을 현재 질의의 원문에 근거시킨 뒤 제공하고, 게이트 거부 시 에이전트로 폴백하는 HGC 아키텍처를 제안합니다. 3개 벤치마크와 3개 백본을 교차한 7개 셀에서 캐시 단독 베이스라인 대비 오염 조건 성능 저하를 0~6.5pp로 억제했습니다.",
+        "en": "A sole-author study on contamination in LLM-agent response caches (agent memory). HGC grounds each cached answer in the current query's source text through a three-stage gate (scope filter, document-ID verification, evidence verifier), falling back to the agent when the gate rejects. Across seven cells spanning three benchmarks and three backbones, it holds degradation under contamination to 0–6.5pp versus a cache-only baseline."
+      }
+    },
+    {
+      "id": "kr-housing-longrag",
+      "title": "KR-Housing-LongRAG-Bench: Evaluating Long-Context and Retrieval-Augmented LLMs on Korean Housing Regulations",
+      "venue": {
+        "ko": "ACL Rolling Review 2026 (August Cycle)",
+        "en": "ACL Rolling Review 2026 (August Cycle)"
+      },
+      "year": "2026",
+      "status": "under-review",
+      "statusLabel": {
+        "ko": "심사 진행 중",
+        "en": "Under review"
+      },
+      "authorRole": {
+        "ko": "단독저자",
+        "en": "Sole author"
+      },
+      "summary": {
+        "ko": "한국 공공주택 공고문·법령·공공 표를 대상으로 롱컨텍스트 LLM과 RAG를 동일 문항에서 통제 비교한 벤치마크. 41개 공식 공고와 공공 데이터 포털 표를 기반으로 근거 연결형 QA 1,997문항을 설계하고, 12개 태스크 패밀리와 32k~512k 컨텍스트 티어로 구성했습니다. 약 410k 토큰 구간에서 모델 간 정확도 99% 대 9%의 격차가 발생함을 확인하고, 이것이 '기억'이 아닌 '긴 컨텍스트 처리 능력'임을 분리 입증했습니다.",
+        "en": "A benchmark that compares long-context LLMs and RAG on identical questions over Korean public-housing announcements, statutes, and public tables. It comprises 1,997 evidence-linked QA items built from 41 official announcements and open-data tables, spanning 12 task families and 32k–512k context tiers. At roughly 410k tokens, model accuracy diverges from 99% to 9% — shown to reflect long-context processing ability rather than memorization."
+      }
+    },
+    {
+      "id": "jips-trajectory-clustering",
+      "title": "Auditing Trajectory Clustering in LLM-Agent Failure Analysis: A Multi-Dataset Validation Protocol",
+      "venue": {
+        "ko": "Journal of Information Processing Systems (한국정보처리학회)",
+        "en": "Journal of Information Processing Systems (KIPS)"
+      },
+      "year": "2026",
+      "status": "under-review",
+      "statusLabel": {
+        "ko": "심사 진행 중",
+        "en": "Under review"
+      },
+      "authorRole": {
+        "ko": "제1저자 (주저자)",
+        "en": "First author"
+      },
+      "indexing": "SCOPUS",
+      "summary": {
+        "ko": "LLM 에이전트 실패 분석에서 '트래젝토리 클러스터가 외부 실패 라벨과 정렬된다'는 통념을 검증한 연구. 누수 감사·층화 라벨 검증·멀티라벨 검증·matched-K 베이스라인 비교로 구성된 4단계 프로토콜을 제안하고, 3개 공개 벤치마크(AFTraj-2K, AgentErrorBench, AgentRx)에 26개 피처 기반 표현으로 적용했습니다. 겉보기 정렬 대부분이 태스크·프레임워크 교란요인으로 설명됨을 규명했습니다 (NMI 0.32→0.21).",
+        "en": "Tests the common assumption that trajectory clusters align with external failure labels in LLM-agent analysis. Proposes a four-stage protocol — leakage audit, stratified label validation, multi-label validation, and matched-K baseline comparison — applied to three public benchmarks (AFTraj-2K, AgentErrorBench, AgentRx) under 26 feature-based representations, showing most apparent alignment is explained by task and framework confounders (NMI 0.32→0.21)."
+      }
+    },
+    {
+      "id": "jksqm-lhtt",
+      "title": "LLM 기반 시계열 예측 하이퍼파라미터 자동 튜닝 프레임워크: 서울시 대기질 데이터 사례연구",
+      "venue": {
+        "ko": "품질경영학회지 제53권 제3호, pp.343-360",
+        "en": "J. of the Korean Society for Quality Management, 53(3), 343-360"
+      },
+      "year": "2025",
+      "status": "published",
+      "statusLabel": {
+        "ko": "게재 완료",
+        "en": "Published"
+      },
+      "authorRole": {
+        "ko": "제1저자 (3인 공저)",
+        "en": "First author (3 authors)"
+      },
+      "indexing": "KCI",
+      "summary": {
+        "ko": "생성형 AI를 활용한 시계열 예측 자동화 프레임워크 LHTT를 제안한 연구. Gemma3:27B를 반복 피드백 루프에 결합해 모델 선택부터 하이퍼파라미터 최적화, 결과 분석, 리포트 생성까지 end-to-end로 자동화했습니다. 서울시 PM2.5 데이터(2025.05, 25개 측정소 18,500건)에 5개 모델을 적용해 검증했으며, LSTM이 RMSE 3.70 / R² 0.82로 베이스라인 대비 17.86% 개선을 달성했습니다.",
+        "en": "Proposes LHTT, an LLM-based automation framework for time-series forecasting. Gemma3:27B is placed in an iterative feedback loop that automates model selection, hyperparameter optimization, result analysis, and report generation end-to-end. Validated on Seoul PM2.5 data (May 2025, 18,500 records across 25 stations) with five models; LSTM reached RMSE 3.70 / R² 0.82, a 17.86% improvement over baseline."
+      },
+      "doi": "10.7469/JKSQM.2025.53.3.343",
+      "link": "https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART003244700"
+    },
+    {
+      "id": "ask2023-coverletter",
+      "title": "GPT-4 기반 채용공고별 AI 자기소개서 작성 가이드 개인화 서비스",
+      "venue": {
+        "ko": "2023년 한국정보처리학회 춘계학술발표대회 (ASK 2023) 제30권 1호",
+        "en": "ASK 2023, Annual Spring Conference of KIPS, Vol. 30 No. 1"
+      },
+      "year": "2023",
+      "status": "presented",
+      "statusLabel": {
+        "ko": "발표 완료",
+        "en": "Presented"
+      },
+      "authorRole": {
+        "ko": "제1저자 (주저자)",
+        "en": "First author"
+      },
+      "summary": {
+        "ko": "GPT-4 API 기반으로 채용공고 맞춤 자기소개서를 생성하는 end-to-end 서비스를 설계·구현하고 발표한 연구. 채용공고 스크래핑 → DB 적재 → 검색·필터링 → 사용자 이력 입력 → 개인화 문서 생성 → 다운로드까지 파이프라인을 구축했고, 4단계 프롬프트 구조를 실험적으로 최적화해 템플릿 기반 서비스 대비 개인화 품질을 개선했습니다. GPT-4 공개(2023.03) 두 달 만의 초기 상용 LLM 응용 사례입니다.",
+        "en": "Designed and implemented an end-to-end service that generates job-posting-specific cover letters with the GPT-4 API. The pipeline spans posting scraping, database ingestion, search/filtering, applicant-history input, personalized document generation, and download; a four-stage prompt structure was empirically optimized to improve personalization over template-based services. Built within two months of GPT-4's March 2023 release."
+      },
+      "doi": "10.3745/PKIPS.y2023m05a.430"
     }
   ]
 }
