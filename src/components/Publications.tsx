@@ -20,31 +20,32 @@ const Publications: React.FC<PublicationsProps> = ({ items, lang }) => {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.grid}>
-        {items.map((pub) => {
-          const StatusIcon = statusIcons[pub.status];
-          const isOpen = expandedId === pub.id;
+    <ol className={styles.list}>
+      {items.map((pub) => {
+        const StatusIcon = statusIcons[pub.status];
+        const isOpen = expandedId === pub.id;
 
-          return (
-            <article key={pub.id} className={styles.card} data-status={pub.status}>
-              <div className={styles.badges}>
-                <span className={styles.status}>
-                  <StatusIcon size={13} strokeWidth={2.2} />
-                  {pub.statusLabel[lang]}
-                </span>
-                {pub.indexing && <span className={styles.indexing}>{pub.indexing}</span>}
-                <span className={styles.year}>{pub.year}</span>
-              </div>
+        return (
+          <li key={pub.id} className={styles.item} data-status={pub.status}>
+            <div className={styles.metaRow}>
+              <span className={styles.status}>
+                <StatusIcon size={13} strokeWidth={2.2} />
+                {pub.statusLabel[lang]}
+              </span>
+              {pub.indexing && <span className={styles.indexing}>{pub.indexing}</span>}
+              <span className={styles.year}>{pub.year}</span>
+            </div>
 
-              <h3 className={styles.title}>{pub.title}</h3>
-              <p className={styles.venue}>{pub.venue[lang]}</p>
-              <p className={styles.role}>{pub.authorRole[lang]}</p>
+            <h3 className={styles.title}>{pub.title}</h3>
+            <p className={styles.venue}>
+              {pub.venue[lang]} · {pub.authorRole[lang]}
+            </p>
 
-              <p className={`${styles.summary} ${isOpen ? styles.summaryOpen : ''}`}>
-                {pub.summary[lang]}
-              </p>
+            <p className={`${styles.summary} ${isOpen ? styles.summaryOpen : ''}`}>
+              {pub.summary[lang]}
+            </p>
 
+            <div className={styles.footerRow}>
               <button
                 type="button"
                 className={styles.moreBtn}
@@ -60,48 +61,44 @@ const Publications: React.FC<PublicationsProps> = ({ items, lang }) => {
                     : 'Show more'}
               </button>
 
-              {(pub.link || pub.codeLink || pub.doi) && (
-                <div className={styles.links}>
-                  {pub.link && (
-                    <a
-                      href={pub.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles.link}
-                    >
-                      <ExternalLink size={14} />
-                      {lang === 'ko' ? '논문 보기' : 'View paper'}
-                    </a>
-                  )}
-                  {pub.codeLink && (
-                    <a
-                      href={pub.codeLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles.link}
-                    >
-                      <Code2 size={14} />
-                      {lang === 'ko' ? '코드' : 'Code'}
-                    </a>
-                  )}
-                  {pub.doi && (
-                    <a
-                      href={`https://doi.org/${pub.doi}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles.link}
-                    >
-                      <FileText size={14} />
-                      DOI
-                    </a>
-                  )}
-                </div>
+              {pub.link && (
+                <a
+                  href={pub.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.link}
+                >
+                  <ExternalLink size={13} />
+                  {lang === 'ko' ? '논문' : 'Paper'}
+                </a>
               )}
-            </article>
-          );
-        })}
-      </div>
-    </div>
+              {pub.codeLink && (
+                <a
+                  href={pub.codeLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.link}
+                >
+                  <Code2 size={13} />
+                  {lang === 'ko' ? '코드' : 'Code'}
+                </a>
+              )}
+              {pub.doi && (
+                <a
+                  href={`https://doi.org/${pub.doi}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.link}
+                >
+                  <FileText size={13} />
+                  DOI
+                </a>
+              )}
+            </div>
+          </li>
+        );
+      })}
+    </ol>
   );
 };
 

@@ -1,22 +1,23 @@
-import type { Metadata } from "next";
-import { Outfit, JetBrains_Mono } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Instrument_Sans, JetBrains_Mono } from 'next/font/google';
+import './globals.css';
 
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-outfit",
-  display: "swap",
+const instrumentSans = Instrument_Sans({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
 });
 
 const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
-  display: "swap",
+  subsets: ['latin'],
+  variable: '--font-mono',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: "Ruo | AI Agent Platform Developer",
-  description: "Portfolio of Ruo, an AI Agent Platform Developer specialized in Python, RAG, and Agentic Systems.",
+  title: 'Ruo Lee — AI Engineer',
+  description:
+    'AI engineer building LLM agent platforms — execution runtime, orchestration, memory, and quality evaluation — with published research on RAG and LLM agents.',
 };
 
 export default function RootLayout({
@@ -25,7 +26,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${outfit.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${instrumentSans.variable} ${jetbrainsMono.variable}`}
+      suppressHydrationWarning
+    >
       <body>{children}</body>
     </html>
   );

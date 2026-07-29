@@ -37,14 +37,14 @@ export default function ArchitectureModal({
   useEffect(() => {
     mermaid.initialize({
       startOnLoad: true,
-      theme: 'dark',
+      theme: 'neutral',
       themeVariables: {
-        primaryColor: '#4f46e5',
-        primaryTextColor: '#fff',
-        primaryBorderColor: '#818cf8',
-        lineColor: '#06b6d4',
-        secondaryColor: '#0891b2',
-        tertiaryColor: '#dc2626',
+        primaryColor: '#eef2fd',
+        primaryTextColor: '#1c1917',
+        primaryBorderColor: '#1d4ed8',
+        lineColor: '#57534e',
+        secondaryColor: '#f4f3f1',
+        tertiaryColor: '#faf5f0',
       },
     });
   }, []);

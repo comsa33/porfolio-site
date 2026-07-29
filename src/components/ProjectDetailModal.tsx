@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styles from './ProjectDetailModal.module.css';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 interface Props {
   project: Project;
@@ -61,7 +61,7 @@ export default function ProjectDetailModal({ project, lang, isOpen, onClose }: P
           {/* Section: Problem Solving Cases (핵심) */}
           <section className={styles.section}>
             <h3 className={styles.sectionTitle}>
-              {lang === 'ko' ? '🔥 핵심 문제 해결 사례' : '🔥 Core Problem-Solving Cases'}
+              {lang === 'ko' ? '핵심 문제 해결 사례' : 'Core Problem-Solving Cases'}
             </h3>
             <p className={styles.sectionDesc}>
               {lang === 'ko'
@@ -139,13 +139,13 @@ export default function ProjectDetailModal({ project, lang, isOpen, onClose }: P
                         return (
                           <SyntaxHighlighter
                             language={codeLanguage}
-                            style={vscDarkPlus}
+                            style={oneLight}
                             customStyle={{
                               margin: 0,
-                              padding: '1.5rem',
-                              background: 'rgba(0, 0, 0, 0.5)',
-                              fontSize: '0.875rem',
-                              borderRadius: '0 0 6px 6px',
+                              padding: '1.25rem',
+                              background: 'var(--bg-subtle)',
+                              fontSize: '0.84rem',
+                              borderRadius: '0 0 8px 8px',
                             }}
                           >
                             {cleanedCode}
