@@ -76,6 +76,7 @@ export interface Project {
     web?: string;
     ios?: string;
     android?: string;
+    github?: string;
   };
   keyAchievements?: LocalizedString[];
   features: (string | LocalizedString)[];

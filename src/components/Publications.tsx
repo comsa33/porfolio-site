@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { FileText, ExternalLink, Code2, CheckCircle2, Clock, Mic, Award } from 'lucide-react';
+import { FileText, ExternalLink, CheckCircle2, Clock, Mic, Award } from 'lucide-react';
+import BrandIcon from './BrandIcon';
 import styles from './Publications.module.css';
 import { Publication, PublicationStatus } from '@/types';
 
@@ -80,7 +81,7 @@ const Publications: React.FC<PublicationsProps> = ({ items, lang }) => {
                   rel="noopener noreferrer"
                   className={styles.link}
                 >
-                  <Code2 size={13} />
+                  <BrandIcon url={pub.codeLink} size={13} />
                   {lang === 'ko' ? '코드' : 'Code'}
                 </a>
               )}

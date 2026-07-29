@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Globe, Wrench, Network } from 'lucide-react';
+import { Wrench, Network } from 'lucide-react';
+import BrandIcon, { brandName } from './BrandIcon';
 import styles from './ProjectCard.module.css';
 import { Project } from '@/types';
 import ProjectDetailModal from './ProjectDetailModal';
@@ -48,10 +49,22 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang }) => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.platformLink}
-                  title="Web"
-                  aria-label="Open web app"
+                  title={brandName(project.platformLinks.web)}
+                  aria-label={`Open on ${brandName(project.platformLinks.web)}`}
                 >
-                  <Globe size={14} strokeWidth={2} />
+                  <BrandIcon url={project.platformLinks.web} size={14} />
+                </a>
+              )}
+              {project.platformLinks.github && (
+                <a
+                  href={project.platformLinks.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.platformLink}
+                  title="GitHub"
+                  aria-label="Open on GitHub"
+                >
+                  <BrandIcon url={project.platformLinks.github} size={14} />
                 </a>
               )}
               {project.platformLinks.ios && (

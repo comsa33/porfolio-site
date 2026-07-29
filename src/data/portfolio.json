@@ -1996,7 +1996,8 @@
         "en": "May 2024 ~ Jul 2026"
       },
       "platformLinks": {
-        "web": "https://huggingface.co/comsa33"
+        "web": "https://huggingface.co/comsa33",
+        "github": "https://github.com/comsa33"
       },
       "featured": false,
       "order": 5
