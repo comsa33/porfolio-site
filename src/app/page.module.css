@@ -160,48 +160,43 @@
   padding: 0.28rem 0.8rem;
 }
 
-.skillsGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  margin-top: 3rem;
-  padding-top: 2.25rem;
+.skillsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 2.75rem;
+  padding-top: 2rem;
   border-top: 1px solid var(--border);
 }
 
-.skillTitle {
+.skillRow {
+  display: flex;
+  align-items: baseline;
+  gap: 1.25rem;
+}
+
+.skillLabel {
+  flex-shrink: 0;
+  width: 12.5rem;
   font-family: var(--font-mono), monospace;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink-tertiary);
-  margin-bottom: 0.8rem;
 }
 
-.skillList {
-  list-style: none;
-}
-
-.skillList li {
-  font-size: 0.92rem;
+.skillItems {
+  font-size: 0.9rem;
+  line-height: 1.8;
   color: var(--ink-secondary);
-  padding: 0.22rem 0;
 }
 
-/* ============ Projects ============ */
+/* ============ Projects — same list grammar as Research ============ */
 
-.featuredGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.25rem;
-}
-
-.compactGrid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.25rem;
-  margin-top: 1.25rem;
+.projectList {
+  list-style: none;
+  max-width: 860px;
 }
 
 /* ============ Journey ============ */
@@ -359,16 +354,6 @@
 
 /* ============ Responsive ============ */
 
-@media (max-width: 900px) {
-  .featuredGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .compactGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 @media (max-width: 640px) {
   .nav {
     display: none;
@@ -394,13 +379,17 @@
     padding-top: 3.5rem;
   }
 
-  .skillsGrid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+  .skillRow {
+    flex-direction: column;
+    gap: 0.15rem;
   }
 
-  .compactGrid {
-    grid-template-columns: 1fr;
+  .skillLabel {
+    width: auto;
+  }
+
+  .skillsList {
+    gap: 1rem;
   }
 
   .sectionHeader {

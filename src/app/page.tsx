@@ -164,15 +164,13 @@ export default function Home() {
             </span>
           </div>
 
-          <div className={styles.skillsGrid}>
+          <div className={styles.skillsList}>
             {(['backend', 'ai', 'system'] as const).map((key) => (
-              <div key={key} className={styles.skillCol}>
-                <h2 className={styles.skillTitle}>{data.profile.coreSkills[key].title[lang]}</h2>
-                <ul className={styles.skillList}>
-                  {data.profile.coreSkills[key].skills.map((skill) => (
-                    <li key={skill}>{skill}</li>
-                  ))}
-                </ul>
+              <div key={key} className={styles.skillRow}>
+                <h2 className={styles.skillLabel}>{data.profile.coreSkills[key].title[lang]}</h2>
+                <p className={styles.skillItems}>
+                  {data.profile.coreSkills[key].skills.join(' · ')}
+                </p>
               </div>
             ))}
           </div>
@@ -181,16 +179,11 @@ export default function Home() {
         {/* Projects */}
         <section id="projects" className={styles.section}>
           <h2 className={styles.sectionTitle}>{SECTION_TITLES.projects[lang]}</h2>
-          <div className={styles.featuredGrid}>
-            {featuredProjects.map((project) => (
-              <ProjectCard key={project.id} project={project} lang={lang} variant="featured" />
+          <ol className={styles.projectList}>
+            {[...featuredProjects, ...otherProjects].map((project) => (
+              <ProjectCard key={project.id} project={project} lang={lang} />
             ))}
-          </div>
-          <div className={styles.compactGrid}>
-            {otherProjects.map((project) => (
-              <ProjectCard key={project.id} project={project} lang={lang} variant="compact" />
-            ))}
-          </div>
+          </ol>
         </section>
 
         {/* Research */}

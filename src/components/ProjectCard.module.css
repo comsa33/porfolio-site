@@ -1,50 +1,48 @@
-.card {
+.row {
+  list-style: none;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.row:first-child {
+  padding-top: 0.25rem;
+}
+
+.metaRow {
   display: flex;
-  flex-direction: column;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease,
-    transform 0.15s ease;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.55rem;
 }
 
-.card:hover {
-  border-color: var(--border-strong);
-  box-shadow: 0 6px 24px rgba(28, 25, 23, 0.06);
-  transform: translateY(-2px);
-}
-
-.featured {
-  padding: 1.6rem 1.75rem;
-}
-
-.compact {
-  padding: 1.25rem 1.4rem;
+.featuredChip {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: 4px;
+  padding: 0.16rem 0.45rem;
 }
 
 .meta {
   font-family: var(--font-mono), monospace;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   letter-spacing: 0.02em;
   color: var(--ink-tertiary);
-  margin-bottom: 0.55rem;
 }
 
 .title {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 650;
-  letter-spacing: -0.015em;
-  line-height: 1.35;
+  letter-spacing: -0.01em;
+  line-height: 1.45;
   word-break: keep-all;
-}
-
-.compact .title {
-  font-size: 1rem;
 }
 
 .platformLinks {
@@ -63,88 +61,56 @@
   color: var(--accent);
 }
 
-.shortDesc {
-  font-size: 0.9rem;
+.oneLiner {
+  font-size: 0.88rem;
   color: var(--ink-secondary);
-  margin-top: 0.3rem;
-  line-height: 1.55;
+  line-height: 1.6;
+  margin-top: 0.25rem;
   word-break: keep-all;
+}
+
+.techLine {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  line-height: 1.7;
+  color: var(--ink-tertiary);
+  margin-top: 0.35rem;
+}
+
+/* Expanded detail */
+.expanded {
+  margin-top: 0.8rem;
 }
 
 .fullDesc {
   font-size: 0.88rem;
-  color: var(--ink-secondary);
   line-height: 1.7;
-  margin-top: 0.8rem;
+  color: var(--ink-secondary);
   word-break: keep-all;
 }
 
-.techStack {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  margin-top: 1rem;
-}
-
-.techTag {
+.expandedLabel {
   font-family: var(--font-mono), monospace;
   font-size: 0.68rem;
-  color: var(--ink-secondary);
-  background: var(--bg-subtle);
-  border-radius: 5px;
-  padding: 0.22rem 0.55rem;
-}
-
-.achievements {
-  margin-top: 1rem;
-  border-top: 1px solid var(--border);
-  padding-top: 0.9rem;
-}
-
-.achievementsSummary {
-  font-size: 0.84rem;
   font-weight: 600;
-  color: var(--ink-secondary);
-  cursor: pointer;
-  list-style: none;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  user-select: none;
-  transition: color 0.15s ease;
-}
-
-.achievementsSummary::before {
-  content: '+';
-  font-family: var(--font-mono), monospace;
-  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
   color: var(--ink-tertiary);
-}
-
-.achievements[open] .achievementsSummary::before {
-  content: '−';
-}
-
-.achievementsSummary::-webkit-details-marker {
-  display: none;
-}
-
-.achievementsSummary:hover {
-  color: var(--ink);
+  margin-top: 0.9rem;
+  margin-bottom: 0.45rem;
 }
 
 .achievementsList {
   list-style: none;
-  margin-top: 0.7rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.45rem;
 }
 
 .achievementsList li {
   position: relative;
-  font-size: 0.84rem;
-  line-height: 1.6;
+  font-size: 0.85rem;
+  line-height: 1.65;
   color: var(--ink-secondary);
   padding-left: 1rem;
   word-break: keep-all;
@@ -166,22 +132,40 @@
   font-weight: 600;
 }
 
-.actions {
+/* Footer links — mirrors the Publications footer row */
+.footerRow {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.1rem;
-  margin-top: auto;
-  padding-top: 1.1rem;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.6rem;
 }
 
-.actionBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.2rem;
+.moreBtn {
   font-family: inherit;
-  font-size: 0.86rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: var(--accent);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.moreBtn:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 550;
+  color: var(--ink-secondary);
   background: none;
   border: none;
   padding: 0;
@@ -189,6 +173,6 @@
   transition: color 0.15s ease;
 }
 
-.actionBtn:hover {
-  color: var(--accent-hover);
+.link:hover {
+  color: var(--ink);
 }
