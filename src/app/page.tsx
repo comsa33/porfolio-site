@@ -71,8 +71,14 @@ export default function Home() {
 
   const toggleLang = () => setLang((prev) => (prev === 'ko' ? 'en' : 'ko'));
 
-  // Timeline: newest first
-  const sortedTimeline = [...data.timeline].reverse();
+  // Timeline: newest first by START date. Sorting by parsed date (not reversed
+  // array order) keeps entries correct no matter where they sit in the JSON —
+  // the ISO certs were appended last and used to surface above newer entries.
+  const parseStart = (date: string): number => {
+    const m = date.match(/(\d{4})\.(\d{2})/);
+    return m ? parseInt(m[1], 10) * 100 + parseInt(m[2], 10) : 0;
+  };
+  const sortedTimeline = [...data.timeline].sort((a, b) => parseStart(b.date) - parseStart(a.date));
 
   // Bootcamps live under "Other" rather than "Education"
   const bootcampIds = ['edu-kcci', 'edu-codestates'];

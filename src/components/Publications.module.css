@@ -22,6 +22,9 @@
 .item[data-status='presented'] {
   --pub-accent: var(--violet);
 }
+.item[data-status='patent'] {
+  --pub-accent: var(--accent);
+}
 
 .metaRow {
   display: flex;

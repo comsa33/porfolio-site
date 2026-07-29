@@ -850,7 +850,7 @@
         ]
       },
       "featured": false,
-      "order": 6
+      "order": 10
     },
     {
       "id": "opic-master",
@@ -1054,8 +1054,8 @@
           }
         ]
       },
-      "featured": true,
-      "order": 3
+      "featured": false,
+      "order": 6
     },
     {
       "id": "evaluator",
@@ -1251,8 +1251,8 @@
           }
         ]
       },
-      "featured": false,
-      "order": 2
+      "featured": true,
+      "order": 4
     },
     {
       "id": "py-editor",
@@ -1444,7 +1444,7 @@
         ]
       },
       "featured": false,
-      "order": 4
+      "order": 9
     },
     {
       "id": "knowledge-base",
@@ -1650,7 +1650,7 @@
         ]
       },
       "featured": false,
-      "order": 5
+      "order": 8
     },
     {
       "id": "square-messenger",
@@ -1871,8 +1871,8 @@
           }
         ]
       },
-      "featured": true,
-      "order": 4
+      "featured": false,
+      "order": 7
     },
     {
       "id": "agent-memory",
@@ -1931,8 +1931,8 @@
         "ko": "2026.03 ~ 2026.07",
         "en": "Mar 2026 ~ Jul 2026"
       },
-      "featured": false,
-      "order": 1
+      "featured": true,
+      "order": 3
     },
     {
       "id": "llm-finetuning",
@@ -1999,7 +1999,7 @@
         "web": "https://huggingface.co/comsa33"
       },
       "featured": false,
-      "order": 3
+      "order": 5
     }
   ],
   "publications": [
@@ -2118,6 +2118,29 @@
       },
       "doi": "10.7469/JKSQM.2025.53.3.343",
       "link": "https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART003244700"
+    },
+    {
+      "id": "patent-culturefit",
+      "title": "기계학습을 이용한 구직자-구인자 컬쳐핏 매칭 방법",
+      "venue": {
+        "ko": "대한민국 등록특허 제10-2721044호",
+        "en": "Korean Patent No. 10-2721044"
+      },
+      "year": "2024",
+      "status": "patent",
+      "statusLabel": {
+        "ko": "등록",
+        "en": "Registered"
+      },
+      "authorRole": {
+        "ko": "공동발명자 (4인)",
+        "en": "Co-inventor (4 inventors)"
+      },
+      "summary": {
+        "ko": "그레이비랩 재직 중 개발한 구직자-기업 매칭 ML 모델의 등록특허. 경력·학력 데이터 기반 구직자 클러스터링과 설문 기반 업무 성향 도출, 기업 평판·정보 데이터 기반 구인자 클러스터링을 결합해 개인 그룹과 기업 그룹을 컬쳐핏 관점에서 매칭하는 방법을 제안합니다. 스킬 매칭 중심의 기존 접근을 넘어 객관 지표와 문화적 적합성을 함께 반영한 것이 특징입니다. (2022.08.31 출원 · 2024.10.23 등록)",
+        "en": "Registered patent for the job-seeker–employer matching ML model built at GravyLab. It clusters job seekers from career and education data with survey-derived work tendencies, clusters employers from reputation and company data, and matches the two groups at the culture-fit level — combining objective metrics with cultural compatibility beyond skill-based matching. Filed Aug 31, 2022; granted Oct 23, 2024."
+      },
+      "link": "https://patents.google.com/patent/KR102721044B1/ko"
     },
     {
       "id": "ask2023-coverletter",
