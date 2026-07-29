@@ -39,26 +39,25 @@ function getCareerYears(): number {
   return Math.floor(totalMonths / 12) + 1;
 }
 
-// Helper: Get career experience text with years
+/**
+ * Fills the `{years}` placeholder in the intro copy. The placeholder is explicit
+ * so the copy can be rewritten freely — matching on a prose fragment used to make
+ * the year silently vanish whenever the sentence changed.
+ */
 function getCareerIntro(lang: 'ko' | 'en', introText: string): string {
   const years = getCareerYears();
-
-  if (lang === 'ko') {
-    return introText.replace('AI 에이전트 플랫폼 개발자', `${years}년차 AI 에이전트 플랫폼 개발자`);
-  } else {
-    const yearSuffix =
-      years === 1
+  const token =
+    lang === 'ko'
+      ? String(years)
+      : years === 1
         ? '1st-year'
         : years === 2
           ? '2nd-year'
           : years === 3
             ? '3rd-year'
             : `${years}th-year`;
-    return introText.replace(
-      'An AI Agent Platform Developer',
-      `A ${yearSuffix} AI Agent Platform Developer`,
-    );
-  }
+
+  return introText.replace('{years}', token);
 }
 
 export default function Home() {

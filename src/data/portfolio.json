@@ -13,8 +13,8 @@
       "en": "From Designer to World Traveler to AI Engineer — Building Intelligent Systems with Global Perspective"
     },
     "intro": {
-      "ko": "기술의 기본 원리로 문제의 본질을 해결하는 AI 에이전트 플랫폼 개발자입니다. 디자인을 전공하고 세계를 여행하며 얻은 넓은 시야로, 사용자 경험과 기술의 조화를 추구합니다.",
-      "en": "An AI Agent Platform Developer who solves the essence of problems through fundamental technology principles. With a background in Visual Design and a global perspective from world travel, I strive for harmony between User Experience and Technology."
+      "ko": "{years}년차 AI 엔지니어입니다. AI 모델을 만드는 일에서 시작해, 지금은 모델이 실제로 동작하는 시스템을 만듭니다. LLM 에이전트의 실행 런타임과 오케스트레이션, 메모리, 품질 평가까지 전 계층을 설계하고 구현합니다.",
+      "en": "A {years} AI engineer. I started out building models and now build the systems they actually run in — designing and implementing every layer of an LLM agent platform: execution runtime, orchestration, memory, and quality evaluation."
     },
     "coreSkills": {
       "backend": {

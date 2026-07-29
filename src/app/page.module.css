@@ -113,9 +113,16 @@
 }
 
 .title {
-  width: 100%;
-  max-width: 700px;
-  font-size: 16rem;
+  /*
+   * The glyphs are painted by this element's own gradient (background-clip: text),
+   * so the box must hug the text: any text spilling past the box has no background
+   * to clip and renders fully transparent. A fixed max-width silently ate the tail
+   * of longer names (e.g. "RUO LEE"), so the width follows the text and the size
+   * scales with the viewport instead.
+   */
+  width: fit-content;
+  max-width: 100%;
+  font-size: clamp(3rem, 23vw, 16rem);
   font-weight: 700;
   line-height: 0.9;
   background: linear-gradient(90deg, #fff, #aaa);
@@ -912,7 +919,7 @@
   }
 
   .title {
-    font-size: 6rem;
+    font-size: clamp(2.5rem, 18vw, 6rem);
   }
 
   .subtitle {
