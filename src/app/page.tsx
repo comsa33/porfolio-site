@@ -72,6 +72,11 @@ export default function Home() {
   const [projectFilter, setProjectFilter] = useState<'featured' | 'all' | 'company' | 'personal'>(
     'featured',
   );
+  // Defaults to everything: at seven entries no subset reads as "the highlights",
+  // and hiding papers by default would bury the sole-author ACL submissions.
+  const [researchFilter, setResearchFilter] = useState<'all' | 'journal' | 'conference' | 'patent'>(
+    'all',
+  );
   const [certModalImage, setCertModalImage] = useState<string | null>(null);
 
   const toggleLang = () => setLang((prev) => (prev === 'ko' ? 'en' : 'ko'));
@@ -124,6 +129,17 @@ export default function Home() {
       return p.scope === projectFilter;
     })
     .sort(sortByOrder);
+
+  const researchFilters = [
+    { key: 'all', label: { ko: '전체', en: 'All' } },
+    { key: 'journal', label: { ko: '저널', en: 'Journals' } },
+    { key: 'conference', label: { ko: '학회', en: 'Conferences' } },
+    { key: 'patent', label: { ko: '특허', en: 'Patents' } },
+  ] as const;
+
+  const visiblePublications = data.publications.filter(
+    (p) => researchFilter === 'all' || p.category === researchFilter,
+  );
 
   return (
     <>
@@ -224,8 +240,21 @@ export default function Home() {
 
         {/* Research */}
         <section id="research" className={styles.section}>
-          <h2 className={styles.sectionTitle}>{SECTION_TITLES.research[lang]}</h2>
-          <Publications items={data.publications} lang={lang} />
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>{SECTION_TITLES.research[lang]}</h2>
+            <div className={styles.filterGroup} role="tablist" aria-label="Research filter">
+              {researchFilters.map((f) => (
+                <button
+                  key={f.key}
+                  className={`${styles.filterChip} ${researchFilter === f.key ? styles.filterActive : ''}`}
+                  onClick={() => setResearchFilter(f.key)}
+                >
+                  {f.label[lang]}
+                </button>
+              ))}
+            </div>
+          </div>
+          <Publications items={visiblePublications} lang={lang} />
         </section>
 
         {/* Journey */}

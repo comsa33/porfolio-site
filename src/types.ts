@@ -44,6 +44,7 @@ export interface Publication {
   statusLabel: LocalizedString; // e.g. "심사 중" / "Under review"
   authorRole: LocalizedString; // e.g. "제1저자" / "단독저자"
   indexing?: string; // SCIE, SCOPUS, KCI, ...
+  category?: 'journal' | 'conference' | 'patent'; // Drives the Research filter chips
   summary: LocalizedString;
   link?: string;
   codeLink?: string;
