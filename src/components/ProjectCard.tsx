@@ -25,6 +25,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang }) => {
 
   const title = typeof project.title === 'string' ? project.title : project.title[lang];
 
+  // Collapsed rows keep the tech line to one line — on a phone the full stack
+  // wrapped to three lines and cost ~60px per row across ten rows.
+  const TECH_PREVIEW = 3;
+  const techShown = expanded ? project.techStack : project.techStack.slice(0, TECH_PREVIEW);
+  const techHidden = project.techStack.length - techShown.length;
+
   return (
     <>
       <li className={styles.row}>
@@ -100,7 +106,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang }) => {
         </h3>
 
         <p className={styles.oneLiner}>{project.shortDescription[lang]}</p>
-        <p className={styles.techLine}>{project.techStack.join(' · ')}</p>
+        <p className={styles.techLine}>
+          <span className={expanded ? undefined : styles.techItems}>{techShown.join(' · ')}</span>
+          {techHidden > 0 && <span className={styles.techMore}>+{techHidden}</span>}
+        </p>
 
         {expanded && (
           <div className={styles.expanded}>

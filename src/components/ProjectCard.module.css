@@ -1,6 +1,6 @@
 .row {
   list-style: none;
-  padding: 1.5rem 0;
+  padding: 1.15rem 0;
   border-bottom: 1px solid var(--border);
 }
 
@@ -13,7 +13,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.55rem;
+  margin-bottom: 0.4rem;
 }
 
 .featuredChip {
@@ -70,11 +70,32 @@
 }
 
 .techLine {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
   font-family: var(--font-mono), monospace;
   font-size: 0.7rem;
   line-height: 1.7;
   color: var(--ink-tertiary);
-  margin-top: 0.35rem;
+  margin-top: 0.3rem;
+}
+
+/*
+ * Collapsed: the stack stays on one line and ellipsises, while the "+N" count
+ * sits outside that box so it can never be clipped away with the text — the
+ * whole point of the badge is telling you how much is hidden.
+ */
+.techItems {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.techMore {
+  flex-shrink: 0;
+  color: var(--ink-secondary);
+  font-weight: 600;
 }
 
 /* Expanded detail */
@@ -138,7 +159,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 1rem;
-  margin-top: 0.6rem;
+  margin-top: 0.5rem;
 }
 
 .moreBtn {

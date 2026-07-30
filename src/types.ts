@@ -83,6 +83,7 @@ export interface Project {
   detail?: ProjectDetail; // Optional detailed showcase
   featured?: boolean; // Featured project flag (default: false)
   order?: number; // Display order (lower = first, default: 999)
+  scope?: 'company' | 'personal'; // Drives the Projects filter chips
 }
 
 // Problem-solving case study (핵심: 이슈 → 해결 과정)

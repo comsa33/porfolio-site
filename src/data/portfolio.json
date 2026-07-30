@@ -425,7 +425,8 @@
         "en": "Jun 2025 ~ Jul 2026"
       },
       "featured": true,
-      "order": 1
+      "order": 1,
+      "scope": "company"
     },
     {
       "id": "py-runner",
@@ -669,7 +670,8 @@
         ]
       },
       "featured": true,
-      "order": 2
+      "order": 2,
+      "scope": "company"
     },
     {
       "id": "log-collector",
@@ -850,7 +852,8 @@
         ]
       },
       "featured": false,
-      "order": 10
+      "order": 10,
+      "scope": "company"
     },
     {
       "id": "opic-master",
@@ -1055,7 +1058,8 @@
         ]
       },
       "featured": false,
-      "order": 6
+      "order": 6,
+      "scope": "personal"
     },
     {
       "id": "evaluator",
@@ -1252,7 +1256,8 @@
         ]
       },
       "featured": true,
-      "order": 4
+      "order": 4,
+      "scope": "company"
     },
     {
       "id": "py-editor",
@@ -1444,7 +1449,8 @@
         ]
       },
       "featured": false,
-      "order": 9
+      "order": 9,
+      "scope": "company"
     },
     {
       "id": "knowledge-base",
@@ -1650,7 +1656,8 @@
         ]
       },
       "featured": false,
-      "order": 8
+      "order": 8,
+      "scope": "company"
     },
     {
       "id": "square-messenger",
@@ -1872,7 +1879,8 @@
         ]
       },
       "featured": false,
-      "order": 7
+      "order": 7,
+      "scope": "personal"
     },
     {
       "id": "agent-memory",
@@ -1932,7 +1940,8 @@
         "en": "Mar 2026 ~ Jul 2026"
       },
       "featured": true,
-      "order": 3
+      "order": 3,
+      "scope": "company"
     },
     {
       "id": "llm-finetuning",
@@ -2000,7 +2009,8 @@
         "github": "https://github.com/comsa33"
       },
       "featured": false,
-      "order": 5
+      "order": 5,
+      "scope": "personal"
     }
   ],
   "publications": [

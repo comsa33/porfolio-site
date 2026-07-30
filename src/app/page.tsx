@@ -67,6 +67,11 @@ export default function Home() {
   const [timelineFilter, setTimelineFilter] = useState<
     'all' | 'education' | 'career' | 'certification' | 'other'
   >('career');
+  // Defaults to the four pillars so the section opens at ~1 screen on a phone
+  // instead of three; the other six stay one chip away.
+  const [projectFilter, setProjectFilter] = useState<'featured' | 'all' | 'company' | 'personal'>(
+    'featured',
+  );
   const [certModalImage, setCertModalImage] = useState<string | null>(null);
 
   const toggleLang = () => setLang((prev) => (prev === 'ko' ? 'en' : 'ko'));
@@ -105,8 +110,20 @@ export default function Home() {
   const sortByOrder = (a: (typeof data.projects)[0], b: (typeof data.projects)[0]) =>
     (a.order ?? 999) - (b.order ?? 999);
 
-  const featuredProjects = data.projects.filter((p) => p.featured === true).sort(sortByOrder);
-  const otherProjects = data.projects.filter((p) => p.featured !== true).sort(sortByOrder);
+  const projectFilters = [
+    { key: 'featured', label: { ko: '주요', en: 'Featured' } },
+    { key: 'all', label: { ko: '전체', en: 'All' } },
+    { key: 'company', label: { ko: '회사', en: 'Work' } },
+    { key: 'personal', label: { ko: '개인', en: 'Personal' } },
+  ] as const;
+
+  const visibleProjects = data.projects
+    .filter((p) => {
+      if (projectFilter === 'all') return true;
+      if (projectFilter === 'featured') return p.featured === true;
+      return p.scope === projectFilter;
+    })
+    .sort(sortByOrder);
 
   return (
     <>
@@ -184,9 +201,22 @@ export default function Home() {
 
         {/* Projects */}
         <section id="projects" className={styles.section}>
-          <h2 className={styles.sectionTitle}>{SECTION_TITLES.projects[lang]}</h2>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>{SECTION_TITLES.projects[lang]}</h2>
+            <div className={styles.filterGroup} role="tablist" aria-label="Project filter">
+              {projectFilters.map((f) => (
+                <button
+                  key={f.key}
+                  className={`${styles.filterChip} ${projectFilter === f.key ? styles.filterActive : ''}`}
+                  onClick={() => setProjectFilter(f.key)}
+                >
+                  {f.label[lang]}
+                </button>
+              ))}
+            </div>
+          </div>
           <ol className={styles.projectList}>
-            {[...featuredProjects, ...otherProjects].map((project) => (
+            {visibleProjects.map((project) => (
               <ProjectCard key={project.id} project={project} lang={lang} />
             ))}
           </ol>
