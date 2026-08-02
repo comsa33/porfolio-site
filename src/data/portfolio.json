@@ -2043,14 +2043,14 @@
       "id": "hgc-acl",
       "title": "HGC: Hint-Gated Cache for Contamination-Resilient Information-Seeking LLM Agents",
       "venue": {
-        "ko": "ACL Rolling Review 2026 (May Cycle)",
-        "en": "ACL Rolling Review 2026 (May Cycle)"
+        "ko": "EMNLP 2026",
+        "en": "EMNLP 2026"
       },
       "year": "2026",
       "status": "under-review",
       "statusLabel": {
-        "ko": "심사 진행 중",
-        "en": "Under review"
+        "ko": "심사 완료 · 채택 발표 대기",
+        "en": "Review complete · awaiting decision"
       },
       "authorRole": {
         "ko": "단독저자",
@@ -2060,7 +2060,8 @@
         "ko": "LLM 에이전트의 응답 캐시(에이전트 메모리) 오염 문제를 다룬 단독 저자 연구. 스코프 필터·문서 ID 검증·근거 검증기의 3단계 게이트로 캐시 답변을 현재 질의의 원문에 근거시킨 뒤 제공하고, 게이트 거부 시 에이전트로 폴백하는 HGC 아키텍처를 제안합니다. 3개 벤치마크와 3개 백본을 교차한 7개 셀에서 캐시 단독 베이스라인 대비 오염 조건 성능 저하를 0~6.5pp로 억제했습니다.",
         "en": "A sole-author study on contamination in LLM-agent response caches (agent memory). HGC grounds each cached answer in the current query's source text through a three-stage gate (scope filter, document-ID verification, evidence verifier), falling back to the agent when the gate rejects. Across seven cells spanning three benchmarks and three backbones, it holds degradation under contamination to 0–6.5pp versus a cache-only baseline."
       },
-      "category": "conference"
+      "category": "conference",
+      "indexing": "CORE A*"
     },
     {
       "id": "kr-housing-longrag",
