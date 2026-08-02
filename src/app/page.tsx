@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Github, Linkedin, Mail, ShieldCheck, X } from 'lucide-react';
+import { Check, Github, Linkedin, Mail, ShieldCheck, X } from 'lucide-react';
 import styles from './page.module.css';
 import Timeline from '@/components/Timeline';
 import Publications from '@/components/Publications';
@@ -78,8 +78,26 @@ export default function Home() {
     'all',
   );
   const [certModalImage, setCertModalImage] = useState<string | null>(null);
+  const [emailCopied, setEmailCopied] = useState(false);
 
   const toggleLang = () => setLang((prev) => (prev === 'ko' ? 'en' : 'ko'));
+
+  /**
+   * A mailto: link does nothing at all when the visitor has no mail client
+   * registered — and the footer deliberately no longer prints the address, so
+   * that failure would leave them with no way to reach it. Copy on click as
+   * well: whichever of the two works, they end up with the address.
+   */
+  const handleEmailClick = async () => {
+    try {
+      await navigator.clipboard.writeText(data.profile.email);
+      setEmailCopied(true);
+      setTimeout(() => setEmailCopied(false), 2200);
+    } catch {
+      // Clipboard unavailable (permissions, insecure context) — the mailto
+      // still fires, and the address is on the button's title attribute.
+    }
+  };
 
   // Timeline: newest first by START date. Sorting by parsed date (not reversed
   // array order) keeps entries correct no matter where they sit in the JSON —
@@ -287,9 +305,23 @@ export default function Home() {
               ? '에이전트 플랫폼이나 LLM 품질 평가에 관한 이야기라면 언제든 환영합니다.'
               : 'Always glad to talk agent platforms or LLM evaluation.'}
           </p>
-          <a href={`mailto:${data.profile.email}`} className={styles.footerCta}>
-            <Mail size={16} strokeWidth={2} />
-            {lang === 'ko' ? '이메일 보내기' : 'Send an email'}
+          <a
+            href={`mailto:${data.profile.email}`}
+            className={styles.footerCta}
+            onClick={handleEmailClick}
+            title={data.profile.email}
+          >
+            {emailCopied ? (
+              <>
+                <Check size={16} strokeWidth={2.4} />
+                {lang === 'ko' ? '주소 복사됨' : 'Address copied'}
+              </>
+            ) : (
+              <>
+                <Mail size={16} strokeWidth={2} />
+                {lang === 'ko' ? '이메일 보내기' : 'Send an email'}
+              </>
+            )}
           </a>
           <p className={styles.copyright}>
             © {new Date().getFullYear()} {data.profile.name[lang]}

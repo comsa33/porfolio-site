@@ -260,7 +260,10 @@
 .footerCta {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
+  /* Holds width across the label swap so the copied state doesn't jump */
+  min-width: 11.5rem;
   font-size: 0.92rem;
   font-weight: 600;
   color: #fff;
