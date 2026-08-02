@@ -71,7 +71,14 @@ const Publications: React.FC<PublicationsProps> = ({ items, lang }) => {
                   className={styles.link}
                 >
                   <ExternalLink size={13} />
-                  {lang === 'ko' ? '논문' : 'Paper'}
+                  {/* A patent's link is the patent record, not a paper */}
+                  {pub.category === 'patent'
+                    ? lang === 'ko'
+                      ? '특허'
+                      : 'Patent'
+                    : lang === 'ko'
+                      ? '논문'
+                      : 'Paper'}
                 </a>
               )}
               {pub.codeLink && (
