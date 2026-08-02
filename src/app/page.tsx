@@ -276,39 +276,21 @@ export default function Home() {
           <Timeline items={filteredTimeline} lang={lang} onCertClick={setCertModalImage} />
         </section>
 
-        {/* Contact */}
+        {/*
+          Closing CTA rather than a second contact block: the address, GitHub, and
+          LinkedIn all live in the hero already, so repeating them here read as two
+          contact sections. One line of context and one action is enough.
+        */}
         <footer id="contact" className={styles.footer}>
-          <h2 className={styles.footerTitle}>{SECTION_TITLES.contact[lang]}</h2>
           <p className={styles.footerText}>
             {lang === 'ko'
-              ? 'AI 관련 다양한 기회에 열려있습니다.'
-              : 'Open to diverse AI opportunities.'}
+              ? '에이전트 플랫폼이나 LLM 품질 평가에 관한 이야기라면 언제든 환영합니다.'
+              : 'Always glad to talk agent platforms or LLM evaluation.'}
           </p>
-          <a href={`mailto:${data.profile.email}`} className={styles.footerEmail}>
-            {data.profile.email}
+          <a href={`mailto:${data.profile.email}`} className={styles.footerCta}>
+            <Mail size={16} strokeWidth={2} />
+            {lang === 'ko' ? '이메일 보내기' : 'Send an email'}
           </a>
-          <div className={styles.footerLinks}>
-            <a
-              href={data.profile.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub"
-              className={styles.footerIcon}
-            >
-              <Github size={20} strokeWidth={1.8} />
-            </a>
-            {data.profile.linkedin && (
-              <a
-                href={data.profile.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn"
-                className={styles.footerIcon}
-              >
-                <Linkedin size={20} strokeWidth={1.8} />
-              </a>
-            )}
-          </div>
           <p className={styles.copyright}>
             © {new Date().getFullYear()} {data.profile.name[lang]}
           </p>
