@@ -363,7 +363,7 @@ batch.set(regularRef, {/*new friendship*/});
     ],
   },
   featured: false,
-  order: 7,
+  order: 8,
   scope: 'personal',
 } satisfies Project;
 

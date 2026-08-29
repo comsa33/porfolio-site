@@ -44,6 +44,14 @@ const project = {
       ko: '학습 모델을 GGUF(q8_0)로 양자화해 로컬 추론이 가능한 형태로 배포, 문항 생성 관리자 백엔드·조회 API·인증 서버·모바일 앱(Flutter)까지 연결해 엔드투엔드 서비스로 완성',
       en: 'Quantized to GGUF (q8_0) for local inference and wired it end-to-end — item-generation admin backend, query API, auth server, and a Flutter mobile app',
     },
+    {
+      ko: '한국어 주거정책 long-context RAG 벤치마크 구축·공개 — 41개 공식 공고 기반 QA 1,997문항, 32k~512k 컨텍스트 티어 (Hugging Face 데이터셋, CC-BY-4.0)',
+      en: 'Built and released a Korean housing-policy long-context RAG benchmark — 1,997 QA items from 41 official notices across 32k–512k context tiers (Hugging Face dataset, CC-BY-4.0)',
+    },
+    {
+      ko: '상용 API 4종 + 오픈웨이트 3종을 LLM-judge로 채점하고 사람 라벨 표본과 대조 — 일치율 96.2%, Cohen’s κ 0.924',
+      en: 'Scored 4 commercial APIs and 3 open-weight models with an LLM judge, validated against human labels — 96.2% agreement, Cohen’s κ 0.924',
+    },
   ],
   features: [
     'QLoRA Fine-tuning (single GPU)',
