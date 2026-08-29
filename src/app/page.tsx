@@ -65,7 +65,7 @@ export default function Home() {
     'all' | 'education' | 'career' | 'certification' | 'other'
   >('career');
   // Defaults to the four pillars so the section opens at ~1 screen on a phone
-  // instead of three; the other six stay one chip away.
+  // instead of three; the other eight stay one chip away.
   const [projectFilter, setProjectFilter] = useState<'featured' | 'all' | 'company' | 'personal'>(
     'featured',
   );

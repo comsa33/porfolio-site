@@ -51,7 +51,7 @@ export default function ProjectDetailModal({ project, lang, isOpen, onClose }: P
             {typeof project.title === 'string' ? project.title : project.title[lang]}
             <span className={styles.tag}>Deep Dive</span>
           </h2>
-          <button className={styles.closeBtn} onClick={onClose} arial-label="Close">
+          <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
             ✕
           </button>
         </div>
