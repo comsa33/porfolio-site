@@ -33,12 +33,7 @@ export interface Certification {
   pdfPath?: string;
 }
 
-export type PublicationStatus =
-  | 'published'
-  | 'under-review'
-  | 'in-preparation'
-  | 'presented'
-  | 'patent';
+export type PublicationStatus = 'published' | 'under-review' | 'presented' | 'patent';
 
 export interface Publication {
   id: string;

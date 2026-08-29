@@ -69,8 +69,8 @@ export default function Home() {
   const [projectFilter, setProjectFilter] = useState<'featured' | 'all' | 'company' | 'personal'>(
     'featured',
   );
-  // Defaults to everything: at seven entries no subset reads as "the highlights",
-  // and hiding papers by default would bury the sole-author ACL submissions.
+  // Defaults to everything: at five entries no subset reads as "the highlights".
+  // Anonymized submissions under review (ARR) are deliberately not listed here.
   const [researchFilter, setResearchFilter] = useState<'all' | 'journal' | 'conference' | 'patent'>(
     'all',
   );
