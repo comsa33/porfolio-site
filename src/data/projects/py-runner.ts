@@ -26,8 +26,8 @@ const project = {
   ],
   keyAchievements: [
     {
-      ko: '금융·공공·엔터프라이즈 7개 고객사 / 9개 프로젝트에 적용된 실행 런타임 (주 개발자, 커밋 71% · 코드 라인 63%)',
-      en: 'Execution runtime adopted by 9 projects across 7 finance/public/enterprise clients (lead developer — 71% of commits, 63% of lines)',
+      ko: '금융·공공·엔터프라이즈 7개 고객사 / 9개 프로젝트에 적용된 실행 런타임 (주 개발자)',
+      en: 'Execution runtime adopted by 9 projects across 7 finance/public/enterprise clients (lead developer)',
     },
     {
       ko: '도구를 이름·스키마·실행부 3요소로 규약화해 코어 수정 없이 신규 도구를 편입하는 플러그인 구조 확립',
@@ -615,7 +615,7 @@ def _write_batch(self, logs):
     ],
   },
   featured: true,
-  order: 2,
+  order: 1,
   scope: 'company',
 } satisfies Project;
 
