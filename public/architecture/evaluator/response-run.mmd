@@ -1,0 +1,27 @@
+sequenceDiagram
+    participant UI
+    participant API as 평가 서비스 API
+    participant Q as 워커 (동시성 제한 · 기본 2)
+    participant AG as 대화 오케스트레이터
+    participant DS as 데이터 저장소
+    UI->>API: POST /api/v2/runs/response {dataset_id, agent, judge?}
+    API-->>UI: 202 {id}
+    Q->>Q: 전역 큐 슬롯 대기 — pending 상태 · 60초 하트비트
+    Q->>DS: 정합 검사 + 결과 행 전량 선생성
+    loop 행별 (전체 유실은 스킵 · 세마포어)
+        Q->>Q: 호출 단위 UUID 생성 → 요청 ID 선저장
+        Q->>AG: 실서비스 질의 (추적 헤더 = UUID · 새 스레드)
+        AG-->>Q: {챗로그 ID, 스레드 ID} — 받는 즉시 저장
+        loop 폴링 (5~10초 주기 · 타임아웃 필수)
+            Q->>DS: 챗로그 결과 조회
+            DS-->>Q: 처리 상태
+        end
+        alt 정상 완료
+            Q->>DS: 프롬프트 조회 → 실제 사용 모델 확인
+            Q->>Q: 응답 저장 (답변 · 근거 문서 · 정답 활용 · 모델 불일치 여부)
+        else 오류 / 길이 초과 / 중단 / 타임아웃
+            Q->>Q: 실패 처리 — 근거 문서는 있으면 보존
+        end
+        Q->>Q: 진행률 +1
+    end
+    Q->>Q: 응답 단계 완료 → 판정 설정 시 슬롯 반납 후 재줄서기

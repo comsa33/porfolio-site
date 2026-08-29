@@ -1,0 +1,27 @@
+sequenceDiagram
+    participant UI
+    participant API as Evaluation API
+    participant Q as Worker (concurrency-capped · default 2)
+    participant AG as Conversation Orchestrator
+    participant DS as Data store
+    UI->>API: POST /api/v2/runs/response {dataset_id, agent, judge?}
+    API-->>UI: 202 {id}
+    Q->>Q: Wait for a global queue slot — pending · 60s heartbeat
+    Q->>DS: Integrity check + pre-create every result row
+    loop Per row (all-lost rows skipped · semaphore)
+        Q->>Q: Generate per-call UUID → store request ID first
+        Q->>AG: Live-service query (trace header = UUID · fresh thread)
+        AG-->>Q: {chatlog ID, thread ID} — stored on receipt
+        loop Polling (every 5–10s · timeout mandatory)
+            Q->>DS: Fetch chatlog result
+            DS-->>Q: Processing status
+        end
+        alt Completed normally
+            Q->>DS: Fetch prompt → confirm the model actually used
+            Q->>Q: Store response (answer · passages · gold usage · model mismatch)
+        else Error / length / abort / timeout
+            Q->>Q: Mark failed — passages preserved when present
+        end
+        Q->>Q: progress +1
+    end
+    Q->>Q: Response stage done → with a judge configured, release the slot and re-queue for judgment

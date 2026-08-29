@@ -1,0 +1,31 @@
+sequenceDiagram
+    participant UI
+    participant API as 평가 서비스 API
+    participant W as 워커
+    participant DS as 데이터 저장소
+    participant RT as 검색 서비스
+    UI->>API: POST /api/v2/runs/retrieval {dataset_id, config}
+    API->>API: run 생성 + 설정·인덱스 스냅샷
+    API-->>UI: 202 {id}
+    W->>W: 전역 큐 슬롯 대기 — pending 상태 · 60초 하트비트
+    W->>DS: 데이터셋 정합 검사 (근거 문서 존재 확인)
+    W->>W: 결과 행 전량 선생성 (제외 건 포함) — 입력 스냅샷이 이후의 전부
+    loop 행별 (활성 건만)
+        alt 근거 문서 전체 유실
+            W->>W: 호출 스킵 — 판정 불가로 분류
+        else 근거 미지정
+            W->>W: 호출 스킵 — 비교 불가로 분류
+        else
+            W->>RT: 검색 질의 {인덱스, 질문, 검색 방식, topK}
+            RT-->>W: 문서 목록 (배열 순서 = 랭킹)
+            opt 리랭크 설정 시
+                W->>RT: 리랭크 {모델, 질의, 상위 문서}
+                RT-->>W: 재정렬 결과 (점수 내림차순)
+                W->>W: 상위 재정렬 + 나머지는 원래 순서 유지
+            end
+            W->>W: 정답(gold) 대조 → 검색 결과 저장
+        end
+        W->>W: 진행률 +1
+    end
+    W->>W: 검색 단계 완료 · 요약 확정
+    UI->>API: GET /api/v2/runs/{id} 폴링 (진행률)

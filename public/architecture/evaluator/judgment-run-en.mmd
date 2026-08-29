@@ -1,0 +1,21 @@
+sequenceDiagram
+    participant UI
+    participant API as Evaluation API
+    participant W as Worker
+    participant LG as LLM Gateway
+    UI->>API: POST /api/v2/runs/{id}/judge {judge model, embedding, criteria set}
+    API->>API: Snapshot criteria · store model · switch to judgment phase
+    API-->>UI: 202
+    W->>W: Wait for a global queue slot (shown as "judging · queued")
+    W->>W: Claim (pending → running · attempt +1) · judge round +1
+    loop Per judged row
+        W->>W: Assemble judge input — question / answer / passages / reference
+        W->>LG: Call 4 RAGAS-family metrics (JSON-parse retries)
+        alt Scores obtained
+            W->>W: Classify verdict
+        else Retries exhausted
+            W->>W: Not judgeable — excluded from aggregates
+        end
+        W->>W: Overwrite judgment + round marker
+    end
+    W->>W: Judged · summary frozen

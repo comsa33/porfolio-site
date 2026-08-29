@@ -1,0 +1,29 @@
+sequenceDiagram
+    participant UI
+    participant API as 평가 서비스 API
+    participant W as 워커
+    participant DS as 데이터 저장소
+    participant LG as LLM 게이트웨이
+    UI->>API: POST /api/v2/datasets/{id}/generations {프롬프트, 모델, 수량·비율, 추출 기준, 중복 제거}
+    API-->>UI: 202 {id}
+    W->>DS: 문서 총량 조회
+    W->>W: 목표 건수 확정 → 추출 기준대로 전역 인덱스 표본 → 페이지별 묶음
+    loop 표본이 속한 페이지만
+        W->>DS: 문서 페이지 조회
+        loop 페이지 내 표본별
+            alt 중복 제거 설정 + 이미 사용한 청크
+                W->>W: 건너뜀 — 중복 스킵 집계
+            else
+                W->>LG: 시스템 프롬프트 + 추가 지시문 + 청크 본문
+                LG-->>W: QnA JSON
+                alt 스키마 검증 통과
+                    W->>W: 생성 항목 저장 (사용한 청크 = 정답 근거)
+                else
+                    W->>W: 재시도 → 소진 시 이슈 기록
+                end
+            end
+            W->>W: 진행률 · 토큰 사용량 갱신
+        end
+    end
+    UI->>API: 검토 → 선택 건 데이터셋 반영
+    API->>API: 항목 복사 (중복 검사) + 정합 검사 트리거
