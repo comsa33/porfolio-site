@@ -4,8 +4,8 @@ sequenceDiagram
     participant Q as 워커 (동시성 제한 · 기본 2)
     participant AG as 대화 오케스트레이터
     participant DS as 데이터 저장소
-    UI->>API: POST /api/v2/runs/response {dataset_id, agent, judge?}
-    API-->>UI: 202 {id}
+    UI->>API: 응답 평가 실행 요청 {데이터셋, 대상 에이전트, 판정 여부}
+    API-->>UI: 접수 {실행 ID}
     Q->>Q: 전역 큐 슬롯 대기 — pending 상태 · 60초 하트비트
     Q->>DS: 정합 검사 + 결과 행 전량 선생성
     loop 행별 (전체 유실은 스킵 · 세마포어)

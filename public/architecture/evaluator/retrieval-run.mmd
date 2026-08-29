@@ -4,9 +4,9 @@ sequenceDiagram
     participant W as 워커
     participant DS as 데이터 저장소
     participant RT as 검색 서비스
-    UI->>API: POST /api/v2/runs/retrieval {dataset_id, config}
+    UI->>API: 검색 평가 실행 요청 {데이터셋, 검색 설정}
     API->>API: run 생성 + 설정·인덱스 스냅샷
-    API-->>UI: 202 {id}
+    API-->>UI: 접수 {실행 ID}
     W->>W: 전역 큐 슬롯 대기 — pending 상태 · 60초 하트비트
     W->>DS: 데이터셋 정합 검사 (근거 문서 존재 확인)
     W->>W: 결과 행 전량 선생성 (제외 건 포함) — 입력 스냅샷이 이후의 전부
@@ -28,4 +28,4 @@ sequenceDiagram
         W->>W: 진행률 +1
     end
     W->>W: 검색 단계 완료 · 요약 확정
-    UI->>API: GET /api/v2/runs/{id} 폴링 (진행률)
+    UI->>API: 실행 상태 폴링 (진행률)

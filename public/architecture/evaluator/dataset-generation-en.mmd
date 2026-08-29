@@ -4,8 +4,8 @@ sequenceDiagram
     participant W as Worker
     participant DS as Data store
     participant LG as LLM Gateway
-    UI->>API: POST /api/v2/datasets/{id}/generations {prompt, model, quantity/ratio, sampling order, dedupe}
-    API-->>UI: 202 {id}
+    UI->>API: Request dataset generation {prompt, model, quantity/ratio, sampling order, dedupe}
+    API-->>UI: Accepted {run ID}
     W->>DS: Fetch total document count
     W->>W: Fix target count → sample global indices per the order → group by page
     loop Only pages containing samples

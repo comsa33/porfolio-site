@@ -1,0 +1,30 @@
+flowchart LR
+    subgraph H[하네스 에이전트]
+        A[에이전트 루프<br/>의도 분류 → 도구 선택<br/>→ 병렬 실행 → 서브에이전트 위임]
+        T[MCP 도구 30종+<br/>쿠버네티스 제어 · 코드 편집 · 관측성]
+        A --- T
+    end
+
+    subgraph M[관리 플레인 — 저작·배포]
+        GW[게이트웨이<br/>인증 · 권한 경계]
+        SC[시나리오 관리<br/>등록 · 검증 · 배포 · 버전]
+        CAT[리소스 카탈로그<br/>모델 · 서비스 · 인덱스 · 데이터소스]
+        GW --> SC
+        GW --> CAT
+    end
+
+    subgraph R[런타임 플레인 — 실행·스트리밍]
+        ORCH[대화 오케스트레이터]
+        RUN[실행 런타임<br/>배포된 시나리오 로드 · 글래스박스 스트리밍]
+        ORCH --> RUN
+    end
+
+    A -->|모든 관리 작업은 게이트웨이 경유| GW
+    A -->|실행 테스트만| ORCH
+    SC -->|배포 · 버전 태그| RUN
+    HITL[사람 승인<br/>되돌릴 수 없는 상용 배포만] -. 게이트 .-> SC
+
+    style GW fill:#fff9c4,stroke:#fbc02d,stroke-width:2px,color:#000
+    style HITL fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#000
+    style A fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#000
+    style RUN fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000
