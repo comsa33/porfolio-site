@@ -4,8 +4,8 @@ sequenceDiagram
     participant W as 워커
     participant DS as 데이터 저장소
     participant LG as LLM 게이트웨이
-    UI->>API: POST /api/v2/datasets/{id}/generations {프롬프트, 모델, 수량·비율, 추출 기준, 중복 제거}
-    API-->>UI: 202 {id}
+    UI->>API: 데이터셋 생성 요청 {프롬프트, 모델, 수량·비율, 추출 기준, 중복 제거}
+    API-->>UI: 접수 {실행 ID}
     W->>DS: 문서 총량 조회
     W->>W: 목표 건수 확정 → 추출 기준대로 전역 인덱스 표본 → 페이지별 묶음
     loop 표본이 속한 페이지만

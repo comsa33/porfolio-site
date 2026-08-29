@@ -4,8 +4,8 @@ sequenceDiagram
     participant Q as Worker (concurrency-capped · default 2)
     participant AG as Conversation Orchestrator
     participant DS as Data store
-    UI->>API: POST /api/v2/runs/response {dataset_id, agent, judge?}
-    API-->>UI: 202 {id}
+    UI->>API: Request response run {dataset, target agent, judge?}
+    API-->>UI: Accepted {run ID}
     Q->>Q: Wait for a global queue slot — pending · 60s heartbeat
     Q->>DS: Integrity check + pre-create every result row
     loop Per row (all-lost rows skipped · semaphore)

@@ -1,0 +1,30 @@
+flowchart LR
+    subgraph H[Harness agent]
+        A[Agent loop<br/>intent classification → tool selection<br/>→ parallel execution → sub-agent delegation]
+        T[30+ MCP tools<br/>Kubernetes control · code editing · observability]
+        A --- T
+    end
+
+    subgraph M[Management plane — authoring & deployment]
+        GW[Gateway<br/>auth & permission boundary]
+        SC[Scenario management<br/>register · validate · deploy · version]
+        CAT[Resource catalog<br/>models · services · indexes · datasources]
+        GW --> SC
+        GW --> CAT
+    end
+
+    subgraph R[Runtime plane — execution & streaming]
+        ORCH[Conversation orchestrator]
+        RUN[Execution runtime<br/>loads deployed scenarios · glass-box streaming]
+        ORCH --> RUN
+    end
+
+    A -->|every management action goes through the gateway| GW
+    A -->|smoke tests only| ORCH
+    SC -->|deploy · version tag| RUN
+    HITL[Human approval<br/>only irreversible production deploys] -. gate .-> SC
+
+    style GW fill:#fff9c4,stroke:#fbc02d,stroke-width:2px,color:#000
+    style HITL fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#000
+    style A fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#000
+    style RUN fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000

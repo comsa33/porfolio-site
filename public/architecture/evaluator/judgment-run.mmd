@@ -3,9 +3,9 @@ sequenceDiagram
     participant API as 평가 서비스 API
     participant W as 워커
     participant LG as LLM 게이트웨이
-    UI->>API: POST /api/v2/runs/{id}/judge {판정 모델, 임베딩, 판정 기준 세트}
+    UI->>API: 품질 판정 요청 {판정 모델, 임베딩, 판정 기준 세트}
     API->>API: 판정 기준 스냅샷 · 모델 저장 · 판정 단계 전환
-    API-->>UI: 202
+    API-->>UI: 접수
     W->>W: 전역 큐 슬롯 대기 (「품질 판정 · 대기」 표시)
     W->>W: 선점 (pending → running · 시도 +1) · 판정 라운드 +1
     loop 판정 대상 행

@@ -66,6 +66,38 @@ const project = {
     ko: '2025.06 ~ 현재',
     en: 'Jun 2025 ~ Present',
   },
+  detail: {
+    architecture: [
+      {
+        title: {
+          ko: '자율 에이전트 라이프사이클',
+          en: 'Autonomous Agent Lifecycle',
+        },
+        description: {
+          ko: '하네스 에이전트가 요구 분석부터 저작·검증·배포·실행 테스트·실행 추적까지 스스로 도는 루프. 되돌릴 수 없는 배포만 사람이 승인하는 HITL 하드게이트를 통과하고, 결함이 발견되면 저작 단계로 되돌아가 수정합니다.',
+          en: 'The harness agent closes the loop on its own — requirement analysis, authoring, validation, deployment, smoke testing, and execution tracing. Only irreversible deploys pass through a human-approval hard gate, and any defect loops back to authoring for a fix.',
+        },
+        mermaidFilePath: {
+          ko: '/architecture/agentic-harness/harness-lifecycle.mmd',
+          en: '/architecture/agentic-harness/harness-lifecycle-en.mmd',
+        },
+      },
+      {
+        title: {
+          ko: '2-플레인 아키텍처',
+          en: 'Two-Plane Architecture',
+        },
+        description: {
+          ko: '저작·배포를 담당하는 관리 플레인과 실행·스트리밍을 담당하는 런타임 플레인을 분리한 구조. 모든 관리 작업은 인증 게이트웨이를 경유하고 실행 테스트만 런타임 플레인으로 가므로, 에이전트의 권한 경계가 구조적으로 보장됩니다.',
+          en: 'The management plane (authoring, deployment) is separated from the runtime plane (execution, streaming). Every management action goes through the auth gateway while only smoke tests touch the runtime plane, so the agent’s permission boundary is enforced structurally.',
+        },
+        mermaidFilePath: {
+          ko: '/architecture/agentic-harness/two-plane.mmd',
+          en: '/architecture/agentic-harness/two-plane-en.mmd',
+        },
+      },
+    ],
+  },
   featured: true,
   order: 2,
   scope: 'company',

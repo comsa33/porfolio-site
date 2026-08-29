@@ -1,0 +1,19 @@
+flowchart TD
+    Req[개발 요청] --> Analyze[요구 분석<br/>플랫폼 리소스 조회 — 모델 · 서비스<br/>데이터소스 · 인덱스 · 기존 시나리오]
+    Analyze --> Author[시나리오 저작<br/>DSL 워크플로우 작성]
+    Author --> Create[등록·검증<br/>미배포 초안 — 스키마 · DSL 검사]
+    Create --> Gate{배포 승인<br/>HITL 하드게이트<br/>되돌릴 수 없는 배포만 사람이 승인}
+    Gate -->|승인| Deploy[배포<br/>관리 플레인 경유 · 버전 태그<br/>런타임 모듈 핫리로드]
+    Gate -->|보류·수정 요청| Author
+    Deploy --> Test[실행 테스트<br/>런타임 플레인에 실제 질의<br/>응답 폴링]
+    Test --> Trace[실행 추적<br/>노드별 플로우 · 변수 · 에러]
+    Trace -->|결함 발견 → 수정| Author
+    Trace -->|통과| Done[완료 보고]
+    Analyze -. 저비용 조사 위임 .-> Sub[읽기 전용 서브에이전트]
+    Sub -.-> Analyze
+
+    style Req fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#000
+    style Gate fill:#fff9c4,stroke:#fbc02d,stroke-width:2px,color:#000
+    style Deploy fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#000
+    style Done fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000
+    style Sub fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000

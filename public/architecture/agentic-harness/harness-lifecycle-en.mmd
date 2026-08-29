@@ -1,0 +1,19 @@
+flowchart TD
+    Req[Development request] --> Analyze[Requirement analysis<br/>Platform resource lookup — models · services<br/>datasources · indexes · existing scenarios]
+    Analyze --> Author[Scenario authoring<br/>Write the DSL workflow]
+    Author --> Create[Register & validate<br/>Undeployed draft — schema · DSL checks]
+    Create --> Gate{Deployment approval<br/>HITL hard gate<br/>only irreversible deploys need a human}
+    Gate -->|Approved| Deploy[Deploy<br/>via the management plane · version tag<br/>hot-reload of runtime modules]
+    Gate -->|Held · changes requested| Author
+    Deploy --> Test[Smoke test<br/>Real queries against the runtime plane<br/>response polling]
+    Test --> Trace[Execution tracing<br/>per-node flow · variables · errors]
+    Trace -->|Defect found → fix| Author
+    Trace -->|Pass| Done[Completion report]
+    Analyze -. delegate low-cost research .-> Sub[Read-only sub-agent]
+    Sub -.-> Analyze
+
+    style Req fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#000
+    style Gate fill:#fff9c4,stroke:#fbc02d,stroke-width:2px,color:#000
+    style Deploy fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#000
+    style Done fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000
+    style Sub fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000

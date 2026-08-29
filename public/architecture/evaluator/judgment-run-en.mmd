@@ -3,9 +3,9 @@ sequenceDiagram
     participant API as Evaluation API
     participant W as Worker
     participant LG as LLM Gateway
-    UI->>API: POST /api/v2/runs/{id}/judge {judge model, embedding, criteria set}
+    UI->>API: Request quality judgment {judge model, embedding, criteria set}
     API->>API: Snapshot criteria · store model · switch to judgment phase
-    API-->>UI: 202
+    API-->>UI: Accepted
     W->>W: Wait for a global queue slot (shown as "judging · queued")
     W->>W: Claim (pending → running · attempt +1) · judge round +1
     loop Per judged row
