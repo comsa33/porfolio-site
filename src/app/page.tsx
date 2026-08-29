@@ -70,11 +70,13 @@ export default function Home() {
   const [projectFilter, setProjectFilter] = useState<'featured' | 'all' | 'company' | 'personal'>(
     'featured',
   );
-  // Defaults to everything: at five entries no subset reads as "the highlights".
-  // Anonymized submissions under review (ARR) are deliberately not listed here.
-  const [researchFilter, setResearchFilter] = useState<'all' | 'journal' | 'conference' | 'patent'>(
-    'all',
-  );
+  // Defaults to confirmed outcomes only (published / registered / presented) —
+  // leading with items still under review reads as padding. The under-review
+  // entries stay one chip away under 전체. Anonymized submissions under review
+  // (ARR) are deliberately not listed at all.
+  const [researchFilter, setResearchFilter] = useState<
+    'featured' | 'all' | 'journal' | 'conference' | 'patent'
+  >('featured');
   const [certModalImage, setCertModalImage] = useState<string | null>(null);
   const [emailCopied, setEmailCopied] = useState(false);
 
@@ -147,15 +149,18 @@ export default function Home() {
     .sort(sortByOrder);
 
   const researchFilters = [
+    { key: 'featured', label: { ko: '주요', en: 'Featured' } },
     { key: 'all', label: { ko: '전체', en: 'All' } },
     { key: 'journal', label: { ko: '저널', en: 'Journals' } },
     { key: 'conference', label: { ko: '학회', en: 'Conferences' } },
     { key: 'patent', label: { ko: '특허', en: 'Patents' } },
   ] as const;
 
-  const visiblePublications = data.publications.filter(
-    (p) => researchFilter === 'all' || p.category === researchFilter,
-  );
+  const visiblePublications = data.publications.filter((p) => {
+    if (researchFilter === 'all') return true;
+    if (researchFilter === 'featured') return p.status !== 'under-review';
+    return p.category === researchFilter;
+  });
 
   return (
     <>
