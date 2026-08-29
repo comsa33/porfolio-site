@@ -51,7 +51,7 @@ const project = {
     github: 'https://github.com/comsa33/gpt-recruit.com',
   },
   featured: false,
-  order: 12,
+  order: 13,
   scope: 'personal',
 } satisfies Project;
 

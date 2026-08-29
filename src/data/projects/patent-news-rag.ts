@@ -43,7 +43,7 @@ const project = {
     en: 'Nov 2023 ~ Jul 2024',
   },
   featured: false,
-  order: 9,
+  order: 10,
   scope: 'company',
 } satisfies Project;
 
