@@ -2,10 +2,13 @@ import type { Project } from '@/types';
 
 const project = {
   id: 'evaluator',
-  title: 'Evaluator',
+  title: {
+    ko: 'RAG/Agent 품질 평가 서비스',
+    en: 'RAG/Agent Quality Evaluation Service',
+  },
   shortDescription: {
-    ko: 'RAG/Agent 품질 평가 벤치마크 자동화 서비스 (단독 개발)',
-    en: 'Automated RAG/Agent quality benchmarking service (sole developer)',
+    ko: '검색 정확도·생성 품질을 정량 측정하는 벤치마크 자동화 (단독 개발)',
+    en: 'Automated benchmarking of retrieval accuracy and generation quality (sole developer)',
   },
   fullDescription: {
     ko: '에이전트·RAG 품질을 정량 측정하는 평가 서비스를 단독 개발했습니다(코드 라인 100%, 커밋 95% — git 실측). 검색 정확도(Recall)와 생성 품질(RAGAS 계열 메트릭)을 자동 측정하고, 평가용 QnA 데이터셋 자동 생성 파이프라인까지 구축해 전 고객사 서비스의 품질 검증에 사용됩니다.',
@@ -41,14 +44,13 @@ const project = {
     'Real-time Progress Tracking',
     'Markdown Result Visualization',
   ],
-  repoPath: 'evaluator',
   company: {
     ko: '(주)포지큐브',
     en: 'Posicube Inc.',
   },
   period: {
-    ko: '2025.02 ~ 2026.07',
-    en: 'Feb 2025 ~ Jul 2026',
+    ko: '2025.02 ~ 현재',
+    en: 'Feb 2025 ~ Present',
   },
   detail: {
     problemSolving: [
@@ -118,8 +120,8 @@ class ProgressTracker:
           'API Optimization',
         ],
         impact: {
-          ko: 'API 서버 부하 **99% 감소**, 평가 결과 손실 **제로화**, 사용자 경험 개선',
-          en: 'API server load reduced by **99%**, evaluation result loss **eliminated**, improved UX',
+          ko: '상태 보고 API 호출 1,000회 → 10회 감축, 단계별 평가 히스토리 유실 제거',
+          en: 'Status-report API calls cut from 1,000 to 10; stage-level evaluation history no longer lost',
         },
       },
       {
@@ -162,7 +164,7 @@ class BaseEvaluationProcessor(ABC):
     async def _process(self, data): pass
 \`\`\`
 
-**핵심**: Template Method + Factory로 코드 중복 70% 감소`,
+**핵심**: Template Method + Factory로 공통 흐름 일원화`,
           en: `\`\`\`python
 from abc import ABC, abstractmethod
 
@@ -183,7 +185,7 @@ class BaseEvaluationProcessor(ABC):
     async def _process(self, data): pass
 \`\`\`
 
-**Key**: Template Method + Factory reduced duplication by 70%`,
+**Key**: Template Method + Factory unify the shared flow`,
         },
         csFoundations: [
           'Template Method Pattern',
@@ -192,8 +194,8 @@ class BaseEvaluationProcessor(ABC):
           'Abstract Base Class',
         ],
         impact: {
-          ko: '코드 중복 **70% 감소**, 신규 평가 타입 추가 시간 **3일 → 4시간**, 테스트 커버리지 **45% → 85%**',
-          en: 'Code duplication reduced by **70%**, new evaluation type time **3 days → 4 hours**, test coverage **45% → 85%**',
+          ko: '4개 평가 타입의 로딩·에러 처리·로깅 공통화 — 신규 평가 타입은 핵심 로직 구현만으로 추가',
+          en: 'Loading, error handling, and logging unified across four evaluation types — a new type only implements its core logic',
         },
       },
       {
@@ -256,8 +258,8 @@ async def submit_evaluation(request, chat_logs_id: Optional[int]):
           'Background Tasks',
         ],
         impact: {
-          ko: 'API 타임아웃 **제로화**, 사용자 대기 시간 **95% 감소**, 운영 효율성 **150% 향상**',
-          en: 'API timeouts **eliminated**, user wait time reduced by **95%**, operational efficiency improved by **150%**',
+          ko: '대규모 평가를 백그라운드 작업으로 전환해 API 타임아웃 제거 — 제출 즉시 응답, 진행률로 추적',
+          en: 'Large evaluations moved to background jobs, eliminating API timeouts — immediate response on submit, tracked via progress updates',
         },
       },
     ],

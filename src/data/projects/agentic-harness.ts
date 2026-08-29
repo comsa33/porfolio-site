@@ -58,14 +58,13 @@ const project = {
     'Human-in-the-Loop Gating',
     'Glass-box Streaming',
   ],
-  repoPath: 'agentic-harness',
   company: {
     ko: '(주)포지큐브',
     en: 'Posicube Inc.',
   },
   period: {
-    ko: '2025.06 ~ 2026.07',
-    en: 'Jun 2025 ~ Jul 2026',
+    ko: '2025.06 ~ 현재',
+    en: 'Jun 2025 ~ Present',
   },
   featured: true,
   order: 1,

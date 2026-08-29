@@ -52,14 +52,13 @@ const project = {
     'Open Model & Dataset Release',
     'End-to-end Service Integration',
   ],
-  repoPath: 'llm-finetuning',
   company: {
     ko: '개인 연구 (오픈소스 공개)',
     en: 'Personal R&D (open-sourced)',
   },
   period: {
-    ko: '2024.05 ~ 2026.07',
-    en: 'May 2024 ~ Jul 2026',
+    ko: '2024.05 ~ 현재',
+    en: 'May 2024 ~ Present',
   },
   platformLinks: {
     web: 'https://huggingface.co/comsa33',
