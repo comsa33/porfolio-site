@@ -11,8 +11,8 @@ const project = {
     en: 'Long-term memory that carries user context across turns and sessions',
   },
   fullDescription: {
-    ko: '에이전트가 턴·세션을 넘어 사용자 맥락을 유지하도록 장기 메모리와 단기 컨텍스트 관리 체계를 설계·구현했습니다. 무한 누적(append-only) 구조가 컨텍스트를 오염시키고 비용을 키우는 문제를 실사용 로그로 진단한 뒤, 카테고리 기반 관리형 구조로 재설계했습니다.',
-    en: 'Designed and implemented long-term memory and short-term context management so agents retain user context across turns and sessions. After diagnosing from production logs how an append-only structure pollutes context and inflates cost, the store was redesigned around managed, categorized memory.',
+    ko: '에이전트가 턴·세션을 넘어 사용자 맥락을 유지하도록 장기 메모리와 단기 컨텍스트 관리 체계를 설계·구현했습니다. 무한 누적(append-only) 구조가 컨텍스트를 오염시키고 비용을 키우는 문제를 실사용 로그로 진단한 뒤, 카테고리 기반 관리형 구조로 재설계했습니다. 장기기억(LTM) 파트 전담 — 코드 라인 기여 81.6% (git 실측, 벤더 제외).',
+    en: 'Designed and implemented long-term memory and short-term context management so agents retain user context across turns and sessions. After diagnosing from production logs how an append-only structure pollutes context and inflates cost, the store was redesigned around managed, categorized memory. Owned the long-term-memory (LTM) side — 81.6% of lines by git measurement (vendors excluded).',
   },
   techStack: ['Elasticsearch', 'PostgreSQL', 'MongoDB', 'Redis', 'mem0', 'Knowledge Graph'],
   keyAchievements: [
@@ -48,14 +48,13 @@ const project = {
     'Global/Local Scope Separation',
     'Hybrid Storage Design',
   ],
-  repoPath: 'agent-memory',
   company: {
     ko: '(주)포지큐브',
     en: 'Posicube Inc.',
   },
   period: {
-    ko: '2026.03 ~ 2026.07',
-    en: 'Mar 2026 ~ Jul 2026',
+    ko: '2026.03 ~ 현재',
+    en: 'Mar 2026 ~ Present',
   },
   featured: true,
   order: 3,

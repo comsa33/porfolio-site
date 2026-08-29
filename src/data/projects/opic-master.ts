@@ -49,7 +49,6 @@ const project = {
     'Inline Grammar Correction',
     'Structured Shadowing',
   ],
-  repoPath: 'opic-master',
   platformLinks: {
     web: 'https://opic.po24lio.com',
     ios: 'https://apps.apple.com/kr/app/%EC%98%A4%ED%94%BD-%EB%A7%88%EC%8A%A4%ED%84%B0/id6757357743',
@@ -133,8 +132,8 @@ const project = {
           'Mobile-first Design',
         ],
         impact: {
-          ko: '**성과**: 문법 피드백 사용성 **대폭 개선**. 모바일 터치 UX 최적화. 팝오버 대비 **안정성 100%**.',
-          en: '**Impact**: Grammar feedback usability **significantly improved**. Optimized mobile touch UX. **100% reliability** compared to popovers.',
+          ko: '**성과**: 팝오버에서 인라인 표시로 전환해 모바일 터치에서 오동작 없이 문법 교정 확인 가능.',
+          en: '**Impact**: Switching from popovers to inline display makes grammar corrections reliably viewable on mobile touch.',
         },
         commits: [],
       },
@@ -203,8 +202,8 @@ function calculateNextReview(card: Card, quality: number) {
         },
         csFoundations: ['Spaced Repetition', 'SM-2 Algorithm', 'Learning Science', 'State Machine'],
         impact: {
-          ko: '**성과**: 학습 효율 **향상**. 사용자 이탈률 **감소**. 복습 타이밍 자동화로 UX 개선.',
-          en: '**Impact**: Learning efficiency **improved**. User drop-off **reduced**. Automated review timing enhanced UX.',
+          ko: '**성과**: SM-2 기반 간격 반복으로 복습 타이밍 자동화 — 일정 관리 없이 망각 곡선에 맞춰 복습 제시.',
+          en: '**Impact**: SM-2 spaced repetition automates review timing — reviews follow the forgetting curve without manual scheduling.',
         },
         commits: [],
       },
@@ -290,8 +289,8 @@ export async function POST(request: Request) {
           'Cross-platform Development',
         ],
         impact: {
-          ko: '**성과**: Web/iOS/Android **3개 플랫폼 결제 통합**. 환불 시 권한 자동 취소. 결제 성공률 **99%+**.',
-          en: '**Impact**: **Unified payment across 3 platforms** (Web/iOS/Android). Auto-revoke on refund. Payment success rate **99%+**.',
+          ko: '**성과**: Web/iOS/Android 3개 플랫폼 결제를 단일 흐름으로 통합 — 환불 시 권한 자동 회수까지 서버에서 일원 처리.',
+          en: '**Impact**: One payment flow across Web/iOS/Android — entitlement auto-revocation on refund handled server-side.',
         },
         commits: ['66d81f6', 'e9a79a4', '632c2b4'],
       },

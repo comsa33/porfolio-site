@@ -47,23 +47,22 @@ const project = {
   ],
   keyAchievements: [
     {
-      ko: '답변 정확도 **85% → 95%** 향상 (Self-Correction 도입)',
-      en: 'Improved answer accuracy **85% → 95%** (Introduced Self-Correction)',
+      ko: '품질 평가 기반 Self-Corrective Loop — 답변이 임계값에 못 미치면 검색어를 개선해 최대 3회 재검색',
+      en: 'Quality-gated Self-Corrective Loop — refines the query and retries up to 3 times when an answer falls below threshold',
     },
     {
-      ko: '검색 성공률 **70% → 90%** 개선 (Query Refinement 적용)',
-      en: 'Improved retrieval success rate **70% → 90%** (Applied Query Refinement)',
+      ko: 'LLM 기반 Query Refinement — 일상어 질문을 도메인 기술 용어로 변환해 검색 실패를 회복',
+      en: 'LLM-based query refinement — recovers failed searches by rewriting casual questions into domain terminology',
     },
     {
-      ko: '복잡한 질문 답변 완성도 **+40%** (Context Accumulation)',
-      en: 'Completeness for complex queries **+40%** (Context Accumulation)',
+      ko: 'Progressive Context Accumulation — 재시도마다 패시지를 누적·중복 제거해 복합 질문의 답변 완성도 개선',
+      en: 'Progressive context accumulation — passages accumulate (deduplicated) across retries, improving answers to multi-part questions',
     },
     {
-      ko: '신입사원 온보딩 시간 **50% 단축**',
-      en: 'Reduced new employee onboarding time by **50%**',
+      ko: 'PM·타부서·B2B 이해관계자·신입사원의 상시 질의 채널로 운영',
+      en: 'Runs as the everyday Q&A channel for PMs, other departments, B2B stakeholders, and new hires',
     },
   ],
-  repoPath: 'knowledge-base',
   detail: {
     problemSolving: [
       {
@@ -78,8 +77,8 @@ const project = {
         },
         icon: '🔄',
         problem: {
-          ko: '**이슈**: 일반 RAG는 첫 검색 결과가 부정확하거나 불충분해도 재시도 없이 그대로 답변 생성. 사내 복잡한 기술 질문의 경우 첫 검색만으로는 적절한 컨텍스트를 확보하지 못해 오답률 15% 발생.',
-          en: '**Issue**: Standard RAG generates answers without retry even when initial search results are inaccurate or insufficient. For complex internal technical questions, single search cannot secure appropriate context, resulting in 15% error rate.',
+          ko: '**이슈**: 일반 RAG는 첫 검색 결과가 부정확하거나 불충분해도 재시도 없이 그대로 답변 생성. 사내 복잡한 기술 질문의 경우 첫 검색만으로는 적절한 컨텍스트를 확보하지 못해 오답이 잦았습니다.',
+          en: '**Issue**: Standard RAG generates answers without retry even when initial search results are inaccurate or insufficient. For complex internal technical questions, single search cannot secure appropriate context, so wrong answers were frequent.',
         },
         solution: {
           ko: '**해결**: GPT-4o-mini 기반 평가 LLM을 도입하여 생성된 답변의 품질을 70점 기준으로 자동 평가. 임계값 미달 시 최대 3회까지 검색어를 개선하여 재검색하는 Self-Corrective Loop 구현. 재시도마다 이전 검색 결과를 누적하여 컨텍스트를 점진적으로 확장.',
@@ -96,8 +95,8 @@ const project = {
           'RAG Optimization',
         ],
         impact: {
-          ko: '**성과**: 답변 정확도 **85% → 95%** (10%p ↑). 오답률 **15% → 5%** (67% 감소).',
-          en: '**Impact**: Answer accuracy **85% → 95%** (+10%p). Error rate **15% → 5%** (67% reduction).',
+          ko: '**성과**: 첫 검색이 실패한 질문에 자동 회복 경로 확보 — 재시도마다 컨텍스트가 누적되어 답변 근거가 강화됨.',
+          en: '**Impact**: Questions that fail the first search now have an automatic recovery path — context accumulates with each retry, strengthening answer grounding.',
         },
         commits: [],
       },
@@ -131,8 +130,8 @@ const project = {
           'Context Window Management',
         ],
         impact: {
-          ko: '**성과**: 복잡한 질문 답변 완성도 **40% 향상**. 평균 컨텍스트 크기 3개 → 7개 패시지로 확대.',
-          en: '**Impact**: Complex query answer completeness **+40%**. Average context size expanded from 3 to 7 passages.',
+          ko: '**성과**: 이전 라운드의 검색 결과가 버려지지 않고 최종 답변에 통합 — 여러 시스템에 걸친 복합 질문의 불완전 답변 감소.',
+          en: "**Impact**: Earlier rounds' passages are integrated into the final answer instead of discarded — fewer incomplete answers to questions spanning multiple systems.",
         },
         commits: [],
       },
@@ -166,8 +165,8 @@ const project = {
           'Domain Adaptation',
         ],
         impact: {
-          ko: '**성과**: 검색 성공률 **70% → 90%** (20%p ↑). 모호한 질문 처리 성공률 **3배 향상**.',
-          en: '**Impact**: Search success rate **70% → 90%** (+20%p). Ambiguous question handling success rate **3x improvement**.',
+          ko: '**성과**: 기술 용어가 없는 일상어 질문도 도메인 키워드로 변환되어 검색 가능 — 실패 시 평가 피드백을 반영해 쿼리 재작성.',
+          en: '**Impact**: Casual questions without technical terms become searchable through domain-keyword rewriting — on failure, the query is rewritten using evaluator feedback.',
         },
         commits: [],
       },
@@ -179,7 +178,7 @@ const project = {
           en: 'Self-Corrective RAG Flow',
         },
         description: {
-          ko: '사용자 질문부터 품질 평가, 재검색, 최종 답변까지의 전체 Self-Corrective RAG 프로세스. 품질 임계값 미달 시 자동으로 검색어개선 및 패시지 누적을 통해 답변 품quality를 향상시키는 피드백 루프.',
+          ko: '사용자 질문부터 품질 평가, 재검색, 최종 답변까지의 전체 Self-Corrective RAG 프로세스. 품질 임계값 미달 시 자동으로 검색어개선 및 패시지 누적을 통해 답변 품질을 향상시키는 피드백 루프.',
           en: 'Complete Self-Corrective RAG process from user question through quality evaluation, re-search, to final answer. Feedback loop that automatically refines search queries and accumulates passages to improve answer quality when below threshold.',
         },
         mermaidFilePath: {

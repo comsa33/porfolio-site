@@ -1,7 +1,6 @@
 import type { Project } from '@/types';
 import agenticHarness from './agentic-harness';
 import pyRunner from './py-runner';
-import logCollector from './log-collector';
 import opicMaster from './opic-master';
 import evaluator from './evaluator';
 import pyEditor from './py-editor';
@@ -14,7 +13,6 @@ import llmFinetuning from './llm-finetuning';
 export const projects: Project[] = [
   agenticHarness,
   pyRunner,
-  logCollector,
   opicMaster,
   evaluator,
   pyEditor,

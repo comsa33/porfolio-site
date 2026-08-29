@@ -75,7 +75,6 @@ export interface Project {
   shortDescription: LocalizedString;
   fullDescription: LocalizedString;
   techStack: string[];
-  repoPath: string;
   company?: LocalizedString; // Company name (optional)
   period?: LocalizedString; // Project period (optional)
   platformLinks?: {

@@ -41,7 +41,6 @@ const project = {
     'Real-time Chat',
     'Contact Sync',
   ],
-  repoPath: 'square',
   platformLinks: {
     web: 'https://square.po24lio.com',
     ios: 'https://apps.apple.com/app/id6758040597',
@@ -121,8 +120,8 @@ if (!matchedUserData.settings?.allowPhoneSearch) continue;
           'Firestore Security Rules',
         ],
         impact: {
-          ko: '**성과**: 서버에 원본 전화번호 **0건** 저장. 해커가 DB 탈취해도 전화번호 **역추적 불가**. 사용자 프라이버시 완벽 보호.',
-          en: '**Impact**: **Zero** raw phone numbers stored on server. Even if hackers breach DB, phone numbers **cannot be reverse-engineered**. User privacy fully protected.',
+          ko: '**성과**: 서버에 원본 전화번호 0건 저장 — DB에는 해시만 존재해 유출 시에도 원본 번호가 직접 드러나지 않음.',
+          en: '**Impact**: Zero raw phone numbers on the server — the DB holds only hashes, so a breach does not directly expose numbers.',
         },
       },
       {
@@ -195,8 +194,8 @@ Future<void> _restoreHiddenParticipant() async {
           'Race Condition Prevention',
         ],
         impact: {
-          ko: '**성과**: 사용자별 독립적 채팅방 관리. 상대방 대화 **100% 보존**. 복원 시 자연스러운 UX.',
-          en: "**Impact**: Independent chat room management per user. Other party's chat **100% preserved**. Natural UX on restoration.",
+          ko: '**성과**: 한쪽의 나가기·삭제가 상대방의 대화 이력에 영향을 주지 않음 — 복원 시에도 각자의 시점 유지.',
+          en: "**Impact**: One side's leave or delete never touches the other's history — each keeps their own view on restore.",
         },
       },
       {
@@ -271,8 +270,8 @@ if (!isShadowBlocked) {
           'Firestore Subcollection',
         ],
         impact: {
-          ko: '**성과**: 차단 관련 분쟁 **제로**. 발신자 UX 저하 없음. 수신자 프라이버시 **완벽 보호**.',
-          en: '**Impact**: **Zero** blocking disputes. No sender UX degradation. Recipient privacy **perfectly protected**.',
+          ko: '**성과**: 차단 사실이 발신자에게 드러나지 않는 UX — 발신은 평소처럼 동작하고 수신자에게만 도달하지 않음.',
+          en: '**Impact**: Blocking stays invisible to the sender — sending works as usual, the message simply never reaches the blocker.',
         },
       },
       {
@@ -341,8 +340,8 @@ batch.set(regularRef, {/*new friendship*/});
           'Information Symmetry',
         ],
         impact: {
-          ko: '**성과**: 비대칭 정보 노출 **완벽 방지**. 사용자 간 공정한 관계 형성. 신뢰 기반 소셜 경험.',
-          en: '**Impact**: Asymmetric information exposure **completely prevented**. Fair relationship formation between users. Trust-based social experience.',
+          ko: '**성과**: 쌍방이 동시에 공개할 때만 실명 전환 — 한쪽만 정보가 노출되는 비대칭 상황을 프로토콜 수준에서 차단.',
+          en: '**Impact**: Identity reveals only when both sides open simultaneously — one-sided exposure is blocked at the protocol level.',
         },
       },
     ],

@@ -2,10 +2,13 @@ import type { Project } from '@/types';
 
 const project = {
   id: 'py-editor',
-  title: 'PyEditor',
+  title: {
+    ko: '브라우저 기반 Python 웹 IDE',
+    en: 'Browser-based Python Web IDE',
+  },
   shortDescription: {
-    ko: '브라우저 기반 Python 통합 개발 환경',
-    en: 'Browser-based Python Integrated Development Environment',
+    ko: 'Monaco Editor + Python LSP 연동, 멀티유저 지원 코드 편집 환경',
+    en: 'Monaco Editor wired to a Python LSP with multi-user process pooling',
   },
   fullDescription: {
     ko: 'Monaco Editor와 Python LSP를 연동한 VSCode 스타일 웹 IDE입니다. Custom Process Pool을 통해 멀티유저 환경에서도 안정적인 LSP 서비스를 제공하며, WebSocket 기반 저지연 통신으로 실시간 자동완성과 Go-to-Definition을 지원합니다.',
@@ -49,7 +52,6 @@ const project = {
     'Context-aware AI Copilot',
     'Git Integration & Diff Viewer',
   ],
-  repoPath: 'py-editor',
   company: {
     ko: '(주)포지큐브',
     en: 'Posicube Inc.',
@@ -123,7 +125,7 @@ class LSPProcessPool {
 }
 \`\`\`
 
-**핵심**: 프로세스 재사용으로 메모리 70% 감소`,
+**핵심**: 프로세스 재사용으로 사용자당 기동 비용 제거`,
           en: `\`\`\`
 class LSPProcessPool {
   constructor(maxProcesses = 20, idleTimeout = 300000) {
@@ -167,7 +169,7 @@ class LSPProcessPool {
 }
 \`\`\`
 
-**Key**: Process reuse reduced memory by 70%`,
+**Key**: Process reuse removes per-user startup cost`,
         },
         csFoundations: [
           'Object Pool Pattern',
@@ -176,8 +178,8 @@ class LSPProcessPool {
           'Cache Eviction',
         ],
         impact: {
-          ko: '메모리 사용량 **70% 감소**, 20명 동시 사용자 지원, LSP 응답 시간 **40% 단축**',
-          en: 'Memory usage reduced by **70%**, supports 20 concurrent users, LSP response time improved by **40%**',
+          ko: '프로세스 수 상한·유휴 회수·재사용으로 동시 사용자가 늘어도 메모리가 선형으로 증가하지 않음',
+          en: 'With a process cap, idle reclamation, and reuse, memory no longer grows linearly with concurrent users',
         },
       },
       {
@@ -285,8 +287,8 @@ await limiter.execute(() => callLLMAPI());
         },
         csFoundations: ['Rate Limiting', 'Semaphore', 'Queue Management', 'Backpressure'],
         impact: {
-          ko: '메모리 스파이크 **제로화**, API 타임아웃 **99% 감소**, 서버 안정성 확보',
-          en: 'Memory spikes **eliminated**, API timeouts reduced by **99%**, server stability ensured',
+          ko: '동시 LLM 호출 상한으로 메모리 스파이크 제거 — 큐 기반 백프레셔로 과부하에서도 응답성 유지',
+          en: 'A concurrency cap removes memory spikes — queue-based backpressure keeps the server responsive under load',
         },
       },
       {
@@ -385,8 +387,8 @@ app.use('/api/files', pathAccessControl);
           'Multi-tenancy',
         ],
         impact: {
-          ko: '보안 취약점 **제로화**, 멀티테넌시 격리 완벽화, 외부 서비스 연동 유연성 확보',
-          en: 'Security vulnerabilities **eliminated**, perfect multi-tenancy isolation, flexible external service integration',
+          ko: '브라우저는 /workspace만, 인증된 서비스는 전체 경로 — 최소 권한 원칙으로 시스템 경로 노출 차단',
+          en: 'Browsers reach only /workspace while authenticated services get full paths — least privilege blocks system-path exposure',
         },
       },
     ],
@@ -397,8 +399,8 @@ app.use('/api/files', pathAccessControl);
           en: 'System Architecture',
         },
         description: {
-          ko: 'PyEditor의 전체 시스템 구조. Client Layer, WebSocket Layer, Middleware, Service Layer, API Layer, External Resources 간의 상호작용을 보여줍니다.',
-          en: 'Overall system structure of PyEditor. Shows interactions between Client Layer, WebSocket Layer, Middleware, Service Layer, API Layer, and External Resources.',
+          ko: '웹 IDE의 전체 시스템 구조. Client Layer, WebSocket Layer, Middleware, Service Layer, API Layer, External Resources 간의 상호작용을 보여줍니다.',
+          en: 'Overall system structure of the web IDE. Shows interactions between Client Layer, WebSocket Layer, Middleware, Service Layer, API Layer, and External Resources.',
         },
         mermaidFilePath: {
           ko: '/architecture/pyeditor/system-architecture.mmd',

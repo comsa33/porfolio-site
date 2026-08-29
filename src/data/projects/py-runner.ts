@@ -2,10 +2,13 @@ import type { Project } from '@/types';
 
 const project = {
   id: 'py-runner',
-  title: 'PyRunner',
+  title: {
+    ko: 'AI Agent 실행 런타임',
+    en: 'AI Agent Execution Runtime',
+  },
   shortDescription: {
-    ko: '분산형 Python 샌드박스 & 동적 에이전트 런타임',
-    en: 'Distributed Python Sandbox & Dynamic Agent Runtime',
+    ko: '멀티팟 분산 Python 샌드박스 & 무중단 동적 배포',
+    en: 'Multi-pod distributed Python sandbox with zero-downtime dynamic deployment',
   },
   fullDescription: {
     ko: 'Multi-Pod 환경에서 AI 에이전트를 동적으로 배포하고 실행하는 고가용성 플랫폼입니다. Redis Pub/Sub 기반 분산 라우팅과 FastAPI Sub-app 동적 로딩을 통해 Zero-downtime 배포를 실현했습니다.',
@@ -43,8 +46,8 @@ const project = {
       en: 'Provider-agnostic LLM adapter layer (Azure/AWS Bedrock/Anthropic/Google/OpenAI) with Redis Stream-backed SSE token streaming',
     },
     {
-      ko: '구조화 로깅·OTLP 트레이싱 등 관측성 계층과 로그 수집 워커를 단독 개발, 핵심 모듈 테스트 1.6만 줄 이상 작성',
-      en: 'Solely built the observability layer (structured logging, OTLP tracing) and log-collection worker; wrote 16k+ lines of core-module tests',
+      ko: '구조화 로깅·OTLP 트레이싱 등 관측성 계층과 로그 수집 워커(배치 flush · At-least-once)를 단독 개발, 핵심 모듈 테스트 1.6만 줄 이상 작성',
+      en: 'Solely built the observability layer (structured logging, OTLP tracing) and the batched, at-least-once log-collection worker; wrote 16k+ lines of core-module tests',
     },
   ],
   features: [
@@ -53,22 +56,22 @@ const project = {
     'Zero-downtime Deployment',
     'SSE Streaming Pipeline',
     'Secure Sandbox Isolation',
+    'At-least-once Log Collection',
   ],
-  repoPath: 'py-runner',
   company: {
     ko: '(주)포지큐브',
     en: 'Posicube Inc.',
   },
   period: {
-    ko: '2024.12 ~ 2026.07',
-    en: 'Dec 2024 ~ Jul 2026',
+    ko: '2024.12 ~ 현재',
+    en: 'Dec 2024 ~ Present',
   },
   detail: {
     problemSolving: [
       {
         id: 'async-migration',
         title: {
-          ko: '동시성 프로그래밍: 동기에서 비동기로의 대전환',
+          ko: '동시성 프로그래밍: 동기에서 비동기로 전환',
           en: 'Concurrency Programming: Async/Await Migration',
         },
         category: {
@@ -134,8 +137,8 @@ async def deploy_agent(agent_id):
           'Concurrency vs Parallelism',
         ],
         impact: {
-          ko: '**성과**: 멀티팟 환경에서 응답 시간 **40% 감소**. CPU 활용률 극대화로 동시 처리 용량 대폭 증가.',
-          en: '**Impact**: **40% reduction** in response time in multi-pod environment. Significantly increased concurrent processing capacity through maximized CPU utilization.',
+          ko: '**성과**: 블로킹 I/O 제거 — 한 요청의 대기가 다른 요청을 막지 않게 되어 멀티팟 환경의 동시 처리 용량 확대.',
+          en: "**Impact**: Removed blocking I/O — one request's wait no longer stalls others, expanding concurrent capacity across pods.",
         },
         commits: ['4b7a8aa'],
       },
@@ -208,8 +211,8 @@ async def safe_deploy(agent_id, version):
           'Type Safety',
         ],
         impact: {
-          ko: '**성과**: 배포 실패율 **0%** 달성. 데이터 무결성 **100%** 보장. 멀티팟 환경에서 완벽한 일관성 확보.',
-          en: '**Impact**: Achieved **0% deployment failure rate**. Guaranteed **100% data integrity**. Perfect consistency in multi-pod environment.',
+          ko: '**성과**: 도입 후 동시 배포로 인한 버전 유실 재발 0건 — 배포 실패율 0% 유지.',
+          en: '**Impact**: No version-loss recurrence from concurrent deployments since the fix — deployment failure rate held at 0%.',
         },
         commits: ['942909a', '76dfbc3'],
       },
@@ -284,8 +287,8 @@ async def stream_handler(request):
           'Memory Management',
         ],
         impact: {
-          ko: '**성과**: 메모리 사용량 **70% 감소**. 장시간 스트리밍에서도 안정적인 메모리 유지. 동시 처리 가능 요청 수 대폭 증가.',
-          en: '**Impact**: **70% reduction** in memory usage. Stable memory maintenance even during long-term streaming. Significantly increased concurrent request capacity.',
+          ko: '**성과**: 토큰 누적 제거로 응답 길이와 무관하게 메모리 사용량 평탄 유지 — 장시간 스트리밍·동시 요청에서 안정성 확보.',
+          en: '**Impact**: Memory stays flat regardless of response length — stable under long streams and concurrent requests.',
         },
         commits: ['346a8f5', '8c4aba6'],
       },
@@ -364,17 +367,212 @@ async def deploy(agent_id: str):
           'Input Validation',
         ],
         impact: {
-          ko: '**성과**: ID 관련 버그 **0건** 달성. 시스템 전반의 데이터 일관성 확보. 디버깅 시간 대폭 단축.',
-          en: '**Impact**: Achieved **0 ID-related bugs**. Ensured data consistency across entire system. Significantly reduced debugging time.',
+          ko: '**성과**: 정규화 도입 후 ID 형식 불일치로 인한 중복 배포·조인 실패 재발 0건.',
+          en: '**Impact**: No recurrence of duplicate deployments or failed joins from ID format mismatches after normalization.',
         },
         commits: ['5f21d96', 'da0d614'],
+      },
+
+      {
+        id: 'batch-processing',
+        title: {
+          ko: '배치 처리: HTTP 오버헤드 99% 감소',
+          en: 'Batch Processing: 99% HTTP Overhead Reduction',
+        },
+        category: {
+          ko: '성능최적화',
+          en: 'Performance',
+        },
+        icon: '🚀',
+        problem: {
+          ko: '**이슈**: 로그 1건당 HTTP 호출 2회(GET+POST) 필요. 초당 100건 로그 발생 시 200회 HTTP 호출로 네트워크 병목 발생. 각 HTTP 호출의 고정 비용(~50ms)으로 인해 처리량이 초당 10건에 불과.',
+          en: '**Issue**: Each log required 2 HTTP calls (GET+POST). With 100 logs/second, 200 HTTP calls caused network bottleneck. Fixed cost per HTTP call (~50ms) limited throughput to only 10 logs/second.',
+        },
+        solution: {
+          ko: '**해결**: 1초 주기 배치 처리 도입. 로그를 메모리 버퍼에 축적 후 한 번에 전송하여 HTTP 호출을 2회로 통합. 에이전트별 버퍼 관리로 독립성 보장.',
+          en: '**Solution**: Introduced 1-second interval batch processing. Accumulated logs in memory buffer then sent at once, consolidating HTTP calls to just 2. Maintained independence through per-agent buffer management.',
+        },
+        technicalDetails: {
+          ko: `\`\`\`python
+# Before (건당 처리)
+for log in logs:  # 100개
+    await client.get(url)   # 50ms × 100
+    await client.post(url)  # 50ms × 100
+# 총 시간: 10,000ms (10초)
+
+# After (배치 처리)
+buffer.extend(logs)  # 버퍼에 축적
+await asyncio.sleep(1)  # 1초 대기
+
+# 한 번에 처리
+combined = '\\n'.join(buffer)
+await client.get(url)   # 50ms × 1
+await client.post(url)  # 50ms × 1
+# 총 시간: ~1,100ms
+\`\`\`
+
+**핵심**: 네트워크 왕복 횟수 최소화`,
+          en: `\`\`\`python
+# Before (per-log)
+for log in logs:  # 100 logs
+    await client.get(url)   # 50ms × 100
+    await client.post(url)  # 50ms × 100
+# Total: 10,000ms (10 seconds)
+
+# After (batch)
+buffer.extend(logs)  # Accumulate
+await asyncio.sleep(1)  # Wait 1 sec
+
+# Process at once
+combined = '\\n'.join(buffer)
+await client.get(url)   # 50ms × 1
+await client.post(url)  # 50ms × 1
+# Total: ~1,100ms
+\`\`\`
+
+**Key**: Minimize network round-trips`,
+        },
+        csFoundations: [
+          'Batch Processing',
+          'Buffer Management',
+          'Amortized Cost',
+          'I/O Optimization',
+        ],
+        impact: {
+          ko: '**성과**: HTTP 호출 횟수 **99% 감소** (건당 2회 → 배치당 2회) — 네트워크 왕복이 로그량과 무관해짐.',
+          en: '**Impact**: HTTP calls cut by **99%** (2 per log → 2 per batch) — network round-trips no longer scale with log volume.',
+        },
+        commits: [],
+      },
+      {
+        id: 'at-least-once',
+        title: {
+          ko: 'At-least-once: 장애에도 로그 손실 제로',
+          en: 'At-least-once: Zero Log Loss Even During Failures',
+        },
+        category: {
+          ko: '분산시스템',
+          en: 'Distributed System',
+        },
+        icon: '🛡️',
+        problem: {
+          ko: '**이슈**: 기존 방식은 메시지 수신 즉시 ACK 처리. 버퍼에 로그가 있는 상태에서 서버 장애 시 해당 로그 영구 손실. Redis에서 이미 ACK된 메시지는 재전달되지 않음.',
+          en: "**Issue**: Previous approach ACKed messages immediately upon receipt. If server crashed with logs in buffer, those logs were permanently lost. Redis doesn't redeliver already-ACKed messages.",
+        },
+        solution: {
+          ko: '**해결**: ACK를 flush 성공 후에만 수행하도록 변경. 실패 시 버퍼에 로그를 다시 넣어 다음 주기에 재시도. 서버 장애 시 Redis Consumer Group이 마지막 ACK 지점부터 재전달.',
+          en: '**Solution**: Changed to ACK only after successful flush. On failure, put logs back in buffer for retry in next cycle. On server crash, Redis Consumer Group redelivers from last ACK point.',
+        },
+        technicalDetails: {
+          ko: `\`\`\`python
+async def _flush_agent(self, agent_key):
+    logs = self.buffer.pop(agent_key, [])
+    
+    try:
+        await self._write_batch(logs)
+        
+        # 성공 시에만 ACK
+        for log in logs:
+            await self.ack_callback(log.msg_id)
+            
+    except Exception:
+        # 실패 시 버퍼에 반환
+        self.buffer[agent_key] = logs
+\`\`\`
+
+**핵심**: ACK 지연 + 실패 시 재시도 = At-least-once`,
+          en: `\`\`\`python
+async def _flush_agent(self, agent_key):
+    logs = self.buffer.pop(agent_key, [])
+    
+    try:
+        await self._write_batch(logs)
+        
+        # ACK only on success
+        for log in logs:
+            await self.ack_callback(log.msg_id)
+            
+    except Exception:
+        # On failure, return to buffer
+        self.buffer[agent_key] = logs
+\`\`\`
+
+**Key**: Delayed ACK + retry on failure = At-least-once`,
+        },
+        csFoundations: [
+          'At-least-once Delivery',
+          'Consumer Group',
+          'Message Acknowledgment',
+          'Failure Recovery',
+        ],
+        impact: {
+          ko: '**성과**: 장애 시 로그 손실 0건 — flush 성공 후에만 ACK하므로 재시작 시 마지막 ACK 지점부터 자동 재전달.',
+          en: '**Impact**: Zero log loss on failure — ACK only after a successful flush, so redelivery resumes from the last ACK point on restart.',
+        },
+        commits: [],
+      },
+      {
+        id: 'dedup-sorting',
+        title: {
+          ko: '중복 제거 & 시간순 정렬: 재전달 로그 처리',
+          en: 'Deduplication & Sorting: Handling Redelivered Logs',
+        },
+        category: {
+          ko: '데이터관리',
+          en: 'Data Management',
+        },
+        icon: '🔄',
+        problem: {
+          ko: '**이슈**: At-least-once 방식은 재전달로 인한 중복 로그 발생 가능. 또한 비동기 처리로 로그 순서가 뒤섞일 수 있어 디버깅 시 시간순 추적이 어려움.',
+          en: '**Issue**: At-least-once delivery can cause duplicate logs due to redelivery. Also, async processing can scramble log order, making time-based debugging difficult.',
+        },
+        solution: {
+          ko: '**해결**: 파일 저장소에 쓰기 전 중복 제거(dict.fromkeys로 순서 유지) 및 타임스탬프 기반 정렬 적용. 로그 포맷 `[date][time]...`에서 타임스탬프 추출하여 정렬.',
+          en: '**Solution**: Applied deduplication (dict.fromkeys preserves order) and timestamp-based sorting before writing to the file store. Extracted timestamp from log format `[date][time]...` for sorting.',
+        },
+        technicalDetails: {
+          ko: `\`\`\`python
+def _write_batch(self, logs):
+    new_lines = [log.format() for log in logs]
+    all_lines = existing_lines + new_lines
+    
+    # 중복 제거 (순서 유지)
+    unique = list(dict.fromkeys(all_lines))
+    
+    # 시간순 정렬
+    unique.sort(key=self._extract_timestamp)
+    return unique
+\`\`\`
+
+**핵심**: Idempotent Write (멱등 쓰기)`,
+          en: `\`\`\`python
+def _write_batch(self, logs):
+    new_lines = [log.format() for log in logs]
+    all_lines = existing_lines + new_lines
+    
+    # Deduplicate (preserve order)
+    unique = list(dict.fromkeys(all_lines))
+    
+    # Sort by time
+    unique.sort(key=self._extract_timestamp)
+    return unique
+\`\`\`
+
+**Key**: Idempotent Write`,
+        },
+        csFoundations: ['Idempotency', 'Deduplication', 'Sorting Algorithm', 'Data Integrity'],
+        impact: {
+          ko: '**성과**: 재전달로 생긴 중복 로그 자동 제거, 시간순 정렬로 장애 추적 시 로그 흐름 재구성 가능.',
+          en: '**Impact**: Redelivered duplicates removed automatically; time-ordered logs make incident timelines reconstructable.',
+        },
+        commits: [],
       },
     ],
     architecture: [
       {
         title: {
-          ko: 'PyRunner 시스템 아키텍처',
-          en: 'PyRunner System Architecture',
+          ko: '실행 런타임 시스템 아키텍처',
+          en: 'Execution Runtime System Architecture',
         },
         description: {
           ko: 'Multi-Process FastAPI 서버와 Redis 기반 분산 동기화 구조. 사용자 코드를 동적 Sub-App으로 로딩하여 독립성을 보장하며, Pub/Sub을 통해 무중단 배포를 실현합니다.',
@@ -397,6 +595,21 @@ async def deploy(agent_id: str):
         mermaidFilePath: {
           ko: '/architecture/pyrunner/race-condition-resolution.mmd',
           en: '/architecture/pyrunner/race-condition-resolution-en.mmd',
+        },
+      },
+
+      {
+        title: {
+          ko: '배치 처리 플로우',
+          en: 'Batch Processing Flow',
+        },
+        description: {
+          ko: 'Redis Stream에서 파일 저장소까지의 At-least-once 배치 처리 플로우. 메시지 수신, 버퍼 축적, flush, ACK의 전체 과정과 실패 시 재시도 메커니즘.',
+          en: 'At-least-once batch processing flow from Redis Stream to the file store. Complete process of message reception, buffer accumulation, flush, ACK, and retry mechanism on failure.',
+        },
+        mermaidFilePath: {
+          ko: '/architecture/log-collector/batch-flow.mmd',
+          en: '/architecture/log-collector/batch-flow-en.mmd',
         },
       },
     ],
