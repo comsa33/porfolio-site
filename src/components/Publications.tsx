@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { FileText, ExternalLink, CheckCircle2, Clock, Mic, Award } from 'lucide-react';
+import { FileText, ExternalLink, CheckCircle2, Clock, RefreshCw, Mic, Award } from 'lucide-react';
 import BrandIcon from './BrandIcon';
 import styles from './Publications.module.css';
 import { Publication, PublicationStatus } from '@/types';
@@ -14,6 +14,7 @@ interface PublicationsProps {
 const statusIcons: Record<PublicationStatus, React.ElementType> = {
   published: CheckCircle2,
   'under-review': Clock,
+  'in-preparation': RefreshCw,
   presented: Mic,
   patent: Award,
 };
