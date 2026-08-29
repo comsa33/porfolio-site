@@ -1,0 +1,54 @@
+sequenceDiagram
+    autonumber
+    actor U as User
+    participant A as Conversation Orchestrator
+    participant M as LLM
+    participant R as MCP Runner
+    participant S as STM (short-term context)
+    participant L as LTM (long-term memory)
+
+    U->>A: Question
+
+    rect rgb(238, 245, 255)
+    Note over A,L: Every turn, automatic — the orchestrator assembles (REST)
+    A->>L: Read all category memories<br/>(preference · focus · context · learning — injected without search)
+    L-->>A: Memory list (truncation disclosed when over budget)
+    A->>S: Load current conversation
+    S-->>A: Verbatim QA (+ summary) · compaction status
+    opt When compaction is needed
+        A->>S: Request compaction
+        S->>S: Replace older turns with a summary (summarizer LLM)
+        S-->>A: Summary + verbatim after the boundary
+    end
+    end
+
+    A->>M: Assemble prompt and call
+
+    rect rgb(255, 245, 235)
+    Note over A,R: MCP tools — the model requests, the runner executes
+    M-->>A: Tool call request
+    A->>R: Execute tool {name, arguments}
+    Note over R: Identity headers overwritten by the runner → no user spoofing
+    opt When a compacted-away span is needed
+        R->>S: Search session · read chatlog
+    end
+    opt When looking up past conversations
+        R->>L: Search memories (current conversation excluded)
+    end
+    opt When recording a lasting fact
+        R->>L: Remember / update (no extraction LLM · category set)
+    end
+    R-->>A: Tool result
+    A->>M: Tool result
+    end
+
+    M-->>A: Response
+    A->>U: Answer
+
+    rect rgb(240, 255, 240)
+    Note over A,L: Ingest — one signal. Never blocks the response
+    A->>L: Ingest signal {conversation ID, agent ID}
+    L-->>A: Accepted
+    Note over L: Cursor +1 only — runs once per N turns or T min of inactivity
+    L->>L: Fetch source chatlog → extract memories → advance cursor
+    end

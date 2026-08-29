@@ -149,7 +149,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang }) => {
                 ? '더 보기'
                 : 'Show more'}
           </button>
-          {project.detail && (
+          {project.detail?.problemSolving && project.detail.problemSolving.length > 0 && (
             <button type="button" className={styles.link} onClick={() => setShowDetail(true)}>
               <Wrench size={13} />
               {lang === 'ko' ? '문제 해결 과정' : 'Key solutions'}
