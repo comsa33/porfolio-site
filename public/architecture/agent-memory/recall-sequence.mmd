@@ -1,0 +1,54 @@
+sequenceDiagram
+    autonumber
+    actor U as 사용자
+    participant A as 대화 오케스트레이터
+    participant M as LLM
+    participant R as MCP 실행기
+    participant S as STM (단기 컨텍스트)
+    participant L as LTM (장기기억)
+
+    U->>A: 질문
+
+    rect rgb(238, 245, 255)
+    Note over A,L: 매 턴 자동 — 오케스트레이터가 조립 (REST)
+    A->>L: 카테고리 기억 전량 읽기<br/>(선호·대상·환경·교훈 — 검색 없이 주입)
+    L-->>A: 기억 목록 (예산 초과 시 잘림 고지)
+    A->>S: 이 대화 불러오기
+    S-->>A: 원문 QA (+ 요약) · 압축 필요 여부
+    opt 압축 필요 상태일 때
+        A->>S: 압축 요청
+        S->>S: 앞부분을 요약으로 교체 (요약 LLM)
+        S-->>A: 요약 + 경계 이후 원문
+    end
+    end
+
+    A->>M: 프롬프트 조립 후 호출
+
+    rect rgb(255, 245, 235)
+    Note over A,R: MCP 도구 — 모델이 요청하고 실행기가 수행
+    M-->>A: 도구 호출 요청
+    A->>R: 도구 실행 {name, arguments}
+    Note over R: 신원 헤더는 실행기가 덮어씀 → 사용자 위조 불가
+    opt 압축돼 사라진 구간이 필요할 때
+        R->>S: 세션 검색 · 챗로그 읽기
+    end
+    opt 지난 대화를 찾을 때
+        R->>L: 기억 검색 (현재 대화는 제외)
+    end
+    opt 지속되는 사실을 남길 때
+        R->>L: 기억 저장/갱신 (추출 LLM 없이 · 카테고리 지정)
+    end
+    R-->>A: 도구 결과
+    A->>M: 도구 결과
+    end
+
+    M-->>A: 응답
+    A->>U: 답변
+
+    rect rgb(240, 255, 240)
+    Note over A,L: 적재 — 신호 한 번. 응답을 막지 않음
+    A->>L: 적재 신호 {대화 ID, 에이전트 ID}
+    L-->>A: 접수
+    Note over L: 커서만 +1 — N턴 또는 무활동 T분에 1회 실행
+    L->>L: 원본 챗로그 조회 → 기억 추출 → 커서 이동
+    end

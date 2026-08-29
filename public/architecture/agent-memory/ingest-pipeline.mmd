@@ -1,0 +1,16 @@
+flowchart TD
+    Signal[매 턴 적재 신호<br/>Redis Stream] --> Worker[적재 워커<br/>N턴 묶음 · 무활동 타이머]
+    Worker -->|커서 이후만 조회| Chatlog[(챗로그 원본 저장소<br/>대화 원문의 유일한 원본<br/>— 서비스 DB에 복제하지 않음)]
+    Chatlog --> Extract[기억 추출 LLM<br/>N턴 묶음 호출<br/>고정 프롬프트 비용 4.6배 절감]
+    Extract --> Gate{추출 게이트<br/>독립 판정 LLM<br/>귀속·신규성 검증}
+    Gate -->|통과| Store[(PostgreSQL + pgvector<br/>기억 본체 · 변경 원장 · 커서)]
+    Gate -->|거부| Reject[거부 후보 기록<br/>과억제 측정용 · TTL 30일]
+    Store --> Cursor[커서 전진<br/>실패 시 옮기지 않음 → 재시도로 멱등]
+    Sweep[보존 스윕 워커<br/>TTL 만료 · 원본 삭제 전파] -.주기 실행.-> Store
+
+    style Signal fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#000
+    style Worker fill:#eef5ff,stroke:#1976d2,stroke-width:2px,color:#000
+    style Gate fill:#fff9c4,stroke:#fbc02d,stroke-width:2px,color:#000
+    style Store fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000
+    style Reject fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000
+    style Sweep fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000

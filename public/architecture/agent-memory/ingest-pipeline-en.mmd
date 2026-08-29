@@ -1,0 +1,16 @@
+flowchart TD
+    Signal[Per-turn ingest signal<br/>Redis Stream] --> Worker[Ingest worker<br/>N-turn batching · inactivity timer]
+    Worker -->|reads after the cursor only| Chatlog[(Source chatlog store<br/>the single source of conversation text<br/>— never replicated into the service DB)]
+    Chatlog --> Extract[Memory-extraction LLM<br/>called per N-turn batch<br/>4.6x saving on fixed prompt cost]
+    Extract --> Gate{Extraction gate<br/>independent judge LLM<br/>attribution & novelty check}
+    Gate -->|pass| Store[(PostgreSQL + pgvector<br/>memories · change ledger · cursor)]
+    Gate -->|reject| Reject[Rejected candidates logged<br/>for over-suppression review · 30-day TTL]
+    Store --> Cursor[Advance cursor<br/>held back on failure → idempotent retries]
+    Sweep[Retention sweep worker<br/>TTL expiry · source-deletion propagation] -.periodic.-> Store
+
+    style Signal fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#000
+    style Worker fill:#eef5ff,stroke:#1976d2,stroke-width:2px,color:#000
+    style Gate fill:#fff9c4,stroke:#fbc02d,stroke-width:2px,color:#000
+    style Store fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000
+    style Reject fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000
+    style Sweep fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000

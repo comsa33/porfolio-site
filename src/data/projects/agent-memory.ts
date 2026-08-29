@@ -56,6 +56,38 @@ const project = {
     ko: '2026.03 ~ 현재',
     en: 'Mar 2026 ~ Present',
   },
+  detail: {
+    architecture: [
+      {
+        title: {
+          ko: '매 턴 회상 흐름',
+          en: 'Per-turn Recall Flow',
+        },
+        description: {
+          ko: '대화 오케스트레이터가 매 턴 카테고리 기억 전량과 현재 대화(예산 초과 시 압축본)를 받아 프롬프트를 조립하고, 모델은 필요할 때만 MCP 도구로 기억을 검색·저장하는 흐름. 적재는 신호 한 번으로 끝나 응답을 막지 않습니다.',
+          en: 'Each turn the orchestrator assembles the prompt from all category memories and the current conversation (compacted when over budget); the model reaches for MCP memory tools only when needed. Ingest is a single signal that never blocks the response.',
+        },
+        mermaidFilePath: {
+          ko: '/architecture/agent-memory/recall-sequence.mmd',
+          en: '/architecture/agent-memory/recall-sequence-en.mmd',
+        },
+      },
+      {
+        title: {
+          ko: '기억 적재 파이프라인',
+          en: 'Memory Ingest Pipeline',
+        },
+        description: {
+          ko: '대화 원문을 서비스 DB에 복제하지 않고 커서 기반으로 원본 저장소에서 재조회해 N턴씩 묶어 추출하는 파이프라인. 추출 게이트가 저장 전에 오염을 차단하고, 실패 시 커서를 옮기지 않아 재시도가 멱등입니다.',
+          en: 'Conversation text is never replicated — the pipeline re-reads the source store past a cursor and extracts in N-turn batches. The extraction gate blocks contamination before storage, and the cursor holds back on failure so retries stay idempotent.',
+        },
+        mermaidFilePath: {
+          ko: '/architecture/agent-memory/ingest-pipeline.mmd',
+          en: '/architecture/agent-memory/ingest-pipeline-en.mmd',
+        },
+      },
+    ],
+  },
   featured: true,
   order: 3,
   scope: 'company',
