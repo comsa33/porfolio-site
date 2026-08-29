@@ -44,8 +44,8 @@ const project = {
     en: 'Personal project',
   },
   period: {
-    ko: '2023 (ASK 2023 발표)',
-    en: '2023 (presented at ASK 2023)',
+    ko: '2023.03 ~ 2023.05',
+    en: 'Mar 2023 ~ May 2023',
   },
   platformLinks: {
     github: 'https://github.com/comsa33/gpt-recruit.com',
