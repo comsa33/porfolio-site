@@ -28,53 +28,6 @@ export const publications = [
     category: 'journal',
   },
   {
-    id: 'hgc-acl',
-    title: 'HGC: Hint-Gated Cache for Contamination-Resilient Information-Seeking LLM Agents',
-    venue: {
-      ko: 'ACL Rolling Review (ARR) 2026',
-      en: 'ACL Rolling Review (ARR) 2026',
-    },
-    year: '2026',
-    status: 'in-preparation',
-    statusLabel: {
-      ko: 'ARR 2026 October 재투고 준비 중',
-      en: 'Preparing resubmission (ARR Oct 2026)',
-    },
-    authorRole: {
-      ko: '단독저자',
-      en: 'Sole author',
-    },
-    summary: {
-      ko: 'LLM 에이전트의 응답 캐시(에이전트 메모리) 오염 문제를 다룬 단독 저자 연구. 스코프 필터·문서 ID 검증·근거 검증기의 3단계 게이트로 캐시 답변을 현재 질의의 원문에 근거시킨 뒤 제공하고, 게이트 거부 시 에이전트로 폴백하는 HGC 아키텍처를 제안합니다. 3개 벤치마크와 3개 백본을 교차한 7개 셀에서 캐시 단독 베이스라인 대비 오염 조건 성능 저하를 0~6.5pp로 억제했습니다.',
-      en: "A sole-author study on contamination in LLM-agent response caches (agent memory). HGC grounds each cached answer in the current query's source text through a three-stage gate (scope filter, document-ID verification, evidence verifier), falling back to the agent when the gate rejects. Across seven cells spanning three benchmarks and three backbones, it holds degradation under contamination to 0–6.5pp versus a cache-only baseline.",
-    },
-    category: 'conference',
-  },
-  {
-    id: 'kr-housing-longrag',
-    title:
-      'KR-Housing-LongRAG-Bench: Evaluating Long-Context and Retrieval-Augmented LLMs on Korean Housing Regulations',
-    venue: {
-      ko: 'ACL Rolling Review 2026 (August Cycle)',
-      en: 'ACL Rolling Review 2026 (August Cycle)',
-    },
-    year: '2026',
-    status: 'under-review',
-    statusLabel: {
-      ko: '심사 진행 중',
-      en: 'Under review',
-    },
-    authorRole: {
-      ko: '단독저자',
-      en: 'Sole author',
-    },
-    summary: {
-      ko: "한국 공공주택 공고문·법령·공공 표를 대상으로 롱컨텍스트 LLM과 RAG를 동일 문항에서 통제 비교한 벤치마크. 41개 공식 공고와 공공 데이터 포털 표를 기반으로 근거 연결형 QA 1,997문항을 설계하고, 12개 태스크 패밀리와 32k~512k 컨텍스트 티어로 구성했습니다. 약 410k 토큰 구간에서 모델 간 정확도 99% 대 9%의 격차가 발생함을 확인하고, 이것이 '기억'이 아닌 '긴 컨텍스트 처리 능력'임을 분리 입증했습니다.",
-      en: 'A benchmark that compares long-context LLMs and RAG on identical questions over Korean public-housing announcements, statutes, and public tables. It comprises 1,997 evidence-linked QA items built from 41 official announcements and open-data tables, spanning 12 task families and 32k–512k context tiers. At roughly 410k tokens, model accuracy diverges from 99% to 9% — shown to reflect long-context processing ability rather than memorization.',
-    },
-    category: 'conference',
-  },
-  {
     id: 'jips-trajectory-clustering',
     title:
       'Auditing Trajectory Clustering in LLM-Agent Failure Analysis: A Multi-Dataset Validation Protocol',

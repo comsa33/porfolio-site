@@ -19,9 +19,6 @@
 .item[data-status='under-review'] {
   --pub-accent: var(--amber);
 }
-.item[data-status='in-preparation'] {
-  --pub-accent: var(--ink-secondary);
-}
 .item[data-status='presented'] {
   --pub-accent: var(--violet);
 }
