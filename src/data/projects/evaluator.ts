@@ -57,7 +57,7 @@ const project = {
   ],
   features: [
     'Agentic RAG Evaluator',
-    'Custom Recall & VecDash Metrics',
+    'Custom Recall & Retrieval Metrics',
     'Automated QnA Generation',
     'Real-time Progress Tracking',
     'Markdown Result Visualization',

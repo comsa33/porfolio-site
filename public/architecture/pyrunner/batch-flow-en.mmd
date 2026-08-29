@@ -3,7 +3,7 @@ sequenceDiagram
     participant Consumer as Redis Consumer
     participant Buffer as Memory Buffer
     participant Writer as Batch Writer
-    participant PyEditor as PyEditor API
+    participant Store as Web IDE file API
 
     loop Message Reception
         Redis->>Consumer: Read log message
@@ -13,14 +13,14 @@ sequenceDiagram
     alt 1 sec elapsed OR buffer reaches 100
         Buffer->>Writer: Trigger flush
         Writer->>Writer: Dedup + Sort by time
-        Writer->>PyEditor: Batch write (GET → POST)
+        Writer->>Store: Batch write (read → merged save)
         
         alt Success
-            PyEditor-->>Writer: 200 OK
+            Store-->>Writer: Saved
             Writer->>Redis: XACK (acknowledge)
             Note right of Redis: Proceed to next message
         else Failure
-            PyEditor-->>Writer: Error
+            Store-->>Writer: Failure
             Writer->>Buffer: Put back in buffer
             Note right of Buffer: Retry in next flush
         end
