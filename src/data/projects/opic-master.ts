@@ -327,7 +327,7 @@ export async function POST(request: Request) {
     ],
   },
   featured: false,
-  order: 7,
+  order: 10,
   scope: 'personal',
 } satisfies Project;
 
