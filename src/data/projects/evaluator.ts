@@ -71,243 +71,61 @@ const project = {
     en: 'Feb 2025 ~ Present',
   },
   detail: {
-    problemSolving: [
-      {
-        id: 'progress-tracker',
-        title: {
-          ko: 'Progress Tracker 설계',
-          en: 'Progress Tracker Design',
-        },
-        category: {
-          ko: '동시성',
-          en: 'Concurrency',
-        },
-        icon: '📊',
-        problem: {
-          ko: '대규모 평가 작업(수백~수천 개 QnA) 실행 시 사용자는 진행 상황을 알 수 없고, 매 작업마다 상태 업데이트 시 API 서버 부하 과다 발생. 또한 이전 단계 평가 결과가 유실되는 문제가 있었습니다.',
-          en: 'During large-scale evaluation tasks (hundreds to thousands of QnAs), users had no visibility into progress, and updating status for every task caused excessive API server load. Additionally, previous stage evaluation results were being lost.',
-        },
-        solution: {
-          ko: '**ProgressTracker 클래스**를 설계하여 10% 단위로만 진행률을 DataHub API에 보고하도록 최적화했습니다. **Prefix message 패턴**을 도입하여 이전 단계의 결과를 현재 업데이트 메시지 앞에 prepend함으로써 평가 히스토리를 보존했습니다.',
-          en: 'Designed a **ProgressTracker class** to optimize progress reporting to DataHub API at 10% intervals only. Introduced a **prefix message pattern** that prepends previous stage results to current update messages.',
-        },
-        technicalDetails: {
-          ko: `\`\`\`python
-class ProgressTracker:
-    def __init__(self, total, interval=10):
-        self.total = total
-        self.interval = interval
-        self.current = 0
-        self.last_percent = 0
-    
-    async def update(self, inc=1):
-        self.current += inc
-        percent = int((self.current / self.total) * 100)
-        
-        # Decile-based: 10% 단위로만 API 호출
-        if percent // self.interval > self.last_percent // self.interval:
-            self.last_percent = percent
-            await self._send_update()  # 1000개 → 10번만
-\`\`\`
-
-**핵심**: API 호출 1000번 → 10번 (99% 감소)`,
-          en: `\`\`\`python
-class ProgressTracker:
-    def __init__(self, total, interval=10):
-        self.total = total
-        self.interval = interval
-        self.current = 0
-        self.last_percent = 0
-    
-    async def update(self, inc=1):
-        self.current += inc
-        percent = int((self.current / self.total) * 100)
-        
-        # Decile-based: API calls only at 10% intervals
-        if percent // self.interval > self.last_percent // self.interval:
-            self.last_percent = percent
-            await self._send_update()  # 1000 tasks → 10 calls
-\`\`\`
-
-**Key**: API calls 1000 → 10 (99% reduction)`,
-        },
-        csFoundations: [
-          'Rate Limiting',
-          'State Accumulation',
-          'Progress Tracking',
-          'API Optimization',
-        ],
-        impact: {
-          ko: '상태 보고 API 호출 1,000회 → 10회 감축, 단계별 평가 히스토리 유실 제거',
-          en: 'Status-report API calls cut from 1,000 to 10; stage-level evaluation history no longer lost',
-        },
-      },
-      {
-        id: 'multi-processor-pattern',
-        title: {
-          ko: 'Multi-Processor Pattern 도입',
-          en: 'Multi-Processor Pattern',
-        },
-        category: {
-          ko: '설계패턴',
-          en: 'Design Pattern',
-        },
-        icon: '🏭',
-        problem: {
-          ko: 'Recall, Ragas, VecDash, Pipeline 등 4가지 평가 타입마다 중복된 파일 로딩, 에러 처리, 로깅 로직이 반복 구현되어 있었고, 신규 평가 방식 추가 시 보일러플레이트 코드가 증가했습니다.',
-          en: 'For four evaluation types (Recall, Ragas, VecDash, Pipeline), duplicate file loading, error handling, and logging logic was repeatedly implemented.',
-        },
-        solution: {
-          ko: '**Template Method 패턴** 기반 `BaseEvaluationProcessor` 추상 클래스를 설계했습니다. 공통 흐름(`run()`)은 부모에서 정의하고, 평가별 핵심 로직만 서브클래스가 구현하도록 강제했습니다.',
-          en: 'Designed `BaseEvaluationProcessor` abstract class based on **Template Method pattern**. Common flow (`run()`) defined in parent class, evaluation-specific logic in subclasses.',
-        },
-        technicalDetails: {
-          ko: `\`\`\`python
-from abc import ABC, abstractmethod
-
-class BaseEvaluationProcessor(ABC):
-    async def run(self):
-        try:
-            data = await self._load_input()  # 추상
-            result = await self._process(data)
-            return await self._save_output(result)
-        except Exception as e:
-            logger.error(f"Failed: {e}")
-            raise
-    
-    @abstractmethod
-    async def _load_input(self): pass
-    
-    @abstractmethod
-    async def _process(self, data): pass
-\`\`\`
-
-**핵심**: Template Method + Factory로 공통 흐름 일원화`,
-          en: `\`\`\`python
-from abc import ABC, abstractmethod
-
-class BaseEvaluationProcessor(ABC):
-    async def run(self):
-        try:
-            data = await self._load_input()  # abstract
-            result = await self._process(data)
-            return await self._save_output(result)
-        except Exception as e:
-            logger.error(f"Failed: {e}")
-            raise
-    
-    @abstractmethod
-    async def _load_input(self): pass
-    
-    @abstractmethod
-    async def _process(self, data): pass
-\`\`\`
-
-**Key**: Template Method + Factory unify the shared flow`,
-        },
-        csFoundations: [
-          'Template Method Pattern',
-          'Factory Pattern',
-          'Dependency Injection',
-          'Abstract Base Class',
-        ],
-        impact: {
-          ko: '4개 평가 타입의 로딩·에러 처리·로깅 공통화 — 신규 평가 타입은 핵심 로직 구현만으로 추가',
-          en: 'Loading, error handling, and logging unified across four evaluation types — a new type only implements its core logic',
-        },
-      },
-      {
-        id: 'async-job-processing',
-        title: {
-          ko: '비동기 작업 처리 시스템',
-          en: 'Async Job Processing',
-        },
-        category: {
-          ko: '성능최적화',
-          en: 'Performance',
-        },
-        icon: '⏱️',
-        problem: {
-          ko: '수백 개의 QnA 평가 작업을 동기식으로 처리하면 API 타임아웃이 발생하고, 사용자는 작업 완료까지 브라우저를 닫을 수 없어 UX가 저하되었습니다.',
-          en: "Processing hundreds of QnA evaluation tasks synchronously caused API timeouts, and users couldn't close their browsers until completion.",
-        },
-        solution: {
-          ko: '`chat_logs_id` 파라미터 기반 동기/비동기 실행 분기. `asyncio.create_task()`로 백그라운드 작업 생성하고 즉시 응답 반환. 작업 상태를 ProgressTracker를 통해 실시간 보고.',
-          en: 'Implemented sync/async branching based on `chat_logs_id` parameter. Creates background task with `asyncio.create_task()` and returns immediately.',
-        },
-        technicalDetails: {
-          ko: `\`\`\`python
-@router.post("/evaluation/ragas")
-async def submit_evaluation(request, chat_logs_id: Optional[int]):
-    processor = get_processor("ragas", request)
-    
-    if chat_logs_id:
-        # 비동기: 백그라운드 실행
-        asyncio.create_task(run_job(processor, chat_logs_id))
-        return {"status": "queued"}
-    else:
-        # 동기: 즉시 완료
-        await processor.run()
-        return {"status": "completed"}
-\`\`\`
-
-**핵심**: Event Loop에서 독립 실행, 즉시 응답`,
-          en: `\`\`\`python
-@router.post("/evaluation/ragas")
-async def submit_evaluation(request, chat_logs_id: Optional[int]):
-    processor = get_processor("ragas", request)
-    
-    if chat_logs_id:
-        # Async: background execution
-        asyncio.create_task(run_job(processor, chat_logs_id))
-        return {"status": "queued"}
-    else:
-        # Sync: immediate completion
-        await processor.run()
-        return {"status": "completed"}
-\`\`\`
-
-**Key**: Independent execution in Event Loop`,
-        },
-        csFoundations: [
-          'Async Programming',
-          'Event Loop',
-          'Graceful Error Handling',
-          'Background Tasks',
-        ],
-        impact: {
-          ko: '대규모 평가를 백그라운드 작업으로 전환해 API 타임아웃 제거 — 제출 즉시 응답, 진행률로 추적',
-          en: 'Large evaluations moved to background jobs, eliminating API timeouts — immediate response on submit, tracked via progress updates',
-        },
-      },
-    ],
     architecture: [
       {
         title: {
-          ko: '시스템 아키텍처',
-          en: 'System Architecture',
+          ko: '검색 평가 실행',
+          en: 'Retrieval Evaluation Run',
         },
         description: {
-          ko: 'Evaluator의 전체 시스템 구조. API Layer, Processor Factory, Base Processor Pattern, Evaluation Layer, Progress Tracking, External Services 간의 상호작용을 보여줍니다.',
-          en: 'Overall system structure of Evaluator. Shows interactions between API Layer, Processor Factory, Base Processor Pattern, Evaluation Layer, Progress Tracking, and External Services.',
+          ko: '전역 큐에서 슬롯을 받아 데이터셋 정합 검사 후 결과 행을 전량 선생성하고, 행별로 검색 서비스를 질의해 정답(gold)과 대조하는 흐름. 실행 시점의 설정·인덱스 스냅샷이 이후 판단의 전부가 되어 재현 가능합니다.',
+          en: 'A run claims a global queue slot, integrity-checks the dataset, pre-creates every result row, then queries the retrieval service per row and compares against gold. The config and index snapshot taken at run time is all later judgment relies on, keeping runs reproducible.',
         },
         mermaidFilePath: {
-          ko: '/architecture/evaluator/system-architecture.mmd',
-          en: '/architecture/evaluator/system-architecture-en.mmd',
+          ko: '/architecture/evaluator/retrieval-run.mmd',
+          en: '/architecture/evaluator/retrieval-run-en.mmd',
         },
       },
       {
         title: {
-          ko: '평가 파이프라인 플로우',
-          en: 'Evaluation Pipeline Flow',
+          ko: '응답 평가 실행',
+          en: 'Response Evaluation Run',
         },
         description: {
-          ko: 'QnA 생성 → Recall 평가 → Ragas 평가로 이어지는 E2E 평가 파이프라인의 상세 흐름. 각 단계별 Progress Tracking, 파일 관리, 비동기 처리 메커니즘을 포함합니다.',
-          en: 'Detailed flow of the E2E evaluation pipeline from QnA Generation → Recall Evaluation → Ragas Evaluation. Includes Progress Tracking, file management, and async processing mechanisms for each stage.',
+          ko: '평가 전용 경로가 아니라 실서비스 대화 경로에 실제 질의를 보내 end-to-end 응답 품질을 측정합니다. 호출 단위 추적 ID 선저장, 폴링 타임아웃, 실패 시에도 근거 문서 보존으로 어떤 실패든 사후 추적이 가능합니다.',
+          en: 'Real queries go through the live conversation path — not an evaluation-only shortcut — to measure end-to-end response quality. Pre-stored per-call trace IDs, mandatory polling timeouts, and passage preservation on failure keep every outcome traceable.',
         },
         mermaidFilePath: {
-          ko: '/architecture/evaluator/evaluation-pipeline.mmd',
-          en: '/architecture/evaluator/evaluation-pipeline-en.mmd',
+          ko: '/architecture/evaluator/response-run.mmd',
+          en: '/architecture/evaluator/response-run-en.mmd',
+        },
+      },
+      {
+        title: {
+          ko: '품질 판정',
+          en: 'Quality Judgment',
+        },
+        description: {
+          ko: 'RAGAS 계열 지표 4종을 LLM 게이트웨이로 판정하는 단계. 판정 기준을 실행 시점에 스냅샷하고 라운드를 표식해 같은 실행을 다른 기준·모델로 재판정해도 이력이 섞이지 않습니다. 판정 불가 건은 집계 모수에서 제외됩니다.',
+          en: 'Four RAGAS-family metrics judged through the LLM gateway. Criteria are snapshotted at run time and rounds are marked, so re-judging the same run with different criteria or models never mixes histories; unjudgeable rows drop out of the aggregates.',
+        },
+        mermaidFilePath: {
+          ko: '/architecture/evaluator/judgment-run.mmd',
+          en: '/architecture/evaluator/judgment-run-en.mmd',
+        },
+      },
+      {
+        title: {
+          ko: '평가 데이터셋 생성',
+          en: 'Evaluation Dataset Generation',
+        },
+        description: {
+          ko: '문서 저장소에서 표본을 추출해 LLM으로 QnA를 생성하고, 스키마 검증·중복 제거를 거쳐 사람 검토 후 데이터셋에 반영하는 파이프라인. 생성에 사용한 청크가 그대로 정답 근거(gold)가 되어 검색 평가와 연결됩니다.',
+          en: 'Samples documents, generates QnA with an LLM, and applies items to the dataset after schema validation, deduplication, and human review. The source chunk of each item becomes its gold passage, linking generation directly to retrieval evaluation.',
+        },
+        mermaidFilePath: {
+          ko: '/architecture/evaluator/dataset-generation.mmd',
+          en: '/architecture/evaluator/dataset-generation-en.mmd',
         },
       },
     ],

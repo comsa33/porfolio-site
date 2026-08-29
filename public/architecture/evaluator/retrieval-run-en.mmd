@@ -1,0 +1,31 @@
+sequenceDiagram
+    participant UI
+    participant API as Evaluation API
+    participant W as Worker
+    participant DS as Data store
+    participant RT as Retrieval service
+    UI->>API: POST /api/v2/runs/retrieval {dataset_id, config}
+    API->>API: Create run + snapshot config & index
+    API-->>UI: 202 {id}
+    W->>W: Wait for a global queue slot — pending · 60s heartbeat
+    W->>DS: Dataset integrity check (gold passages exist?)
+    W->>W: Pre-create every result row (excluded ones too) — the input snapshot is all that follows
+    loop Per row (enabled only)
+        alt All gold passages lost
+            W->>W: Skip call — classified not judgeable
+        else No gold specified
+            W->>W: Skip call — classified not comparable
+        else
+            W->>RT: Search query {index, question, method, topK}
+            RT-->>W: Documents (array order = ranking)
+            opt When rerank is configured
+                W->>RT: Rerank {model, query, top documents}
+                RT-->>W: Reordered results (score desc)
+                W->>W: Reorder the top, keep the rest in original order
+            end
+            W->>W: Compare against gold → store retrieval block
+        end
+        W->>W: progress +1
+    end
+    W->>W: Retrieval stage done · summary finalized
+    UI->>API: GET /api/v2/runs/{id} polling (progress)

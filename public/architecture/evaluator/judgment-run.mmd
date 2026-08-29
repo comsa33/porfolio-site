@@ -1,0 +1,21 @@
+sequenceDiagram
+    participant UI
+    participant API as 평가 서비스 API
+    participant W as 워커
+    participant LG as LLM 게이트웨이
+    UI->>API: POST /api/v2/runs/{id}/judge {판정 모델, 임베딩, 판정 기준 세트}
+    API->>API: 판정 기준 스냅샷 · 모델 저장 · 판정 단계 전환
+    API-->>UI: 202
+    W->>W: 전역 큐 슬롯 대기 (「품질 판정 · 대기」 표시)
+    W->>W: 선점 (pending → running · 시도 +1) · 판정 라운드 +1
+    loop 판정 대상 행
+        W->>W: 판정 입력 조립 — 질문 / 답변 / 근거 문서 / 정답
+        W->>LG: RAGAS 계열 지표 4종 판정 호출 (JSON 파싱 재시도)
+        alt 점수 확보
+            W->>W: 판정 분류
+        else 재시도 소진
+            W->>W: 판정 불가 — 집계 모수에서 제외
+        end
+        W->>W: 판정 덮어쓰기 + 라운드 표식
+    end
+    W->>W: 판정 완료 · 요약 굳힘
