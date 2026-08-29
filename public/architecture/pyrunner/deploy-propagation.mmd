@@ -1,0 +1,16 @@
+sequenceDiagram
+    participant MG as 관리 플레인
+    participant AG as 에이전트 관리 서버
+    participant IDE as 웹 IDE (파일 저장소)
+    participant R as Redis
+    participant Pods as 전체 파드의 서버들
+
+    MG->>AG: 에이전트 스키마 등록
+    AG->>AG: 코드 템플릿 생성 (API 모듈 · 명세)
+    AG->>IDE: 파일 저장 (공유 볼륨)
+    AG->>R: 분산 락 획득 → 배포 상태 갱신
+    Note over R: 동시 배포는 락으로 직렬화<br/>— 버전 목록 유실 방지 · 배포 실패율 0%
+    AG->>R: Pub/Sub 배포 이벤트 발행
+    R-->>Pods: 전 파드 브로드캐스트
+    Pods->>Pods: 서브앱 동적 로딩 — 서버 재시작 없이 반영
+    AG-->>MG: 등록 완료

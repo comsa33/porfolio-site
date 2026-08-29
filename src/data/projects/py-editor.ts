@@ -57,8 +57,8 @@ const project = {
     en: 'Posicube Inc.',
   },
   period: {
-    ko: '2025.06 ~ 현재',
-    en: 'Jun 2025 ~ Present',
+    ko: '2025.06 ~ 2026.02',
+    en: 'Jun 2025 ~ Feb 2026',
   },
   detail: {
     problemSolving: [
