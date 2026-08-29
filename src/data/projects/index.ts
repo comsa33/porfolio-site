@@ -8,6 +8,7 @@ import knowledgeBase from './knowledge-base';
 import squareMessenger from './square-messenger';
 import agentMemory from './agent-memory';
 import llmFinetuning from './llm-finetuning';
+import krLongragBench from './kr-longrag-bench';
 import culturefitMatching from './culturefit-matching';
 import patentNewsRag from './patent-news-rag';
 import gptRecruit from './gpt-recruit';
@@ -23,6 +24,7 @@ export const projects: Project[] = [
   squareMessenger,
   agentMemory,
   llmFinetuning,
+  krLongragBench,
   culturefitMatching,
   patentNewsRag,
   gptRecruit,

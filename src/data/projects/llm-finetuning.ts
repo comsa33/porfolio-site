@@ -3,16 +3,16 @@ import type { Project } from '@/types';
 const project = {
   id: 'llm-finetuning',
   title: {
-    ko: '오픈소스 LLM/SLM 파인튜닝 & 평가 벤치마크',
-    en: 'Open-source LLM/SLM Fine-tuning & Benchmarks',
+    ko: '오픈소스 LLM/SLM QLoRA 파인튜닝',
+    en: 'Open-source LLM/SLM QLoRA Fine-tuning',
   },
   shortDescription: {
-    ko: '모델·데이터셋·코드를 공개한 개인 R&D (단일 GPU QLoRA)',
-    en: 'Personal R&D with openly released models, datasets, and code (single-GPU QLoRA)',
+    ko: '단일 GPU로 한국어 모델을 도메인 특화 학습해 공개한 개인 R&D',
+    en: 'Domain-tuned Korean models on a single GPU, released openly',
   },
   fullDescription: {
-    ko: '업무와 별개로 오픈소스 모델을 직접 파인튜닝하고, LLM·에이전트 품질을 측정하는 평가 벤치마크를 구축해 공개해 온 개인 연구입니다. 모델과 데이터셋은 Hugging Face, 코드는 GitHub에 공개되어 있어 결과를 직접 확인할 수 있습니다.',
-    en: 'Personal research, separate from day-to-day work, fine-tuning open-source models and building public benchmarks for LLM and agent quality. Models and datasets are on Hugging Face and the code is on GitHub, so the results are directly verifiable.',
+    ko: '업무와 별개로 오픈소스 모델을 직접 파인튜닝해 공개해 온 개인 연구입니다. 모델은 Hugging Face(MIT), 학습 코드는 GitHub에 공개되어 있어 결과를 직접 확인할 수 있고, 학습한 모델을 영어 시험 학습 서비스에 연결해 실사용까지 완결했습니다.',
+    en: 'Personal research, separate from day-to-day work, fine-tuning open-source models and releasing them. The models are on Hugging Face (MIT) and the training code on GitHub, so results are directly verifiable — and the tuned models power a real English-exam study service.',
   },
   techStack: [
     'PyTorch',
@@ -44,14 +44,6 @@ const project = {
       ko: '학습 모델을 GGUF(q8_0)로 양자화해 로컬 추론이 가능한 형태로 배포, 문항 생성 관리자 백엔드·조회 API·인증 서버·모바일 앱(Flutter)까지 연결해 엔드투엔드 서비스로 완성',
       en: 'Quantized to GGUF (q8_0) for local inference and wired it end-to-end — item-generation admin backend, query API, auth server, and a Flutter mobile app',
     },
-    {
-      ko: '한국어 주거정책 long-context RAG 벤치마크 구축·공개 — 41개 공식 공고 기반 QA 1,997문항, 32k~512k 컨텍스트 티어 (Hugging Face 데이터셋, CC-BY-4.0)',
-      en: 'Built and released a Korean housing-policy long-context RAG benchmark — 1,997 QA items from 41 official notices across 32k–512k context tiers (Hugging Face dataset, CC-BY-4.0)',
-    },
-    {
-      ko: '상용 API 4종 + 오픈웨이트 3종을 LLM-judge로 채점하고 사람 라벨 표본과 대조 — 일치율 96.2%, Cohen’s κ 0.924',
-      en: 'Scored 4 commercial APIs and 3 open-weight models with an LLM judge, validated against human labels — 96.2% agreement, Cohen’s κ 0.924',
-    },
   ],
   features: [
     'QLoRA Fine-tuning (single GPU)',
@@ -65,15 +57,15 @@ const project = {
     en: 'Personal R&D (open-sourced)',
   },
   period: {
-    ko: '2024.05 ~ 현재',
-    en: 'May 2024 ~ Present',
+    ko: '2024.05 ~ 2025.05',
+    en: 'May 2024 ~ May 2025',
   },
   platformLinks: {
-    web: 'https://huggingface.co/comsa33',
-    github: 'https://github.com/comsa33',
+    web: 'https://huggingface.co/comsa33/Llama3-Open-Ko-8B-Instruct-toeic4all',
+    github: 'https://github.com/comsa33/finetune-llm',
   },
   featured: false,
-  order: 5,
+  order: 6,
   scope: 'personal',
 } satisfies Project;
 
