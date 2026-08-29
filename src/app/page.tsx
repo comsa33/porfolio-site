@@ -6,10 +6,7 @@ import styles from './page.module.css';
 import Timeline from '@/components/Timeline';
 import Publications from '@/components/Publications';
 import ProjectCard from '@/components/ProjectCard';
-import portfolioData from '@/data/portfolio.json';
-import { PortfolioData } from '@/types';
-
-const data = portfolioData as PortfolioData;
+import { portfolioData as data } from '@/data';
 
 const SECTION_TITLES = {
   projects: { ko: '프로젝트', en: 'Projects' },
