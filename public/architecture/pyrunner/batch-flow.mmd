@@ -3,7 +3,7 @@ sequenceDiagram
     participant Consumer as Redis Consumer
     participant Buffer as 메모리 버퍼
     participant Writer as Batch Writer
-    participant PyEditor as PyEditor API
+    participant Store as 웹 IDE 파일 API
 
     loop 메시지 수신
         Redis->>Consumer: 로그 메시지 읽기
@@ -13,14 +13,14 @@ sequenceDiagram
     alt 1초 경과 또는 버퍼 100개 도달
         Buffer->>Writer: flush 트리거
         Writer->>Writer: 중복 제거 + 시간순 정렬
-        Writer->>PyEditor: 배치 쓰기 (GET → POST)
+        Writer->>Store: 배치 쓰기 (조회 → 병합 저장)
         
         alt 성공
-            PyEditor-->>Writer: 200 OK
+            Store-->>Writer: 저장 성공
             Writer->>Redis: XACK (메시지 확인)
             Note right of Redis: 다음 메시지로 진행
         else 실패
-            PyEditor-->>Writer: Error
+            Store-->>Writer: 실패
             Writer->>Buffer: 버퍼에 다시 넣기
             Note right of Buffer: 다음 flush에서 재시도
         end
