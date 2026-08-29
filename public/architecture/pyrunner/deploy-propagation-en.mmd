@@ -1,0 +1,16 @@
+sequenceDiagram
+    participant MG as Management plane
+    participant AG as Agent management server
+    participant IDE as Web IDE (file store)
+    participant R as Redis
+    participant Pods as Servers on every pod
+
+    MG->>AG: Register agent schema
+    AG->>AG: Generate code template (API module · spec)
+    AG->>IDE: Save files (shared volume)
+    AG->>R: Acquire distributed lock → update deploy state
+    Note over R: Concurrent deploys serialized by the lock<br/>— no version-list loss · 0% deploy failures
+    AG->>R: Publish deploy event (Pub/Sub)
+    R-->>Pods: Broadcast to every pod
+    Pods->>Pods: Dynamic sub-app loading — applied without a restart
+    AG-->>MG: Registration complete

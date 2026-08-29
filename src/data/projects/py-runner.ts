@@ -11,8 +11,8 @@ const project = {
     en: 'Multi-pod distributed Python sandbox with zero-downtime dynamic deployment',
   },
   fullDescription: {
-    ko: 'Multi-Pod 환경에서 AI 에이전트를 동적으로 배포하고 실행하는 고가용성 플랫폼입니다. Redis Pub/Sub 기반 분산 라우팅과 FastAPI Sub-app 동적 로딩을 통해 Zero-downtime 배포를 실현했습니다.',
-    en: 'High-availability platform for dynamically deploying and executing AI agents in multi-pod environments. Achieved zero-downtime deployment through Redis Pub/Sub distributed routing and FastAPI sub-app dynamic loading.',
+    ko: '멀티팟 환경에서 AI 에이전트를 동적으로 등록·배포·실행하는 실행 런타임입니다. 에이전트 관리 서버와 프로덕션·개발 샌드박스를 프로세스 격리로 나눈 3서버 구조 위에서, Redis Pub/Sub 동기화와 FastAPI 서브앱 동적 로딩으로 서버 재시작 없는 배포를 실현했습니다.',
+    en: 'An execution runtime that registers, deploys, and runs AI agents dynamically across pods. Three process-isolated servers — agent management, production sandbox, dev sandbox — with Redis Pub/Sub synchronization and dynamic FastAPI sub-app loading deploy changes without a restart.',
   },
   techStack: [
     'Python',
@@ -38,8 +38,8 @@ const project = {
       en: 'Real-time multi-pod deployment sync via a Redis Pub/Sub event bus, with distributed locks achieving 0% deployment failure',
     },
     {
-      ko: 'FastAPI Sub-app 동적 로딩으로 서버 재시작 없이 기능 추가·교체 (Zero-downtime 배포)',
-      en: 'Zero-downtime deployment — FastAPI sub-app dynamic loading adds or swaps features without a server restart',
+      ko: 'FastAPI 서브앱 동적 로딩으로 서버 재시작 없이 기능 추가·교체 — 사용자 정의 에이전트 API·커스텀 LLM·알고리즘 스크립트까지 무중단 배포',
+      en: 'Zero-downtime deployment — dynamic sub-app loading adds or swaps user-defined agent APIs, custom LLMs, and algorithm scripts without a restart',
     },
     {
       ko: '프로바이더 무관 LLM 어댑터 계층 (Azure/AWS Bedrock/Anthropic/Google/OpenAI) + Redis Stream 기반 SSE 토큰 스트리밍',
@@ -68,80 +68,6 @@ const project = {
   },
   detail: {
     problemSolving: [
-      {
-        id: 'async-migration',
-        title: {
-          ko: '동시성 프로그래밍: 동기에서 비동기로 전환',
-          en: 'Concurrency Programming: Async/Await Migration',
-        },
-        category: {
-          ko: '동시성',
-          en: 'Concurrency',
-        },
-        icon: '⚡',
-        problem: {
-          ko: '**이슈**: Redis 클라이언트가 동기 방식으로 작동하여 멀티팟 환경에서 블로킹 I/O 발생. 한 요청이 Redis 응답을 대기하는 동안 다른 모든 요청이 대기 상태로 전환되어 응답 시간이 급격히 증가하고 CPU가 낭비되는 문제.',
-          en: '**Issue**: Synchronous Redis client caused blocking I/O in multi-pod environment. While one request waited for Redis response, all other requests were blocked, causing response time spikes and CPU waste.',
-        },
-        solution: {
-          ko: '**해결**: `redis-py` → `aioredis`로 전면 마이그레이션하여 모든 Redis 작업을 `async/await` 패턴으로 전환. Event Loop 기반 아키텍처를 도입해 I/O 대기 중에도 다른 요청을 처리할 수 있도록 개선. Background Log Worker를 비동기로 구현하고, Lock Manager에 Context Manager 패턴을 적용해 자동 해제 보장.',
-          en: '**Solution**: Migrated from `redis-py` to `aioredis`, converting all Redis operations to `async/await` pattern. Introduced event loop-based architecture to handle other requests during I/O waiting. Implemented asynchronous Background Log Worker and applied Context Manager pattern to Lock Manager for automatic release.',
-        },
-        technicalDetails: {
-          ko: `\`\`\`python
-# Before (동기)
-def deploy_agent(agent_id):
-    lock = redis.get(f"lock:{agent_id}")  # 블로킹 I/O
-    result = redis.set(f"deployed:{agent_id}", "true")
-    return result
-
-# After (비동기)
-async def deploy_agent(agent_id):
-    lock = await redis.get(f"lock:{agent_id}")  # Non-blocking
-    # await 중에 다른 코루틴 실행 가능
-    result = await redis.set(f"deployed:{agent_id}", "true")
-    return result
-\`\`\`
-
-**핵심 변경사항**:
-- 13개 파일 수정, +704줄 / -338줄
-- RedisClient 전면 리팩토링
-- Event Loop 기반 아키텍처 구축
-- Distributed Lock을 Non-blocking으로 전환`,
-          en: `\`\`\`python
-# Before (sync)
-def deploy_agent(agent_id):
-    lock = redis.get(f"lock:{agent_id}")  # Blocking I/O
-    result = redis.set(f"deployed:{agent_id}", "true")
-    return result
-
-# After (async)
-async def deploy_agent(agent_id):
-    lock = await redis.get(f"lock:{agent_id}")  # Non-blocking
-    # Other coroutines can run during await
-    result = await redis.set(f"deployed:{agent_id}", "true")
-    return result
-\`\`\`
-
-**Key Changes**:
-- 13 files modified, +704 / -338 lines
-- Complete RedisClient refactoring
-- Event loop-based architecture
-- Distributed Lock converted to non-blocking`,
-        },
-        csFoundations: [
-          'Async/Await',
-          'Event Loop',
-          'Non-blocking I/O',
-          'Cooperative Multitasking',
-          'Concurrency vs Parallelism',
-        ],
-        impact: {
-          ko: '**성과**: 블로킹 I/O 제거 — 한 요청의 대기가 다른 요청을 막지 않게 되어 멀티팟 환경의 동시 처리 용량 확대.',
-          en: "**Impact**: Removed blocking I/O — one request's wait no longer stalls others, expanding concurrent capacity across pods.",
-        },
-        commits: ['4b7a8aa'],
-      },
       {
         id: 'race-condition',
         title: {
@@ -293,158 +219,6 @@ async def stream_handler(request):
         commits: ['346a8f5', '8c4aba6'],
       },
       {
-        id: 'data-normalization',
-        title: {
-          ko: '데이터 정규화: Agent ID 불일치 해결',
-          en: 'Data Normalization: Agent ID Unification',
-        },
-        category: {
-          ko: '데이터정규화',
-          en: 'Data Normalization',
-        },
-        icon: '🎯',
-        problem: {
-          ko: "**이슈**: 시스템 전반에서 Agent ID 형식이 불일치('a123' vs '123')하여 같은 Agent를 다른 것으로 인식. Frontend, Backend, Redis Event에서 각각 다른 형식을 사용해 Join 연산 실패 및 중복 배포 발생.",
-          en: "**Issue**: Inconsistent Agent ID format across system ('a123' vs '123') caused same agent to be recognized as different. Different formats used in Frontend, Backend, and Redis Events led to join operation failures and duplicate deployments.",
-        },
-        solution: {
-          ko: '**해결**: 중앙화된 `AgentIdNormalizer` 클래스를 구현하여 단일 책임 원칙(SRP) 적용. API Entry Point에서 즉시 ID를 정규화하고, 내부 로직은 정규화된 ID만 사용하도록 통일. Integer → String 변환 및 공백 제거 로직 추가.',
-          en: '**Solution**: Implemented centralized `AgentIdNormalizer` class applying Single Responsibility Principle (SRP). Normalized IDs immediately at API entry points, unified internal logic to use only normalized IDs. Added Integer → String conversion and whitespace trimming logic.',
-        },
-        technicalDetails: {
-          ko: `\`\`\`python
-class AgentIdNormalizer:
-    @staticmethod
-    def normalize(agent_id: str) -> str:
-        """모든 Agent ID를 일관된 형식으로 변환"""
-        if agent_id.startswith('a'):
-            return agent_id[1:]  # 'a123' → '123'
-        return agent_id
-    
-    @staticmethod
-    def with_prefix(agent_id: str) -> str:
-        """필요시 접두사 추가"""
-        normalized = AgentIdNormalizer.normalize(agent_id)
-        return f"a{normalized}"
-
-# API 진입점에서 정규화
-@app.post("/deploy")
-async def deploy(agent_id: str):
-    normalized_id = AgentIdNormalizer.normalize(agent_id)
-    # 이후 모든 로직은 normalized_id 사용
-\`\`\`
-
-**핵심 원칙**: Data Governance + Defensive Programming`,
-          en: `\`\`\`python
-class AgentIdNormalizer:
-    @staticmethod
-    def normalize(agent_id: str) -> str:
-        """Convert all Agent IDs to consistent format"""
-        if agent_id.startswith('a'):
-            return agent_id[1:]  # 'a123' → '123'
-        return agent_id
-    
-    @staticmethod
-    def with_prefix(agent_id: str) -> str:
-        """Add prefix if needed"""
-        normalized = AgentIdNormalizer.normalize(agent_id)
-        return f"a{normalized}"
-
-# Normalize at API entry point
-@app.post("/deploy")
-async def deploy(agent_id: str):
-    normalized_id = AgentIdNormalizer.normalize(agent_id)
-    # All subsequent logic uses normalized_id
-\`\`\`
-
-**Core Principles**: Data Governance + Defensive Programming`,
-        },
-        csFoundations: [
-          'Data Normalization',
-          'Canonical Form',
-          'Single Responsibility Principle',
-          'Defensive Programming',
-          'Input Validation',
-        ],
-        impact: {
-          ko: '**성과**: 정규화 도입 후 ID 형식 불일치로 인한 중복 배포·조인 실패 재발 0건.',
-          en: '**Impact**: No recurrence of duplicate deployments or failed joins from ID format mismatches after normalization.',
-        },
-        commits: ['5f21d96', 'da0d614'],
-      },
-
-      {
-        id: 'batch-processing',
-        title: {
-          ko: '배치 처리: HTTP 오버헤드 99% 감소',
-          en: 'Batch Processing: 99% HTTP Overhead Reduction',
-        },
-        category: {
-          ko: '성능최적화',
-          en: 'Performance',
-        },
-        icon: '🚀',
-        problem: {
-          ko: '**이슈**: 로그 1건당 HTTP 호출 2회(GET+POST) 필요. 초당 100건 로그 발생 시 200회 HTTP 호출로 네트워크 병목 발생. 각 HTTP 호출의 고정 비용(~50ms)으로 인해 처리량이 초당 10건에 불과.',
-          en: '**Issue**: Each log required 2 HTTP calls (GET+POST). With 100 logs/second, 200 HTTP calls caused network bottleneck. Fixed cost per HTTP call (~50ms) limited throughput to only 10 logs/second.',
-        },
-        solution: {
-          ko: '**해결**: 1초 주기 배치 처리 도입. 로그를 메모리 버퍼에 축적 후 한 번에 전송하여 HTTP 호출을 2회로 통합. 에이전트별 버퍼 관리로 독립성 보장.',
-          en: '**Solution**: Introduced 1-second interval batch processing. Accumulated logs in memory buffer then sent at once, consolidating HTTP calls to just 2. Maintained independence through per-agent buffer management.',
-        },
-        technicalDetails: {
-          ko: `\`\`\`python
-# Before (건당 처리)
-for log in logs:  # 100개
-    await client.get(url)   # 50ms × 100
-    await client.post(url)  # 50ms × 100
-# 총 시간: 10,000ms (10초)
-
-# After (배치 처리)
-buffer.extend(logs)  # 버퍼에 축적
-await asyncio.sleep(1)  # 1초 대기
-
-# 한 번에 처리
-combined = '\\n'.join(buffer)
-await client.get(url)   # 50ms × 1
-await client.post(url)  # 50ms × 1
-# 총 시간: ~1,100ms
-\`\`\`
-
-**핵심**: 네트워크 왕복 횟수 최소화`,
-          en: `\`\`\`python
-# Before (per-log)
-for log in logs:  # 100 logs
-    await client.get(url)   # 50ms × 100
-    await client.post(url)  # 50ms × 100
-# Total: 10,000ms (10 seconds)
-
-# After (batch)
-buffer.extend(logs)  # Accumulate
-await asyncio.sleep(1)  # Wait 1 sec
-
-# Process at once
-combined = '\\n'.join(buffer)
-await client.get(url)   # 50ms × 1
-await client.post(url)  # 50ms × 1
-# Total: ~1,100ms
-\`\`\`
-
-**Key**: Minimize network round-trips`,
-        },
-        csFoundations: [
-          'Batch Processing',
-          'Buffer Management',
-          'Amortized Cost',
-          'I/O Optimization',
-        ],
-        impact: {
-          ko: '**성과**: HTTP 호출 횟수 **99% 감소** (건당 2회 → 배치당 2회) — 네트워크 왕복이 로그량과 무관해짐.',
-          en: '**Impact**: HTTP calls cut by **99%** (2 per log → 2 per batch) — network round-trips no longer scale with log volume.',
-        },
-        commits: [],
-      },
-      {
         id: 'at-least-once',
         title: {
           ko: 'At-least-once: 장애에도 로그 손실 제로',
@@ -511,62 +285,6 @@ async def _flush_agent(self, agent_key):
         },
         commits: [],
       },
-      {
-        id: 'dedup-sorting',
-        title: {
-          ko: '중복 제거 & 시간순 정렬: 재전달 로그 처리',
-          en: 'Deduplication & Sorting: Handling Redelivered Logs',
-        },
-        category: {
-          ko: '데이터관리',
-          en: 'Data Management',
-        },
-        icon: '🔄',
-        problem: {
-          ko: '**이슈**: At-least-once 방식은 재전달로 인한 중복 로그 발생 가능. 또한 비동기 처리로 로그 순서가 뒤섞일 수 있어 디버깅 시 시간순 추적이 어려움.',
-          en: '**Issue**: At-least-once delivery can cause duplicate logs due to redelivery. Also, async processing can scramble log order, making time-based debugging difficult.',
-        },
-        solution: {
-          ko: '**해결**: 파일 저장소에 쓰기 전 중복 제거(dict.fromkeys로 순서 유지) 및 타임스탬프 기반 정렬 적용. 로그 포맷 `[date][time]...`에서 타임스탬프 추출하여 정렬.',
-          en: '**Solution**: Applied deduplication (dict.fromkeys preserves order) and timestamp-based sorting before writing to the file store. Extracted timestamp from log format `[date][time]...` for sorting.',
-        },
-        technicalDetails: {
-          ko: `\`\`\`python
-def _write_batch(self, logs):
-    new_lines = [log.format() for log in logs]
-    all_lines = existing_lines + new_lines
-    
-    # 중복 제거 (순서 유지)
-    unique = list(dict.fromkeys(all_lines))
-    
-    # 시간순 정렬
-    unique.sort(key=self._extract_timestamp)
-    return unique
-\`\`\`
-
-**핵심**: Idempotent Write (멱등 쓰기)`,
-          en: `\`\`\`python
-def _write_batch(self, logs):
-    new_lines = [log.format() for log in logs]
-    all_lines = existing_lines + new_lines
-    
-    # Deduplicate (preserve order)
-    unique = list(dict.fromkeys(all_lines))
-    
-    # Sort by time
-    unique.sort(key=self._extract_timestamp)
-    return unique
-\`\`\`
-
-**Key**: Idempotent Write`,
-        },
-        csFoundations: ['Idempotency', 'Deduplication', 'Sorting Algorithm', 'Data Integrity'],
-        impact: {
-          ko: '**성과**: 재전달로 생긴 중복 로그 자동 제거, 시간순 정렬로 장애 추적 시 로그 흐름 재구성 가능.',
-          en: '**Impact**: Redelivered duplicates removed automatically; time-ordered logs make incident timelines reconstructable.',
-        },
-        commits: [],
-      },
     ],
     architecture: [
       {
@@ -575,8 +293,8 @@ def _write_batch(self, logs):
           en: 'Execution Runtime System Architecture',
         },
         description: {
-          ko: 'Multi-Process FastAPI 서버와 Redis 기반 분산 동기화 구조. 사용자 코드를 동적 Sub-App으로 로딩하여 독립성을 보장하며, Pub/Sub을 통해 무중단 배포를 실현합니다.',
-          en: 'Multi-process FastAPI server with Redis-based distributed synchronization. Dynamically loads user code as isolated Sub-Apps and enables zero-downtime deployment via Pub/Sub.',
+          ko: '메인 프로세스가 에이전트 관리 서버와 프로덕션·개발 샌드박스를 프로세스 격리로 스폰하는 3서버 구조. Redis가 배포 상태·분산 락·Pub/Sub을 담당하고, 공유 볼륨과 S3 호환 오브젝트 스토리지 위에서 사용자 스크립트·커스텀 LLM·알고리즘이 실행됩니다.',
+          en: 'A main process spawns three isolated servers — agent management, production sandbox, and dev sandbox. Redis carries deploy state, distributed locks, and Pub/Sub, while user scripts, custom LLMs, and algorithms run over a shared volume and S3-compatible object storage.',
         },
         mermaidFilePath: {
           ko: '/architecture/pyrunner/system-architecture.mmd',
@@ -585,27 +303,26 @@ def _write_batch(self, logs):
       },
       {
         title: {
-          ko: 'Race Condition 해결 과정',
-          en: 'Race Condition Resolution',
+          ko: '동적 등록 · 무중단 배포 전파',
+          en: 'Dynamic Registration & Zero-downtime Propagation',
         },
         description: {
-          ko: '파일 시스템 직접 감지 방식의 한계를 극복하기 위해 Redis Distributed Lock을 도입. 배포 실패율 0%를 달성했습니다.',
-          en: 'Overcame filesystem monitoring limitations by introducing Redis Distributed Lock, achieving 0% deployment failure rate.',
+          ko: '스키마 등록 한 번으로 코드 템플릿 생성 → 파일 저장 → 분산 락 하의 상태 갱신 → Pub/Sub 브로드캐스트 → 전 파드 서브앱 동적 로딩까지 이어지는 흐름. 동시 배포가 락으로 직렬화되어 배포 실패율 0%를 유지합니다.',
+          en: 'One schema registration flows through template generation, file save, state update under a distributed lock, Pub/Sub broadcast, and dynamic sub-app loading on every pod. Concurrent deploys are serialized by the lock, holding deploy failures at 0%.',
         },
         mermaidFilePath: {
-          ko: '/architecture/pyrunner/race-condition-resolution.mmd',
-          en: '/architecture/pyrunner/race-condition-resolution-en.mmd',
+          ko: '/architecture/pyrunner/deploy-propagation.mmd',
+          en: '/architecture/pyrunner/deploy-propagation-en.mmd',
         },
       },
-
       {
         title: {
-          ko: '배치 처리 플로우',
-          en: 'Batch Processing Flow',
+          ko: '로그 수집 파이프라인',
+          en: 'Log Collection Pipeline',
         },
         description: {
-          ko: 'Redis Stream에서 파일 저장소까지의 At-least-once 배치 처리 플로우. 메시지 수신, 버퍼 축적, flush, ACK의 전체 과정과 실패 시 재시도 메커니즘.',
-          en: 'At-least-once batch processing flow from Redis Stream to the file store. Complete process of message reception, buffer accumulation, flush, ACK, and retry mechanism on failure.',
+          ko: '에이전트 실행 로그를 Redis Stream Consumer Group으로 수집하는 배치 파이프라인. flush 성공 후에만 ACK하는 At-least-once 보장으로 장애 시에도 로그가 유실되지 않습니다.',
+          en: 'A batched pipeline collecting agent execution logs via Redis Stream consumer groups. ACK only after a successful flush gives at-least-once delivery — no log loss even through failures.',
         },
         mermaidFilePath: {
           ko: '/architecture/pyrunner/batch-flow.mmd',
