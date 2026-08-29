@@ -8,6 +8,9 @@ import knowledgeBase from './knowledge-base';
 import squareMessenger from './square-messenger';
 import agentMemory from './agent-memory';
 import llmFinetuning from './llm-finetuning';
+import culturefitMatching from './culturefit-matching';
+import patentNewsRag from './patent-news-rag';
+import gptRecruit from './gpt-recruit';
 
 // 표시 순서는 각 프로젝트의 order 필드가 결정한다. 이 배열 순서는 무관.
 export const projects: Project[] = [
@@ -20,4 +23,7 @@ export const projects: Project[] = [
   squareMessenger,
   agentMemory,
   llmFinetuning,
+  culturefitMatching,
+  patentNewsRag,
+  gptRecruit,
 ];
