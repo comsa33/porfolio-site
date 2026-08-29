@@ -9,6 +9,7 @@ export const profile = {
   email: 'comsa333@gmail.com',
   github: 'https://github.com/comsa33',
   linkedin: 'https://www.linkedin.com/in/ruo-lee-79864522a',
+  orcid: 'https://orcid.org/0009-0005-4701-1967',
   story: {
     ko: '디자이너로 시작해 34개국을 여행하며 얻은 통찰을, 이제 AI 기술로 구현합니다',
     en: 'From Designer to World Traveler to AI Engineer — Building Intelligent Systems with Global Perspective',

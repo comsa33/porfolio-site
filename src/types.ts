@@ -9,6 +9,7 @@ export interface Profile {
   email: string;
   github: string;
   linkedin?: string;
+  orcid?: string;
   story: LocalizedString;
   intro: LocalizedString;
   coreSkills: {

@@ -6,6 +6,7 @@ import styles from './page.module.css';
 import Timeline from '@/components/Timeline';
 import Publications from '@/components/Publications';
 import ProjectCard from '@/components/ProjectCard';
+import BrandIcon from '@/components/BrandIcon';
 import { portfolioData as data } from '@/data';
 
 const SECTION_TITLES = {
@@ -206,6 +207,17 @@ export default function Home() {
               >
                 <Linkedin size={15} strokeWidth={2} />
                 <span>LinkedIn</span>
+              </a>
+            )}
+            {data.profile.orcid && (
+              <a
+                href={data.profile.orcid}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.metaLink}
+              >
+                <BrandIcon url={data.profile.orcid} size={15} />
+                <span>ORCID</span>
               </a>
             )}
             <span className={styles.isoBadge}>
