@@ -22,8 +22,8 @@ const project = {
   ],
   keyAchievements: [
     {
-      ko: 'Google Play/App Store 동시 출시 (Web + iOS + Android)',
-      en: 'Published on both Google Play & App Store (Web + iOS + Android)',
+      ko: 'Google Play/App Store 동시 출시 (Web + iOS + Android) — 누적 사용자 450+',
+      en: 'Published on both Google Play & App Store (Web + iOS + Android) — 450+ cumulative users',
     },
     {
       ko: 'Gemini AI 기반 실시간 STT 분석 & 5개 영역 피드백 (문법/어휘/발음/유창성/내용)',
