@@ -608,8 +608,8 @@ def _write_batch(self, logs):
           en: 'At-least-once batch processing flow from Redis Stream to the file store. Complete process of message reception, buffer accumulation, flush, ACK, and retry mechanism on failure.',
         },
         mermaidFilePath: {
-          ko: '/architecture/log-collector/batch-flow.mmd',
-          en: '/architecture/log-collector/batch-flow-en.mmd',
+          ko: '/architecture/pyrunner/batch-flow.mmd',
+          en: '/architecture/pyrunner/batch-flow-en.mmd',
         },
       },
     ],
