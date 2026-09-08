@@ -21,28 +21,38 @@ export const profile = {
   coreSkills: {
     backend: {
       title: {
-        ko: 'Backend & Infrastructure',
+        ko: '백엔드 · 인프라',
         en: 'Backend & Infrastructure',
       },
       skills: ['Python', 'FastAPI', 'Kubernetes', 'Redis', 'Elasticsearch', 'PostgreSQL'],
     },
     ai: {
       title: {
-        ko: 'AI & LLM',
+        ko: 'AI · LLM',
         en: 'AI & LLM',
       },
-      skills: ['LLM Agent', 'MCP', 'RAG Pipeline', 'DSPy', 'QLoRA Fine-tuning'],
+      skills: [
+        'LLM Agent',
+        'Agent Memory',
+        'RAG Pipeline',
+        'LLM Evaluation',
+        'MCP',
+        'DSPy',
+        'LLM Fine-tuning',
+      ],
     },
     system: {
       title: {
-        ko: 'System Design',
+        ko: '시스템 설계',
         en: 'System Design',
       },
       skills: [
         'Multi-Agent Orchestration',
-        'Async/Concurrency',
+        'Sandboxed Execution',
         'Distributed Systems',
-        'OpenTelemetry',
+        'Streaming · Pub/Sub',
+        'Async/Concurrency',
+        'Observability',
       ],
     },
   },

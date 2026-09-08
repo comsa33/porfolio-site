@@ -17,6 +17,7 @@ import Timeline from '@/components/Timeline';
 import Publications from '@/components/Publications';
 import ProjectCard from '@/components/ProjectCard';
 import BrandIcon from '@/components/BrandIcon';
+import SectionDot from '@/components/SectionDot';
 import { portfolioData as data } from '@/data';
 import { countProjectsForSkill, projectMatchesSkill } from '@/data/skillMatch';
 
@@ -152,6 +153,11 @@ function useActiveSection(ids: readonly string[]) {
       for (const el of els) {
         if (el.getBoundingClientRect().top <= line) current = el.id;
       }
+      // At the very end of the page the last section may be too short to
+      // reach the line; it is still what the reader is looking at.
+      const atEnd =
+        window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+      if (atEnd) current = els[els.length - 1].id;
       setActive(current);
     };
 
@@ -330,10 +336,11 @@ export default function Home() {
       </header>
 
       <main id="top" className={styles.frame}>
+        <SectionDot active={activeSection} />
         {/* Hero — the intro sentence is the headline */}
         <section className={styles.hero}>
           <p className={`${styles.eyebrow} rise`} style={rise(0)}>
-            <strong>{data.profile.name[lang]}</strong>
+            <strong data-dot="hero">{data.profile.name[lang]}</strong>
             <span className={styles.eyebrowTitle}>{data.profile.title}</span>
           </p>
           <h1 className={`${styles.lede} rise`} style={rise(1)}>
@@ -390,7 +397,7 @@ export default function Home() {
             Skills double as a project index: the count is how many projects
             use the skill, and clicking one filters the list below.
           */}
-          <div className={`${styles.skills} rise`} style={rise(3)}>
+          <div className={`${styles.skills} rise`} style={rise(3)} data-lang={lang}>
             {skillGroups.map((group) => (
               <div key={group.key} className={styles.skillRow}>
                 <h2 className={styles.skillLabel}>{group.title}</h2>
@@ -421,7 +428,7 @@ export default function Home() {
         {/* Projects */}
         <section id="projects" className={styles.section}>
           <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>
+            <h2 className={styles.sectionTitle} data-dot="projects">
               {SECTION_TITLES.projects[lang]}
               {techFilter && (
                 <button
@@ -467,7 +474,9 @@ export default function Home() {
         {/* Research */}
         <section id="research" className={styles.section}>
           <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>{SECTION_TITLES.research[lang]}</h2>
+            <h2 className={styles.sectionTitle} data-dot="research">
+              {SECTION_TITLES.research[lang]}
+            </h2>
             <div className={styles.filterGroup} role="tablist" aria-label="Research filter">
               {researchFilters.map((f) => (
                 <button
@@ -490,7 +499,9 @@ export default function Home() {
         {/* Journey */}
         <section id="journey" className={styles.section}>
           <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>{SECTION_TITLES.journey[lang]}</h2>
+            <h2 className={styles.sectionTitle} data-dot="journey">
+              {SECTION_TITLES.journey[lang]}
+            </h2>
             <div className={styles.filterGroup} role="tablist" aria-label="Timeline filter">
               {timelineFilters.map((f) => (
                 <button
@@ -511,7 +522,7 @@ export default function Home() {
         </section>
 
         <footer id="contact" className={styles.footer}>
-          <p className={styles.footerText}>
+          <p className={styles.footerText} data-dot="contact">
             {lang === 'ko'
               ? '에이전트 플랫폼이나 LLM 품질 평가에 관한 이야기라면 언제든 환영합니다.'
               : 'Always glad to talk agent platforms or LLM evaluation.'}

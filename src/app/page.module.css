@@ -7,6 +7,7 @@
 /* ============ Frame ============ */
 
 .frame {
+  position: relative; /* SectionDot is positioned against this */
   max-width: var(--frame);
   margin: 0 auto;
   padding: 0 1.5rem;
@@ -223,18 +224,25 @@ a.contactLink:hover span {
   display: grid;
   grid-template-columns: 11rem minmax(0, 1fr);
   gap: 0 2rem;
+  align-items: center; /* a two-line label and its tokens share a centre */
   padding: 1.1rem 0;
   border-bottom: 1px solid var(--line);
 }
 
+/* English labels are mono caps; Korean labels use the body face (no caps). */
 .skillLabel {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--ink-tertiary);
+}
+
+.skills[data-lang='en'] .skillLabel {
   font-family: var(--font-mono), monospace;
   font-size: 12px;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.02em;
-  color: var(--ink-tertiary);
-  padding-top: 0.2rem;
 }
 
 .skillTokens {
