@@ -609,9 +609,10 @@ a.contactLink:hover span {
     order: 3;
     flex-basis: 100%;
     margin-left: 0;
-    /* Tightened so the fifth item still fits on a narrow phone without
-       relying on the horizontal scroll, which reads as hidden. */
-    gap: 1rem;
+    /* Tightened so all five items fit a 375px phone (the widest label set,
+       English, measures 322px inside the 327px text column) without relying
+       on the horizontal scroll, which reads as hidden. */
+    gap: 0.85rem;
     overflow-x: auto;
     scrollbar-width: none;
     padding: 0.35rem 0 0.6rem;
