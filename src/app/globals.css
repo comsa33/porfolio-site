@@ -31,11 +31,6 @@
 
   --overlay: rgba(15, 15, 15, 0.4);
 
-  /* Status hues (used sparingly) */
-  --green: #1a7f4b;
-  --amber: #b45309;
-  --violet: #6d28d9;
-
   /* Layout */
   --frame: 960px;
   --header-h: 64px;
@@ -74,10 +69,6 @@
   --on-accent: #0d0d0d;
 
   --overlay: rgba(0, 0, 0, 0.6);
-
-  --green: #4ade80;
-  --amber: #fbbf24;
-  --violet: #a78bfa;
 
   color-scheme: dark;
 }

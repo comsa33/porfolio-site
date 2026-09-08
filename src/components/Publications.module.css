@@ -49,24 +49,15 @@
   color: var(--ink-secondary);
 }
 
-/* Status: sans (Korean), colour only for the word itself */
+/* Status is a word, not a colour. Pending items sit one step quieter. */
 .status {
   font-family: var(--font-body);
   font-size: 12px;
-  color: var(--pub-accent, var(--ink-tertiary));
+  color: var(--ink-secondary);
 }
 
-.row[data-status='published'] {
-  --pub-accent: var(--green);
-}
-.row[data-status='under-review'] {
-  --pub-accent: var(--amber);
-}
-.row[data-status='presented'] {
-  --pub-accent: var(--violet);
-}
-.row[data-status='patent'] {
-  --pub-accent: var(--ink-secondary);
+.row[data-status='under-review'] .status {
+  color: var(--ink-tertiary);
 }
 
 .main {

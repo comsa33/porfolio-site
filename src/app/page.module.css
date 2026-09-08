@@ -448,12 +448,9 @@ a.contactLink:hover span {
   background-repeat: no-repeat;
 }
 
-.copied {
-  color: var(--green);
-}
-
+.copied,
 .copied svg:last-child {
-  color: var(--green);
+  color: var(--accent);
 }
 
 .copyright {
