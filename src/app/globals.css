@@ -186,19 +186,17 @@ pre {
 }
 
 /*
- * SectionDot on phones: no gutter, so the heading currently hosting the dot
- * slides its text right to make room (0.55em dot + 0.9em gap) while the
- * dot arrives; the others stay flush left.
+ * SectionDot: the heading currently hosting the dot slides its text right
+ * to make room (0.55em dot + 0.9em gap) while the dot arrives; the others
+ * stay flush left. Same behaviour at every width.
  */
-@media (max-width: 720px) {
-  [data-dot] {
-    padding-left: 0;
-    transition: padding-left 480ms var(--ease);
-  }
+[data-dot] {
+  padding-left: 0;
+  transition: padding-left 480ms var(--ease);
+}
 
-  [data-dot][data-dot-active] {
-    padding-left: 1.45em;
-  }
+[data-dot][data-dot-active] {
+  padding-left: 1.45em;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -19,5 +19,3 @@
     width 320ms var(--ease),
     height 320ms var(--ease);
 }
-
-/* On phones the dot sits in an inline slot; see [data-dot] in globals.css. */

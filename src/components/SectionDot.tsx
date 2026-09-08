@@ -9,8 +9,8 @@ interface SectionDotProps {
 }
 
 /**
- * One accent dot that travels down the left gutter to sit beside the heading
- * of whatever section the reader is in. Size follows the heading's type size.
+ * One accent dot that travels to the heading of whatever section the reader
+ * is in; that heading slides its text aside to make room. Size follows the heading's type size.
  * Headings opt in with data-dot="<section id>" (the hero uses "hero").
  *
  * Positioned via FLIP-free absolute coordinates inside <main>, so a move is
@@ -46,11 +46,9 @@ export default function SectionDot({ active }: SectionDotProps) {
       const fontSize = parseFloat(cs.fontSize);
       const lineHeight = parseFloat(cs.lineHeight) || fontSize * 1.4;
       const size = Math.round(fontSize * 0.55);
-      const gap = Math.round(fontSize * 0.9);
-      // Wide: sit in the gutter left of the heading. Narrow: headings reserve
-      // an inline slot (see CSS) and the dot sits inside it, DD-style.
-      const inline = window.matchMedia('(max-width: 720px)').matches;
-      const x = inline ? a.left - m.left : a.left - m.left - gap - size;
+      // The dot sits in the slot the active heading opens before its text
+      // (see [data-dot-active] in globals.css).
+      const x = a.left - m.left;
 
       dot.style.setProperty('--size', `${size}px`);
       dot.style.transform = `translate(${Math.round(x)}px, ${Math.round(
