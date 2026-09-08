@@ -185,6 +185,16 @@ pre {
   mix-blend-mode: normal;
 }
 
+/*
+ * SectionDot on phones: no gutter, so every heading that can host the dot
+ * reserves an inline slot before its text (0.55em dot + 0.9em gap).
+ */
+@media (max-width: 720px) {
+  [data-dot] {
+    padding-left: 1.45em;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

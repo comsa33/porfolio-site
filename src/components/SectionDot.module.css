@@ -20,9 +20,4 @@
     height 320ms var(--ease);
 }
 
-/* The gutter is too narrow on phones; the nav underline covers this there. */
-@media (max-width: 720px) {
-  .dot {
-    display: none;
-  }
-}
+/* On phones the dot sits in an inline slot; see [data-dot] in globals.css. */

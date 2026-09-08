@@ -47,9 +47,13 @@ export default function SectionDot({ active }: SectionDotProps) {
       const lineHeight = parseFloat(cs.lineHeight) || fontSize * 1.4;
       const size = Math.round(fontSize * 0.55);
       const gap = Math.round(fontSize * 0.9);
+      // Wide: sit in the gutter left of the heading. Narrow: headings reserve
+      // an inline slot (see CSS) and the dot sits inside it, DD-style.
+      const inline = window.matchMedia('(max-width: 720px)').matches;
+      const x = inline ? a.left - m.left : a.left - m.left - gap - size;
 
       dot.style.setProperty('--size', `${size}px`);
-      dot.style.transform = `translate(${Math.round(a.left - m.left - gap - size)}px, ${Math.round(
+      dot.style.transform = `translate(${Math.round(x)}px, ${Math.round(
         a.top - m.top + (lineHeight - size) / 2,
       )}px)`;
 
