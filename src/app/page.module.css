@@ -86,6 +86,54 @@
   transform: scaleX(1);
 }
 
+/* Divides the in-page anchors from the link that leaves the site */
+.navSep {
+  align-self: center;
+  flex-shrink: 0;
+  width: 1px;
+  height: 11px;
+  background: var(--line);
+}
+
+/*
+ * The arrow marks a destination outside this site, so it stays outside the
+ * underline too: the rule hugs the label, and the arrow lifts on hover the
+ * same way the footer call to action does.
+ */
+.navExternal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.navExternal::after {
+  content: none;
+}
+
+.navExternal > span {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size var(--dur) var(--ease);
+}
+
+.navExternal:hover > span {
+  background-size: 100% 1px;
+}
+
+.navExternal svg {
+  color: var(--ink-tertiary);
+  transition:
+    transform var(--dur) var(--ease-out),
+    color var(--dur-fast) var(--ease);
+}
+
+.navExternal:hover svg {
+  color: var(--ink);
+  transform: translate(1px, -1px);
+}
+
 .controls {
   display: flex;
   align-items: center;
@@ -561,7 +609,9 @@ a.contactLink:hover span {
     order: 3;
     flex-basis: 100%;
     margin-left: 0;
-    gap: 1.25rem;
+    /* Tightened so the fifth item still fits on a narrow phone without
+       relying on the horizontal scroll, which reads as hidden. */
+    gap: 1rem;
     overflow-x: auto;
     scrollbar-width: none;
     padding: 0.35rem 0 0.6rem;

@@ -10,6 +10,7 @@ export interface Profile {
   github: string;
   linkedin?: string;
   orcid?: string;
+  blog?: string;
   story: LocalizedString;
   intro: LocalizedString;
   coreSkills: {

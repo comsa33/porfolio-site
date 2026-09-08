@@ -8,6 +8,7 @@ import {
   Linkedin,
   Mail,
   Moon,
+  PenLine,
   ShieldCheck,
   Sun,
   X,
@@ -315,6 +316,25 @@ export default function Home() {
                 {item.label[lang]}
               </a>
             ))}
+            {/*
+              The blog is a separate site, so it gets a rule and an arrow to
+              set it apart from the in-page anchors beside it. It mirrors the
+              "포트폴리오" link in the blog's own header.
+            */}
+            {data.profile.blog && (
+              <>
+                <span className={styles.navSep} aria-hidden />
+                <a
+                  href={data.profile.blog}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${styles.navLink} ${styles.navExternal}`}
+                >
+                  <span>{lang === 'ko' ? '블로그' : 'Blog'}</span>
+                  <ArrowUpRight size={12} strokeWidth={1.75} />
+                </a>
+              </>
+            )}
           </nav>
           <div className={styles.controls}>
             <button onClick={toggleLang} className={styles.ctrlBtn} aria-label="Toggle language">
@@ -381,6 +401,17 @@ export default function Home() {
               >
                 <BrandIcon url={data.profile.orcid} size={14} />
                 <span>ORCID</span>
+              </a>
+            )}
+            {data.profile.blog && (
+              <a
+                href={data.profile.blog}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.contactLink}
+              >
+                <PenLine size={14} strokeWidth={1.75} />
+                <span>Blog</span>
               </a>
             )}
             <span className={styles.contactLink}>
