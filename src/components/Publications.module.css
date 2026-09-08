@@ -1,142 +1,194 @@
+/*
+ * Same row grammar as projects: mono column (year, status, indexing) on the
+ * left, content on the right, hairline below, bleeding hover surface.
+ */
+
 .list {
   list-style: none;
-  max-width: 860px;
 }
 
-.item {
-  padding: 1.15rem 0;
-  border-bottom: 1px solid var(--border);
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr);
+  gap: 0 2rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--line);
+  animation: rise var(--dur-slow) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 50ms);
 }
 
-.item:first-child {
-  padding-top: 0.25rem;
+.row::before {
+  content: '';
+  position: absolute;
+  inset: 0 -1rem;
+  border-radius: var(--radius);
+  background: var(--bg-hover);
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease);
+  pointer-events: none;
+  z-index: -1;
 }
 
-/* Per-status hue, used only on the status chip */
-.item[data-status='published'] {
-  --pub-accent: var(--green);
-}
-.item[data-status='under-review'] {
-  --pub-accent: var(--amber);
-}
-.item[data-status='presented'] {
-  --pub-accent: var(--violet);
-}
-.item[data-status='patent'] {
-  --pub-accent: var(--accent);
+.row:hover::before {
+  opacity: 1;
 }
 
-.metaRow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.4rem;
-}
-
-.status {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.32rem;
-  font-size: 0.74rem;
-  font-weight: 600;
-  color: var(--pub-accent);
-}
-
-.indexing {
+.meta {
   font-family: var(--font-mono), monospace;
-  font-size: 0.66rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  color: var(--ink-secondary);
-  background: var(--bg-subtle);
-  border-radius: 4px;
-  padding: 0.16rem 0.45rem;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ink-tertiary);
+  padding-top: 0.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
 }
 
 .year {
-  margin-left: auto;
-  font-family: var(--font-mono), monospace;
-  font-size: 0.74rem;
-  color: var(--ink-tertiary);
+  color: var(--ink-secondary);
+}
+
+/* Status: sans (Korean), colour only for the word itself */
+.status {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--pub-accent, var(--ink-tertiary));
+}
+
+.row[data-status='published'] {
+  --pub-accent: var(--green);
+}
+.row[data-status='under-review'] {
+  --pub-accent: var(--amber);
+}
+.row[data-status='presented'] {
+  --pub-accent: var(--violet);
+}
+.row[data-status='patent'] {
+  --pub-accent: var(--ink-secondary);
+}
+
+.main {
+  min-width: 0;
 }
 
 .title {
-  font-size: 1.05rem;
-  font-weight: 650;
-  letter-spacing: -0.01em;
+  font-size: 17px;
+  font-weight: 500;
   line-height: 1.45;
-  word-break: keep-all;
+  letter-spacing: -0.01em;
   overflow-wrap: anywhere;
 }
 
 .venue {
-  font-size: 0.85rem;
+  font-size: 14px;
   color: var(--ink-secondary);
-  margin-top: 0.25rem;
+  margin-top: 0.35rem;
+}
+
+/* Animated disclosure (same mechanism as ProjectCard) */
+.details {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur-slow) var(--ease);
+}
+
+.detailsOpen {
+  grid-template-rows: 1fr;
+}
+
+.detailsInner {
+  min-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    opacity var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+
+.detailsOpen .detailsInner {
+  opacity: 1;
+  transform: none;
+  transition-delay: 120ms;
 }
 
 .summary {
-  font-size: 0.88rem;
+  font-size: 15px;
   line-height: 1.7;
   color: var(--ink-secondary);
-  margin-top: 0.45rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  word-break: keep-all;
+  padding-top: 0.9rem;
   overflow-wrap: anywhere;
 }
 
-.summaryOpen {
-  -webkit-line-clamp: unset;
-  line-clamp: unset;
-  overflow: visible;
-}
-
-.footerRow {
+.actions {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 0.5rem;
+  gap: 1.25rem;
+  margin-top: 0.9rem;
 }
 
-.moreBtn {
-  font-family: inherit;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--accent);
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-secondary);
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
+  transition: color var(--dur-fast) var(--ease);
 }
 
-.moreBtn:hover {
-  color: var(--accent-hover);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+.actionBtn svg {
+  color: var(--ink-tertiary);
+  transition:
+    color var(--dur-fast) var(--ease),
+    transform var(--dur) var(--ease-out);
 }
 
-.link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: 0.78rem;
-  font-weight: 550;
-  color: var(--ink-secondary);
-  transition: color 0.15s ease;
-}
-
-.link:hover {
+.actionBtn:hover {
   color: var(--ink);
 }
 
-@media (max-width: 640px) {
-  .year {
-    margin-left: 0;
+.actionBtn:hover svg {
+  color: var(--ink);
+}
+
+.chevron {
+  transform: rotate(0deg);
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+a.actionBtn:hover svg {
+  transform: translate(1px, -1px);
+}
+
+@media (max-width: 720px) {
+  .row {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+    padding: 1.25rem 0;
+  }
+
+  .row::before {
+    inset: 0 -0.75rem;
+  }
+
+  .meta {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0 0.75rem;
+    padding-top: 0;
+  }
+
+  .title {
+    font-size: 16px;
   }
 }

@@ -1,19 +1,9 @@
 'use client';
 
 import React from 'react';
-import {
-  Code2,
-  GraduationCap,
-  Palette,
-  Plane,
-  Briefcase,
-  FileText,
-  Award,
-  Laptop,
-  ExternalLink,
-} from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import styles from './Timeline.module.css';
-import { TimelineItem } from '@/types';
+import { TimelineItem, TimelineType } from '@/types';
 
 interface TimelineProps {
   items: TimelineItem[];
@@ -21,41 +11,50 @@ interface TimelineProps {
   onCertClick?: (imagePath: string) => void;
 }
 
-const categoryIcons = {
-  Dev: Code2,
-  Education: GraduationCap,
-  Design: Palette,
-  Travel: Plane,
-  Career: Briefcase,
-  Certification: Award,
+const KIND_LABELS: Record<TimelineType, { ko: string; en: string }> = {
+  Dev: { ko: '경력', en: 'Work' },
+  Career: { ko: '경력', en: 'Work' },
+  Education: { ko: '학력', en: 'Education' },
+  Certification: { ko: '자격', en: 'Certification' },
+  Design: { ko: '디자인', en: 'Design' },
+  Travel: { ko: '여행', en: 'Travel' },
 };
 
-// Bootcamp entries render with a laptop icon instead of the education cap
+// Bootcamp entries are filed as "other" in the filter, and read as such here.
 const bootcampIds = ['edu-kcci', 'edu-codestates'];
 
 const isImageLink = (link: string) =>
   link.endsWith('.png') || link.endsWith('.jpg') || link.endsWith('.webp');
 
+/**
+ * Journey as list rows: date range in the mono column, organisation and role
+ * beside it. No rail or icons; the category is a word under the date.
+ */
 const Timeline: React.FC<TimelineProps> = ({ items, lang, onCertClick }) => {
   return (
-    <ol className={styles.timeline}>
-      {items.map((item) => {
-        const IconComponent = bootcampIds.includes(item.id)
-          ? Laptop
-          : categoryIcons[item.type as keyof typeof categoryIcons];
+    <ol className={styles.list}>
+      {items.map((item, i) => {
         const title = typeof item.title === 'string' ? item.title : item.title[lang];
         const role = typeof item.role === 'string' ? item.role : item.role[lang];
-        const isPatent =
-          item.paperTitle?.['en']?.toLowerCase().includes('patent') ||
-          item.paperTitle?.[lang]?.includes('특허');
+        const kind = bootcampIds.includes(item.id)
+          ? lang === 'ko'
+            ? '부트캠프'
+            : 'Bootcamp'
+          : KIND_LABELS[item.type][lang];
 
         return (
-          <li key={item.id} className={styles.item} data-type={item.type}>
-            <span className={styles.marker}>
-              {IconComponent && <IconComponent size={14} strokeWidth={2} />}
-            </span>
-            <div className={styles.body}>
+          <li
+            key={item.id}
+            className={styles.row}
+            data-type={item.type}
+            style={{ '--i': i } as React.CSSProperties}
+          >
+            <div className={styles.meta}>
               <span className={styles.date}>{item.date}</span>
+              <span className={styles.kind}>{kind}</span>
+            </div>
+
+            <div className={styles.main}>
               <h3 className={styles.title}>
                 {title}
                 <span className={styles.role}>{role}</span>
@@ -63,28 +62,28 @@ const Timeline: React.FC<TimelineProps> = ({ items, lang, onCertClick }) => {
               <p className={styles.desc}>{item.description[lang]}</p>
 
               {item.paperLink && item.paperTitle && (
-                <>
+                <div className={styles.actions}>
                   {onCertClick && isImageLink(item.paperLink) ? (
                     <button
+                      type="button"
                       onClick={() => onCertClick(item.paperLink!)}
-                      className={styles.paperLink}
+                      className={styles.actionBtn}
                     >
-                      {isPatent ? <Award size={13} /> : <FileText size={13} />}
-                      <span>{item.paperTitle[lang]}</span>
+                      {item.paperTitle[lang]}
+                      <ArrowUpRight size={13} strokeWidth={1.75} />
                     </button>
                   ) : (
                     <a
                       href={item.paperLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={styles.paperLink}
+                      className={styles.actionBtn}
                     >
-                      {isPatent ? <Award size={13} /> : <FileText size={13} />}
-                      <span>{item.paperTitle[lang]}</span>
-                      <ExternalLink size={12} />
+                      {item.paperTitle[lang]}
+                      <ArrowUpRight size={13} strokeWidth={1.75} />
                     </a>
                   )}
-                </>
+                </div>
               )}
             </div>
           </li>

@@ -1,0 +1,369 @@
+/*
+ * Shared modal shell. A wide panel with a list rail on the left and one
+ * item's content on the right, so long material is browsed one piece at a
+ * time instead of scrolled through. Same tokens and motion as the page.
+ */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--overlay);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: fade var(--dur) var(--ease) both;
+}
+
+.panel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
+  width: min(1180px, 100%);
+  max-width: 100%;
+  /* A flex item defaults to min-width:auto, which would let a long nowrap
+     line (footer note, code) push the panel wider than the viewport. */
+  min-width: 0;
+  height: min(860px, 92vh);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  animation: rise var(--dur-slow) var(--ease-out) both;
+}
+
+@keyframes sheetOut {
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.99);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+.closing {
+  animation: fadeOut 200ms var(--ease) both;
+}
+
+.closing .panel {
+  animation: sheetOut 200ms var(--ease) both;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--line);
+  min-width: 0;
+}
+
+.header > div:first-child {
+  min-width: 0;
+}
+
+.eyebrow {
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  color: var(--ink-tertiary);
+  margin-bottom: 0.3rem;
+}
+
+.title {
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+}
+
+.close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  color: var(--ink-tertiary);
+  background: none;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+
+.close:hover {
+  color: var(--ink);
+  background: var(--bg-hover);
+}
+
+/* Body: rail + content */
+.body {
+  display: grid;
+  grid-template-columns: 17rem minmax(0, 1fr);
+  min-height: 0;
+  min-width: 0;
+}
+
+.rail {
+  border-right: 1px solid var(--line);
+  overflow-y: auto;
+  padding: 0.75rem 0;
+}
+
+.railItem {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: 0 0.5rem;
+  width: 100%;
+  text-align: left;
+  padding: 0.85rem 1.25rem 0.85rem 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink-secondary);
+  transition:
+    color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+
+.railItem:hover {
+  color: var(--ink);
+  background: var(--bg-hover);
+}
+
+.railItemActive,
+.railItemActive:hover {
+  color: var(--ink);
+}
+
+.railIndex {
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ink-tertiary);
+}
+
+.railItemActive .railIndex {
+  color: var(--accent);
+}
+
+.railTitle {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.railSub {
+  font-size: 12px;
+  color: var(--ink-tertiary);
+  margin-top: 0.15rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.content {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  padding: 1.5rem;
+}
+
+/* Re-runs the entrance whenever the key changes */
+.swap {
+  animation: rise var(--dur) var(--ease-out) both;
+}
+
+/* Footer */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-width: 0;
+  padding: 0.5rem 1rem 0.5rem 1.5rem;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: var(--ink-tertiary);
+}
+
+.footerNote {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Pager: ‹ 01 / 03 › */
+.pager {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.pagerCount {
+  min-width: 4.5ch;
+  text-align: center;
+  color: var(--ink-secondary);
+}
+
+.pagerBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: var(--ink-secondary);
+  background: none;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+
+.pagerBtn:hover:not(:disabled) {
+  color: var(--ink);
+  background: var(--bg-hover);
+}
+
+.pagerBtn:disabled {
+  color: var(--line-strong);
+  cursor: default;
+}
+
+/* Small control group (segmented text) */
+.segment {
+  display: inline-flex;
+  gap: 1rem;
+}
+
+.segmentBtn {
+  font-size: 13px;
+  color: var(--ink-tertiary);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background-image: linear-gradient(var(--ink), var(--ink));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition:
+    color var(--dur-fast) var(--ease),
+    background-size var(--dur) var(--ease);
+}
+
+.segmentBtn:hover {
+  color: var(--ink);
+}
+
+.segmentActive,
+.segmentActive:hover {
+  color: var(--ink);
+  background-size: 100% 1px;
+}
+
+@media (max-width: 860px) {
+  .overlay {
+    padding: 0;
+  }
+
+  .panel {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100dvh;
+    border-radius: 0;
+    border: none;
+  }
+
+  .body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  /*
+   * Narrow screens: the rail collapses to numbered tabs (01 02 03) that
+   * always fit, so nothing hides behind a horizontal scroll. The current
+   * item's title is shown in the content head right below.
+   */
+  .rail {
+    display: flex;
+    gap: 0.25rem;
+    padding: 0 0.75rem;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    overflow: visible;
+  }
+
+  .railItem {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-width: 2.75rem;
+    padding: 0.85rem 0.5rem;
+    position: relative;
+  }
+
+  .railItem::after {
+    content: '';
+    position: absolute;
+    left: 0.5rem;
+    right: 0.5rem;
+    bottom: -1px;
+    height: 1px;
+    background: var(--ink);
+    transform: scaleX(0);
+    transition: transform var(--dur) var(--ease);
+  }
+
+  .railItemActive::after {
+    transform: scaleX(1);
+  }
+
+  .railIndex {
+    display: block;
+    font-size: 13px;
+    color: var(--ink-tertiary);
+  }
+
+  .railItemActive .railIndex {
+    color: var(--ink);
+  }
+
+  .railTitle,
+  .railSub {
+    display: none;
+  }
+
+  .content {
+    padding: 1.25rem;
+  }
+
+  .header {
+    padding: 1rem 1.25rem 0.85rem;
+  }
+
+  .footer {
+    padding: 0.4rem 0.75rem 0.4rem 1.25rem;
+  }
+}

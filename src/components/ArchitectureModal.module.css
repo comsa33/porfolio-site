@@ -1,204 +1,275 @@
-/* Overlay */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(28, 25, 23, 0.5);
-  backdrop-filter: blur(6px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 1.5rem;
-  isolation: isolate;
-}
+/*
+ * Diagram canvas. Mermaid output is restyled to the page tokens: one ink,
+ * one hairline, Pretendard, no fills. Colour lives only in the accent, used
+ * for the hovered node and its connections.
+ */
 
-/* Modal */
-.modal {
-  background: var(--bg);
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  box-shadow: 0 24px 64px rgba(28, 25, 23, 0.25);
-  width: min(1280px, 100%);
-  max-height: 92vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.header {
+.toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1.4rem 1.75rem;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg-card);
+  margin-bottom: 1rem;
 }
 
-.title {
-  font-size: 1.2rem;
-  font-weight: 650;
-  letter-spacing: -0.015em;
-}
-
-.company {
-  font-size: 0.82rem;
+.hint {
+  font-size: 12px;
   color: var(--ink-tertiary);
-  margin-top: 0.15rem;
 }
 
-.closeBtn {
+.controls {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 2.1rem;
-  height: 2.1rem;
-  font-size: 0.95rem;
+  gap: 1.25rem;
+}
+
+.flowBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 13px;
   color: var(--ink-secondary);
   background: none;
-  border: 1px solid var(--border);
-  border-radius: 50%;
+  border: none;
+  padding: 0;
   cursor: pointer;
-  flex-shrink: 0;
-  transition:
-    color 0.15s ease,
-    border-color 0.15s ease;
+  transition: color var(--dur-fast) var(--ease);
 }
 
-.closeBtn:hover {
+.flowBtn svg {
+  color: var(--accent);
+}
+
+.flowBtn:hover {
   color: var(--ink);
-  border-color: var(--ink-tertiary);
 }
 
-/* Privacy notice */
-.privacyNotice {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.6rem;
-  font-size: 0.8rem;
-  line-height: 1.6;
-  color: var(--amber);
-  background: color-mix(in srgb, var(--amber) 7%, transparent);
-  border-bottom: 1px solid var(--border);
-  padding: 0.7rem 1.75rem;
+/* The travelling dash on sequence arrows */
+.mermaid :global(.flowPulse) {
+  fill: none !important;
+  stroke: var(--accent) !important;
+  stroke-width: 2px !important;
+  stroke-linecap: round;
+  pointer-events: none;
 }
 
-.privacyNotice .icon {
-  flex-shrink: 0;
-}
-
-/* Tabs */
-.tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  padding: 1rem 1.75rem 0;
-}
-
-.tab {
-  font-family: inherit;
-  font-size: 0.84rem;
-  font-weight: 550;
-  color: var(--ink-secondary);
-  background: none;
-  border: 1px solid var(--border-strong);
-  border-radius: 9999px;
-  padding: 0.35rem 0.95rem;
-  cursor: pointer;
-  transition:
-    color 0.15s ease,
-    background 0.15s ease,
-    border-color 0.15s ease;
-}
-
-.tab:hover {
-  color: var(--ink);
-  border-color: var(--ink-tertiary);
-}
-
-.tabActive {
-  color: #fff;
-  background: var(--ink);
-  border-color: var(--ink);
-}
-
-.tabActive:hover {
-  color: #fff;
-  border-color: var(--ink);
-}
-
-/* Content */
-.content {
-  overflow: auto;
-  padding: 1.25rem 1.75rem 1.75rem;
-}
-
-.description {
-  font-size: 0.88rem;
-  line-height: 1.7;
-  color: var(--ink-secondary);
-  margin-bottom: 1.25rem;
-  word-break: keep-all;
-}
-
-.diagram {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+.canvas {
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 1.25rem;
   overflow: auto;
+  min-height: 320px;
+  background: var(--bg);
 }
 
-.mermaidContainer {
+.caption {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--ink-secondary);
+  margin-top: 1rem;
+  max-width: 44rem;
+}
+
+.mermaid {
   display: flex;
   justify-content: center;
   min-width: fit-content;
 }
 
-.mermaidContainer svg {
+.mermaid svg {
   max-width: 100%;
   height: auto;
+  font-family: var(--font-body) !important;
+}
+
+/* ---- Flowchart ---- */
+
+.mermaid :global(.node rect),
+.mermaid :global(.node circle),
+.mermaid :global(.node ellipse),
+.mermaid :global(.node polygon),
+.mermaid :global(.node path) {
+  fill: var(--bg) !important;
+  stroke: var(--line-strong) !important;
+  stroke-width: 1px !important;
+  transition:
+    stroke var(--dur-fast) var(--ease),
+    opacity var(--dur) var(--ease);
+}
+
+.mermaid :global(.cluster rect) {
+  fill: var(--bg-hover) !important;
+  stroke: var(--line) !important;
+  stroke-width: 1px !important;
+  rx: 8;
+}
+
+.mermaid :global(.cluster-label),
+.mermaid :global(.cluster-label span) {
+  font-family: var(--font-mono), monospace !important;
+  font-size: 11px !important;
+  color: var(--ink-tertiary) !important;
+  fill: var(--ink-tertiary) !important;
+}
+
+.mermaid :global(.nodeLabel),
+.mermaid :global(.label),
+.mermaid :global(.edgeLabel) {
+  color: var(--ink) !important;
+  fill: var(--ink) !important;
+  font-size: 13px !important;
+  line-height: 1.4;
+}
+
+.mermaid :global(.edgeLabel),
+.mermaid :global(.edgeLabel span),
+.mermaid :global(.edgeLabel p) {
+  background: var(--bg) !important;
+  color: var(--ink-secondary) !important;
+  font-size: 11px !important;
+}
+
+.mermaid :global(.flowchart-link),
+.mermaid :global(.edgePath path) {
+  stroke: var(--ink-secondary) !important;
+  stroke-width: 1px !important;
+  transition:
+    stroke var(--dur-fast) var(--ease),
+    opacity var(--dur) var(--ease);
+}
+
+.mermaid :global(.marker),
+.mermaid :global(marker path) {
+  fill: var(--ink-secondary) !important;
+  stroke: var(--ink-secondary) !important;
+}
+
+/* Hover focus: everything not connected to the hovered node recedes */
+.mermaid :global(.node.dim),
+.mermaid :global(.edgePath.dim),
+.mermaid :global(.flowchart-link.dim),
+.mermaid :global(.edgeLabel.dim) {
+  opacity: 0.18;
+}
+
+.mermaid :global(.node.focus rect),
+.mermaid :global(.node.focus polygon),
+.mermaid :global(.node.focus circle),
+.mermaid :global(.node.focus path) {
+  stroke: var(--accent) !important;
+}
+
+.mermaid :global(.flowchart-link.lit),
+.mermaid :global(.edgePath.lit path) {
+  stroke: var(--accent) !important;
+}
+
+.mermaid :global(.node) {
+  cursor: default;
+}
+
+/* ---- Sequence ---- */
+
+.mermaid :global(.actor) {
+  fill: var(--bg) !important;
+  stroke: var(--line-strong) !important;
+  stroke-width: 1px !important;
+}
+
+.mermaid :global(text.actor),
+.mermaid :global(.actor tspan),
+.mermaid :global(.actor-line) {
+  fill: var(--ink) !important;
+  stroke: none !important;
+}
+
+.mermaid :global(line.actor-line),
+.mermaid :global(.actor-line) {
+  stroke: var(--line) !important;
+  stroke-width: 1px !important;
+}
+
+.mermaid :global(.messageLine0),
+.mermaid :global(.messageLine1) {
+  stroke: var(--ink-secondary) !important;
+  stroke-width: 1px !important;
+}
+
+.mermaid :global(.messageText),
+.mermaid :global(.loopText),
+.mermaid :global(.loopText tspan),
+.mermaid :global(.noteText),
+.mermaid :global(.noteText tspan) {
+  fill: var(--ink) !important;
+  font-size: 12px !important;
+  font-family: var(--font-body) !important;
+}
+
+.mermaid :global(.note) {
+  fill: var(--bg-hover) !important;
+  stroke: var(--line) !important;
+}
+
+.mermaid :global(rect.rect) {
+  fill: var(--bg-hover) !important;
+  stroke: none !important;
+  opacity: 1 !important;
+}
+
+.mermaid :global(.loopLine) {
+  stroke: var(--line-strong) !important;
+  stroke-dasharray: 3 3;
+}
+
+.mermaid :global(.labelBox) {
+  fill: var(--bg) !important;
+  stroke: var(--line-strong) !important;
+}
+
+.mermaid :global(.labelText),
+.mermaid :global(.labelText tspan) {
+  fill: var(--ink-secondary) !important;
+  font-family: var(--font-mono), monospace !important;
+  font-size: 10px !important;
+}
+
+.mermaid :global(.sequenceNumber) {
+  fill: var(--bg) !important;
+  font-family: var(--font-mono), monospace !important;
+  font-size: 10px !important;
+}
+
+.mermaid :global(circle[fill]) {
+  fill: var(--ink) !important;
+  stroke: none !important;
+}
+
+.mermaid :global(.activation0),
+.mermaid :global(.activation1),
+.mermaid :global(.activation2) {
+  fill: var(--bg-hover) !important;
+  stroke: var(--line-strong) !important;
 }
 
 /* Loading */
 .loading {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.8rem;
-  padding: 3rem 0;
+  justify-content: center;
+  min-height: 320px;
   color: var(--ink-tertiary);
-  font-size: 0.88rem;
+  font-size: 13px;
 }
 
-.spinner {
-  width: 26px;
-  height: 26px;
-  border: 2.5px solid var(--border);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+@media (max-width: 860px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
-}
 
-@media (max-width: 640px) {
-  .overlay {
+  .canvas {
     padding: 0.75rem;
-  }
-
-  .header,
-  .privacyNotice,
-  .content {
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
-  }
-
-  .tabs {
-    padding: 1rem 1.25rem 0;
+    min-height: 240px;
   }
 }

@@ -1,134 +1,141 @@
-.timeline {
+/*
+ * Journey as list rows. The date range is the mono column; no rail, no
+ * markers. Category is a small sans word under the date so the eye can
+ * still scan by kind without icons.
+ */
+
+.list {
   list-style: none;
-  position: relative;
-  max-width: var(--prose);
-  padding-left: 0;
 }
 
-/* The rail */
-.timeline::before {
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr);
+  gap: 0 2rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--line);
+  animation: rise var(--dur-slow) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 50ms);
+}
+
+.row::before {
   content: '';
   position: absolute;
-  left: 15px;
-  top: 8px;
-  bottom: 8px;
-  width: 1px;
-  background: var(--border);
+  inset: 0 -1rem;
+  border-radius: var(--radius);
+  background: var(--bg-hover);
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease);
+  pointer-events: none;
+  z-index: -1;
 }
 
-.item {
-  position: relative;
+.row:hover::before {
+  opacity: 1;
+}
+
+.meta {
   display: flex;
-  gap: 1.25rem;
-  padding-bottom: 2.25rem;
-}
-
-.item:last-child {
-  padding-bottom: 0.5rem;
-}
-
-.marker {
-  position: relative;
-  z-index: 1;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 31px;
-  height: 31px;
-  border-radius: 50%;
-  background: var(--bg-card);
-  border: 1px solid var(--border-strong);
-  color: var(--ink-tertiary);
-}
-
-/* Category tints — subtle, one hue each */
-.item[data-type='Dev'] .marker {
-  color: var(--accent);
-  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
-}
-
-.item[data-type='Education'] .marker {
-  color: var(--violet);
-  border-color: color-mix(in srgb, var(--violet) 30%, transparent);
-}
-
-.item[data-type='Career'] .marker {
-  color: var(--green);
-  border-color: color-mix(in srgb, var(--green) 30%, transparent);
-}
-
-.item[data-type='Certification'] .marker {
-  color: var(--amber);
-  border-color: color-mix(in srgb, var(--amber) 35%, transparent);
-}
-
-.body {
-  min-width: 0;
-  padding-top: 0.15rem;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding-top: 0.3rem;
 }
 
 .date {
-  display: block;
   font-family: var(--font-mono), monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.02em;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.kind {
+  font-size: 12px;
   color: var(--ink-tertiary);
-  margin-bottom: 0.3rem;
+}
+
+.main {
+  min-width: 0;
 }
 
 .title {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.3rem 0.7rem;
-  font-size: 1.02rem;
-  font-weight: 650;
+  gap: 0.2rem 0.6rem;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.45;
   letter-spacing: -0.01em;
-  line-height: 1.4;
 }
 
 .role {
-  font-size: 0.84rem;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 400;
   color: var(--ink-secondary);
 }
 
 .desc {
-  font-size: 0.88rem;
-  line-height: 1.65;
+  font-size: 15px;
+  line-height: 1.7;
   color: var(--ink-secondary);
   margin-top: 0.4rem;
   white-space: pre-line;
-  word-break: keep-all;
 }
 
-.paperLink {
+.actions {
+  margin-top: 0.75rem;
+}
+
+.actionBtn {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  margin-top: 0.7rem;
-  font-family: inherit;
-  font-size: 0.8rem;
-  font-weight: 550;
-  color: var(--accent);
+  gap: 0.35rem;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-secondary);
   background: none;
-  border: 1px solid var(--border);
-  border-radius: 7px;
-  padding: 0.32rem 0.7rem;
+  border: none;
+  padding: 0;
   cursor: pointer;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.actionBtn svg {
+  color: var(--ink-tertiary);
   transition:
-    border-color 0.15s ease,
-    background 0.15s ease;
+    color var(--dur-fast) var(--ease),
+    transform var(--dur) var(--ease-out);
 }
 
-.paperLink:hover {
-  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
-  background: var(--accent-soft);
+.actionBtn:hover {
+  color: var(--ink);
 }
 
-@media (max-width: 640px) {
-  .item {
-    gap: 1rem;
+.actionBtn:hover svg {
+  color: var(--ink);
+  transform: translate(1px, -1px);
+}
+
+@media (max-width: 720px) {
+  .row {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+    padding: 1.25rem 0;
+  }
+
+  .row::before {
+    inset: 0 -0.75rem;
+  }
+
+  .meta {
+    flex-direction: row;
+    gap: 0 0.75rem;
+    padding-top: 0;
+  }
+
+  .title {
+    font-size: 16px;
   }
 }

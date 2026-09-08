@@ -1,29 +1,49 @@
+/*
+ * Pure typographic layout. One column, 960px. Hairlines separate list rows;
+ * hover highlights bleed slightly past the text column. Mono is used only
+ * for Latin/numeric metadata (dates, stacks, English labels).
+ */
+
+/* ============ Frame ============ */
+
+.frame {
+  max-width: var(--frame);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
 /* ============ Header ============ */
 
 .header {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 80%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--dur) var(--ease);
+}
+
+/* Hairline appears only once content is passing underneath */
+.header[data-scrolled='true'] {
+  border-bottom-color: var(--line);
 }
 
 .headerInner {
-  max-width: var(--container);
+  max-width: var(--frame);
   margin: 0 auto;
-  height: var(--header-h);
   padding: 0 1.5rem;
+  height: var(--header-h);
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .wordmark {
-  font-weight: 650;
-  font-size: 1.05rem;
+  font-weight: 500;
+  font-size: 15px;
   letter-spacing: -0.01em;
-  color: var(--ink);
 }
 
 .nav {
@@ -33,256 +53,413 @@
 }
 
 .navLink {
-  font-size: 0.88rem;
+  position: relative;
+  font-size: 14px;
+  line-height: 1;
   color: var(--ink-secondary);
-  transition: color 0.15s ease;
+  padding: 0.35rem 0;
+  transition: color var(--dur-fast) var(--ease);
 }
 
-.navLink:hover {
+/* Underline hugs the text: sits 3px under the baseline, not at the box edge */
+.navLink::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.1rem;
+  height: 1px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur) var(--ease);
+}
+
+.navLink:hover,
+.navLink[data-active='true'] {
   color: var(--ink);
 }
 
-.langBtn {
-  font-family: var(--font-mono), monospace;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--ink-secondary);
-  background: none;
-  border: 1px solid var(--border-strong);
-  border-radius: 6px;
-  padding: 0.3rem 0.65rem;
-  cursor: pointer;
-  transition:
-    color 0.15s ease,
-    border-color 0.15s ease;
+.navLink:hover::after,
+.navLink[data-active='true']::after {
+  transform: scaleX(1);
 }
 
-.langBtn:hover {
-  color: var(--ink);
-  border-color: var(--ink-tertiary);
-}
-
-/* ============ Layout ============ */
-
-.main {
-  max-width: var(--container);
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
-
-.section {
-  padding: 4.5rem 0 0;
-}
-
-.sectionTitle {
-  font-size: 1.6rem;
-  font-weight: 650;
-  letter-spacing: -0.02em;
-  margin-bottom: 1.75rem;
-}
-
-.sectionHeader {
+.controls {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 1.75rem;
+  gap: 0.75rem;
 }
 
-.sectionHeader .sectionTitle {
-  margin-bottom: 0;
+/* Same type as the nav so the language switch reads as one more link */
+.ctrlBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  min-width: 28px;
+  padding: 0 0.15rem;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--ink-secondary);
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+
+.ctrlBtn:hover {
+  color: var(--ink);
+  background: var(--bg-hover);
+}
+
+.ctrlBtn svg {
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.ctrlBtn:active svg {
+  transform: scale(0.85) rotate(-12deg);
 }
 
 /* ============ Hero ============ */
 
 .hero {
-  padding: 5.5rem 0 0;
+  padding: 7rem 0 0;
 }
 
-.kicker {
-  font-family: var(--font-mono), monospace;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 1rem;
-}
-
-.name {
-  font-size: clamp(2.4rem, 6vw, 3.6rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  margin-bottom: 1.5rem;
-}
-
-.lede {
-  max-width: var(--prose);
-  font-size: 1.13rem;
-  line-height: 1.75;
-  color: var(--ink-secondary);
-  word-break: keep-all;
-}
-
-.heroMeta {
+.eyebrow {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 0.6rem 1.4rem;
-  margin-top: 1.75rem;
-}
-
-.metaLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.42rem;
-  font-size: 0.88rem;
-  color: var(--ink-secondary);
-  transition: color 0.15s ease;
-}
-
-.metaLink:hover {
-  color: var(--accent);
-}
-
-.isoBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.42rem;
-  font-size: 0.82rem;
-  font-weight: 550;
-  color: var(--green);
-  background: color-mix(in srgb, var(--green) 8%, transparent);
-  border: 1px solid color-mix(in srgb, var(--green) 25%, transparent);
-  border-radius: 9999px;
-  padding: 0.28rem 0.8rem;
-}
-
-.skillsList {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin-top: 2.75rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border);
-}
-
-.skillRow {
-  display: flex;
   align-items: baseline;
-  gap: 1.25rem;
+  gap: 0.6rem;
+  font-size: 14px;
+  color: var(--ink-secondary);
+  margin-bottom: 2rem;
 }
 
-.skillLabel {
-  flex-shrink: 0;
-  width: 12.5rem;
+.eyebrow strong {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.eyebrowTitle {
   font-family: var(--font-mono), monospace;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-size: 12px;
   text-transform: uppercase;
+  letter-spacing: 0.02em;
   color: var(--ink-tertiary);
 }
 
-.skillItems {
-  font-size: 0.9rem;
-  line-height: 1.8;
+/* The intro paragraph is the hero. Keywords stay ink; the rest recedes. */
+.lede {
+  max-width: 46rem;
+  font-size: clamp(1.5rem, 3.4vw, 2.25rem);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
   color: var(--ink-secondary);
 }
 
-/* ============ Projects — same list grammar as Research ============ */
-
-.projectList {
-  list-style: none;
-  max-width: 860px;
+.lede em {
+  font-style: normal;
+  color: var(--ink);
 }
 
-/* ============ Journey ============ */
+.contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.contactLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 14px;
+  color: var(--ink-secondary);
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.contactLink svg {
+  color: var(--ink-tertiary);
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.contactLink span {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size var(--dur) var(--ease);
+}
+
+a.contactLink:hover {
+  color: var(--ink);
+}
+
+a.contactLink:hover svg {
+  color: var(--ink);
+}
+
+a.contactLink:hover span {
+  background-size: 100% 1px;
+}
+
+/*
+ * Skills as a project index. Each row: mono label in a fixed column, then
+ * tokens flowing inline. The count is set in mono, slightly raised, so it
+ * reads as an annotation rather than part of the name.
+ */
+.skills {
+  margin-top: 5rem;
+  border-top: 1px solid var(--line);
+}
+
+.skillRow {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr);
+  gap: 0 2rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.skillLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--ink-tertiary);
+  padding-top: 0.2rem;
+}
+
+.skillTokens {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.4rem;
+}
+
+.skillToken {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.2rem;
+  font-size: 15px;
+  color: var(--ink-secondary);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.skillToken > span {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size var(--dur) var(--ease);
+}
+
+.skillToken:hover {
+  color: var(--ink);
+}
+
+.skillToken:hover > span,
+.skillTokenActive > span {
+  background-size: 100% 1px;
+}
+
+.skillTokenActive {
+  color: var(--ink);
+}
+
+.skillCount {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  line-height: 1;
+  color: var(--ink-tertiary);
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.skillToken:hover .skillCount,
+.skillTokenActive .skillCount {
+  color: var(--accent);
+}
+
+/* Active tech filter shown beside the section title */
+.techChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: 0.75rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  animation: rise var(--dur) var(--ease-out) both;
+}
+
+.techChip::before {
+  content: '/';
+  color: var(--ink-tertiary);
+  margin-right: 0.3rem;
+}
+
+.techChip svg {
+  color: var(--ink-tertiary);
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.techChip:hover svg {
+  color: var(--accent);
+}
+
+.filterGroupMuted .filterChip {
+  color: var(--line-strong);
+}
+
+.filterGroupMuted .filterChip:hover {
+  color: var(--ink);
+}
+
+/* ============ Sections ============ */
+
+.section {
+  padding-top: 7rem;
+  scroll-margin-top: var(--header-h);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.sectionTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
 
 .filterGroup {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: 1.1rem;
 }
 
 .filterChip {
-  font-family: inherit;
-  font-size: 0.84rem;
-  font-weight: 500;
-  color: var(--ink-secondary);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--ink-tertiary);
   background: none;
-  border: 1px solid var(--border-strong);
-  border-radius: 9999px;
-  padding: 0.32rem 0.9rem;
+  border: none;
+  padding: 0;
   cursor: pointer;
+  background-image: linear-gradient(var(--ink), var(--ink));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
   transition:
-    color 0.15s ease,
-    background 0.15s ease,
-    border-color 0.15s ease;
+    color var(--dur-fast) var(--ease),
+    background-size var(--dur) var(--ease);
 }
 
 .filterChip:hover {
   color: var(--ink);
-  border-color: var(--ink-tertiary);
 }
 
-.filterActive {
-  color: #fff;
-  background: var(--ink);
-  border-color: var(--ink);
-}
-
+.filterActive,
 .filterActive:hover {
-  color: #fff;
-  border-color: var(--ink);
+  color: var(--ink);
+  background-size: 100% 1px;
+}
+
+/* ============ Lists ============ */
+
+.projectList {
+  list-style: none;
+}
+
+.listWrap {
+  padding-top: 0.5rem;
 }
 
 /* ============ Footer ============ */
 
 .footer {
-  margin-top: 5.5rem;
-  padding: 4rem 0 2.5rem;
-  border-top: 1px solid var(--border);
-  text-align: center;
+  padding: 9rem 0 3rem;
 }
 
 .footerText {
   max-width: 34rem;
-  margin: 0 auto 1.5rem;
-  color: var(--ink-secondary);
-  font-size: 1rem;
-  line-height: 1.7;
-  word-break: keep-all;
+  font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
 }
 
 .footerCta {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 0.5rem;
-  /* Holds width across the label swap so the copied state doesn't jump */
-  min-width: 11.5rem;
-  font-size: 0.92rem;
-  font-weight: 600;
-  color: #fff;
-  background: var(--ink);
-  border-radius: 9999px;
-  padding: 0.65rem 1.5rem;
+  margin-top: 1.75rem;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.footerCta svg:last-child {
+  color: var(--ink-tertiary);
   transition:
-    background 0.15s ease,
-    transform 0.15s ease;
+    transform var(--dur) var(--ease-out),
+    color var(--dur-fast) var(--ease);
 }
 
 .footerCta:hover {
-  background: var(--accent);
-  transform: translateY(-1px);
+  color: var(--accent);
+}
+
+.footerCta:hover svg:last-child {
+  color: var(--accent);
+  transform: translate(2px, -2px);
+}
+
+.footerCtaLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+}
+
+.copied {
+  color: var(--green);
+}
+
+.copied svg:last-child {
+  color: var(--green);
 }
 
 .copyright {
-  margin-top: 2.5rem;
-  font-size: 0.8rem;
+  margin-top: 5rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
   color: var(--ink-tertiary);
 }
 
@@ -292,23 +469,24 @@
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: rgba(28, 25, 23, 0.5);
-  backdrop-filter: blur(6px);
+  background: var(--overlay);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
+  animation: fade var(--dur-fast) var(--ease) both;
 }
 
 .certModalContent {
   position: relative;
-  background: var(--bg-card);
+  background: var(--bg);
   border-radius: var(--radius);
-  box-shadow: 0 24px 64px rgba(28, 25, 23, 0.25);
   max-width: min(680px, 92vw);
   max-height: 90vh;
   overflow: auto;
   padding: 1rem;
+  animation: rise var(--dur) var(--ease-out) both;
 }
 
 .certModalClose {
@@ -320,70 +498,106 @@
   justify-content: center;
   width: 2.2rem;
   height: 2.2rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: var(--bg-hover);
+  border: none;
   border-radius: 50%;
   color: var(--ink-secondary);
   cursor: pointer;
   transition:
-    color 0.15s ease,
-    border-color 0.15s ease;
+    color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
 }
 
 .certModalClose:hover {
   color: var(--ink);
-  border-color: var(--ink-tertiary);
 }
 
 .certModalImage {
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
 }
 
 /* ============ Responsive ============ */
 
-@media (max-width: 640px) {
+@media (max-width: 720px) {
+  .skills {
+    margin-top: 3.5rem;
+  }
+
+  .skillRow {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 1rem 0;
+  }
+
+  .skillTokens {
+    gap: 0.2rem 1.1rem;
+  }
+
+  .skillToken {
+    font-size: 14px;
+  }
+
+  /* Header becomes two rows: wordmark + controls, then a scrollable nav */
+  .headerInner {
+    height: auto;
+    flex-wrap: wrap;
+    gap: 0 1rem;
+    padding-top: 0.6rem;
+  }
+
+  .controls {
+    margin-left: auto;
+  }
+
   .nav {
+    order: 3;
+    flex-basis: 100%;
+    margin-left: 0;
+    gap: 1.25rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0.35rem 0 0.6rem;
+  }
+
+  .nav::-webkit-scrollbar {
     display: none;
   }
 
-  .headerInner {
-    padding: 0 1.25rem;
-  }
-
-  .main {
-    padding: 0 1.25rem;
+  .navLink {
+    flex-shrink: 0;
   }
 
   .hero {
     padding-top: 3.5rem;
   }
 
-  .lede {
-    font-size: 1.02rem;
+  .eyebrow {
+    margin-bottom: 1.25rem;
   }
 
-  .section {
-    padding-top: 3.5rem;
-  }
-
-  .skillRow {
-    flex-direction: column;
-    gap: 0.15rem;
-  }
-
-  .skillLabel {
-    width: auto;
-  }
-
-  .skillsList {
-    gap: 1rem;
+  .contact {
+    gap: 0.5rem 1.1rem;
+    margin-top: 1.75rem;
   }
 
   .sectionHeader {
     flex-direction: column;
     align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .filterGroup {
+    gap: 0.9rem;
+  }
+
+  .section {
+    padding-top: 4.5rem;
+  }
+
+  .footer {
+    padding-top: 6rem;
   }
 }

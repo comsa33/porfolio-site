@@ -1,35 +1,85 @@
+/*
+ * Tokens. Near-white page, three greys of ink, one hairline, one accent.
+ * No surfaces: structure comes from type, whitespace, and hairlines.
+ *
+ * Motion: one easing for entrances, one for state changes. Durations are
+ * short and everything respects prefers-reduced-motion.
+ *
+ * Theme is driven by [data-theme] on <html>, set before paint in layout.tsx.
+ */
+
 :root {
-  /* Editorial light palette — warm paper + single accent */
-  --bg: #fafaf9;
-  --bg-subtle: #f4f3f1;
-  --bg-card: #ffffff;
+  --bg: #fcfcfc;
+  --bg-hover: #f3f3f3;
+  --bg-card: #f6f6f6;
+  --bg-subtle: #f6f6f6;
 
-  --ink: #1c1917;
-  --ink-secondary: #57534e;
-  --ink-tertiary: #a29d97;
+  --ink: #0f0f0f;
+  --ink-secondary: #6b6b6b;
+  --ink-tertiary: #9c9c9c;
 
-  --border: #e7e5e4;
-  --border-strong: #d6d3d1;
+  --line: #e8e8e8;
+  --line-strong: #cfcfcf;
+  --border: var(--line);
+  --border-strong: var(--line-strong);
 
-  --accent: #1d4ed8;
-  --accent-hover: #1e40af;
-  --accent-soft: #eef2fd;
+  --accent: #ff6a00;
+  --accent: color(display-p3 0.99 0.4 0.02);
+  --accent-hover: #e85f00;
+  --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
+  --on-accent: #ffffff;
+
+  --overlay: rgba(15, 15, 15, 0.4);
 
   /* Status hues (used sparingly) */
-  --green: #047857;
+  --green: #1a7f4b;
   --amber: #b45309;
   --violet: #6d28d9;
 
   /* Layout */
-  --container: 1080px;
-  --prose: 720px;
+  --frame: 960px;
   --header-h: 64px;
   --radius: 10px;
+  --radius-sm: 6px;
 
-  /* Type — Latin display font with Korean system fallback */
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --dur-fast: 160ms;
+  --dur: 320ms;
+  --dur-slow: 640ms;
+
+  /* Type */
   --font-body:
-    var(--font-sans), 'Pretendard Variable', Pretendard, 'Apple SD Gothic Neo', 'Noto Sans KR',
-    'Malgun Gothic', sans-serif;
+    'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto,
+    'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  --bg: #0d0d0d;
+  --bg-hover: #161616;
+  --bg-card: #141414;
+  --bg-subtle: #141414;
+
+  --ink: #f2f2f2;
+  --ink-secondary: #9a9a9a;
+  --ink-tertiary: #6a6a6a;
+
+  --line: #222222;
+  --line-strong: #3a3a3a;
+
+  --accent-hover: #ff8533;
+  --on-accent: #0d0d0d;
+
+  --overlay: rgba(0, 0, 0, 0.6);
+
+  --green: #4ade80;
+  --amber: #fbbf24;
+  --violet: #a78bfa;
+
+  color-scheme: dark;
 }
 
 * {
@@ -42,20 +92,27 @@ html {
   scroll-behavior: smooth;
 }
 
+/*
+ * overflow-x: clip, not hidden. `hidden` turns <body> into a scroll container,
+ * which silently breaks position: sticky on the header.
+ */
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
+  overflow-x: clip;
   background-color: var(--bg);
   color: var(--ink);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  font-size: 1rem;
-  line-height: 1.7;
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 400;
+  word-break: keep-all;
 }
 
 a {
@@ -63,23 +120,28 @@ a {
   text-decoration: none;
 }
 
+button {
+  font-family: inherit;
+  color: inherit;
+}
+
 code,
 pre {
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 ::selection {
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
 }
 
 :focus-visible {
   outline: 2px solid var(--accent);
-  outline-offset: 2px;
-  border-radius: 2px;
+  outline-offset: 3px;
+  border-radius: 3px;
 }
 
-/* Scrollbar — quiet, matches paper */
+/* Scrollbar — quiet */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -88,12 +150,48 @@ pre {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border-strong);
+  background: var(--line-strong);
   border-radius: 5px;
   border: 2px solid var(--bg);
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--ink-tertiary);
+}
+
+/* ============ Motion primitives ============ */
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Staggered entrance. Set --i on each child. */
+.rise {
+  animation: rise var(--dur-slow) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+/* Theme switch cross-fades the whole document via the View Transitions API. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 360ms;
+  animation-timing-function: var(--ease);
+  mix-blend-mode: normal;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -104,6 +202,7 @@ pre {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
     transition-duration: 0.01ms !important;
   }
 }
