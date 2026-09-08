@@ -186,11 +186,17 @@ pre {
 }
 
 /*
- * SectionDot on phones: no gutter, so every heading that can host the dot
- * reserves an inline slot before its text (0.55em dot + 0.9em gap).
+ * SectionDot on phones: no gutter, so the heading currently hosting the dot
+ * slides its text right to make room (0.55em dot + 0.9em gap) while the
+ * dot arrives; the others stay flush left.
  */
 @media (max-width: 720px) {
   [data-dot] {
+    padding-left: 0;
+    transition: padding-left 480ms var(--ease);
+  }
+
+  [data-dot][data-dot-active] {
     padding-left: 1.45em;
   }
 }

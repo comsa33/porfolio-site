@@ -83,9 +83,16 @@ export default function SectionDot({ active }: SectionDotProps) {
     };
   }, []);
 
-  // Re-place immediately when the active section changes (no scroll needed).
-  // Nudging a scroll event reuses the throttled placer above.
+  // When the active section changes: mark the new host heading (on phones
+  // its text slides right to make room, see [data-dot-active] in globals.css)
+  // and re-place the dot. Nudging a scroll event reuses the throttled placer.
   useEffect(() => {
+    const main = ref.current?.parentElement;
+    if (!main) return;
+    const id = active ?? 'hero';
+    main.querySelectorAll<HTMLElement>('[data-dot]').forEach((el) => {
+      el.toggleAttribute('data-dot-active', el.dataset.dot === id);
+    });
     window.dispatchEvent(new Event('scroll'));
   }, [active]);
 
