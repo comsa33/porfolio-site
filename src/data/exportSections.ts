@@ -135,8 +135,12 @@ export const CONTACT_LINKS: { id: string; label: LocalizedString; value: string 
   ] as { id: string; label: LocalizedString; value?: string }[]
 ).filter((c): c is { id: string; label: LocalizedString; value: string } => Boolean(c.value));
 
-/** `https://` is noise on paper; the address is the address. */
-export const bareUrl = (url: string) => url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+/** `https://` and `www.` are noise on paper; the address is the address. */
+export const bareUrl = (url: string) =>
+  url
+    .replace(/^https?:\/\//, '')
+    .replace(/^www\./, '')
+    .replace(/\/$/, '');
 
 export const EXPORT_SECTIONS: ExportSection[] = [
   {

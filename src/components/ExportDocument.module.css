@@ -332,9 +332,14 @@
   color: #4a4a4a;
 }
 
-.doc[data-tpl='ledger'] .contact span + span::before {
-  content: '·';
-  margin-right: 9px;
+.doc[data-tpl='ledger'] .contact span,
+.doc[data-tpl='editorial'] .contact span {
+  white-space: nowrap;
+}
+
+.doc[data-tpl='ledger'] .contact span:not(:last-child)::after,
+.doc[data-tpl='editorial'] .contact span:not(:last-child)::after {
+  content: ' ·';
   color: #cfcfcf;
 }
 
@@ -380,7 +385,7 @@
 }
 
 .doc[data-tpl='ledger'] .bullets li {
-  padding-left: 14px;
+  padding-left: 19px;
 }
 
 .doc[data-tpl='ledger'] .bullets li::before {
