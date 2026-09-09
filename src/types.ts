@@ -11,6 +11,7 @@ export interface Profile {
   linkedin?: string;
   orcid?: string;
   blog?: string;
+  worldtrip?: string;
   story: LocalizedString;
   intro: LocalizedString;
   coreSkills: {

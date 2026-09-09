@@ -5,6 +5,7 @@ import {
   ArrowUpRight,
   Check,
   Github,
+  Globe,
   Linkedin,
   Mail,
   Moon,
@@ -335,6 +336,22 @@ export default function Home() {
                 </a>
               </>
             )}
+            {/*
+              Third site in the series. Desktop only in the header: the phone
+              nav is sized for exactly five items, and the contact section
+              carries this link on every width.
+            */}
+            {data.profile.worldtrip && (
+              <a
+                href={data.profile.worldtrip}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${styles.navLink} ${styles.navExternal} ${styles.navWorldtrip}`}
+              >
+                <span>{lang === 'ko' ? '세계일주' : 'World Trip'}</span>
+                <ArrowUpRight size={12} strokeWidth={1.75} />
+              </a>
+            )}
           </nav>
           <div className={styles.controls}>
             <button onClick={toggleLang} className={styles.ctrlBtn} aria-label="Toggle language">
@@ -412,6 +429,17 @@ export default function Home() {
               >
                 <PenLine size={14} strokeWidth={1.75} />
                 <span>Blog</span>
+              </a>
+            )}
+            {data.profile.worldtrip && (
+              <a
+                href={data.profile.worldtrip}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.contactLink}
+              >
+                <Globe size={14} strokeWidth={1.75} />
+                <span>{lang === 'ko' ? '세계일주' : 'World Trip'}</span>
               </a>
             )}
             <span className={styles.contactLink}>
