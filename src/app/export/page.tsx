@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useEffect, useMemo, useState } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { ArrowLeft, Printer } from 'lucide-react';
@@ -58,16 +58,20 @@ function ExportView() {
   }, [doc, lang]);
 
   /*
-   * Chrome names the saved PDF after the document title, so the title is the
-   * filename. Set it before the print dialog opens, and put it back on the way
-   * out so a reader who navigates on doesn't keep it.
+   * Chrome names the saved PDF after the document title, so the title has to be
+   * the filename at the moment the dialog opens — not merely on mount, where the
+   * router's own metadata lands afterwards and takes it back. Restore on
+   * afterprint so a reader who stays on the page doesn't keep it.
    */
-  useEffect(() => {
+  const printNow = useCallback(() => {
     const previous = document.title;
     document.title = filename;
-    return () => {
+    const restore = () => {
       document.title = previous;
+      window.removeEventListener('afterprint', restore);
     };
+    window.addEventListener('afterprint', restore);
+    window.print();
   }, [filename]);
 
   // Print once the fonts have settled — printing mid-swap reflows the pagination.
@@ -79,12 +83,12 @@ function ExportView() {
       if (cancelled) return;
       setPrinted(true);
       // One frame so the settled fonts are painted before the dialog snapshots.
-      requestAnimationFrame(() => window.print());
+      requestAnimationFrame(printNow);
     });
     return () => {
       cancelled = true;
     };
-  }, [printed, params]);
+  }, [printed, params, printNow]);
 
   return (
     <>
@@ -94,7 +98,7 @@ function ExportView() {
           <span>{lang === 'ko' ? '포트폴리오로' : 'Back to portfolio'}</span>
         </Link>
         <span className={styles.name}>{filename}.pdf</span>
-        <button type="button" className={styles.print} onClick={() => window.print()}>
+        <button type="button" className={styles.print} onClick={printNow}>
           <Printer size={14} strokeWidth={1.6} />
           <span>{lang === 'ko' ? '인쇄 · PDF로 저장' : 'Print · Save as PDF'}</span>
         </button>
