@@ -418,8 +418,13 @@
 
 .doc[data-tpl='editorial'] {
   --fs-base: 15px; /* 11.25pt — a document meant to be read through */
-  --lh: 1.68;
+  --lh: 1.72;
   padding: 74px 70px 52px;
+  /* Serif for the read-through document — the convention for prose on paper.
+     Noto Serif KR carries Latin too, so a mixed Korean/English line keeps one
+     face instead of switching mid-sentence. */
+  font-family: 'Noto Serif KR', var(--font-body);
+  letter-spacing: 0;
 }
 
 .doc[data-tpl='editorial'] .masthead {
@@ -434,9 +439,11 @@
 }
 
 .doc[data-tpl='editorial'] .name {
-  font-size: calc(var(--fs) * 2.8);
-  letter-spacing: -0.035em;
-  line-height: 1.05;
+  font-size: calc(var(--fs) * 2.65);
+  font-weight: 600;
+  /* Serifs need the room a geometric sans does not. */
+  letter-spacing: -0.015em;
+  line-height: 1.08;
 }
 
 .doc[data-tpl='editorial'] .role {
@@ -473,6 +480,7 @@
 }
 
 .doc[data-tpl='editorial'] .labelText {
+  font-weight: 400;
   color: #b4b4b4;
 }
 
@@ -507,10 +515,10 @@
 }
 
 .doc[data-tpl='editorial'] .entryTitle {
-  font-size: calc(var(--fs) * 1.34);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1.35;
+  font-size: calc(var(--fs) * 1.28);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: 1.4;
 }
 
 .doc[data-tpl='editorial'] .entryLead {
@@ -534,7 +542,15 @@
 /* ============ Print ============ */
 
 @media print {
-  .doc {
+  /*
+   * The template rules carry an attribute selector, so they outrank a bare
+   * .doc no matter which block it sits in — each one has to be named here or
+   * it keeps its on-screen padding inside the page margins and the text column
+   * ends up half its width.
+   */
+  .doc,
+  .doc[data-tpl='ledger'],
+  .doc[data-tpl='editorial'] {
     width: auto;
     min-height: 0;
     margin: 0;

@@ -1,3 +1,10 @@
+/*
+ * The editorial template loads a serif from Google Fonts at render time.
+ * next/next/no-page-custom-font wants that in the root layout, but only one
+ * of three templates uses it and it is a Korean face — putting it in the
+ * layout would load it on every page of the site for nothing.
+ */
+/* eslint-disable @next/next/no-page-custom-font */
 import React from 'react';
 import { portfolioData as data } from '@/data';
 import {
@@ -176,6 +183,18 @@ export default function ExportDocument({
 
   return (
     <article className={styles.doc} data-tpl={template} lang={lang}>
+      {/*
+        Editorial is the one template meant to be read end to end, and a serif
+        is the convention for that — so it gets one. Loaded only when chosen;
+        React hoists this into the head and dedupes it.
+      */}
+      {template === 'editorial' && (
+        <link
+          rel="stylesheet"
+          precedence="default"
+          href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600&display=swap"
+        />
+      )}
       <header className={styles.masthead}>
         <div>
           <div className={styles.accent} aria-hidden />
