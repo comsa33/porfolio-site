@@ -1,7 +1,9 @@
 import React from 'react';
 import { portfolioData as data } from '@/data';
 import {
+  bareUrl,
   CAREER_ENTRIES,
+  CONTACT_LINKS,
   DOC_LABELS,
   EDUCATION_ENTRIES,
   ETC_ENTRIES,
@@ -137,6 +139,7 @@ export default function ExportDocument({ picked, template, lang, doc }: Props) {
 
   // All four lists are already newest-first, and bootcamps already sit under
   // "other" — the manifest settled that once so the paper doesn't re-decide it.
+  const contacts = CONTACT_LINKS.filter((c) => has(c.id));
   const careerItems = CAREER_ENTRIES.filter((t) => has(t.id));
   const degrees = EDUCATION_ENTRIES.filter((t) => has(t.id));
   const other = ETC_ENTRIES.filter((t) => has(t.id));
@@ -161,10 +164,9 @@ export default function ExportDocument({ picked, template, lang, doc }: Props) {
           </p>
         </div>
         <address className={styles.contact}>
-          <span>{profile.email}</span>
-          <span>{profile.github.replace(/^https?:\/\//, '')}</span>
-          {profile.orcid && <span>{profile.orcid.replace(/^https?:\/\//, '')}</span>}
-          {profile.blog && <span>{profile.blog.replace(/^https?:\/\//, '')}</span>}
+          {contacts.map((c) => (
+            <span key={c.id}>{bareUrl(c.value)}</span>
+          ))}
         </address>
       </header>
 

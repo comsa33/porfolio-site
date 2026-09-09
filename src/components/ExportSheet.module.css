@@ -407,16 +407,22 @@
 
 /* ============ Footer actions ============ */
 
+/*
+ * The summary on the left is what gives way — it already ellipsises. The
+ * actions keep their width, or the label wraps out of a fixed-height button.
+ */
 .actions {
   display: flex;
   align-items: center;
   gap: 0.9rem;
+  flex: 0 0 auto;
 }
 
 .shortcut {
   font-family: var(--font-mono), monospace;
   font-size: 11px;
   color: var(--ink-tertiary);
+  white-space: nowrap;
 }
 
 .download {
@@ -425,6 +431,8 @@
   gap: 0.5rem;
   height: 34px;
   padding: 0 0.9rem;
+  flex: 0 0 auto;
+  white-space: nowrap;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-sm);
   font-family: var(--font-body);

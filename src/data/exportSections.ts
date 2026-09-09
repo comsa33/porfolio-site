@@ -12,7 +12,7 @@ import { portfolioData as data } from './index';
  */
 
 export type ExportSectionId =
-  | 'profile'
+  | 'contact'
   | 'summary'
   | 'skills'
   | 'career'
@@ -93,21 +93,39 @@ const timelineItem = (t: TimelineItem): ExportItem => ({
   meta: join(both(t.role), both(t.date)),
 });
 
+/**
+ * The name and the title are the document's identity, so they are never a
+ * checkbox — what varies is how much of a way back to you the paper carries.
+ * A résumé for an agency does not need the travel blog on it.
+ */
+export const CONTACT_LINKS: { id: string; label: LocalizedString; value: string }[] = (
+  [
+    { id: 'contact-email', label: { ko: '이메일', en: 'Email' }, value: data.profile.email },
+    { id: 'contact-github', label: both('GitHub'), value: data.profile.github },
+    { id: 'contact-linkedin', label: both('LinkedIn'), value: data.profile.linkedin },
+    { id: 'contact-orcid', label: both('ORCID'), value: data.profile.orcid },
+    { id: 'contact-blog', label: { ko: '기술 블로그', en: 'Tech blog' }, value: data.profile.blog },
+    {
+      id: 'contact-worldtrip',
+      label: { ko: '세계일주 기록', en: 'World trip' },
+      value: data.profile.worldtrip,
+    },
+  ] as { id: string; label: LocalizedString; value?: string }[]
+).filter((c): c is { id: string; label: LocalizedString; value: string } => Boolean(c.value));
+
+/** `https://` is noise on paper; the address is the address. */
+export const bareUrl = (url: string) => url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+
 export const EXPORT_SECTIONS: ExportSection[] = [
   {
-    id: 'profile',
-    name: { ko: '프로필', en: 'Profile' },
-    weight: 0.15,
-    items: [
-      {
-        id: 'profile',
-        title: {
-          ko: `${data.profile.name.ko} — ${data.profile.title}`,
-          en: `${data.profile.name.en} — ${data.profile.title}`,
-        },
-        meta: both(`${data.profile.email} · GitHub · LinkedIn · ORCID · Blog`),
-      },
-    ],
+    id: 'contact',
+    name: { ko: '연락처 · 링크', en: 'Contact' },
+    weight: 0.02,
+    items: CONTACT_LINKS.map((c) => ({
+      id: c.id,
+      title: c.label,
+      meta: both(bareUrl(c.value)),
+    })),
   },
   {
     id: 'summary',
@@ -211,9 +229,12 @@ const idsOf = (section: ExportSectionId) => SECTION_BY_ID.get(section)?.items.ma
 export function presetPicks(preset: Exclude<PresetId, 'custom'>): string[] {
   if (preset === 'portfolio') return [...ALL_ITEM_IDS];
 
+  // The travel blog is a portfolio link, not a résumé one.
+  const workContacts = idsOf('contact').filter((id) => id !== 'contact-worldtrip');
+
   if (preset === 'resume') {
     return [
-      ...idsOf('profile'),
+      ...workContacts,
       ...idsOf('summary'),
       ...idsOf('skills'),
       ...idsOf('career'),
@@ -225,7 +246,7 @@ export function presetPicks(preset: Exclude<PresetId, 'custom'>): string[] {
   }
 
   return [
-    ...idsOf('profile'),
+    ...workContacts,
     ...idsOf('summary'),
     ...idsOf('skills'),
     ...idsOf('career'),
@@ -243,9 +264,12 @@ export function matchPreset(picked: Set<string>): PresetId {
   return 'custom';
 }
 
-/** Live page estimate for the sheet. The print engine has the final say. */
+/**
+ * Live page estimate for the sheet. The print engine has the final say.
+ * The masthead and the colophon are on every document, hence the floor.
+ */
 export function estimatePages(picked: Set<string>): number {
-  let total = 0;
+  let total = 0.13;
   for (const section of EXPORT_SECTIONS) {
     for (const item of section.items) if (picked.has(item.id)) total += section.weight;
   }
