@@ -515,10 +515,12 @@
 }
 
 .doc[data-tpl='editorial'] .entryTitle {
-  font-size: calc(var(--fs) * 1.28);
+  /* An entry heading only has to outrank the line under it, and at this body
+     size weight does that on its own — 1.28x was reading as a section title. */
+  font-size: calc(var(--fs) * 1.1);
   font-weight: 600;
   letter-spacing: -0.005em;
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 .doc[data-tpl='editorial'] .entryLead {
