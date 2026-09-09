@@ -54,6 +54,7 @@
   font-size: 12px;
   color: var(--ink-tertiary);
   margin-left: auto;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -116,6 +117,16 @@
 }
 
 @media print {
+  /*
+   * The page carries the site's own background, which is near-black under the
+   * dark theme — and printBackground paints it into the PDF's margins. Paper
+   * is white regardless of how the reader keeps their screen.
+   */
+  :global(html),
+  :global(body) {
+    background: #ffffff;
+  }
+
   .bar,
   .hint {
     display: none;
@@ -129,5 +140,36 @@
   /* Paper is paper: the print engine does its own fitting. */
   .stage > * {
     zoom: 1;
+  }
+}
+
+/* Secondary action: the browser's own print path, kept as a fallback. */
+.ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  font-size: 13.5px;
+  color: var(--ink-secondary);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.ghost svg {
+  color: var(--ink-tertiary);
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.ghost:hover,
+.ghost:hover svg {
+  color: var(--ink);
+}
+
+@media print {
+  .ghost {
+    display: none;
   }
 }

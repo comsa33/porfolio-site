@@ -26,6 +26,8 @@ interface Props {
   /** Composer overrides. Absent means the copy in profile.ts stands. */
   title?: string;
   summary?: string;
+  /** Off when a real PDF footer will carry the same information per page. */
+  colophon?: boolean;
 }
 
 const value = (v: string | LocalizedString, lang: 'ko' | 'en') =>
@@ -136,7 +138,15 @@ function timelineEntry(item: TimelineItem, lang: 'ko' | 'en', withBody: boolean)
  * and the colour of every part are the stylesheet's business, so a template
  * swap can never change what the paper says.
  */
-export default function ExportDocument({ picked, template, lang, doc, title, summary }: Props) {
+export default function ExportDocument({
+  picked,
+  template,
+  lang,
+  doc,
+  title,
+  summary,
+  colophon = true,
+}: Props) {
   const { profile } = data;
   const has = (id: string) => picked.has(id);
 
@@ -255,12 +265,14 @@ export default function ExportDocument({ picked, template, lang, doc, title, sum
         </Section>
       )}
 
-      <footer className={styles.foot}>
-        <span>
-          {name} — {docLabel}
-        </span>
-        <span>{profile.email}</span>
-      </footer>
+      {colophon && (
+        <footer className={styles.foot}>
+          <span>
+            {name} — {docLabel}
+          </span>
+          <span>{profile.email}</span>
+        </footer>
+      )}
     </article>
   );
 }

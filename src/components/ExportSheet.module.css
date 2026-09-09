@@ -709,3 +709,68 @@
     font-size: 10px;
   }
 }
+
+/* Opens the same document as a page, for a look before taking it. */
+.preview {
+  font-size: 12.5px;
+  color: var(--ink-secondary);
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition:
+    color var(--dur-fast) var(--ease),
+    background-size var(--dur) var(--ease);
+}
+
+.preview:hover {
+  color: var(--ink);
+  background-size: 100% 1px;
+}
+
+/* The button keeps its box and swaps what is inside; progress is its own
+   bottom hairline filling, not a bar added beside it. */
+.download {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.download:disabled {
+  color: var(--ink-tertiary);
+  border-color: var(--line);
+  cursor: default;
+}
+
+.download[data-phase='done'] {
+  border-color: var(--accent);
+}
+
+.download[data-phase='done'] svg {
+  color: var(--accent);
+}
+
+.download[data-phase='working'] svg {
+  animation: exportSpin 1.1s linear infinite;
+}
+
+.fill {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1.5px;
+  background: var(--accent);
+  transition: width var(--dur-slow) var(--ease);
+}
+
+@keyframes exportSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .download[data-phase='working'] svg {
+    animation: none;
+  }
+}

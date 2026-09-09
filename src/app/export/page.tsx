@@ -3,7 +3,7 @@
 import React, { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { ArrowLeft, Printer } from 'lucide-react';
+import { ArrowLeft, Download, Printer } from 'lucide-react';
 import ExportDocument from '@/components/ExportDocument';
 import {
   DOC_LABELS,
@@ -29,7 +29,6 @@ const PRESET_IDS: PresetId[] = ['resume', 'career', 'portfolio', 'custom'];
  */
 function ExportView() {
   const params = useSearchParams();
-  const [printed, setPrinted] = useState(false);
   const [fit, setFit] = useState(1);
 
   const doc = (
@@ -46,11 +45,17 @@ function ExportView() {
   const title = params.get('title')?.slice(0, OVERRIDE_LIMITS.title) ?? undefined;
   const summary = params.get('summary')?.slice(0, OVERRIDE_LIMITS.summary) ?? undefined;
 
+  // Set when Chromium is the reader: the PDF carries page numbers of its own.
+  const forPdf = params.get('pdf') === '1';
+
   const picked = useMemo(() => {
     const raw = (params.get('pick') ?? '').split(',').filter(isExportId);
     // A bare /export?doc=resume is still a valid request for that document.
     return new Set(raw.length > 0 ? raw : doc === 'custom' ? presetPicks('career') : presetPicks(doc));
   }, [params, doc]);
+
+  /** The same query, handed to the renderer that returns a real file. */
+  const pdfHref = useMemo(() => `/api/export?${params.toString()}`, [params]);
 
   const filename = useMemo(() => {
     const now = new Date();
@@ -91,22 +96,6 @@ function ExportView() {
     return () => window.removeEventListener('resize', measure);
   }, []);
 
-  // Print once the fonts have settled — printing mid-swap reflows the pagination.
-  useEffect(() => {
-    if (printed || params.get('print') === '0') return;
-    let cancelled = false;
-    const ready = document.fonts?.ready ?? Promise.resolve();
-    ready.then(() => {
-      if (cancelled) return;
-      setPrinted(true);
-      // One frame so the settled fonts are painted before the dialog snapshots.
-      requestAnimationFrame(printNow);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [printed, params, printNow]);
-
   return (
     <>
       <div className={styles.bar}>
@@ -115,16 +104,20 @@ function ExportView() {
           <span>{lang === 'ko' ? '포트폴리오로' : 'Back to portfolio'}</span>
         </Link>
         <span className={styles.name}>{filename}.pdf</span>
-        <button type="button" className={styles.print} onClick={printNow}>
+        <button type="button" className={styles.ghost} onClick={printNow}>
           <Printer size={14} strokeWidth={1.6} />
-          <span>{lang === 'ko' ? '인쇄 · PDF로 저장' : 'Print · Save as PDF'}</span>
+          <span>{lang === 'ko' ? '인쇄' : 'Print'}</span>
         </button>
+        <a className={styles.print} href={pdfHref}>
+          <Download size={14} strokeWidth={1.6} />
+          <span>{lang === 'ko' ? 'PDF 내려받기' : 'Download PDF'}</span>
+        </a>
       </div>
 
       <p className={styles.hint}>
         {lang === 'ko'
-          ? '인쇄 대화상자에서 대상을 “PDF로 저장”으로 두고, 배경 그래픽을 켜면 화면과 같은 문서가 저장됩니다.'
-          : 'In the print dialog choose “Save as PDF” and enable background graphics for an identical document.'}
+          ? '내려받기는 서버에서 이 페이지를 그대로 조판해 쪽번호까지 붙인 PDF 파일을 내려줍니다. 인쇄는 브라우저의 인쇄 대화상자를 엽니다.'
+          : 'Download renders this very page on the server into a paginated PDF. Print opens the browser dialog instead.'}
       </p>
 
       <main className={styles.stage} style={{ '--fit': fit } as React.CSSProperties}>
@@ -135,6 +128,7 @@ function ExportView() {
           doc={doc}
           title={title}
           summary={summary}
+          colophon={!forPdf}
         />
       </main>
     </>

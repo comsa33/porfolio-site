@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Check, Download, Minus, X } from 'lucide-react';
+import { Check, Download, FileText, Loader, Minus, X } from 'lucide-react';
 import sheet from './Sheet.module.css';
 import styles from './ExportSheet.module.css';
 import { useModalClose } from './useModalClose';
@@ -27,6 +27,16 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
 }
+
+const LABEL = {
+  idle: { ko: 'PDF 내려받기', en: 'Download PDF' },
+  working: { ko: '조판하는 중', en: 'Rendering' },
+  done: { ko: '저장됨', en: 'Saved' },
+  error: { ko: '다시 시도', en: 'Try again' },
+} as const;
+
+/** Progress rides the button's own bottom hairline, not a separate bar. */
+const FILL = { idle: '0%', working: '65%', done: '100%', error: '0%' } as const;
 
 /** The preview is the real document, shrunk. 794px of A4 into a 300px column. */
 const PREVIEW_SCALE = 300 / 794;
@@ -144,6 +154,8 @@ export default function ExportSheet({ lang, isOpen, onClose }: Props) {
   const [template, setTemplate] = useState<TemplateId>('hairline');
   const [docLang, setDocLang] = useState<'ko' | 'en'>(lang);
   const [section, setSection] = useState<ExportSectionId>('projects');
+  const [phase, setPhase] = useState<'idle' | 'working' | 'done' | 'error'>('idle');
+  const resetTimer = useRef<number | undefined>(undefined);
   const [titleOverride, setTitleOverride] = useState<string | null>(null);
   const [summaryOverride, setSummaryOverride] = useState<string | null>(null);
   const { closing, requestClose } = useModalClose(onClose);
@@ -154,14 +166,13 @@ export default function ExportSheet({ lang, isOpen, onClose }: Props) {
   const summary = summaryOverride ?? defaultSummary;
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
   const preset = matchPreset(picked);
   const pages = estimatePages(picked);
 
-  const href = useMemo(() => {
+  const query = useMemo(() => {
     const params = new URLSearchParams({
       doc: preset,
       tpl: template,
@@ -171,8 +182,37 @@ export default function ExportSheet({ lang, isOpen, onClose }: Props) {
     // Only what was actually rewritten rides along.
     if (title.trim() && title !== defaultTitle) params.set('title', title);
     if (summary.trim() && summary !== defaultSummary) params.set('summary', summary);
-    return `/export?${params.toString()}`;
+    return params.toString();
   }, [preset, template, docLang, picked, title, defaultTitle, summary, defaultSummary]);
+
+  /*
+   * The button is the whole progress display: it keeps its box, swaps what is
+   * inside, and fills its own bottom hairline. Rendering runs on the server and
+   * takes a few seconds cold, so saying nothing for that long is not an option.
+   */
+  const download = useCallback(async () => {
+    if (phase === 'working' || picked.size === 0) return;
+    window.clearTimeout(resetTimer.current);
+    setPhase('working');
+    try {
+      const response = await fetch(`/api/export?${query}`);
+      if (!response.ok) throw new Error(String(response.status));
+      const blob = await response.blob();
+      const disposition = response.headers.get('content-disposition') ?? '';
+      const encoded = /filename\*=UTF-8''([^;]+)/.exec(disposition)?.[1];
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = encoded ? decodeURIComponent(encoded) : 'document.pdf';
+      link.click();
+      URL.revokeObjectURL(url);
+      setPhase('done');
+      resetTimer.current = window.setTimeout(() => setPhase('idle'), 4000);
+    } catch {
+      setPhase('error');
+      resetTimer.current = window.setTimeout(() => setPhase('idle'), 4000);
+    }
+  }, [phase, picked.size, query]);
 
   // ⌘↵ / Ctrl+↵ is the shortcut the footer advertises.
   useEffect(() => {
@@ -180,12 +220,14 @@ export default function ExportSheet({ lang, isOpen, onClose }: Props) {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        window.open(href, '_blank', 'noopener');
+        void download();
       }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [isOpen, href]);
+  }, [isOpen, download]);
+
+  useEffect(() => () => window.clearTimeout(resetTimer.current), []);
 
   if (!isOpen || !mounted) return null;
 
@@ -500,20 +542,29 @@ export default function ExportSheet({ lang, isOpen, onClose }: Props) {
             {templateNote.name[lang]}
           </span>
           <div className={styles.actions}>
-            <span className={styles.shortcut}>⌘ ⏎</span>
             <a
-              href={href}
+              href={`/export?${query}`}
               target="_blank"
               rel="noopener noreferrer"
-              className={styles.download}
-              aria-disabled={picked.size === 0}
-              onClick={(e) => {
-                if (picked.size === 0) e.preventDefault();
-              }}
+              className={styles.preview}
             >
-              <Download size={14} strokeWidth={1.6} />
-              <span>{lang === 'ko' ? 'PDF 내려받기' : 'Download PDF'}</span>
+              {lang === 'ko' ? '미리보기' : 'Preview'}
             </a>
+            <span className={styles.shortcut}>⌘ ⏎</span>
+            <button
+              type="button"
+              className={styles.download}
+              onClick={download}
+              disabled={picked.size === 0}
+              data-phase={phase}
+            >
+              <span className={styles.fill} style={{ width: FILL[phase] }} aria-hidden />
+              {phase === 'working' && <Loader size={14} strokeWidth={1.6} />}
+              {phase === 'idle' && <Download size={14} strokeWidth={1.6} />}
+              {phase === 'done' && <Check size={14} strokeWidth={2} />}
+              {phase === 'error' && <FileText size={14} strokeWidth={1.6} />}
+              <span>{LABEL[phase][lang]}</span>
+            </button>
           </div>
         </div>
       </div>
