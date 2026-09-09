@@ -218,6 +218,136 @@
   list-style: none;
 }
 
+/*
+ * A skill belongs to a stack, and the stack is still the row it prints on —
+ * so the group survives as a subhead that toggles its own members.
+ */
+.groupHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  text-align: left;
+  padding: 1.1rem 0 0.4rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--ink-tertiary);
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.groupHead:hover {
+  color: var(--ink);
+}
+
+.groupCount {
+  font-size: 10.5px;
+  color: var(--line-strong);
+}
+
+.groupCount[data-partial='true'] {
+  color: var(--accent);
+}
+
+/* ============ Editable copy ============ */
+
+.editor {
+  padding: 1rem 0 0.25rem;
+}
+
+.editor[data-disabled='true'] {
+  opacity: 0.45;
+}
+
+.editorHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.45rem;
+}
+
+.editorLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--ink-tertiary);
+}
+
+.editorMeta {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.editorReset {
+  font-size: 12px;
+  color: var(--ink-secondary);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition:
+    color var(--dur-fast) var(--ease),
+    background-size var(--dur) var(--ease);
+}
+
+.editorReset:hover {
+  color: var(--accent);
+  background-size: 100% 1px;
+}
+
+.editorCount {
+  font-family: var(--font-mono), monospace;
+  font-size: 10.5px;
+  color: var(--ink-tertiary);
+}
+
+/* Quiet until focused: a hairline box, not a form control. */
+.field,
+.fieldArea {
+  display: block;
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink);
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--dur-fast) var(--ease);
+}
+
+.fieldArea {
+  resize: vertical;
+  min-height: 6.5rem;
+}
+
+.field:hover,
+.fieldArea:hover {
+  border-color: var(--line-strong);
+}
+
+.field:focus,
+.fieldArea:focus {
+  outline: none;
+  border-color: var(--ink);
+}
+
+.field::placeholder,
+.fieldArea::placeholder {
+  color: var(--ink-tertiary);
+}
+
 .item {
   position: relative;
   display: grid;

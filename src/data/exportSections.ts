@@ -1,5 +1,6 @@
 import type { LocalizedString, Project, Publication, TimelineItem } from '@/types';
 import { portfolioData as data } from './index';
+import { countProjectsForSkill } from './skillMatch';
 
 /*
  * The manifest behind the export composer.
@@ -28,7 +29,12 @@ export interface ExportItem {
   id: string;
   title: LocalizedString;
   meta: LocalizedString;
+  /** Optional subhead in the picker; consecutive items sharing one are grouped. */
+  group?: LocalizedString;
 }
+
+/** Free text the composer can override, carried in the URL when it differs. */
+export const OVERRIDE_LIMITS = { title: 90, summary: 420 };
 
 export interface ExportSection {
   id: ExportSectionId;
@@ -84,8 +90,24 @@ export const RESEARCH_ENTRIES: Publication[] = data.publications;
 
 export const SKILL_KEYS = ['backend', 'ai', 'system'] as const;
 
-/** `skills-backend` and friends; the suffix is the key into `profile.coreSkills`. */
-export const skillItemId = (key: (typeof SKILL_KEYS)[number]) => `skills-${key}`;
+const slug = (s: string) =>
+  s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+
+/**
+ * One checkbox per skill, not per group: which stack you lead with is exactly
+ * the thing that changes between two applications. The group survives as the
+ * row the skill prints on.
+ */
+export const SKILL_ITEMS: {
+  id: string;
+  name: string;
+  key: (typeof SKILL_KEYS)[number];
+}[] = SKILL_KEYS.flatMap((key) =>
+  data.profile.coreSkills[key].skills.map((name) => ({ id: `skill-${slug(name)}`, name, key })),
+);
 
 const timelineItem = (t: TimelineItem): ExportItem => ({
   id: t.id,
@@ -119,7 +141,7 @@ export const bareUrl = (url: string) => url.replace(/^https?:\/\//, '').replace(
 export const EXPORT_SECTIONS: ExportSection[] = [
   {
     id: 'contact',
-    name: { ko: '연락처 · 링크', en: 'Contact' },
+    name: { ko: '머리말 · 연락처', en: 'Masthead & contact' },
     weight: 0.02,
     items: CONTACT_LINKS.map((c) => ({
       id: c.id,
@@ -145,12 +167,17 @@ export const EXPORT_SECTIONS: ExportSection[] = [
   {
     id: 'skills',
     name: { ko: '핵심 역량', en: 'Skills' },
-    weight: 0.05,
-    items: SKILL_KEYS.map((key) => ({
-      id: skillItemId(key),
-      title: data.profile.coreSkills[key].title,
-      meta: both(data.profile.coreSkills[key].skills.join(' · ')),
-    })),
+    weight: 0.011,
+    items: SKILL_ITEMS.map((s) => {
+      const n = countProjectsForSkill(data.projects, s.name);
+      return {
+        id: s.id,
+        title: both(s.name),
+        // The same count the hero shows beside each skill token.
+        meta: { ko: `프로젝트 ${n}개`, en: `${n} project${n === 1 ? '' : 's'}` },
+        group: data.profile.coreSkills[s.key].title,
+      };
+    }),
   },
   {
     id: 'career',

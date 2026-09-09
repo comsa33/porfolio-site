@@ -8,6 +8,7 @@ import ExportDocument from '@/components/ExportDocument';
 import {
   DOC_LABELS,
   isExportId,
+  OVERRIDE_LIMITS,
   presetPicks,
   TEMPLATES,
   type PresetId,
@@ -39,6 +40,10 @@ function ExportView() {
   ) as TemplateId;
 
   const lang: 'ko' | 'en' = params.get('lang') === 'en' ? 'en' : 'ko';
+
+  // Composer overrides. Capped here too — the query string is user input.
+  const title = params.get('title')?.slice(0, OVERRIDE_LIMITS.title) ?? undefined;
+  const summary = params.get('summary')?.slice(0, OVERRIDE_LIMITS.summary) ?? undefined;
 
   const picked = useMemo(() => {
     const raw = (params.get('pick') ?? '').split(',').filter(isExportId);
@@ -102,7 +107,14 @@ function ExportView() {
       </p>
 
       <main className={styles.stage}>
-        <ExportDocument picked={picked} template={template} lang={lang} doc={doc} />
+        <ExportDocument
+          picked={picked}
+          template={template}
+          lang={lang}
+          doc={doc}
+          title={title}
+          summary={summary}
+        />
       </main>
     </>
   );

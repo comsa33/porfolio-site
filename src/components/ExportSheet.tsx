@@ -12,12 +12,15 @@ import {
   estimatePages,
   EXPORT_SECTIONS,
   matchPreset,
+  OVERRIDE_LIMITS,
   PRESETS,
   presetPicks,
   TEMPLATES,
   type ExportSectionId,
   type TemplateId,
 } from '@/data/exportSections';
+import { portfolioData as data } from '@/data';
+import { getCareerIntro } from '@/lib/career';
 
 interface Props {
   lang: 'ko' | 'en';
@@ -72,6 +75,65 @@ const TEMPLATE_LINES: Record<TemplateId, { w: string; t: number; h: number; c: s
 };
 
 /**
+ * A field that starts as the site's own copy and stays that way until touched.
+ * Overrides travel in the URL only once they differ, so the ordinary link stays
+ * short and the reset really does put the original back.
+ */
+function Editor({
+  label,
+  value,
+  placeholder,
+  limit,
+  multiline,
+  disabled,
+  edited,
+  lang,
+  onChange,
+  onReset,
+}: {
+  label: string;
+  value: string;
+  placeholder: string;
+  limit: number;
+  multiline?: boolean;
+  disabled?: boolean;
+  edited: boolean;
+  lang: 'ko' | 'en';
+  onChange: (v: string) => void;
+  onReset: () => void;
+}) {
+  const Field = multiline ? 'textarea' : 'input';
+  return (
+    <div className={styles.editor} data-disabled={disabled}>
+      <div className={styles.editorHead}>
+        <span className={styles.editorLabel}>{label}</span>
+        <span className={styles.editorMeta}>
+          {edited && (
+            <button type="button" className={styles.editorReset} onClick={onReset}>
+              {lang === 'ko' ? '원래대로' : 'Reset'}
+            </button>
+          )}
+          <span className={styles.editorCount}>
+            {value.length} / {limit}
+          </span>
+        </span>
+      </div>
+      <Field
+        className={multiline ? styles.fieldArea : styles.field}
+        value={value}
+        placeholder={placeholder}
+        maxLength={limit}
+        disabled={disabled}
+        rows={multiline ? 4 : undefined}
+        onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+          onChange(e.target.value)
+        }
+      />
+    </div>
+  );
+}
+
+/**
  * Pick what goes in, not which template: the sheet is a list of everything the
  * site knows, and the document is whatever survives the checkboxes. The chosen
  * state travels in the URL, so the same link always rebuilds the same PDF.
@@ -82,7 +144,14 @@ export default function ExportSheet({ lang, isOpen, onClose }: Props) {
   const [template, setTemplate] = useState<TemplateId>('hairline');
   const [docLang, setDocLang] = useState<'ko' | 'en'>(lang);
   const [section, setSection] = useState<ExportSectionId>('projects');
+  const [titleOverride, setTitleOverride] = useState<string | null>(null);
+  const [summaryOverride, setSummaryOverride] = useState<string | null>(null);
   const { closing, requestClose } = useModalClose(onClose);
+
+  const defaultTitle = data.profile.title;
+  const defaultSummary = getCareerIntro(docLang, data.profile.intro[docLang]);
+  const title = titleOverride ?? defaultTitle;
+  const summary = summaryOverride ?? defaultSummary;
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -99,8 +168,11 @@ export default function ExportSheet({ lang, isOpen, onClose }: Props) {
       lang: docLang,
       pick: [...picked].join(','),
     });
+    // Only what was actually rewritten rides along.
+    if (title.trim() && title !== defaultTitle) params.set('title', title);
+    if (summary.trim() && summary !== defaultSummary) params.set('summary', summary);
     return `/export?${params.toString()}`;
-  }, [preset, template, docLang, picked]);
+  }, [preset, template, docLang, picked, title, defaultTitle, summary, defaultSummary]);
 
   // ⌘↵ / Ctrl+↵ is the shortcut the footer advertises.
   useEffect(() => {
@@ -144,6 +216,28 @@ export default function ExportSheet({ lang, isOpen, onClose }: Props) {
   const activeSection = EXPORT_SECTIONS.find((s) => s.id === section) ?? EXPORT_SECTIONS[0];
   const activeOn = activeSection.items.filter((i) => picked.has(i.id)).length;
   const templateNote = TEMPLATES.find((t) => t.id === template)!;
+
+  const groupTally = new Map<string, { on: number; total: number }>();
+  for (const item of activeSection.items) {
+    if (!item.group) continue;
+    const tally = groupTally.get(item.group.ko) ?? { on: 0, total: 0 };
+    tally.total += 1;
+    if (picked.has(item.id)) tally.on += 1;
+    groupTally.set(item.group.ko, tally);
+  }
+
+  const toggleGroup = (key: string) => {
+    const ids = activeSection.items.filter((i) => i.group?.ko === key).map((i) => i.id);
+    setPicked((prev) => {
+      const next = new Set(prev);
+      const all = ids.every((id) => next.has(id));
+      for (const id of ids) {
+        if (all) next.delete(id);
+        else next.add(id);
+      }
+      return next;
+    });
+  };
 
   return createPortal(
     <div
@@ -266,11 +360,39 @@ export default function ExportSheet({ lang, isOpen, onClose }: Props) {
                 {activeOn} / {activeSection.items.length} {lang === 'ko' ? '선택됨' : 'selected'}
               </span>
             </div>
+            {activeSection.id === 'contact' && (
+              <Editor
+                label={lang === 'ko' ? '직함' : 'Title'}
+                value={title}
+                placeholder={defaultTitle}
+                limit={OVERRIDE_LIMITS.title}
+                edited={titleOverride !== null && titleOverride !== defaultTitle}
+                lang={lang}
+                onChange={setTitleOverride}
+                onReset={() => setTitleOverride(null)}
+              />
+            )}
+
             <ul className={styles.items}>
-              {activeSection.items.map((item) => {
+              {activeSection.items.map((item, i) => {
                 const on = picked.has(item.id);
+                const group = item.group;
+                const newGroup = group && activeSection.items[i - 1]?.group?.ko !== group.ko;
+                const tally = group ? groupTally.get(group.ko) : undefined;
                 return (
                   <li key={item.id}>
+                    {newGroup && tally && (
+                      <button
+                        type="button"
+                        className={styles.groupHead}
+                        onClick={() => toggleGroup(group.ko)}
+                      >
+                        <span>{group[lang]}</span>
+                        <span className={styles.groupCount} data-partial={tally.on > 0 && tally.on < tally.total}>
+                          {tally.on}/{tally.total}
+                        </span>
+                      </button>
+                    )}
                     <button
                       type="button"
                       className={styles.item}
@@ -291,6 +413,21 @@ export default function ExportSheet({ lang, isOpen, onClose }: Props) {
                 );
               })}
             </ul>
+
+            {activeSection.id === 'summary' && (
+              <Editor
+                label={lang === 'ko' ? '요약 문장' : 'Summary'}
+                value={summary}
+                placeholder={defaultSummary}
+                limit={OVERRIDE_LIMITS.summary}
+                multiline
+                disabled={!picked.has('summary')}
+                edited={summaryOverride !== null && summaryOverride !== defaultSummary}
+                lang={lang}
+                onChange={setSummaryOverride}
+                onReset={() => setSummaryOverride(null)}
+              />
+            )}
           </div>
 
           {/* Preview — templates, then the document itself */}
@@ -346,6 +483,8 @@ export default function ExportSheet({ lang, isOpen, onClose }: Props) {
                     template={template}
                     lang={docLang}
                     doc={preset}
+                    title={title}
+                    summary={summary}
                   />
                 </div>
               </div>

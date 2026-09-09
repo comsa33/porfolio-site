@@ -9,8 +9,8 @@ import {
   ETC_ENTRIES,
   PROJECT_ENTRIES,
   RESEARCH_ENTRIES,
+  SKILL_ITEMS,
   SKILL_KEYS,
-  skillItemId,
   type PresetId,
   type TemplateId,
 } from '@/data/exportSections';
@@ -23,6 +23,9 @@ interface Props {
   template: TemplateId;
   lang: 'ko' | 'en';
   doc: PresetId;
+  /** Composer overrides. Absent means the copy in profile.ts stands. */
+  title?: string;
+  summary?: string;
 }
 
 const value = (v: string | LocalizedString, lang: 'ko' | 'en') =>
@@ -133,9 +136,12 @@ function timelineEntry(item: TimelineItem, lang: 'ko' | 'en', withBody: boolean)
  * and the colour of every part are the stylesheet's business, so a template
  * swap can never change what the paper says.
  */
-export default function ExportDocument({ picked, template, lang, doc }: Props) {
+export default function ExportDocument({ picked, template, lang, doc, title, summary }: Props) {
   const { profile } = data;
   const has = (id: string) => picked.has(id);
+
+  const roleLine = title?.trim() || profile.title;
+  const summaryText = summary?.trim() || getCareerIntro(lang, profile.intro[lang]);
 
   // All four lists are already newest-first, and bootcamps already sit under
   // "other" — the manifest settled that once so the paper doesn't re-decide it.
@@ -145,7 +151,12 @@ export default function ExportDocument({ picked, template, lang, doc }: Props) {
   const other = ETC_ENTRIES.filter((t) => has(t.id));
   const projects = PROJECT_ENTRIES.filter((p) => has(p.id));
   const research = RESEARCH_ENTRIES.filter((r) => has(r.id));
-  const skills = SKILL_KEYS.filter((k) => has(skillItemId(k)));
+
+  // A group prints only if something in it was ticked, and only what was ticked.
+  const skillRows = SKILL_KEYS.map((key) => ({
+    key,
+    names: SKILL_ITEMS.filter((s) => s.key === key && has(s.id)).map((s) => s.name),
+  })).filter((row) => row.names.length > 0);
 
   const docLabel = DOC_LABELS[doc][lang];
   const name = profile.name[lang];
@@ -160,7 +171,7 @@ export default function ExportDocument({ picked, template, lang, doc }: Props) {
           <div className={styles.accent} aria-hidden />
           <h1 className={styles.name}>{name}</h1>
           <p className={styles.role}>
-            {lang === 'ko' ? `${profile.name.en} — ${profile.title}` : profile.title}
+            {lang === 'ko' ? `${profile.name.en} — ${roleLine}` : roleLine}
           </p>
         </div>
         <address className={styles.contact}>
@@ -174,21 +185,17 @@ export default function ExportDocument({ picked, template, lang, doc }: Props) {
 
       {has('summary') && (
         <Section label={lang === 'ko' ? '요약' : 'Summary'} index={nextIndex()}>
-          <p className={styles.lede}>
-            {emphasize(getCareerIntro(lang, profile.intro[lang]), LEDE_KEYWORDS[lang])}
-          </p>
+          <p className={styles.lede}>{emphasize(summaryText, LEDE_KEYWORDS[lang])}</p>
         </Section>
       )}
 
-      {skills.length > 0 && (
+      {skillRows.length > 0 && (
         <Section label={lang === 'ko' ? '핵심 역량' : 'Skills'} index={nextIndex()}>
           <div className={styles.skills}>
-            {skills.map((key) => (
-              <div key={key} className={styles.skillRow}>
-                <span className={styles.skillLabel}>{profile.coreSkills[key].title[lang]}</span>
-                <span className={styles.skillValue}>
-                  {profile.coreSkills[key].skills.join(' · ')}
-                </span>
+            {skillRows.map((row) => (
+              <div key={row.key} className={styles.skillRow}>
+                <span className={styles.skillLabel}>{profile.coreSkills[row.key].title[lang]}</span>
+                <span className={styles.skillValue}>{row.names.join(' · ')}</span>
               </div>
             ))}
           </div>
