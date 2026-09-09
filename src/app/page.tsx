@@ -4,6 +4,7 @@ import { useEffect, useState, useSyncExternalStore } from 'react';
 import {
   ArrowUpRight,
   Check,
+  FileDown,
   Github,
   Globe,
   Linkedin,
@@ -20,8 +21,10 @@ import Publications from '@/components/Publications';
 import ProjectCard from '@/components/ProjectCard';
 import BrandIcon from '@/components/BrandIcon';
 import SectionDot from '@/components/SectionDot';
+import ExportSheet from '@/components/ExportSheet';
 import { portfolioData as data } from '@/data';
 import { countProjectsForSkill, projectMatchesSkill } from '@/data/skillMatch';
+import { getCareerIntro, LEDE_KEYWORDS } from '@/lib/career';
 
 const SECTION_TITLES = {
   projects: { ko: '프로젝트', en: 'Projects' },
@@ -36,52 +39,6 @@ const NAV_ITEMS = [
   { id: 'journey', label: SECTION_TITLES.journey },
   { id: 'contact', label: SECTION_TITLES.contact },
 ] as const;
-
-/**
- * Phrases in the intro that stay full-ink while the rest of the sentence
- * recedes to grey. Matched literally against the copy in profile.ts.
- */
-const LEDE_KEYWORDS = {
-  ko: ['실행 런타임', '오케스트레이션', '메모리', '품질 평가'],
-  en: ['execution runtime', 'orchestration', 'memory', 'quality evaluation'],
-} as const;
-
-/**
- * Career length is anchored to the measured figure (46 months of employment as of
- * 2026-07, which excludes the 2023.06–2023.11 gap) and accrues from there, so it
- * stays accurate instead of gaining a year every January.
- */
-const CAREER_ANCHOR = { year: 2026, month: 7, months: 46 };
-
-function getCareerYears(): number {
-  const now = new Date();
-  const elapsedMonths =
-    (now.getFullYear() - CAREER_ANCHOR.year) * 12 + (now.getMonth() + 1 - CAREER_ANCHOR.month);
-  const totalMonths = CAREER_ANCHOR.months + Math.max(0, elapsedMonths);
-  // Korean "N년차" counts the year in progress, hence the +1.
-  return Math.floor(totalMonths / 12) + 1;
-}
-
-/**
- * Fills the `{years}` placeholder in the intro copy. The placeholder is explicit
- * so the copy can be rewritten freely — matching on a prose fragment used to make
- * the year silently vanish whenever the sentence changed.
- */
-function getCareerIntro(lang: 'ko' | 'en', introText: string): string {
-  const years = getCareerYears();
-  const token =
-    lang === 'ko'
-      ? String(years)
-      : years === 1
-        ? '1st-year'
-        : years === 2
-          ? '2nd-year'
-          : years === 3
-            ? '3rd-year'
-            : `${years}th-year`;
-
-  return introText.replace('{years}', token);
-}
 
 /** Splits text so listed keywords render as <em> (full ink) inside grey prose. */
 function emphasize(text: string, keywords: readonly string[]) {
@@ -201,6 +158,7 @@ export default function Home() {
   const [techFilter, setTechFilter] = useState<string | null>(null);
   const [certModalImage, setCertModalImage] = useState<string | null>(null);
   const [emailCopied, setEmailCopied] = useState(false);
+  const [exportOpen, setExportOpen] = useState(false);
 
   const theme = useSyncExternalStore(subscribeTheme, readTheme, () => 'light' as Theme);
   const toggleTheme = () => setDocumentTheme(theme === 'dark' ? 'light' : 'dark');
@@ -442,6 +400,19 @@ export default function Home() {
                 <span>{lang === 'ko' ? '세계일주' : 'World Trip'}</span>
               </a>
             )}
+            {/*
+              Sits with the links rather than in the header: the phone nav is
+              already sized for exactly five items, and this belongs next to
+              the other ways of taking something away from the page.
+            */}
+            <button
+              type="button"
+              className={styles.contactLink}
+              onClick={() => setExportOpen(true)}
+            >
+              <FileDown size={14} strokeWidth={1.75} />
+              <span>{lang === 'ko' ? '이력서 · 경력기술서' : 'Résumé · Experience'}</span>
+            </button>
             <span className={styles.contactLink}>
               <ShieldCheck size={14} strokeWidth={1.75} />
               <span>
@@ -586,32 +557,45 @@ export default function Home() {
               ? '에이전트 플랫폼이나 LLM 품질 평가에 관한 이야기라면 언제든 환영합니다.'
               : 'Always glad to talk agent platforms or LLM evaluation.'}
           </p>
-          <a
-            href={`mailto:${data.profile.email}`}
-            className={`${styles.footerCta} ${emailCopied ? styles.copied : ''}`}
-            onClick={handleEmailClick}
-            title={data.profile.email}
-          >
-            <span className={styles.footerCtaLabel}>
-              {emailCopied ? (
-                <>
-                  <Check size={15} strokeWidth={2} />
-                  {lang === 'ko' ? '주소 복사됨' : 'Address copied'}
-                </>
-              ) : (
-                <>
-                  <Mail size={15} strokeWidth={1.75} />
-                  {lang === 'ko' ? '이메일 보내기' : 'Send an email'}
-                </>
-              )}
-            </span>
-            <ArrowUpRight size={15} strokeWidth={1.75} />
-          </a>
+          <div className={styles.footerActions}>
+            <a
+              href={`mailto:${data.profile.email}`}
+              className={`${styles.footerCta} ${emailCopied ? styles.copied : ''}`}
+              onClick={handleEmailClick}
+              title={data.profile.email}
+            >
+              <span className={styles.footerCtaLabel}>
+                {emailCopied ? (
+                  <>
+                    <Check size={15} strokeWidth={2} />
+                    {lang === 'ko' ? '주소 복사됨' : 'Address copied'}
+                  </>
+                ) : (
+                  <>
+                    <Mail size={15} strokeWidth={1.75} />
+                    {lang === 'ko' ? '이메일 보내기' : 'Send an email'}
+                  </>
+                )}
+              </span>
+              <ArrowUpRight size={15} strokeWidth={1.75} />
+            </a>
+            <button
+              type="button"
+              className={styles.footerSecondary}
+              onClick={() => setExportOpen(true)}
+            >
+              <FileDown size={15} strokeWidth={1.75} />
+              <span>{lang === 'ko' ? '문서로 내려받기' : 'Take it as a document'}</span>
+              <span className={styles.footerTag}>PDF</span>
+            </button>
+          </div>
           <p className={styles.copyright}>
             © {new Date().getFullYear()} {data.profile.name[lang]}
           </p>
         </footer>
       </main>
+
+      <ExportSheet lang={lang} isOpen={exportOpen} onClose={() => setExportOpen(false)} />
 
       {certModalImage && (
         <div className={styles.certModal} onClick={() => setCertModalImage(null)}>

@@ -1,0 +1,573 @@
+/*
+ * The composer body: rail (presets + sections) / picker (items) / preview.
+ * Shell, header and footer come from Sheet.module.css, so this reads as one
+ * more panel of the same modal family.
+ */
+
+.headerControls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.langLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: var(--ink-tertiary);
+}
+
+.body {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr) 380px;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* ============ Rail ============ */
+
+.rail {
+  border-right: 1px solid var(--line);
+  overflow-y: auto;
+  padding: 1.1rem 1.25rem 1.25rem;
+}
+
+.railLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--ink-tertiary);
+}
+
+.presets {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-top: 0.85rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.preset {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Same rule-grows-from-the-left idiom as every other control on the site. */
+.presetLabel {
+  font-size: 14px;
+  color: var(--ink-secondary);
+  background-image: linear-gradient(var(--ink), var(--ink));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition:
+    color var(--dur-fast) var(--ease),
+    background-size var(--dur) var(--ease);
+}
+
+.preset:hover .presetLabel {
+  color: var(--ink);
+  background-size: 100% 1px;
+}
+
+.presetActive,
+.preset:hover .presetActive {
+  color: var(--ink);
+  font-weight: 500;
+  background-size: 100% 1px;
+}
+
+.presetSub {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--ink-tertiary);
+}
+
+.railLabelSection {
+  display: block;
+  margin: 1.25rem 0 0.35rem;
+}
+
+.sectionRow {
+  display: grid;
+  grid-template-columns: 15px minmax(0, 1fr);
+  gap: 0 0.6rem;
+  align-items: center;
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.sectionRow::before {
+  content: '';
+  position: absolute;
+  inset: 0 -0.6rem;
+  border-radius: var(--radius-sm);
+  background: var(--bg-hover);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-fast) var(--ease);
+}
+
+.sectionRow:hover::before {
+  opacity: 1;
+}
+
+.sectionRow > * {
+  position: relative;
+}
+
+.sectionName {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  text-align: left;
+  font-size: 13.5px;
+  color: var(--ink-secondary);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.sectionName:hover,
+.sectionName[data-active='true'] {
+  color: var(--ink);
+}
+
+.sectionName[data-active='true'] {
+  font-weight: 500;
+}
+
+.count {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: var(--ink-tertiary);
+}
+
+/* A partial section is the one thing worth an accent in the rail. */
+.count[data-partial='true'] {
+  color: var(--accent);
+}
+
+/* ============ Checkbox ============ */
+
+.box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+  border: 1px solid var(--line-strong);
+  border-radius: 3px;
+  background: none;
+  color: var(--on-accent);
+  cursor: pointer;
+  padding: 0;
+  transition:
+    background var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+
+.boxOn {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ============ Picker ============ */
+
+.picker {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  padding: 1.1rem 1.5rem 1.5rem;
+}
+
+.pickerHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.pickerTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.pickerCount {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: var(--ink-tertiary);
+}
+
+.items {
+  list-style: none;
+}
+
+.item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 15px minmax(0, 1fr);
+  gap: 0 0.75rem;
+  align-items: start;
+  width: 100%;
+  text-align: left;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--line);
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  cursor: pointer;
+}
+
+/* The hover fill bleeds past the text column, like the project rows. */
+.item::before {
+  content: '';
+  position: absolute;
+  inset: 0 -0.75rem;
+  border-radius: var(--radius);
+  background: var(--bg-hover);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-fast) var(--ease);
+}
+
+.item:hover::before {
+  opacity: 1;
+}
+
+.item > * {
+  position: relative;
+}
+
+.item .box {
+  margin-top: 2px;
+}
+
+.itemMain {
+  min-width: 0;
+}
+
+.itemTitle {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--ink-tertiary);
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.itemTitle[data-on='true'] {
+  color: var(--ink);
+}
+
+.itemMeta {
+  display: block;
+  font-family: var(--font-mono), monospace;
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: var(--ink-tertiary);
+  margin-top: 0.15rem;
+}
+
+/* ============ Preview ============ */
+
+.preview {
+  border-left: 1px solid var(--line);
+  padding: 1.1rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  min-height: 0;
+}
+
+.templates {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.template {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.template:hover {
+  transform: translateY(-2px);
+}
+
+.mini {
+  display: block;
+  width: 93px;
+  height: 131px;
+  padding: 9px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: #ffffff;
+  transition: border-color var(--dur-fast) var(--ease);
+}
+
+.mini[data-on='true'] {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 1px var(--ink);
+}
+
+.miniLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 10.5px;
+  color: var(--ink-tertiary);
+}
+
+.miniLabel[data-on='true'] {
+  color: var(--ink);
+}
+
+.templateNote {
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--ink-tertiary);
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.previewHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.pageCount {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: var(--ink-secondary);
+}
+
+/* The preview is the real document at 38%: a stack of sheets, top one live. */
+.paperWrap {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.paperStack {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 300px;
+  height: 100%;
+  background: var(--bg-subtle);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+}
+
+.paperStack + .paperStack {
+  top: 8px;
+  left: 8px;
+}
+
+.paper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 100%;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid var(--line-strong);
+  border-radius: 2px;
+}
+
+.paperInner {
+  width: 794px;
+  transform-origin: top left;
+  pointer-events: none;
+}
+
+/* ============ Footer actions ============ */
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.shortcut {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: var(--ink-tertiary);
+}
+
+.download {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 34px;
+  padding: 0 0.9rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink);
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+.download:hover {
+  border-color: var(--ink);
+}
+
+.download[aria-disabled='true'] {
+  color: var(--ink-tertiary);
+  border-color: var(--line);
+  cursor: default;
+}
+
+/* ============ Narrow ============ */
+
+@media (max-width: 860px) {
+  .body {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+
+  /* The rail collapses to one scrolling strip: presets, then sections. */
+  .rail {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.75rem 1.25rem;
+    scrollbar-width: none;
+  }
+
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .railLabel,
+  .presetSub {
+    display: none;
+  }
+
+  .presets {
+    flex-direction: row;
+    gap: 1.1rem;
+    margin: 0;
+    padding: 0 1.1rem 0 0;
+    border-bottom: none;
+    border-right: 1px solid var(--line);
+    flex: 0 0 auto;
+  }
+
+  .preset {
+    min-height: 34px;
+    justify-content: center;
+    flex: 0 0 auto;
+  }
+
+  .presetLabel {
+    white-space: nowrap;
+  }
+
+  .rail > div:last-child {
+    display: flex;
+    gap: 1.1rem;
+    flex: 0 0 auto;
+  }
+
+  .sectionRow {
+    padding: 0;
+    min-height: 34px;
+    flex: 0 0 auto;
+  }
+
+  .sectionName {
+    white-space: nowrap;
+  }
+
+  .picker {
+    padding: 1rem 1.25rem 1.25rem;
+  }
+
+  /* Hit targets get the room a phone needs. */
+  .item {
+    padding: 1rem 0;
+  }
+
+  .box {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+  }
+
+  .item {
+    grid-template-columns: 20px minmax(0, 1fr);
+  }
+
+  .sectionRow {
+    grid-template-columns: 20px minmax(0, 1fr);
+  }
+
+  /* No room for a live sheet on a phone; the templates still choose. */
+  .preview {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+    border-left: none;
+    border-top: 1px solid var(--line);
+    padding: 0.75rem 1.25rem;
+  }
+
+  .templateNote,
+  .previewHead,
+  .paperWrap {
+    display: none;
+  }
+
+  .templates {
+    gap: 0.6rem;
+  }
+
+  .template {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .mini {
+    width: 34px;
+    height: 48px;
+    padding: 4px;
+  }
+
+  .miniLabel {
+    font-size: 10px;
+  }
+}

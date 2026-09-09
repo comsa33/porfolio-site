@@ -1,0 +1,542 @@
+/*
+ * The paper. Three templates, one DOM — everything below is layout and colour,
+ * so switching template can never change what the document says.
+ *
+ * Colours are literal, not theme tokens: paper is paper in either theme, and
+ * a print engine should never be handed a dark palette.
+ *
+ * Authored at 96 px per inch — A4 is 794 × 1123 — so 16px is 12pt, the floor
+ * for running text. Only mono metadata and short labels drop below it.
+ */
+
+.doc {
+  width: 794px;
+  min-height: 1123px;
+  margin: 0 auto;
+  padding: 68px 72px 56px;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  color: #0f0f0f;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  letter-spacing: -0.005em;
+  word-break: keep-all;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.12);
+  /* The accent stroke and the rules are the design; do not let print drop them. */
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ============ Masthead ============ */
+
+.masthead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+  padding-bottom: 22px;
+}
+
+/* The single accent stroke on the page. */
+.accent {
+  width: 26px;
+  height: 3px;
+  background: #ff6a00;
+  margin-bottom: 14px;
+}
+
+.name {
+  font-size: 29px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
+.role {
+  font-family: var(--font-mono), ui-monospace, Menlo, monospace;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: #9c9c9c;
+  margin-top: 7px;
+  text-transform: uppercase;
+}
+
+.contact {
+  display: flex;
+  flex-direction: column;
+  font-style: normal;
+  font-family: var(--font-mono), ui-monospace, Menlo, monospace;
+  font-size: 11.5px;
+  line-height: 1.85;
+  color: #6b6b6b;
+  text-align: right;
+  padding-top: 20px;
+}
+
+.mastheadRule {
+  height: 1px;
+  background: #0f0f0f;
+}
+
+/* ============ Sections ============ */
+
+.section {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  gap: 0 28px;
+  padding: 19px 0;
+  border-top: 1px solid #e8e8e8;
+}
+
+.mastheadRule + .section {
+  border-top: none;
+  padding-top: 22px;
+}
+
+.sectionLabel {
+  padding-top: 3px;
+}
+
+.labelText {
+  font-family: var(--font-mono), ui-monospace, Menlo, monospace;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: #9c9c9c;
+}
+
+/* Only the editorial template numbers its sections. */
+.labelIndex {
+  display: none;
+}
+
+.sectionBody {
+  min-width: 0;
+}
+
+/* ============ Entries ============ */
+
+.entry {
+  display: block;
+}
+
+.entry + .entry {
+  margin-top: 17px;
+}
+
+.entryIndex {
+  display: none;
+}
+
+.entryBody {
+  min-width: 0;
+}
+
+.entryHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.entryTitle {
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+}
+
+.entryRole {
+  font-size: 14px;
+  font-weight: 400;
+  color: #6b6b6b;
+  margin-left: 8px;
+}
+
+.entryDate {
+  font-family: var(--font-mono), ui-monospace, Menlo, monospace;
+  font-size: 12px;
+  color: #9c9c9c;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.entryLead {
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: #6b6b6b;
+  margin-top: 4px;
+}
+
+.bullets {
+  list-style: none;
+  margin-top: 4px;
+}
+
+.bullets li {
+  position: relative;
+  padding-left: 13px;
+  font-size: 16px;
+  line-height: 1.62;
+  color: #4a4a4a;
+  margin-top: 3px;
+}
+
+/* A hairline, not a dot: the same rule weight as everything else on the page. */
+.bullets li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  width: 5px;
+  height: 1px;
+  background: #cfcfcf;
+}
+
+.stack {
+  font-family: var(--font-mono), ui-monospace, Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #9c9c9c;
+  margin-top: 6px;
+}
+
+/* ============ Summary & skills ============ */
+
+.lede {
+  font-size: 16px;
+  line-height: 1.66;
+  color: #6b6b6b;
+}
+
+.lede strong {
+  font-weight: 400;
+  color: #0f0f0f;
+}
+
+.skills {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.skillRow {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 0 16px;
+}
+
+.skillLabel {
+  font-size: 13px;
+  color: #9c9c9c;
+  padding-top: 2px;
+}
+
+.skillValue {
+  font-size: 15px;
+  line-height: 1.55;
+  color: #0f0f0f;
+}
+
+/* ============ Colophon ============ */
+
+.foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid #e8e8e8;
+  font-family: var(--font-mono), ui-monospace, Menlo, monospace;
+  font-size: 11px;
+  color: #9c9c9c;
+}
+
+/* ============================================================
+   B — Ledger. Black ink only, one dense column, no label gutter.
+   Built so an ATS reads it in document order and a mono printer
+   loses nothing.
+   ============================================================ */
+
+.doc[data-tpl='ledger'] {
+  padding: 64px 72px 52px;
+}
+
+.doc[data-tpl='ledger'] .masthead {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  padding-bottom: 12px;
+}
+
+.doc[data-tpl='ledger'] .accent {
+  display: none;
+}
+
+.doc[data-tpl='ledger'] .name {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.doc[data-tpl='ledger'] .role {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: -0.005em;
+  color: #0f0f0f;
+  margin-top: 2px;
+}
+
+.doc[data-tpl='ledger'] .contact {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0 10px;
+  text-align: left;
+  padding-top: 3px;
+  font-size: 12px;
+  color: #4a4a4a;
+}
+
+.doc[data-tpl='ledger'] .contact span + span::before {
+  content: '·';
+  margin-right: 10px;
+  color: #cfcfcf;
+}
+
+.doc[data-tpl='ledger'] .mastheadRule {
+  height: 2px;
+}
+
+.doc[data-tpl='ledger'] .section,
+.doc[data-tpl='ledger'] .mastheadRule + .section {
+  display: block;
+  border-top: none;
+  padding: 18px 0 0;
+}
+
+.doc[data-tpl='ledger'] .sectionLabel {
+  padding: 0 0 5px;
+  border-bottom: 1.5px solid #0f0f0f;
+  margin-bottom: 11px;
+}
+
+.doc[data-tpl='ledger'] .labelText {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #0f0f0f;
+}
+
+.doc[data-tpl='ledger'] .entry + .entry {
+  margin-top: 13px;
+}
+
+.doc[data-tpl='ledger'] .entryTitle {
+  font-size: 16.5px;
+  font-weight: 600;
+}
+
+.doc[data-tpl='ledger'] .entryDate,
+.doc[data-tpl='ledger'] .stack {
+  color: #4a4a4a;
+}
+
+.doc[data-tpl='ledger'] .entryLead {
+  font-size: 15px;
+  color: #2b2b2b;
+  margin-top: 2px;
+}
+
+.doc[data-tpl='ledger'] .bullets li {
+  padding-left: 15px;
+  line-height: 1.5;
+  color: #2b2b2b;
+}
+
+.doc[data-tpl='ledger'] .bullets li::before {
+  content: '—';
+  top: 0;
+  width: auto;
+  height: auto;
+  background: none;
+  color: #6b6b6b;
+}
+
+.doc[data-tpl='ledger'] .lede {
+  color: #2b2b2b;
+  line-height: 1.55;
+}
+
+.doc[data-tpl='ledger'] .lede strong {
+  font-weight: 600;
+}
+
+.doc[data-tpl='ledger'] .skillLabel {
+  font-weight: 600;
+  color: #0f0f0f;
+}
+
+.doc[data-tpl='ledger'] .foot {
+  border-top: 1px solid #cfcfcf;
+  color: #6b6b6b;
+}
+
+/* ============================================================
+   C — Editorial. A wide index column carries the navigation;
+   the text column stays narrow enough to read end to end.
+   ============================================================ */
+
+.doc[data-tpl='editorial'] {
+  padding: 76px 72px 56px;
+}
+
+.doc[data-tpl='editorial'] .masthead {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  padding: 0 0 0 126px;
+}
+
+.doc[data-tpl='editorial'] .accent {
+  display: none;
+}
+
+.doc[data-tpl='editorial'] .name {
+  font-size: 46px;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+.doc[data-tpl='editorial'] .role {
+  letter-spacing: 0.05em;
+  margin-top: 10px;
+}
+
+.doc[data-tpl='editorial'] .contact {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0 12px;
+  text-align: left;
+  padding-top: 18px;
+  color: #9c9c9c;
+}
+
+/* The accent runs only as far as the index column, then hands over to a hairline. */
+.doc[data-tpl='editorial'] .mastheadRule {
+  height: 2px;
+  margin-top: 40px;
+  background: linear-gradient(to right, #ff6a00 0 92px, #e8e8e8 92px);
+}
+
+.doc[data-tpl='editorial'] .section,
+.doc[data-tpl='editorial'] .mastheadRule + .section {
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 0 34px;
+  border-top: none;
+  padding: 30px 0 0;
+}
+
+.doc[data-tpl='editorial'] .sectionLabel {
+  text-align: right;
+  padding-top: 6px;
+}
+
+.doc[data-tpl='editorial'] .labelText {
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: #b4b4b4;
+}
+
+.doc[data-tpl='editorial'] .labelIndex {
+  display: block;
+  font-family: var(--font-mono), ui-monospace, Menlo, monospace;
+  font-size: 12px;
+  color: #dcdcdc;
+  margin-top: 4px;
+}
+
+.doc[data-tpl='editorial'] .entry {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 0 14px;
+}
+
+.doc[data-tpl='editorial'] .entry + .entry {
+  margin-top: 26px;
+}
+
+.doc[data-tpl='editorial'] .entryIndex {
+  display: block;
+  font-family: var(--font-mono), ui-monospace, Menlo, monospace;
+  font-size: 12px;
+  color: #b4b4b4;
+  padding-top: 7px;
+}
+
+.doc[data-tpl='editorial'] .entryHead {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.doc[data-tpl='editorial'] .entryTitle {
+  font-size: 21px;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+}
+
+.doc[data-tpl='editorial'] .entryDate {
+  font-size: 11.5px;
+}
+
+.doc[data-tpl='editorial'] .entryLead {
+  font-size: 16px;
+  line-height: 1.66;
+  margin-top: 8px;
+}
+
+.doc[data-tpl='editorial'] .bullets {
+  margin-top: 8px;
+}
+
+.doc[data-tpl='editorial'] .lede {
+  font-size: 17px;
+  line-height: 1.66;
+  max-width: 27rem;
+}
+
+.doc[data-tpl='editorial'] .foot {
+  border-top: none;
+  padding-top: 26px;
+}
+
+/* ============ Print ============ */
+
+@media print {
+  .doc {
+    width: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  /* An entry is the unit that must not be split across a page break. */
+  .entry,
+  .skillRow {
+    break-inside: avoid;
+  }
+
+  .sectionLabel,
+  .entryHead {
+    break-after: avoid;
+  }
+
+  .doc[data-tpl='editorial'] .masthead {
+    padding-left: 126px;
+  }
+}
