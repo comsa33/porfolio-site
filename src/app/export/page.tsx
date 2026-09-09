@@ -1,9 +1,9 @@
 'use client';
 
-import React, { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { ArrowLeft, Download, Printer } from 'lucide-react';
+import { ArrowLeft, Check, Download, Loader, Printer } from 'lucide-react';
 import ExportDocument from '@/components/ExportDocument';
 import {
   DOC_LABELS,
@@ -19,6 +19,13 @@ import styles from './export.module.css';
 
 const PRESET_IDS: PresetId[] = ['resume', 'career', 'portfolio', 'custom'];
 
+const DOWNLOAD_LABEL = {
+  idle: { ko: 'PDF 내려받기', en: 'Download PDF' },
+  working: { ko: '조판하는 중', en: 'Rendering' },
+  done: { ko: '저장됨', en: 'Saved' },
+  error: { ko: '다시 시도', en: 'Try again' },
+} as const;
+
 /**
  * The document as its own page, and as its own URL.
  *
@@ -30,6 +37,8 @@ const PRESET_IDS: PresetId[] = ['resume', 'career', 'portfolio', 'custom'];
 function ExportView() {
   const params = useSearchParams();
   const [fit, setFit] = useState(1);
+  const [phase, setPhase] = useState<'idle' | 'working' | 'done' | 'error'>('idle');
+  const resetTimer = useRef<number | undefined>(undefined);
 
   const doc = (
     PRESET_IDS.includes(params.get('doc') as PresetId) ? params.get('doc') : 'custom'
@@ -69,6 +78,33 @@ function ExportView() {
    * router's own metadata lands afterwards and takes it back. Restore on
    * afterprint so a reader who stays on the page doesn't keep it.
    */
+  /*
+   * Same asynchronous action as the composer's: the server renders for a few
+   * seconds, so the button has to say so rather than sit there looking idle.
+   */
+  const download = useCallback(async () => {
+    if (phase === 'working') return;
+    window.clearTimeout(resetTimer.current);
+    setPhase('working');
+    try {
+      const response = await fetch(pdfHref);
+      if (!response.ok) throw new Error(String(response.status));
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${filename}.pdf`;
+      link.click();
+      URL.revokeObjectURL(url);
+      setPhase('done');
+    } catch {
+      setPhase('error');
+    }
+    resetTimer.current = window.setTimeout(() => setPhase('idle'), 4000);
+  }, [phase, pdfHref, filename]);
+
+  useEffect(() => () => window.clearTimeout(resetTimer.current), []);
+
   const printNow = useCallback(() => {
     const previous = document.title;
     document.title = filename;
@@ -108,16 +144,20 @@ function ExportView() {
           <Printer size={14} strokeWidth={1.6} />
           <span>{lang === 'ko' ? '인쇄' : 'Print'}</span>
         </button>
-        <a className={styles.print} href={pdfHref}>
-          <Download size={14} strokeWidth={1.6} />
-          <span>{lang === 'ko' ? 'PDF 내려받기' : 'Download PDF'}</span>
-        </a>
+        <button type="button" className={styles.print} onClick={download} data-phase={phase}>
+          <span className={styles.fill} data-phase={phase} aria-hidden />
+          {phase === 'working' && <Loader size={14} strokeWidth={1.6} />}
+          {phase === 'idle' && <Download size={14} strokeWidth={1.6} />}
+          {phase === 'done' && <Check size={14} strokeWidth={2} />}
+          {phase === 'error' && <Download size={14} strokeWidth={1.6} />}
+          <span>{DOWNLOAD_LABEL[phase][lang]}</span>
+        </button>
       </div>
 
       <p className={styles.hint}>
         {lang === 'ko'
-          ? '내려받기는 서버에서 이 페이지를 그대로 조판해 쪽번호까지 붙인 PDF 파일을 내려줍니다. 인쇄는 브라우저의 인쇄 대화상자를 엽니다.'
-          : 'Download renders this very page on the server into a paginated PDF. Print opens the browser dialog instead.'}
+          ? '이 화면은 웹 지면이라 쪽이 나뉘지 않습니다 — 여백과 쪽번호는 조판할 때 붙습니다. 실제 문서 그대로 보려면 내려받거나, 구성기의 “미리보기”로 PDF를 바로 여세요.'
+          : 'This is the web view: it is not paginated, and margins and page numbers are added at render time. Download it, or use the composer preview to open the PDF itself.'}
       </p>
 
       <main className={styles.stage} style={{ '--fit': fit } as React.CSSProperties}>

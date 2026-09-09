@@ -47,8 +47,10 @@ const stamp = () => {
 };
 
 /**
- * Puppeteer renders these into the page margin, in its own context — no page
- * styles reach them, so every rule has to be inline and a size stated.
+ * Puppeteer renders these into the page margin, in ITS own context: no page
+ * styles reach them and, crucially, neither do the page's webfonts. The
+ * lambda's Chromium ships no Korean face, so Korean here comes out blank —
+ * which is why the running foot is Latin.
  */
 const footer = (label: string) => `
   <div style="width:100%;padding:0 15mm;font-family:-apple-system,system-ui,sans-serif;
@@ -64,6 +66,11 @@ export async function GET(request: NextRequest) {
   const docLabel = DOC_LABELS[doc]?.[lang] ?? DOC_LABELS.custom[lang];
   const name = data.profile.name[lang];
   const filename = `${name}_${docLabel}_${stamp()}.pdf`.replace(/\s+/g, '');
+  const footLabel = `${data.profile.name.en} — ${(DOC_LABELS[doc] ?? DOC_LABELS.custom).en}`;
+
+  // inline: the browser opens it in its own viewer, which is the only preview
+  // that is exactly the document — pagination included.
+  const disposition = params.get('inline') === '1' ? 'inline' : 'attachment';
 
   // The page to print is the preview route, minus its own auto-print and
   // colophon: this PDF carries real page numbers in the margin instead.
@@ -88,14 +95,14 @@ export async function GET(request: NextRequest) {
       preferCSSPageSize: false,
       displayHeaderFooter: true,
       headerTemplate: '<span></span>',
-      footerTemplate: footer(`${name} — ${docLabel}`),
+      footerTemplate: footer(footLabel),
       margin: { top: '16mm', bottom: '17mm', left: '15mm', right: '15mm' },
     });
 
     return new Response(pdf as unknown as BodyInit, {
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(filename)}`,
+        'Content-Disposition': `${disposition}; filename*=UTF-8''${encodeURIComponent(filename)}`,
         'Cache-Control': 'no-store',
       },
     });

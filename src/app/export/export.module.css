@@ -173,3 +173,52 @@
     display: none;
   }
 }
+
+/* The download runs on the server, so the button carries its own progress the
+   way the composer's does — its bottom hairline filling, nothing added beside it. */
+.print {
+  position: relative;
+  overflow: hidden;
+}
+
+.print[data-phase='done'] {
+  border-color: var(--accent);
+}
+
+.print[data-phase='done'] svg {
+  color: var(--accent);
+}
+
+.print[data-phase='working'] svg {
+  animation: exportSpin 1.1s linear infinite;
+}
+
+.fill {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1.5px;
+  width: 0;
+  background: var(--accent);
+  transition: width var(--dur-slow) var(--ease);
+}
+
+.fill[data-phase='working'] {
+  width: 65%;
+}
+
+.fill[data-phase='done'] {
+  width: 100%;
+}
+
+@keyframes exportSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .print[data-phase='working'] svg {
+    animation: none;
+  }
+}

@@ -543,7 +543,7 @@ export default function ExportSheet({ lang, isOpen, onClose }: Props) {
           </span>
           <div className={styles.actions}>
             <a
-              href={`/export?${query}`}
+              href={`/api/export?${query}&inline=1`}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.preview}
