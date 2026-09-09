@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { ArrowLeft, Printer } from 'lucide-react';
@@ -30,6 +30,7 @@ const PRESET_IDS: PresetId[] = ['resume', 'career', 'portfolio', 'custom'];
 function ExportView() {
   const params = useSearchParams();
   const [printed, setPrinted] = useState(false);
+  const [fit, setFit] = useState(1);
 
   const doc = (
     PRESET_IDS.includes(params.get('doc') as PresetId) ? params.get('doc') : 'custom'
@@ -74,6 +75,22 @@ function ExportView() {
     window.print();
   }, [filename]);
 
+  /*
+   * A4 is 794px wide and stays 794px wide — reflowing it to a phone would show
+   * a layout that is not the one being saved. So the sheet is scaled to fit
+   * instead, the way a print preview does: the whole page is visible at once,
+   * and pinch-zoom is there for actually reading it.
+   */
+  useEffect(() => {
+    const measure = () => {
+      const available = window.innerWidth - 32;
+      setFit(available >= 794 ? 1 : Math.max(0.3, available / 794));
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, []);
+
   // Print once the fonts have settled — printing mid-swap reflows the pagination.
   useEffect(() => {
     if (printed || params.get('print') === '0') return;
@@ -110,7 +127,7 @@ function ExportView() {
           : 'In the print dialog choose “Save as PDF” and enable background graphics for an identical document.'}
       </p>
 
-      <main className={styles.stage}>
+      <main className={styles.stage} style={{ '--fit': fit } as React.CSSProperties}>
         <ExportDocument
           picked={picked}
           template={template}

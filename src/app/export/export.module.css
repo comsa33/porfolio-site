@@ -103,11 +103,16 @@
     display: none;
   }
 
-  /* The sheet is fixed at A4 width; on a phone it scrolls sideways in its own box. */
   .stage {
-    overflow-x: auto;
     padding: 1rem 1rem 3rem;
   }
+}
+
+/* Scales the A4 sheet down to the viewport rather than letting it overflow.
+   zoom, not transform: it shrinks the layout box too, so nothing is left
+   scrolling past the fold. */
+.stage > * {
+  zoom: var(--fit, 1);
 }
 
 @media print {
@@ -119,5 +124,10 @@
   .stage {
     padding: 0;
     overflow: visible;
+  }
+
+  /* Paper is paper: the print engine does its own fitting. */
+  .stage > * {
+    zoom: 1;
   }
 }
