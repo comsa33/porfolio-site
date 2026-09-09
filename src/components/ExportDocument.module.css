@@ -2,31 +2,53 @@
  * The paper. Three templates, one DOM — everything below is layout and colour,
  * so switching template can never change what the document says.
  *
- * Colours are literal, not theme tokens: paper is paper in either theme, and
- * a print engine should never be handed a dark palette.
+ * Colours are literal, not theme tokens: paper is paper in either theme, and a
+ * print engine should never be handed a dark palette.
  *
- * Authored at 96 px per inch — A4 is 794 × 1123 — so 16px is 12pt, the floor
- * for running text. Only mono metadata and short labels drop below it.
+ * Type. Authored at 96 px per inch, so A4 is 794 × 1123 and 1pt is 1.333px.
+ * Everything scales off --fs, the running body size, which each template sets
+ * to the convention for its kind of document (see --fs-base below).
+ *
+ * Mono is for Latin and numerals ONLY — dates, URLs, indices. It has no Korean
+ * glyphs, so a Korean string set in it silently falls back to whatever the
+ * system offers, in a face that matches nothing else on the page.
  */
 
 .doc {
+  --fs-base: 14px; /* 10.5pt — the conventional body size for a résumé */
+  --fs: var(--fs-base);
+  --lh: 1.62;
+
   width: 794px;
   min-height: 1123px;
   margin: 0 auto;
-  padding: 68px 72px 56px;
+  padding: 66px 70px 52px;
   display: flex;
   flex-direction: column;
   background: #ffffff;
   color: #0f0f0f;
   font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: var(--fs);
+  line-height: var(--lh);
   letter-spacing: -0.005em;
   word-break: keep-all;
+  orphans: 3;
+  widows: 3;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.12);
   /* The accent stroke and the rules are the design; do not let print drop them. */
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
+}
+
+.role,
+.contact,
+.entryDate,
+.entryIndex,
+.stack,
+.labelIndex,
+.foot {
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-feature-settings: 'tnum' 1;
 }
 
 /* ============ Masthead ============ */
@@ -36,30 +58,29 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 32px;
-  padding-bottom: 22px;
+  padding-bottom: 20px;
 }
 
 /* The single accent stroke on the page. */
 .accent {
-  width: 26px;
+  width: 24px;
   height: 3px;
   background: #ff6a00;
-  margin-bottom: 14px;
+  margin-bottom: 13px;
 }
 
 .name {
-  font-size: 29px;
+  font-size: calc(var(--fs) * 1.86);
   font-weight: 600;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.03em;
   line-height: 1.1;
 }
 
 .role {
-  font-family: var(--font-mono), ui-monospace, Menlo, monospace;
-  font-size: 12px;
-  letter-spacing: 0.03em;
-  color: #9c9c9c;
-  margin-top: 7px;
+  font-size: calc(var(--fs) * 0.8);
+  letter-spacing: 0.02em;
+  color: #8e8e8e;
+  margin-top: 6px;
   text-transform: uppercase;
 }
 
@@ -67,12 +88,11 @@
   display: flex;
   flex-direction: column;
   font-style: normal;
-  font-family: var(--font-mono), ui-monospace, Menlo, monospace;
-  font-size: 11.5px;
-  line-height: 1.85;
+  font-size: calc(var(--fs) * 0.78);
+  line-height: 1.75;
   color: #6b6b6b;
   text-align: right;
-  padding-top: 20px;
+  padding-top: 16px;
 }
 
 .mastheadRule {
@@ -82,28 +102,40 @@
 
 /* ============ Sections ============ */
 
+/*
+ * The label hangs in a gutter, and it is positioned rather than laid out in a
+ * grid column: a grid fragments badly across printed pages (Chrome stops
+ * honouring break-inside inside one), while an absolute label simply stays at
+ * the head of its section and lets the body paginate as ordinary block flow.
+ */
 .section {
-  display: grid;
-  grid-template-columns: 104px minmax(0, 1fr);
-  gap: 0 28px;
-  padding: 19px 0;
+  position: relative;
+  padding: 17px 0 17px 128px;
   border-top: 1px solid #e8e8e8;
 }
 
 .mastheadRule + .section {
   border-top: none;
-  padding-top: 22px;
+  padding-top: 20px;
 }
 
 .sectionLabel {
-  padding-top: 3px;
+  position: absolute;
+  left: 0;
+  top: 19px;
+  width: 100px;
 }
 
+.mastheadRule + .section .sectionLabel {
+  top: 22px;
+}
+
+/* Body face, not mono: these labels are Korean as often as not. */
 .labelText {
-  font-family: var(--font-mono), ui-monospace, Menlo, monospace;
-  font-size: 12px;
-  letter-spacing: 0.04em;
-  color: #9c9c9c;
+  font-size: calc(var(--fs) * 0.86);
+  font-weight: 500;
+  line-height: 1.5;
+  color: #8e8e8e;
 }
 
 /* Only the editorial template numbers its sections. */
@@ -119,10 +151,11 @@
 
 .entry {
   display: block;
+  break-inside: avoid;
 }
 
 .entry + .entry {
-  margin-top: 17px;
+  margin-top: 15px;
 }
 
 .entryIndex {
@@ -138,35 +171,35 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 16px;
+  break-after: avoid;
 }
 
 .entryTitle {
-  font-size: 17px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
+  font-size: calc(var(--fs) * 1.08);
+  font-weight: 600;
+  letter-spacing: -0.012em;
   line-height: 1.4;
 }
 
 .entryRole {
-  font-size: 14px;
+  font-size: calc(var(--fs) * 0.9);
   font-weight: 400;
   color: #6b6b6b;
-  margin-left: 8px;
+  margin-left: 7px;
 }
 
 .entryDate {
-  font-family: var(--font-mono), ui-monospace, Menlo, monospace;
-  font-size: 12px;
-  color: #9c9c9c;
+  font-size: calc(var(--fs) * 0.8);
+  color: #8e8e8e;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
 .entryLead {
-  font-size: 15.5px;
-  line-height: 1.6;
+  font-size: calc(var(--fs) * 0.96);
+  line-height: 1.58;
   color: #6b6b6b;
-  margin-top: 4px;
+  margin-top: 3px;
 }
 
 .bullets {
@@ -176,11 +209,11 @@
 
 .bullets li {
   position: relative;
-  padding-left: 13px;
-  font-size: 16px;
-  line-height: 1.62;
-  color: #4a4a4a;
-  margin-top: 3px;
+  padding-left: 12px;
+  line-height: var(--lh);
+  color: #3d3d3d;
+  margin-top: 2px;
+  break-inside: avoid;
 }
 
 /* A hairline, not a dot: the same rule weight as everything else on the page. */
@@ -188,53 +221,52 @@
   content: '';
   position: absolute;
   left: 0;
-  top: 12px;
+  top: calc(var(--fs) * 0.78);
   width: 5px;
   height: 1px;
   background: #cfcfcf;
 }
 
 .stack {
-  font-family: var(--font-mono), ui-monospace, Menlo, monospace;
-  font-size: 12px;
+  font-size: calc(var(--fs) * 0.8);
   line-height: 1.6;
-  color: #9c9c9c;
-  margin-top: 6px;
+  color: #8e8e8e;
+  margin-top: 5px;
 }
 
 /* ============ Summary & skills ============ */
 
 .lede {
-  font-size: 16px;
   line-height: 1.66;
-  color: #6b6b6b;
+  color: #5a5a5a;
 }
 
 .lede strong {
-  font-weight: 400;
+  font-weight: 500;
   color: #0f0f0f;
 }
 
 .skills {
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 7px;
 }
 
 .skillRow {
   display: grid;
-  grid-template-columns: 96px minmax(0, 1fr);
-  gap: 0 16px;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 0 14px;
+  break-inside: avoid;
 }
 
 .skillLabel {
-  font-size: 13px;
-  color: #9c9c9c;
-  padding-top: 2px;
+  font-size: calc(var(--fs) * 0.86);
+  color: #8e8e8e;
+  padding-top: 1px;
 }
 
 .skillValue {
-  font-size: 15px;
+  font-size: calc(var(--fs) * 0.96);
   line-height: 1.55;
   color: #0f0f0f;
 }
@@ -246,28 +278,29 @@
   justify-content: space-between;
   gap: 16px;
   margin-top: auto;
-  padding-top: 18px;
+  padding-top: 16px;
   border-top: 1px solid #e8e8e8;
-  font-family: var(--font-mono), ui-monospace, Menlo, monospace;
-  font-size: 11px;
+  font-size: calc(var(--fs) * 0.75);
   color: #9c9c9c;
 }
 
 /* ============================================================
    B — Ledger. Black ink only, one dense column, no label gutter.
-   Built so an ATS reads it in document order and a mono printer
+   Sized so an ATS reads it in document order and a mono printer
    loses nothing.
    ============================================================ */
 
 .doc[data-tpl='ledger'] {
-  padding: 64px 72px 52px;
+  --fs-base: 13.5px; /* 10pt — the dense end of the convention */
+  --lh: 1.5;
+  padding: 62px 70px 48px;
 }
 
 .doc[data-tpl='ledger'] .masthead {
   flex-direction: column;
   align-items: flex-start;
-  gap: 7px;
-  padding-bottom: 12px;
+  gap: 5px;
+  padding-bottom: 11px;
 }
 
 .doc[data-tpl='ledger'] .accent {
@@ -275,34 +308,33 @@
 }
 
 .doc[data-tpl='ledger'] .name {
-  font-size: 26px;
+  font-size: calc(var(--fs) * 1.85);
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
 }
 
 .doc[data-tpl='ledger'] .role {
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: calc(var(--fs) * 1.06);
   font-weight: 500;
   text-transform: none;
   letter-spacing: -0.005em;
   color: #0f0f0f;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 .doc[data-tpl='ledger'] .contact {
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 0 10px;
+  gap: 0 9px;
   text-align: left;
   padding-top: 3px;
-  font-size: 12px;
   color: #4a4a4a;
 }
 
 .doc[data-tpl='ledger'] .contact span + span::before {
   content: '·';
-  margin-right: 10px;
+  margin-right: 9px;
   color: #cfcfcf;
 }
 
@@ -312,32 +344,28 @@
 
 .doc[data-tpl='ledger'] .section,
 .doc[data-tpl='ledger'] .mastheadRule + .section {
-  display: block;
   border-top: none;
-  padding: 18px 0 0;
+  padding: 16px 0 0;
 }
 
 .doc[data-tpl='ledger'] .sectionLabel {
-  padding: 0 0 5px;
+  position: static;
+  width: auto;
+  padding-bottom: 4px;
   border-bottom: 1.5px solid #0f0f0f;
-  margin-bottom: 11px;
+  margin-bottom: 10px;
+  break-after: avoid;
 }
 
 .doc[data-tpl='ledger'] .labelText {
-  font-family: var(--font-body);
-  font-size: 13px;
+  font-size: calc(var(--fs) * 0.92);
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.02em;
   color: #0f0f0f;
 }
 
 .doc[data-tpl='ledger'] .entry + .entry {
-  margin-top: 13px;
-}
-
-.doc[data-tpl='ledger'] .entryTitle {
-  font-size: 16.5px;
-  font-weight: 600;
+  margin-top: 12px;
 }
 
 .doc[data-tpl='ledger'] .entryDate,
@@ -345,16 +373,14 @@
   color: #4a4a4a;
 }
 
-.doc[data-tpl='ledger'] .entryLead {
-  font-size: 15px;
+.doc[data-tpl='ledger'] .entryLead,
+.doc[data-tpl='ledger'] .bullets li,
+.doc[data-tpl='ledger'] .lede {
   color: #2b2b2b;
-  margin-top: 2px;
 }
 
 .doc[data-tpl='ledger'] .bullets li {
-  padding-left: 15px;
-  line-height: 1.5;
-  color: #2b2b2b;
+  padding-left: 14px;
 }
 
 .doc[data-tpl='ledger'] .bullets li::before {
@@ -364,11 +390,6 @@
   height: auto;
   background: none;
   color: #6b6b6b;
-}
-
-.doc[data-tpl='ledger'] .lede {
-  color: #2b2b2b;
-  line-height: 1.55;
 }
 
 .doc[data-tpl='ledger'] .lede strong {
@@ -386,12 +407,14 @@
 }
 
 /* ============================================================
-   C — Editorial. A wide index column carries the navigation;
+   C — Editorial. A wide index column carries the navigation and
    the text column stays narrow enough to read end to end.
    ============================================================ */
 
 .doc[data-tpl='editorial'] {
-  padding: 76px 72px 56px;
+  --fs-base: 15px; /* 11.25pt — a document meant to be read through */
+  --lh: 1.68;
+  padding: 74px 70px 52px;
 }
 
 .doc[data-tpl='editorial'] .masthead {
@@ -406,112 +429,101 @@
 }
 
 .doc[data-tpl='editorial'] .name {
-  font-size: 46px;
+  font-size: calc(var(--fs) * 2.8);
   letter-spacing: -0.035em;
   line-height: 1.05;
 }
 
 .doc[data-tpl='editorial'] .role {
-  letter-spacing: 0.05em;
-  margin-top: 10px;
+  letter-spacing: 0.045em;
+  margin-top: 9px;
 }
 
 .doc[data-tpl='editorial'] .contact {
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 0 12px;
+  gap: 0 11px;
   text-align: left;
-  padding-top: 18px;
+  padding-top: 15px;
   color: #9c9c9c;
 }
 
 /* The accent runs only as far as the index column, then hands over to a hairline. */
 .doc[data-tpl='editorial'] .mastheadRule {
   height: 2px;
-  margin-top: 40px;
+  margin-top: 36px;
   background: linear-gradient(to right, #ff6a00 0 92px, #e8e8e8 92px);
 }
 
 .doc[data-tpl='editorial'] .section,
 .doc[data-tpl='editorial'] .mastheadRule + .section {
-  grid-template-columns: 92px minmax(0, 1fr);
-  gap: 0 34px;
   border-top: none;
-  padding: 30px 0 0;
+  padding: 27px 0 0 126px;
 }
 
 .doc[data-tpl='editorial'] .sectionLabel {
+  top: 33px;
+  width: 92px;
   text-align: right;
-  padding-top: 6px;
 }
 
 .doc[data-tpl='editorial'] .labelText {
-  font-size: 12px;
-  letter-spacing: 0.05em;
   color: #b4b4b4;
 }
 
 .doc[data-tpl='editorial'] .labelIndex {
   display: block;
-  font-family: var(--font-mono), ui-monospace, Menlo, monospace;
-  font-size: 12px;
+  font-size: calc(var(--fs) * 0.78);
   color: #dcdcdc;
-  margin-top: 4px;
+  margin-top: 3px;
 }
 
 .doc[data-tpl='editorial'] .entry {
   display: grid;
-  grid-template-columns: 34px minmax(0, 1fr);
-  gap: 0 14px;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 0 13px;
 }
 
 .doc[data-tpl='editorial'] .entry + .entry {
-  margin-top: 26px;
+  margin-top: 23px;
 }
 
 .doc[data-tpl='editorial'] .entryIndex {
   display: block;
-  font-family: var(--font-mono), ui-monospace, Menlo, monospace;
-  font-size: 12px;
+  font-size: calc(var(--fs) * 0.78);
   color: #b4b4b4;
-  padding-top: 7px;
+  padding-top: 6px;
 }
 
 .doc[data-tpl='editorial'] .entryHead {
   flex-direction: column;
   align-items: flex-start;
-  gap: 6px;
+  gap: 5px;
 }
 
 .doc[data-tpl='editorial'] .entryTitle {
-  font-size: 21px;
+  font-size: calc(var(--fs) * 1.34);
+  font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1.35;
 }
 
-.doc[data-tpl='editorial'] .entryDate {
-  font-size: 11.5px;
-}
-
 .doc[data-tpl='editorial'] .entryLead {
-  font-size: 16px;
-  line-height: 1.66;
-  margin-top: 8px;
+  margin-top: 7px;
 }
 
 .doc[data-tpl='editorial'] .bullets {
-  margin-top: 8px;
+  margin-top: 7px;
 }
 
 .doc[data-tpl='editorial'] .lede {
-  font-size: 17px;
-  line-height: 1.66;
-  max-width: 27rem;
+  max-width: 28rem;
 }
 
 .doc[data-tpl='editorial'] .foot {
   border-top: none;
-  padding-top: 26px;
+  padding-top: 24px;
+  margin-left: 126px;
 }
 
 /* ============ Print ============ */
@@ -527,12 +539,24 @@
 
   /* An entry is the unit that must not be split across a page break. */
   .entry,
-  .skillRow {
+  .skillRow,
+  .bullets li {
     break-inside: avoid;
   }
 
-  .sectionLabel,
-  .entryHead {
+  .entryHead,
+  .name,
+  .sectionLabel {
+    break-after: avoid;
+  }
+
+  /* A section may span pages; its label stays at the head of the first. */
+  .section {
+    break-inside: auto;
+  }
+
+  .masthead,
+  .mastheadRule {
     break-after: avoid;
   }
 

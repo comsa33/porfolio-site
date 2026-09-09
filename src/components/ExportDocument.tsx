@@ -195,7 +195,7 @@ export default function ExportDocument({ picked, template, lang, doc, title, sum
             {skillRows.map((row) => (
               <div key={row.key} className={styles.skillRow}>
                 <span className={styles.skillLabel}>{profile.coreSkills[row.key].title[lang]}</span>
-                <span className={styles.skillValue}>{row.names.join(' · ')}</span>
+                <span className={styles.skillValue}>{row.names.join(', ')}</span>
               </div>
             ))}
           </div>
@@ -218,7 +218,7 @@ export default function ExportDocument({ picked, template, lang, doc, title, sum
               date={[p.company?.[lang], p.period?.[lang]].filter(Boolean).join(' · ')}
               lead={p.shortDescription[lang]}
               lines={(p.keyAchievements ?? []).map((a) => a[lang])}
-              stack={p.techStack.join(' · ')}
+              stack={p.techStack.join(', ')}
             />
           ))}
         </Section>
