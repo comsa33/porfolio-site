@@ -91,33 +91,91 @@
 /*
  * The one arrival that is not on the way to somewhere else. Every other move
  * ends with the dot waiting to be moved again; this one ends the page, so it
- * lands, bounces once and settles.
+ * gets a sentence of its own to end on.
+ *
+ * It lands, stands up as a terminal caret and blinks twice — the page is over
+ * and it is waiting for input — then falls back into a ball and bounces to a
+ * stop. The origin sits low in the mark so the caret grows upward off the
+ * baseline the way a cursor does, and so the bounces have a floor to land on.
+ *
+ * Opacity steps rather than fades: the pairs of keyframes 0.1% apart are how a
+ * cursor blinks on and off instead of pulsing.
  */
 .ball[data-land] {
-  animation: land 640ms var(--ease-out) both;
+  transform-origin: 50% 85%;
+  animation: land 2200ms var(--ease-out) both;
 }
 
 @keyframes land {
+  /* squashed by the landing, then a rebound */
   0% {
-    transform: translateY(0) scale(1, 1);
-  }
-  /* up */
-  20% {
-    transform: translateY(-90%) scale(0.88, 1.14);
-  }
-  /* down, and squashed by the landing */
-  48% {
     transform: translateY(0) scale(1.18, 0.84);
+    border-radius: 50%;
+    opacity: 1;
   }
-  /* a smaller second hop */
-  70% {
-    transform: translateY(-28%) scale(0.96, 1.05);
+  11% {
+    transform: translateY(0) scale(0.94, 1.06);
   }
-  88% {
-    transform: translateY(0) scale(1.06, 0.95);
+  /* up on end, and square: a caret */
+  17% {
+    transform: translateY(0) scale(0.34, 2.5);
+    border-radius: 1px;
+  }
+  /* blink, blink */
+  26.9% {
+    opacity: 1;
+  }
+  27% {
+    opacity: 0;
+  }
+  36.9% {
+    opacity: 0;
+  }
+  37% {
+    opacity: 1;
+  }
+  46.9% {
+    opacity: 1;
+  }
+  47% {
+    opacity: 0;
+  }
+  56.9% {
+    opacity: 0;
+  }
+  57% {
+    opacity: 1;
+  }
+  /* the caret holds its shape from 17% to here, then falls back into a ball */
+  67% {
+    transform: translateY(0) scale(0.34, 2.5);
+    border-radius: 1px;
+    opacity: 1;
+  }
+  74% {
+    transform: translateY(0) scale(1.06, 0.94);
+    border-radius: 50%;
+  }
+  /* 통통통 — three hops, each smaller than the last */
+  80% {
+    transform: translateY(-80%) scale(0.9, 1.12);
+  }
+  86% {
+    transform: translateY(0) scale(1.16, 0.86);
+  }
+  90% {
+    transform: translateY(-32%) scale(0.96, 1.05);
+  }
+  94% {
+    transform: translateY(0) scale(1.08, 0.94);
+  }
+  97% {
+    transform: translateY(-10%) scale(0.99, 1.02);
   }
   100% {
     transform: translateY(0) scale(1, 1);
+    border-radius: 50%;
+    opacity: 1;
   }
 }
 
