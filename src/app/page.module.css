@@ -498,6 +498,29 @@ button.contactLink:hover span {
   list-style: none;
 }
 
+/*
+ * While the pointer is in a section's filter row, that section's list steps
+ * back. Nothing has changed yet — it only says which of the two the reader is
+ * operating, and it is gone again in 150ms, before anyone can time it.
+ *
+ * Blurring a whole list is a wider area than blurring one row, so it is a step
+ * gentler than the value a row gets from its neighbours.
+ */
+@media (hover: hover) {
+  .projectList,
+  .listWrap {
+    transition:
+      opacity var(--dur-instant) ease-out,
+      filter var(--dur-instant) ease-out;
+  }
+
+  .section:has(.filterGroup:hover) .projectList,
+  .section:has(.filterGroup:hover) .listWrap {
+    opacity: 0.5;
+    filter: blur(1px);
+  }
+}
+
 .listWrap {
   padding-top: 0.5rem;
 }
