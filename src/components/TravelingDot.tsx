@@ -165,10 +165,17 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       const w = width / size;
       ball.style.setProperty('--caret-y', String(h));
       ball.style.setProperty('--caret-x', String(w));
-      // The jump overshoots the caret and settles back into it; that is what
-      // makes it read as a spring rather than as a change of shape.
-      ball.style.setProperty('--caret-y-over', String(h * 1.16));
-      ball.style.setProperty('--caret-x-over', String(w * 0.78));
+      // The jump goes well past the caret and recoils back through it before
+      // settling — overshoot, undershoot, rest. That three-beat is what makes
+      // it read as a spring rather than as a shape growing. At a tenth over
+      // the caret it was four pixels of difference and invisible; half again
+      // as tall is a jump you can see.
+      ball.style.setProperty('--caret-y-over', String(h * 1.5));
+      ball.style.setProperty('--caret-x-over', String(w * 0.62));
+      // Coming back through it, squat and a little wider — the give of
+      // something that overshot and is settling.
+      ball.style.setProperty('--caret-y-under', String(h * 0.93));
+      ball.style.setProperty('--caret-x-under', String(w * 1.14));
     };
 
     /**
