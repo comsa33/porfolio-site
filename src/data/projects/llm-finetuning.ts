@@ -23,6 +23,10 @@ const project = {
     'GGUF (llama.cpp)',
     'Flutter',
   ],
+  peekLine: {
+    ko: '단일 GPU로 8B·2B 한국어 모델을 도메인 특화 학습해 공개',
+    en: 'Fine-tuned and released 8B and 2B Korean models on a single GPU.',
+  },
   keyAchievements: [
     {
       ko: 'Llama-3-Open-Ko-8B(8B)와 Gemma-ko-2b(2B)를 영어 시험 문항 생성 태스크로 도메인 특화 파인튜닝 후 공개',

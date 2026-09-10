@@ -45,6 +45,10 @@ const project = {
       en: 'Source Attribution',
     },
   ],
+  peekLine: {
+    ko: '임계값에 못 미친 답변은 검색어를 고쳐 최대 3회 다시 찾는 자기교정 루프',
+    en: 'A self-correcting loop refines the query and retries up to three times.',
+  },
   keyAchievements: [
     {
       ko: '품질 평가 기반 Self-Corrective Loop — 답변이 임계값에 못 미치면 검색어를 개선해 최대 3회 재검색',

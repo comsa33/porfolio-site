@@ -99,14 +99,15 @@
  *
  * --edge is the boundary's position, written per frame by useEdgeReveal;
  * everything here is a function of it. --lines is the box's height in lines,
- * measured from the summary and floored at two, so the row never resizes.
+ * measured from the summary, and the peek is written to fit it — so the row
+ * never resizes and no sentence is cut.
  */
 .slot {
   --edge: 0;
   --band: 20;
   position: relative;
   margin-top: 0.35rem;
-  min-height: calc(var(--lines, 2) * 1.55em);
+  min-height: calc(var(--lines, 1) * 1.55em);
 }
 
 .oneLiner {
@@ -130,7 +131,7 @@
   color: var(--ink);
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: var(--lines, 2);
+  -webkit-line-clamp: var(--lines, 1);
   overflow: hidden;
   pointer-events: none;
   visibility: hidden;

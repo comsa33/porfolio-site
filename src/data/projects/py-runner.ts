@@ -24,6 +24,10 @@ const project = {
     'OpenTelemetry',
     'pytest',
   ],
+  peekLine: {
+    ko: '금융·공공·엔터프라이즈 7개 고객사 9개 프로젝트에 적용, 주 개발자',
+    en: 'Adopted by 9 projects across 7 finance, public and enterprise clients.',
+  },
   keyAchievements: [
     {
       ko: '금융·공공·엔터프라이즈 7개 고객사 / 9개 프로젝트에 적용된 실행 런타임 (주 개발자)',

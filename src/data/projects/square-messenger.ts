@@ -12,6 +12,10 @@ const project = {
     en: "A privacy-first messenger published on Google Play/App Store. Find friends via SHA-256 contact sync without exposing phone numbers. Features anonymous 'Connect' system and 'Square Log' feed for a new social experience. Real-time architecture based on Firebase + Cloud Functions.",
   },
   techStack: ['Flutter', 'Dart', 'Firebase', 'Cloud Functions', 'TypeScript', 'Firestore', 'FCM'],
+  peekLine: {
+    ko: 'SHA-256 연락처 해싱 — 서버에 원본 전화번호를 남기지 않는 친구 찾기',
+    en: 'SHA-256 contact hashing — friend finding with zero raw phone numbers stored.',
+  },
   keyAchievements: [
     {
       ko: 'SHA-256 연락처 해싱으로 Privacy-First 친구 찾기 (서버에 원본 전화번호 Zero)',

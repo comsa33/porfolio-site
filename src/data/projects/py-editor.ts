@@ -23,6 +23,10 @@ const project = {
     'Python LSP',
     'Docker',
   ],
+  peekLine: {
+    ko: '커스텀 프로세스 풀로 pylsp를 관리해 멀티유저 메모리를 최적화',
+    en: 'A custom process pool manages pylsp, keeping multi-user memory in check.',
+  },
   keyAchievements: [
     {
       ko: 'Custom Process Pool로 pylsp 효율적 관리 (멀티유저 메모리 최적화)',

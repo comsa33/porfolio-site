@@ -15,6 +15,10 @@ const project = {
     en: 'Designed and trained a job seeker–company culture-fit matching model at GravyLab AI Lab. Two million company reviews were structured into organizational-culture types via unsupervised clustering, and review and job-posting text was mapped onto culture axes with zero-shot classification by a pretrained language model. The method was granted a Korean patent.',
   },
   techStack: ['Python', 'Unsupervised Clustering', 'Pretrained LM (zero-shot)', 'Data Pipeline'],
+  peekLine: {
+    ko: '기업 리뷰 200만 건을 비지도 클러스터링해 조직문화 유형을 도출',
+    en: 'Derived culture types by clustering two million company reviews.',
+  },
   keyAchievements: [
     {
       ko: '기업 리뷰 200만 건 비지도 클러스터링으로 조직문화 유형 도출',

@@ -9,9 +9,6 @@ import ProjectDetailModal from './ProjectDetailModal';
 import ArchitectureModal from './ArchitectureModal';
 import { useEdgeReveal, useRowActive, useSameHeight } from './useEdgeReveal';
 
-/** The achievements carry <strong> for emphasis; the peek is one plain line. */
-const plain = (html: string) => html.replace(/<[^>]*>/g, '');
-
 interface ProjectCardProps {
   project: Project;
   lang: 'ko' | 'en';
@@ -32,10 +29,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang, index }) => {
   const title = typeof project.title === 'string' ? project.title : project.title[lang];
   const detailsId = `project-details-${project.id}`;
 
-  // The row's headline achievement, shown in place of the summary while the
-  // reader is on the row. Expanding the row lists all of them, so the peek
-  // stands down rather than competing with the list it introduces.
-  const peek = project.keyAchievements?.[0] ? plain(project.keyAchievements[0][lang]) : undefined;
+  // The one line shown in place of the summary while the reader is on the row.
+  // It is written to the summary's length rather than lifted from the
+  // achievements, so the box keeps its height and the sentence keeps its end.
+  // Expanding the row gives the full account, so the peek stands down rather
+  // than competing with the list it introduces.
+  const peek = project.peekLine?.[lang];
   const rowRef = useRef<HTMLLIElement>(null);
   const row = useRowActive(rowRef);
   const open = row.active && !expanded && Boolean(peek);

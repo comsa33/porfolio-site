@@ -25,6 +25,10 @@ const project = {
     'Kubernetes',
     'pytest',
   ],
+  peekLine: {
+    ko: 'RAGAS 지표를 자체 구현해 버전·프로바이더 종속을 걷어냈다',
+    en: 'Reimplemented the RAGAS metrics in-house, removing version and provider lock-in.',
+  },
   keyAchievements: [
     {
       ko: 'RAGAS 라이브러리 직접 의존 없이 경량 자체 구현 (프롬프트 규격은 준수) — 버전·프로바이더 종속 제거',

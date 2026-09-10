@@ -20,6 +20,10 @@ const project = {
     'Gemini AI',
     'TossPayments',
   ],
+  peekLine: {
+    ko: 'Web·iOS·Android 동시 출시, 누적 사용자 450명',
+    en: 'Shipped on web, iOS and Android — 450+ cumulative users.',
+  },
   keyAchievements: [
     {
       ko: 'Google Play/App Store 동시 출시 (Web + iOS + Android) — 누적 사용자 450+',

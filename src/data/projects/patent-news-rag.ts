@@ -15,6 +15,10 @@ const project = {
     en: 'Built the RAG retrieval layer for a patent/news chatbot on the Illunex AI team — designed the Elasticsearch indexing and search pipeline, implemented LangChain-based embedding and retrieval modules, and built ETL pipelines for large-scale patent and news data.',
   },
   techStack: ['Python', 'Elasticsearch', 'LangChain', 'ETL Pipeline'],
+  peekLine: {
+    ko: '특허·뉴스 챗봇의 검색 계층을 맡은 RAG 문서검색 서버',
+    en: "The RAG retrieval server behind the chatbot's search layer.",
+  },
   keyAchievements: [
     {
       ko: 'RAG 문서검색 서버 개발 — 특허/뉴스 챗봇의 검색 계층 담당',

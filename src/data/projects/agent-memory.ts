@@ -15,6 +15,10 @@ const project = {
     en: 'A standalone user-memory service that lets agents retain user context across turns and sessions. It splits into short-term context (STM), which serves the current conversation verbatim or compacted within a token budget, and long-term memory (LTM), which stores and retrieves user preferences and past conversations. The redesign conclusions — drawn from production logs showing how append-only accumulation pollutes context — were implemented as a PostgreSQL (pgvector) service; I owned the LTM side.',
   },
   techStack: ['Python 3.13', 'FastAPI', 'PostgreSQL (pgvector)', 'mem0 (vendored)', 'MCP', 'Redis'],
+  peekLine: {
+    ko: '저장 전 독립 판정 LLM이 검증해 기억 오염 루프를 쓰기 시점에 끊는다',
+    en: 'An independent judge LLM verifies each memory before it is stored.',
+  },
   keyAchievements: [
     {
       ko: '저장 전 검증 게이트 — 추출된 기억을 독립 판정 LLM으로 검증 후 저장(판정 기준은 원문 지지가 아닌 귀속·신규성). 어시스턴트 제안이 사용자 생각으로 둔갑해 다음 추출로 증폭되는 오염 루프를 쓰기 시점에 차단',

@@ -21,6 +21,10 @@ const project = {
     'bge-m3 (dense)',
     'LLM-as-judge',
   ],
+  peekLine: {
+    ko: '근거 연결형 QA 1,997문항 — 12개 태스크 패밀리, 32k~512k 컨텍스트',
+    en: '1,997 evidence-linked QA items across 12 task families and 32k–512k contexts.',
+  },
   keyAchievements: [
     {
       ko: '41개 공식 공고 + 공공 데이터 포털 표 기반 근거 연결형 QA 1,997문항 구축 — 12개 태스크 패밀리, 32k~512k 컨텍스트 티어',

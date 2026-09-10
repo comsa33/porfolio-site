@@ -82,6 +82,12 @@ export interface Project {
     github?: string;
   };
   keyAchievements?: LocalizedString[];
+  /**
+   * One line the row shows in place of its summary while the reader is on it.
+   * Written to fit the summary's single line — the achievements are the full
+   * account and live behind the expander; this is the headline of them.
+   */
+  peekLine?: LocalizedString;
   features: (string | LocalizedString)[];
   detail?: ProjectDetail; // Optional detailed showcase
   featured?: boolean; // Featured project flag (default: false)

@@ -87,8 +87,7 @@ export function useEdgeReveal(active: boolean, rowRef: React.RefObject<HTMLEleme
 
 /**
  * Clamps the peek to the lines the summary takes, so the box never changes
- * height. Measured, because that depends on the width — and floored at two,
- * because a one-line summary would cut the achievement beside it to nothing.
+ * height. Measured, because that depends on the width.
  */
 export function useSameHeight(slotRef: React.RefObject<HTMLDivElement | null>) {
   const descRef = useRef<HTMLParagraphElement>(null);
@@ -99,7 +98,7 @@ export function useSameHeight(slotRef: React.RefObject<HTMLDivElement | null>) {
       const lh = parseFloat(getComputedStyle(el).lineHeight) || 23.25;
       (slotRef.current ?? el.parentElement)?.style.setProperty(
         '--lines',
-        String(Math.max(2, Math.round(el.offsetHeight / lh))),
+        String(Math.max(1, Math.round(el.offsetHeight / lh))),
       );
     };
     measure();

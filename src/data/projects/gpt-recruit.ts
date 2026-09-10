@@ -15,6 +15,10 @@ const project = {
     en: 'An end-to-end service that scrapes job postings into a database and combines search and filtering with a user’s history to generate posting-tailored cover-letter guides. Built within two months of the GPT-4 API launch (Mar 2023), with a four-stage prompt structure optimized experimentally — presented as first author at KIPS ASK 2023.',
   },
   techStack: ['Python', 'GPT-4 API', 'LangChain', 'LangServe', 'Elasticsearch', 'Airflow'],
+  peekLine: {
+    ko: 'GPT-4 공개 두 달 만에 상용 API 기반 엔드투엔드 서비스를 출시',
+    en: 'Shipped an end-to-end service on the GPT-4 API within two months of its launch.',
+  },
   keyAchievements: [
     {
       ko: 'GPT-4 공개(2023.03) 두 달 만에 상용 LLM API를 적용한 엔드투엔드 서비스 설계·구현',

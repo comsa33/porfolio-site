@@ -24,6 +24,10 @@ const project = {
     'Loki',
     'Prometheus',
   ],
+  peekLine: {
+    ko: '오케스트레이션 계층 설계·구현 — 의도 분류부터 서브에이전트 위임까지',
+    en: 'Built the orchestration layer, from intent classification to sub-agent delegation.',
+  },
   keyAchievements: [
     {
       ko: '오케스트레이션 계층 설계·구현 — 의도 분류 → 도구 선택 → 병렬 실행 → 서브에이전트 위임',
