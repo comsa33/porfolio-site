@@ -73,8 +73,12 @@
 }
 
 .stepBody {
-  font-size: 15px;
-  line-height: 1.7;
+  /* The project speaking, rather than a line written about it — see
+     --font-serif. Everything structural around it stays in the sans, and the
+     size is the sans's optical size, not the serif's declared one. */
+  font-family: var(--font-serif);
+  font-size: calc(15px * var(--serif-scale));
+  line-height: 1.75;
   color: var(--ink-secondary);
   max-width: 44rem;
   overflow-wrap: anywhere;

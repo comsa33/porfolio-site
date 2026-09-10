@@ -292,8 +292,12 @@
 }
 
 .fullDesc {
-  font-size: 15px;
-  line-height: 1.7;
+  /* The project speaking, rather than a line written about it — see
+     --font-serif. Everything structural around it stays in the sans, and the
+     size is the sans's optical size, not the serif's declared one. */
+  font-family: var(--font-serif);
+  font-size: calc(15px * var(--serif-scale));
+  line-height: 1.75;
   color: var(--ink-secondary);
 }
 
@@ -312,10 +316,13 @@
   gap: 0.4rem;
 }
 
+/* The same sentences the row peeks at on hover, so they keep the same face —
+   a claim that changed type between the two would read as two claims. */
 .achievementsList li {
   position: relative;
-  font-size: 14px;
-  line-height: 1.65;
+  font-family: var(--font-serif);
+  font-size: calc(14px * var(--serif-scale));
+  line-height: 1.7;
   color: var(--ink-secondary);
   padding-left: 1rem;
 }
