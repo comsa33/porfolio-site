@@ -356,11 +356,14 @@ export default function Home() {
         <TravelingDot active={activeSection} />
         {/* Hero — the intro sentence is the headline */}
         <section className={styles.hero}>
+          {/* The name is in the header, on the mark the dot comes from; saying
+              it again here was the same word twice. What is left is the role. */}
           <p className={`${styles.eyebrow} rise`} style={rise(0)}>
-            <strong data-dot="hero">{data.profile.name[lang]}</strong>
             <span className={styles.eyebrowTitle}>{data.profile.title}</span>
           </p>
-          <h1 className={`${styles.lede} rise`} style={rise(1)}>
+          {/* The dot's first stop off the mark is the sentence that is the
+              headline, and it takes its size from it. */}
+          <h1 className={`${styles.lede} rise`} style={rise(1)} data-dot="hero">
             {emphasize(getCareerIntro(lang, data.profile.intro[lang]), LEDE_KEYWORDS[lang])}
           </h1>
 

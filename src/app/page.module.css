@@ -229,11 +229,6 @@
   margin-bottom: 2rem;
 }
 
-.eyebrow strong {
-  font-weight: 500;
-  color: var(--ink);
-}
-
 .eyebrowTitle {
   font-family: var(--font-mono), monospace;
   font-size: 12px;
