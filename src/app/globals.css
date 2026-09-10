@@ -59,6 +59,18 @@
   --font-body:
     'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto,
     'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  /*
+   * Measured on the live page: at one declared size the serif draws its glyphs
+   * 9.7% taller than Pretendard and sets a line 11.1% wider, so swapping the
+   * face alone also enlarges the text. This puts the two back on the same
+   * optical size — a hair above exact parity, because the serif's strokes are
+   * lighter and need the extra to hold the same weight on the page.
+   */
+  --serif-scale: 0.92;
+  /* The sans is the voice of everything around the writing; the serif is the
+     writing. A summary is written *about* a project — what it achieved is the
+     project speaking, and the face is what says so. */
+  --font-serif: 'Noto Serif KR', ui-serif, Georgia, 'Apple SD Gothic Neo', serif;
 
   color-scheme: light;
 }

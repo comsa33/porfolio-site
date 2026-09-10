@@ -90,11 +90,155 @@
   transform: translateY(-1px);
 }
 
+/*
+ * The summary and what the project achieved share one slot, stacked. While the
+ * reader is on the row the two trade places — not by crossfading, but as one
+ * edge crossing the box: ahead of it the summary, behind it the achievement.
+ * One moving boundary reads as authored, where two texts fading on their own
+ * timers reads as a glitch.
+ *
+ * --edge is the boundary's position, written per frame by useEdgeReveal;
+ * everything here is a function of it. --lines is the box's height in lines,
+ * measured from the summary and floored at two, so the row never resizes.
+ */
+.slot {
+  --edge: 0;
+  --band: 20;
+  position: relative;
+  margin-top: 0.35rem;
+  min-height: calc(var(--lines, 2) * 1.55em);
+}
+
 .oneLiner {
   font-size: 15px;
   line-height: 1.55;
   color: var(--ink-secondary);
-  margin-top: 0.35rem;
+}
+
+/* The achievement is the project speaking, not a line written about it, and it
+   is set to say so. Size and leading stay optically identical to the summary —
+   the box's height is the summary's, and a face that renders larger would
+   change the type mid-transition and break the count the box was measured
+   for. Only the face and the ink change. */
+.peek {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: calc(15px * var(--serif-scale));
+  line-height: 1.55;
+  color: var(--ink);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--lines, 2);
+  overflow: hidden;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.row[data-run] .peek {
+  visibility: visible;
+}
+
+/* Both texts are cut at the boundary, with 1.5% of feather so the cut is not a
+   razor. The masks do not care which way the edge is travelling. */
+.row[data-run] .oneLiner {
+  mask-image: linear-gradient(
+    90deg,
+    transparent calc(var(--edge) * 1%),
+    #000 calc(var(--edge) * 1% + 1.5%)
+  );
+}
+
+.row[data-run] .peek {
+  mask-image: linear-gradient(
+    90deg,
+    #000 calc(var(--edge) * 1% - 1.5%),
+    transparent calc(var(--edge) * 1%)
+  );
+}
+
+/*
+ * The text going away softens as it reaches the edge. A single element cannot
+ * be blurred by position, so rather than drawing every line twice, a narrow
+ * band rides the boundary and blurs whatever is behind it. It sits on the
+ * dissolving side — ahead of the edge on the way out, behind it on the way
+ * back — so one rule covers both directions.
+ *
+ * The falloff is stepped rather than masked. Safari drops backdrop-filter
+ * entirely on an element that also carries a mask-image, which is why the blur
+ * went missing on phones while it worked in desktop Chrome. Four strips with
+ * their own blur values need no mask, and at this radius the steps are not
+ * visible as steps.
+ */
+.blurBand {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: calc(var(--band) * 1%);
+  display: flex;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-instant) ease-out;
+}
+
+.blurBand span {
+  flex: 1;
+  backdrop-filter: blur(var(--b, 1px));
+  -webkit-backdrop-filter: blur(var(--b, 1px));
+}
+
+/* Strongest against the edge, gone by the far side of the band. */
+.blurBand span:nth-child(1) {
+  --b: 1px;
+}
+.blurBand span:nth-child(2) {
+  --b: 0.7px;
+}
+.blurBand span:nth-child(3) {
+  --b: 0.4px;
+}
+.blurBand span:nth-child(4) {
+  --b: 0.2px;
+}
+
+.row[data-run] .blurBand {
+  opacity: 1;
+}
+
+.row[data-dir='fwd'] .blurBand {
+  left: calc(var(--edge) * 1%);
+}
+
+/* Travelling back, the dissolving side is the other one — the strips keep
+   their order relative to the edge by reversing the row. */
+.row[data-dir='back'] .blurBand {
+  left: calc(var(--edge) * 1% - var(--band) * 1%);
+  flex-direction: row-reverse;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blurBand span {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* The boundary itself, in the one accent the page already uses. */
+.edge {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  left: calc(var(--edge) * 1%);
+  width: 1px;
+  background: var(--accent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-instant) ease-out;
+}
+
+.row[data-run] .edge {
+  opacity: 0.9;
 }
 
 .techLine {
@@ -103,6 +247,17 @@
   line-height: 1.6;
   color: var(--ink-tertiary);
   margin-top: 0.6rem;
+}
+
+/* The row being considered is the only one in focus; the others step back
+   rather than competing with it. Same values the blog gives a row its pointer
+   is not on, so this introduces no new vocabulary. */
+@media (hover: hover) {
+  .row {
+    transition:
+      opacity var(--dur-instant) ease-out,
+      filter var(--dur-instant) ease-out;
+  }
 }
 
 /* Animated disclosure */

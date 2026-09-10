@@ -502,6 +502,16 @@ button.contactLink:hover span {
   padding-top: 0.5rem;
 }
 
+/* One row at a time. While the pointer is somewhere in the project list, the
+   rows it is not on recede — the row it is on is opening its achievement, and
+   this is what keeps that the only thing to read. */
+@media (hover: hover) {
+  .projectList:hover [data-project-row]:not(:hover) {
+    opacity: 0.42;
+    filter: blur(1.2px);
+  }
+}
+
 /* ============ Footer ============ */
 
 .footer {

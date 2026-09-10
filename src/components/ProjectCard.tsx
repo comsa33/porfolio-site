@@ -1,12 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { ChevronDown, Wrench, Network } from 'lucide-react';
 import BrandIcon, { brandName } from './BrandIcon';
 import styles from './ProjectCard.module.css';
 import { Project } from '@/types';
 import ProjectDetailModal from './ProjectDetailModal';
 import ArchitectureModal from './ArchitectureModal';
+import { useEdgeReveal, useRowActive, useSameHeight } from './useEdgeReveal';
+
+/** The achievements carry <strong> for emphasis; the peek is one plain line. */
+const plain = (html: string) => html.replace(/<[^>]*>/g, '');
 
 interface ProjectCardProps {
   project: Project;
@@ -28,9 +32,26 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang, index }) => {
   const title = typeof project.title === 'string' ? project.title : project.title[lang];
   const detailsId = `project-details-${project.id}`;
 
+  // The row's headline achievement, shown in place of the summary while the
+  // reader is on the row. Expanding the row lists all of them, so the peek
+  // stands down rather than competing with the list it introduces.
+  const peek = project.keyAchievements?.[0] ? plain(project.keyAchievements[0][lang]) : undefined;
+  const rowRef = useRef<HTMLLIElement>(null);
+  const row = useRowActive(rowRef);
+  const open = row.active && !expanded && Boolean(peek);
+  const slotRef = useEdgeReveal(open, rowRef);
+  const descRef = useSameHeight(slotRef);
+
   return (
     <>
-      <li className={styles.row} style={{ '--i': index } as React.CSSProperties}>
+      <li
+        ref={rowRef}
+        data-project-row=""
+        className={styles.row}
+        style={{ '--i': index } as React.CSSProperties}
+        onPointerEnter={row.onPointerEnter}
+        onPointerLeave={row.onPointerLeave}
+      >
         <div className={styles.period}>
           {project.period?.[lang]}
           {project.company && <span className={styles.company}>{project.company[lang]}</span>}
@@ -97,7 +118,28 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang, index }) => {
             )}
           </div>
 
-          <p className={styles.oneLiner}>{project.shortDescription[lang]}</p>
+          {/* The summary and what the project achieved share one slot: an edge
+              crosses the box and the two trade places. The box is measured to
+              the taller of them, so nothing below it ever moves. */}
+          <div ref={slotRef} className={styles.slot}>
+            <p ref={descRef} className={styles.oneLiner}>
+              {project.shortDescription[lang]}
+            </p>
+            {peek && (
+              <>
+                <p className={styles.peek} aria-hidden>
+                  {peek}
+                </p>
+                <span className={styles.blurBand} aria-hidden>
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                </span>
+                <span className={styles.edge} aria-hidden />
+              </>
+            )}
+          </div>
           <p className={styles.techLine}>{project.techStack.join(' · ')}</p>
 
           <div

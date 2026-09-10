@@ -39,6 +39,18 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link rel="stylesheet" href={PRETENDARD_CSS} />
+        {/* Serif, for what a project achieved and for the prose in its detail
+            sheet — nowhere else. Weight 500 is all the emphasis needs, so no
+            700 is fetched. Google serves the face as unicode-range subsets, so
+            a page pulls only the slices its own characters need. */}
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* The rule warns about a font added to a single page; this is the root
+            layout, so it is on every one. */}
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500&display=swap"
+        />
       </head>
       <body>{children}</body>
     </html>
