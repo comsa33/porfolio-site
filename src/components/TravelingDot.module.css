@@ -93,84 +93,100 @@
  * ends with the dot waiting to be moved again; this one ends the page, so it
  * gets a sentence of its own to end on.
  *
- * It lands, stands up as a terminal caret and blinks twice — the page is over
- * and it is waiting for input — then falls back into a ball and bounces to a
- * stop. The origin sits low in the mark so the caret grows upward off the
- * baseline the way a cursor does, and so the bounces have a floor to land on.
+ * It lands flat, gathers, and SHOOTS upward — and the stretch of that jump is
+ * what becomes the caret. It overshoots past the caret's proportions and
+ * settles back into them, which is what makes it read as a spring rather than
+ * as a shape dissolving into another shape. It blinks twice, waiting for input
+ * the way a terminal does, then runs the same move backwards: the caret
+ * collapses through a squash and is a ball again, which leaves it bouncing,
+ * three hops smaller each time, until it is the full stop it was always going
+ * to be.
  *
- * Opacity steps rather than fades: the pairs of keyframes 0.1% apart are how a
- * cursor blinks on and off instead of pulsing.
+ * The origin sits low in the mark, so a scale up IS a jump — the mark stays on
+ * the baseline and the body of it leaves — and so the bounces have a floor.
+ *
+ * Opacity steps rather than fades: the pairs of keyframes a tenth of a percent
+ * apart are what make a cursor blink instead of pulse.
  */
 .ball[data-land] {
-  transform-origin: 50% 85%;
+  transform-origin: 50% 88%;
   animation: land 2200ms var(--ease-out) both;
 }
 
 @keyframes land {
-  /* squashed by the landing, then a rebound */
+  /* flattened by the landing */
   0% {
-    transform: translateY(0) scale(1.18, 0.84);
+    transform: translateY(0) scale(1.24, 0.72);
     border-radius: 50%;
     opacity: 1;
   }
-  11% {
-    transform: translateY(0) scale(0.94, 1.06);
+  /* gathered, about to go — and accelerating out of it, not easing */
+  4% {
+    transform: translateY(0) scale(1.1, 0.8);
+    border-radius: 50%;
+    animation-timing-function: cubic-bezier(0.5, 0, 0.75, 0.4);
   }
-  /* up on end, and square: a caret */
-  17% {
+  /* the jump, drawn out past where it is going */
+  10% {
+    transform: translateY(-6%) scale(0.26, 2.92);
+    border-radius: 1px;
+  }
+  /* and settling into the caret it overshot */
+  15% {
     transform: translateY(0) scale(0.34, 2.5);
     border-radius: 1px;
   }
   /* blink, blink */
-  26.9% {
+  23.9% {
     opacity: 1;
   }
-  27% {
+  24% {
     opacity: 0;
   }
-  36.9% {
+  32.9% {
     opacity: 0;
   }
-  37% {
+  33% {
     opacity: 1;
   }
-  46.9% {
+  41.9% {
     opacity: 1;
   }
-  47% {
+  42% {
     opacity: 0;
   }
-  56.9% {
+  50.9% {
     opacity: 0;
   }
-  57% {
+  51% {
     opacity: 1;
   }
-  /* the caret holds its shape from 17% to here, then falls back into a ball */
-  67% {
+  /* the caret holds its shape from 15% to here — then the same move backwards */
+  66% {
     transform: translateY(0) scale(0.34, 2.5);
     border-radius: 1px;
     opacity: 1;
   }
-  74% {
-    transform: translateY(0) scale(1.06, 0.94);
+  /* collapsed, past a ball and into a squash — which is a bounce waiting to go */
+  71% {
+    transform: translateY(0) scale(1.32, 0.7);
     border-radius: 50%;
   }
-  /* 통통통 — three hops, each smaller than the last */
-  80% {
-    transform: translateY(-80%) scale(0.9, 1.12);
+  /* 통 · 통 · 통 */
+  76% {
+    transform: translateY(-85%) scale(0.9, 1.14);
   }
-  86% {
-    transform: translateY(0) scale(1.16, 0.86);
+  82% {
+    transform: translateY(0) scale(1.18, 0.85);
   }
-  90% {
-    transform: translateY(-32%) scale(0.96, 1.05);
+  87% {
+    transform: translateY(-34%) scale(0.95, 1.06);
   }
-  94% {
+  92% {
     transform: translateY(0) scale(1.08, 0.94);
   }
-  97% {
-    transform: translateY(-10%) scale(0.99, 1.02);
+  96% {
+    transform: translateY(-11%) scale(0.99, 1.02);
   }
   100% {
     transform: translateY(0) scale(1, 1);
