@@ -357,13 +357,16 @@ export default function Home() {
         {/* Hero — the intro sentence is the headline */}
         <section className={styles.hero}>
           {/* The name is in the header, on the mark the dot comes from; saying
-              it again here was the same word twice. What is left is the role. */}
+              it again here was the same word twice. What is left is the role,
+              and that one line is the dot's first stop off the mark — the lede
+              below wraps to four lines, and a slot opening in a paragraph
+              moves more type than it marks. */}
           <p className={`${styles.eyebrow} rise`} style={rise(0)}>
-            <span className={styles.eyebrowTitle}>{data.profile.title}</span>
+            <span className={styles.eyebrowTitle} data-dot="hero">
+              {data.profile.title}
+            </span>
           </p>
-          {/* The dot's first stop off the mark is the sentence that is the
-              headline, and it takes its size from it. */}
-          <h1 className={`${styles.lede} rise`} style={rise(1)} data-dot="hero">
+          <h1 className={`${styles.lede} rise`} style={rise(1)}>
             {emphasize(getCareerIntro(lang, data.profile.intro[lang]), LEDE_KEYWORDS[lang])}
           </h1>
 
