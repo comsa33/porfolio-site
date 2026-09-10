@@ -68,7 +68,7 @@
   background-position: 0 100%;
   background-repeat: no-repeat;
   transition:
-    color var(--dur-fast) var(--ease),
+    color var(--dur-instant) var(--ease),
     background-size var(--dur) var(--ease);
 }
 
@@ -112,7 +112,7 @@
   background: var(--bg-hover);
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--dur-fast) var(--ease);
+  transition: opacity var(--dur-instant) var(--ease);
 }
 
 .sectionRow:hover::before {
@@ -136,7 +136,7 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  transition: color var(--dur-fast) var(--ease);
+  transition: color var(--dur-instant) var(--ease);
 }
 
 .sectionName:hover,
@@ -175,8 +175,8 @@
   cursor: pointer;
   padding: 0;
   transition:
-    background var(--dur-fast) var(--ease),
-    border-color var(--dur-fast) var(--ease);
+    background var(--dur-instant) var(--ease),
+    border-color var(--dur-instant) var(--ease);
 }
 
 .boxOn {
@@ -237,7 +237,7 @@
   font-size: 11px;
   letter-spacing: 0.02em;
   color: var(--ink-tertiary);
-  transition: color var(--dur-fast) var(--ease);
+  transition: color var(--dur-instant) var(--ease);
 }
 
 .groupHead:hover {
@@ -296,7 +296,7 @@
   background-position: 0 100%;
   background-repeat: no-repeat;
   transition:
-    color var(--dur-fast) var(--ease),
+    color var(--dur-instant) var(--ease),
     background-size var(--dur) var(--ease);
 }
 
@@ -324,7 +324,7 @@
   background: none;
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
-  transition: border-color var(--dur-fast) var(--ease);
+  transition: border-color var(--dur-instant) var(--ease);
 }
 
 .fieldArea {
@@ -374,7 +374,7 @@
   background: var(--bg-hover);
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--dur-fast) var(--ease);
+  transition: opacity var(--dur-instant) var(--ease);
 }
 
 .item:hover::before {
@@ -399,7 +399,7 @@
   font-weight: 500;
   line-height: 1.45;
   color: var(--ink-tertiary);
-  transition: color var(--dur-fast) var(--ease);
+  transition: color var(--dur-instant) var(--ease);
 }
 
 .itemTitle[data-on='true'] {
@@ -456,7 +456,7 @@
   border: 1px solid var(--line);
   border-radius: 3px;
   background: #ffffff;
-  transition: border-color var(--dur-fast) var(--ease);
+  transition: border-color var(--dur-instant) var(--ease);
 }
 
 .mini[data-on='true'] {
@@ -570,8 +570,8 @@
   font-weight: 500;
   color: var(--ink);
   transition:
-    border-color var(--dur-fast) var(--ease),
-    color var(--dur-fast) var(--ease);
+    border-color var(--dur-instant) var(--ease),
+    color var(--dur-instant) var(--ease);
 }
 
 .download:hover {
@@ -719,7 +719,7 @@
   background-position: 0 100%;
   background-repeat: no-repeat;
   transition:
-    color var(--dur-fast) var(--ease),
+    color var(--dur-instant) var(--ease),
     background-size var(--dur) var(--ease);
 }
 

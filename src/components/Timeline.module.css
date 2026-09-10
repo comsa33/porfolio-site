@@ -15,7 +15,7 @@
   gap: 0 2rem;
   padding: 1.5rem 0;
   border-bottom: 1px solid var(--line);
-  animation: rise var(--dur-slow) var(--ease-out) both;
+  animation: rise var(--dur-slow) var(--ease-out) backwards;
   animation-delay: calc(var(--i, 0) * 50ms);
 }
 
@@ -26,7 +26,7 @@
   border-radius: var(--radius);
   background: var(--bg-hover);
   opacity: 0;
-  transition: opacity var(--dur-fast) var(--ease);
+  transition: opacity var(--dur-instant) var(--ease);
   pointer-events: none;
   z-index: -1;
 }
@@ -99,13 +99,13 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  transition: color var(--dur-fast) var(--ease);
+  transition: color var(--dur-instant) var(--ease);
 }
 
 .actionBtn svg {
   color: var(--ink-tertiary);
   transition:
-    color var(--dur-fast) var(--ease),
+    color var(--dur-instant) var(--ease),
     transform var(--dur) var(--ease-out);
 }
 

@@ -128,7 +128,7 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  transition: color var(--dur-fast) var(--ease);
+  transition: color var(--dur-instant) var(--ease);
 }
 
 .codeToggle svg {

@@ -30,14 +30,14 @@
   gap: 0.4rem;
   font-size: 14px;
   color: var(--ink-secondary);
-  transition: color var(--dur-fast) var(--ease);
+  transition: color var(--dur-instant) var(--ease);
 }
 
 .back svg {
   color: var(--ink-tertiary);
   transition:
     transform var(--dur) var(--ease-out),
-    color var(--dur-fast) var(--ease);
+    color var(--dur-instant) var(--ease);
 }
 
 .back:hover {
@@ -74,7 +74,7 @@
   font-weight: 500;
   color: var(--ink);
   cursor: pointer;
-  transition: border-color var(--dur-fast) var(--ease);
+  transition: border-color var(--dur-instant) var(--ease);
 }
 
 .print:hover {
@@ -155,12 +155,12 @@
   font-size: 13.5px;
   color: var(--ink-secondary);
   cursor: pointer;
-  transition: color var(--dur-fast) var(--ease);
+  transition: color var(--dur-instant) var(--ease);
 }
 
 .ghost svg {
   color: var(--ink-tertiary);
-  transition: color var(--dur-fast) var(--ease);
+  transition: color var(--dur-instant) var(--ease);
 }
 
 .ghost:hover,

@@ -33,7 +33,7 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  transition: color var(--dur-fast) var(--ease);
+  transition: color var(--dur-instant) var(--ease);
 }
 
 .flowBtn svg {
@@ -93,7 +93,7 @@
   stroke: var(--line-strong) !important;
   stroke-width: 1px !important;
   transition:
-    stroke var(--dur-fast) var(--ease),
+    stroke var(--dur-instant) var(--ease),
     opacity var(--dur) var(--ease);
 }
 
@@ -134,7 +134,7 @@
   stroke: var(--ink-secondary) !important;
   stroke-width: 1px !important;
   transition:
-    stroke var(--dur-fast) var(--ease),
+    stroke var(--dur-instant) var(--ease),
     opacity var(--dur) var(--ease);
 }
 

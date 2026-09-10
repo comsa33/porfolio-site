@@ -37,10 +37,21 @@
   --radius: 10px;
   --radius-sm: 6px;
 
-  /* Motion */
+  /*
+   * Motion — measured, not guessed, and shared with blog.po24lio.com so the
+   * two sites move the same way. Values from devouringdetails.com:
+   *   hover / press    filter, opacity, transform   150ms ease-out
+   *   state change     colour, size                 200ms ease-state
+   *   entrance         rise                         640ms ease-out, 70ms stagger
+   * Rule of thumb from interfaces.rauno.me: an interaction never exceeds 200ms.
+   */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease: cubic-bezier(0.32, 0.72, 0, 1);
-  --dur-fast: 160ms;
+  --ease-state: cubic-bezier(0.23, 0.88, 0.26, 0.92);
+  /* Feedback under the pointer — the reader should not be able to time it. */
+  --dur-instant: 150ms;
+  /* A state that actually changed, and wants to be seen changing. */
+  --dur-fast: 200ms;
   --dur: 320ms;
   --dur-slow: 640ms;
 
@@ -151,6 +162,21 @@ pre {
 
 /* ============ Motion primitives ============ */
 
+/*
+ * Entrances fill `backwards`, never `both`.
+ *
+ * `both` keeps the last keyframe applied for good, and an animation's
+ * declarations beat a normal one in the cascade — so any later rule touching
+ * the same properties on that element (a hover opacity, a blur on the rows a
+ * pointer is not on) can never win. It fails silently: the CSS is correct and
+ * simply has no effect.
+ *
+ * `backwards` still holds the first keyframe through the stagger delay, so the
+ * entrance is unchanged, and releases the element once it has arrived. Exits
+ * (fadeOut, sheetOut) are the exception — they must hold their end state, and
+ * keep `both`.
+ */
+
 @keyframes rise {
   from {
     opacity: 0;
@@ -173,7 +199,7 @@ pre {
 
 /* Staggered entrance. Set --i on each child. */
 .rise {
-  animation: rise var(--dur-slow) var(--ease-out) both;
+  animation: rise var(--dur-slow) var(--ease-out) backwards;
   animation-delay: calc(var(--i, 0) * 70ms);
 }
 

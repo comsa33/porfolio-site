@@ -59,7 +59,7 @@
   line-height: 1;
   color: var(--ink-secondary);
   padding: 0.35rem 0;
-  transition: color var(--dur-fast) var(--ease);
+  transition: color var(--dur-instant) var(--ease);
 }
 
 /* Underline hugs the text: sits 3px under the baseline, not at the box edge */
@@ -126,7 +126,7 @@
   color: var(--ink-tertiary);
   transition:
     transform var(--dur) var(--ease-out),
-    color var(--dur-fast) var(--ease);
+    color var(--dur-instant) var(--ease);
 }
 
 .navExternal:hover svg {
@@ -156,8 +156,8 @@
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition:
-    color var(--dur-fast) var(--ease),
-    background var(--dur-fast) var(--ease);
+    color var(--dur-instant) var(--ease),
+    background var(--dur-instant) var(--ease);
 }
 
 .ctrlBtn:hover {
@@ -230,12 +230,12 @@
   gap: 0.4rem;
   font-size: 14px;
   color: var(--ink-secondary);
-  transition: color var(--dur-fast) var(--ease);
+  transition: color var(--dur-instant) var(--ease);
 }
 
 .contactLink svg {
   color: var(--ink-tertiary);
-  transition: color var(--dur-fast) var(--ease);
+  transition: color var(--dur-instant) var(--ease);
 }
 
 .contactLink span {
@@ -333,7 +333,7 @@ button.contactLink:hover span {
   border: none;
   padding: 0;
   cursor: pointer;
-  transition: color var(--dur-fast) var(--ease);
+  transition: color var(--dur-instant) var(--ease);
 }
 
 .skillToken > span {
@@ -362,7 +362,7 @@ button.contactLink:hover span {
   font-size: 10px;
   line-height: 1;
   color: var(--ink-tertiary);
-  transition: color var(--dur-fast) var(--ease);
+  transition: color var(--dur-instant) var(--ease);
 }
 
 .skillToken:hover .skillCount,
@@ -384,7 +384,7 @@ button.contactLink:hover span {
   border: none;
   padding: 0;
   cursor: pointer;
-  animation: rise var(--dur) var(--ease-out) both;
+  animation: rise var(--dur) var(--ease-out) backwards;
 }
 
 .techChip::before {
@@ -395,7 +395,7 @@ button.contactLink:hover span {
 
 .techChip svg {
   color: var(--ink-tertiary);
-  transition: color var(--dur-fast) var(--ease);
+  transition: color var(--dur-instant) var(--ease);
 }
 
 .techChip:hover svg {
@@ -452,8 +452,10 @@ button.contactLink:hover span {
   background-position: 0 100%;
   background-repeat: no-repeat;
   transition:
-    color var(--dur-fast) var(--ease),
-    background-size var(--dur) var(--ease);
+    /* Hovering a chip is feedback; becoming the active filter is a state
+       change, and the underline that says so gets the slower pair. */
+    color var(--dur-instant) var(--ease),
+    background-size var(--dur-fast) var(--ease-state);
 }
 
 .filterChip:hover {
@@ -510,12 +512,12 @@ button.contactLink:hover span {
   border: none;
   padding: 0;
   cursor: pointer;
-  transition: color var(--dur-fast) var(--ease);
+  transition: color var(--dur-instant) var(--ease);
 }
 
 .footerSecondary svg {
   color: var(--ink-tertiary);
-  transition: color var(--dur-fast) var(--ease);
+  transition: color var(--dur-instant) var(--ease);
 }
 
 .footerSecondary > span:first-of-type {
@@ -551,14 +553,14 @@ button.contactLink:hover span {
   font-size: 15px;
   font-weight: 500;
   color: var(--ink);
-  transition: color var(--dur-fast) var(--ease);
+  transition: color var(--dur-instant) var(--ease);
 }
 
 .footerCta svg:last-child {
   color: var(--ink-tertiary);
   transition:
     transform var(--dur) var(--ease-out),
-    color var(--dur-fast) var(--ease);
+    color var(--dur-instant) var(--ease);
 }
 
 .footerCta:hover {
@@ -580,9 +582,12 @@ button.contactLink:hover span {
   background-repeat: no-repeat;
 }
 
+/* The address went to the clipboard — something happened, so it is a state
+   change rather than pointer feedback, and it arrives at that speed. */
 .copied,
 .copied svg:last-child {
   color: var(--accent);
+  transition: color var(--dur-fast) var(--ease-state);
 }
 
 .copyright {
@@ -604,7 +609,7 @@ button.contactLink:hover span {
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
-  animation: fade var(--dur-fast) var(--ease) both;
+  animation: fade var(--dur-instant) var(--ease) backwards;
 }
 
 .certModalContent {
@@ -615,7 +620,7 @@ button.contactLink:hover span {
   max-height: 90vh;
   overflow: auto;
   padding: 1rem;
-  animation: rise var(--dur) var(--ease-out) both;
+  animation: rise var(--dur) var(--ease-out) backwards;
 }
 
 .certModalClose {
@@ -633,8 +638,8 @@ button.contactLink:hover span {
   color: var(--ink-secondary);
   cursor: pointer;
   transition:
-    color var(--dur-fast) var(--ease),
-    background var(--dur-fast) var(--ease);
+    color var(--dur-instant) var(--ease),
+    background var(--dur-instant) var(--ease);
 }
 
 .certModalClose:hover {
