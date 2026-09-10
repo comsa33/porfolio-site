@@ -586,11 +586,16 @@ export default function Home() {
         <footer id="contact" className={styles.footer}>
           {/* The sentence ends without a full stop of its own: the dot that
               has been following the reader down the page is the full stop,
-              and this seat is its last move. */}
+              and this seat is its last move.
+
+              It also ends without finishing — the two ways out below it are
+              what completes it, which is why the mark lands on an open clause
+              and blinks there. The line is the blog's own, on purpose: the two
+              sites are the same person, and this is the seam between them. */}
           <p className={styles.footerText}>
             {lang === 'ko'
-              ? '에이전트 플랫폼이나 LLM 품질 평가에 관한 이야기라면 언제든 환영합니다'
-              : 'Always glad to talk agent platforms or LLM evaluation'}
+              ? '무엇을 만들었는지보다 왜 그렇게 정했는지가 궁금하시다면'
+              : "If you'd rather hear why than what"}
             <span className={styles.endDot} data-dot="contact" data-dot-end aria-hidden />
           </p>
           <div className={styles.footerActions}>
