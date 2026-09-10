@@ -591,7 +591,10 @@ button.contactLink:hover span {
   display: inline-block;
   width: var(--indicator-size);
   height: var(--indicator-size);
-  margin-left: 0.16em;
+  /* A period sits tight to the letter before it; this one had been given more
+     air than that because the accent needs it, but the caret that stands up
+     out of it then read as detached from the sentence. */
+  margin-left: 0.08em;
   vertical-align: baseline;
   position: relative;
   top: 0.1em;

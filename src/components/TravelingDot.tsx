@@ -176,6 +176,11 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       // something that overshot and is settling.
       ball.style.setProperty('--caret-y-under', String(h * 0.93));
       ball.style.setProperty('--caret-x-under', String(w * 1.14));
+      // A period fills its seat and so is centred in it; a caret is a sliver of
+      // the same width and, centred, leaves most of the seat as a gap between
+      // itself and the last letter. It is hung on the seat's left edge instead,
+      // which is where the text actually ends.
+      ball.style.setProperty('--caret-shift', `${((-(size - width) / 2) * 100) / size}%`);
     };
 
     /**
