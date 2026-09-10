@@ -102,14 +102,17 @@
  * three hops smaller each time, until it is the full stop it was always going
  * to be.
  *
- * The origin sits low in the mark, so a scale up IS a jump — the mark stays on
- * the baseline and the body of it leaves — and so the bounces have a floor.
+ * The origin is the mark's own underside, which is the floor for all of this.
+ * A scale up is then a jump: the foot stays put and the body of it leaves. It
+ * is also what puts the caret on the line — grown from anywhere higher, a
+ * caret one em tall spills below the baseline by whatever is left underneath
+ * the origin, and its top lands short of the type it is standing next to.
  *
  * Opacity steps rather than fades: the pairs of keyframes a tenth of a percent
  * apart are what make a cursor blink instead of pulse.
  */
 .ball[data-land] {
-  transform-origin: 50% 88%;
+  transform-origin: 50% 100%;
   animation: land 2200ms var(--ease-out) both;
 }
 
