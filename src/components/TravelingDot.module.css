@@ -1,0 +1,132 @@
+/*
+ * The one accent dot. Its home is the mark before the wordmark in the header;
+ * from there it walks down the page, and at the bottom it becomes the full
+ * stop of the closing sentence. There is never more than one of it on screen.
+ *
+ * The outer element only ever translates, the inner ball only ever deforms,
+ * so the two never fight over `transform`.
+ */
+.dot {
+  --size: 8px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--size);
+  height: var(--size);
+  pointer-events: none;
+  /* Under the sticky header at rest: a heading that scrolls up passes beneath
+     it, and its dot has to go with it. Left permanently above, a dot resting
+     on a heading that has scrolled under the header stays crisp on top of it
+     while the heading fades away underneath — which reads as a layering bug,
+     because it is one. */
+  z-index: 5;
+  will-change: transform;
+}
+
+/* Above the header only while flying to or from the brand mark, which sits
+   inside it — otherwise that journey would be seen through its backdrop. */
+.dot[data-flying] {
+  z-index: 110;
+}
+
+/* At home the mark in the header stands in for it, so it is not drawn. This
+   also means nothing flashes at the parent's corner before first placement. */
+.dot[data-home] {
+  opacity: 0;
+}
+
+/* Glide only after the first placement, so the page never loads mid-flight. */
+.dot[data-ready='true'] {
+  transition:
+    transform 560ms var(--ease),
+    width 320ms var(--ease),
+    height 320ms var(--ease);
+}
+
+/*
+ * The ball. A soft body: on a real journey it gathers, stretches along the
+ * line of travel, lands with a squash and settles — rotated so the stretch
+ * always points where it is going. Amplitudes stay under a third so it reads
+ * as give, not as a cartoon.
+ */
+.ball {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: rotate(var(--angle, 0rad));
+  will-change: transform;
+}
+
+.ball[data-squish] {
+  animation: squish var(--dur-slow) var(--ease-out) both;
+}
+
+@keyframes squish {
+  0% {
+    transform: rotate(var(--angle, 0rad)) scale(1, 1);
+  }
+  /* gathers itself before the jump */
+  10% {
+    transform: rotate(var(--angle, 0rad)) scale(0.84, 1.14);
+  }
+  /* stretched in flight */
+  30% {
+    transform: rotate(var(--angle, 0rad)) scale(1.34, 0.76);
+  }
+  /* lands, squashes */
+  62% {
+    transform: rotate(var(--angle, 0rad)) scale(0.88, 1.1);
+  }
+  /* one rebound, then still */
+  82% {
+    transform: rotate(var(--angle, 0rad)) scale(1.05, 0.96);
+  }
+  100% {
+    transform: rotate(var(--angle, 0rad)) scale(1, 1);
+  }
+}
+
+/*
+ * The one arrival that is not on the way to somewhere else. Every other move
+ * ends with the dot waiting to be moved again; this one ends the page, so it
+ * lands, bounces once and settles.
+ */
+.ball[data-land] {
+  animation: land 640ms var(--ease-out) both;
+}
+
+@keyframes land {
+  0% {
+    transform: translateY(0) scale(1, 1);
+  }
+  /* up */
+  20% {
+    transform: translateY(-90%) scale(0.88, 1.14);
+  }
+  /* down, and squashed by the landing */
+  48% {
+    transform: translateY(0) scale(1.18, 0.84);
+  }
+  /* a smaller second hop */
+  70% {
+    transform: translateY(-28%) scale(0.96, 1.05);
+  }
+  88% {
+    transform: translateY(0) scale(1.06, 0.95);
+  }
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot[data-ready='true'] {
+    transition: none;
+  }
+  .ball[data-squish],
+  .ball[data-land] {
+    animation: none;
+  }
+}

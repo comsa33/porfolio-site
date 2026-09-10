@@ -7,7 +7,7 @@
 /* ============ Frame ============ */
 
 .frame {
-  position: relative; /* SectionDot is positioned against this */
+  position: relative; /* TravelingDot is positioned against this */
   max-width: var(--frame);
   margin: 0 auto;
   padding: 0 1.5rem;
@@ -42,9 +42,33 @@
 }
 
 .wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   font-weight: 500;
   font-size: 15px;
   letter-spacing: -0.01em;
+}
+
+/* The accent mark is the one piece of colour in the chrome, and the dot's
+   home. While the travelling dot is out on the page this is the ring it left
+   behind — the mark and the dot are the same object, never two. */
+.wordmarkDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex: none;
+  transition: transform var(--dur-instant) ease-out;
+}
+
+.wordmark:hover .wordmarkDot {
+  transform: scale(1.25);
+}
+
+.wordmarkDot[data-dot-state] {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--accent);
 }
 
 .nav {
@@ -490,6 +514,27 @@ button.contactLink:hover span {
   font-weight: 500;
   line-height: 1.35;
   letter-spacing: -0.015em;
+}
+
+/*
+ * The seat the travelling dot comes to rest in. It draws nothing itself — the
+ * dot that has been following the reader down the page is the full stop, and
+ * arriving here is its last move. Set a little wider than a period sits, since
+ * a mark this colour reads as punctuation only with air around it.
+ *
+ * Sitting the seat flat on the baseline would put the mark far higher than a
+ * period reads: a period's ink straddles the baseline, where a baseline-seated
+ * circle sits entirely above it. The drop is that difference.
+ */
+.endDot {
+  --indicator-size: 6px;
+  display: inline-block;
+  width: var(--indicator-size);
+  height: var(--indicator-size);
+  margin-left: 0.16em;
+  vertical-align: baseline;
+  position: relative;
+  top: 0.1em;
 }
 
 /* Two ways to leave with something: write, or take the document. */

@@ -212,16 +212,20 @@ pre {
 }
 
 /*
- * SectionDot: the heading currently hosting the dot slides its text right
+ * TravelingDot: the heading currently hosting the dot slides its text right
  * to make room (0.55em dot + 0.9em gap) while the dot arrives; the others
  * stay flush left. Same behaviour at every width.
+ *
+ * The closing seat is excluded: it is not a heading opening a margin beside
+ * itself, it is the full stop at the end of a sentence, and the dot lands on
+ * it rather than in front of it.
  */
-[data-dot] {
+[data-dot]:not([data-dot-end]) {
   padding-left: 0;
   transition: padding-left 480ms var(--ease);
 }
 
-[data-dot][data-dot-active] {
+[data-dot][data-dot-active]:not([data-dot-end]) {
   padding-left: 1.45em;
 }
 

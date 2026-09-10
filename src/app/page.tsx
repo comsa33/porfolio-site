@@ -20,7 +20,7 @@ import Timeline from '@/components/Timeline';
 import Publications from '@/components/Publications';
 import ProjectCard from '@/components/ProjectCard';
 import BrandIcon from '@/components/BrandIcon';
-import SectionDot from '@/components/SectionDot';
+import TravelingDot from '@/components/TravelingDot';
 import ExportSheet from '@/components/ExportSheet';
 import { portfolioData as data } from '@/data';
 import { countProjectsForSkill, projectMatchesSkill } from '@/data/skillMatch';
@@ -261,7 +261,11 @@ export default function Home() {
     <>
       <header className={styles.header} data-scrolled={scrolled}>
         <div className={styles.headerInner}>
+          {/* The dot's home. On the page below, the travelling dot starts
+              here and covers this exactly; once it leaves, what stays behind
+              is the ring (see .wordmarkDot). */}
           <a href="#top" className={styles.wordmark}>
+            <span className={styles.wordmarkDot} data-dot-home aria-hidden />
             Ruo Lee
           </a>
           <nav className={styles.nav} aria-label="Sections">
@@ -331,7 +335,7 @@ export default function Home() {
       </header>
 
       <main id="top" className={styles.frame}>
-        <SectionDot active={activeSection} />
+        <TravelingDot active={activeSection} />
         {/* Hero — the intro sentence is the headline */}
         <section className={styles.hero}>
           <p className={`${styles.eyebrow} rise`} style={rise(0)}>
@@ -552,10 +556,14 @@ export default function Home() {
         </section>
 
         <footer id="contact" className={styles.footer}>
-          <p className={styles.footerText} data-dot="contact">
+          {/* The sentence ends without a full stop of its own: the dot that
+              has been following the reader down the page is the full stop,
+              and this seat is its last move. */}
+          <p className={styles.footerText}>
             {lang === 'ko'
-              ? '에이전트 플랫폼이나 LLM 품질 평가에 관한 이야기라면 언제든 환영합니다.'
-              : 'Always glad to talk agent platforms or LLM evaluation.'}
+              ? '에이전트 플랫폼이나 LLM 품질 평가에 관한 이야기라면 언제든 환영합니다'
+              : 'Always glad to talk agent platforms or LLM evaluation'}
+            <span className={styles.endDot} data-dot="contact" data-dot-end aria-hidden />
           </p>
           <div className={styles.footerActions}>
             <a
