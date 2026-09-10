@@ -255,21 +255,27 @@ pre {
 }
 
 /*
- * TravelingDot: the heading currently hosting the dot slides its text right
- * to make room (0.55em dot + 0.9em gap) while the dot arrives; the others
- * stay flush left. Same behaviour at every width.
+ * TravelingDot: the host currently holding the dot slides its text right to
+ * make room (0.55em dot + 0.9em gap) while the dot arrives; the others stay
+ * flush left. Same behaviour at every width, and the slot is in em, so it is
+ * in proportion to whatever type it is opening in.
+ *
+ * text-indent, not padding-left. The dot marks where the sentence STARTS, so
+ * only the first line gives way to it. Padding moves the whole block, which on
+ * a heading of one line looks identical and on the hero — four wrapped lines —
+ * indents a paragraph that has nothing to make room for.
  *
  * The closing seat is excluded: it is not a heading opening a margin beside
  * itself, it is the full stop at the end of a sentence, and the dot lands on
  * it rather than in front of it.
  */
 [data-dot]:not([data-dot-end]) {
-  padding-left: 0;
-  transition: padding-left 480ms var(--ease);
+  text-indent: 0;
+  transition: text-indent 480ms var(--ease);
 }
 
 [data-dot][data-dot-active]:not([data-dot-end]) {
-  padding-left: 1.45em;
+  text-indent: 1.45em;
 }
 
 @media (prefers-reduced-motion: reduce) {
