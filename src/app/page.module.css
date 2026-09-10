@@ -166,7 +166,9 @@
 .controls {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  /* The rule between the two switches wants the same air either side that the
+     blog's has, which is less than these were sitting on. */
+  gap: 0.5rem;
 }
 
 /* Same type as the nav so the language switch reads as one more link */
@@ -205,8 +207,12 @@
   color: var(--ink-tertiary);
 }
 
+/* No plate. The language switch is a word and takes one; this is a mark that
+   fills and hollows, and a panel behind it sat in the corner of the header as
+   a faint grey box. The mark taking full ink is the feedback. */
 .themeBtn:hover {
   color: var(--ink);
+  background: none;
 }
 
 .ctrlBtn svg {

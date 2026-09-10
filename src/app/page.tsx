@@ -339,6 +339,10 @@ export default function Home() {
             <button onClick={toggleLang} className={styles.ctrlBtn} aria-label="Toggle language">
               {lang === 'ko' ? 'EN' : 'KO'}
             </button>
+            {/* Language and theme are two different kinds of switch — one
+                changes what the page says, the other how it looks — so a rule
+                divides them, as it does in the blog's header. */}
+            <span className={styles.navSep} aria-hidden />
             {/* The same control the blog carries: the mark itself, filled in
                 the light theme and hollow in the dark one. */}
             <button
