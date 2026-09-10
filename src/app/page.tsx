@@ -9,10 +9,8 @@ import {
   Globe,
   Linkedin,
   Mail,
-  Moon,
   PenLine,
   ShieldCheck,
-  Sun,
   X,
 } from 'lucide-react';
 import styles from './page.module.css';
@@ -70,18 +68,39 @@ function readTheme(): Theme {
   return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
 }
 
-function setDocumentTheme(next: Theme) {
-  const apply = () => document.documentElement.setAttribute('data-theme', next);
-  // Cross-fade the whole page where the View Transitions API exists.
+function setDocumentTheme(next: Theme, origin: DOMRect) {
+  const root = document.documentElement;
+
+  // The new theme spreads from the button that was pressed (globals.css,
+  // themeSpread), so the transition needs to know where that was and how far
+  // the farthest corner is.
+  const x = origin.left + origin.width / 2;
+  const y = origin.top + origin.height / 2;
+  const far = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+  root.style.setProperty('--theme-x', `${Math.round(x)}px`);
+  root.style.setProperty('--theme-y', `${Math.round(y)}px`);
+  root.style.setProperty('--theme-r', `${Math.ceil(far)}px`);
+
+  // Suppress interaction transitions while the document switches, otherwise
+  // every hover-tuned transition on the page fires at once.
+  root.setAttribute('data-theme-switching', '');
+
+  const apply = () => {
+    root.setAttribute('data-theme', next);
+    try {
+      localStorage.setItem('theme', next);
+    } catch {
+      // Storage unavailable; the choice just won't persist.
+    }
+  };
+
   if (typeof document.startViewTransition === 'function') {
-    document.startViewTransition(apply);
+    document
+      .startViewTransition(apply)
+      .finished.finally(() => root.removeAttribute('data-theme-switching'));
   } else {
     apply();
-  }
-  try {
-    localStorage.setItem('theme', next);
-  } catch {
-    // Storage unavailable; the choice just won't persist.
+    requestAnimationFrame(() => root.removeAttribute('data-theme-switching'));
   }
 }
 
@@ -161,7 +180,8 @@ export default function Home() {
   const [exportOpen, setExportOpen] = useState(false);
 
   const theme = useSyncExternalStore(subscribeTheme, readTheme, () => 'light' as Theme);
-  const toggleTheme = () => setDocumentTheme(theme === 'dark' ? 'light' : 'dark');
+  const toggleTheme = (e: React.MouseEvent<HTMLButtonElement>) =>
+    setDocumentTheme(theme === 'dark' ? 'light' : 'dark', e.currentTarget.getBoundingClientRect());
   const toggleLang = () => setLang((prev) => (prev === 'ko' ? 'en' : 'ko'));
   const activeSection = useActiveSection(SECTION_IDS);
   const scrolled = useScrolled();
@@ -266,7 +286,7 @@ export default function Home() {
               is the ring (see .wordmarkDot). */}
           <a href="#top" className={styles.wordmark}>
             <span className={styles.wordmarkDot} data-dot-home aria-hidden />
-            Ruo Lee
+            {data.profile.name[lang]}
           </a>
           <nav className={styles.nav} aria-label="Sections">
             {NAV_ITEMS.map((item) => (
@@ -319,16 +339,14 @@ export default function Home() {
             <button onClick={toggleLang} className={styles.ctrlBtn} aria-label="Toggle language">
               {lang === 'ko' ? 'EN' : 'KO'}
             </button>
+            {/* The same control the blog carries: the mark itself, filled in
+                the light theme and hollow in the dark one. */}
             <button
               onClick={toggleTheme}
-              className={styles.ctrlBtn}
+              className={`${styles.ctrlBtn} ${styles.themeBtn}`}
               aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
             >
-              {theme === 'dark' ? (
-                <Sun size={15} strokeWidth={1.75} />
-              ) : (
-                <Moon size={15} strokeWidth={1.75} />
-              )}
+              {theme === 'dark' ? '○' : '●'}
             </button>
           </div>
         </div>

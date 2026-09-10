@@ -215,12 +215,39 @@ pre {
   animation-delay: calc(var(--i, 0) * 70ms);
 }
 
-/* Theme switch cross-fades the whole document via the View Transitions API. */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 360ms;
-  animation-timing-function: var(--ease);
+/* ============ Theme switch ============ */
+
+/* Switching themes must not trigger the hover and state transitions that are
+   meant for explicit interaction — otherwise every one on the page fires at
+   once. They are suppressed for the length of the switch. */
+[data-theme-switching] * {
+  transition: none !important;
+}
+
+/*
+ * The new theme spreads out from the toggle as a circle, so the change comes
+ * from where it was pressed. The toggle writes the origin and the radius to
+ * the farthest corner onto the root; the old theme stays put underneath and
+ * the new one is clipped over it. Same gesture, and the same 360ms, as the
+ * blog.
+ */
+::view-transition-old(root) {
+  animation: none;
   mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  animation: themeSpread 360ms var(--ease);
+  mix-blend-mode: normal;
+}
+
+@keyframes themeSpread {
+  from {
+    clip-path: circle(0 at var(--theme-x, 50%) var(--theme-y, 50%));
+  }
+  to {
+    clip-path: circle(var(--theme-r, 150vmax) at var(--theme-x, 50%) var(--theme-y, 50%));
+  }
 }
 
 /*
@@ -244,6 +271,10 @@ pre {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
   }
   *,
   *::before,

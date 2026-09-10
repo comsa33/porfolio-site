@@ -44,7 +44,8 @@
 .wordmark {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  /* Mark and gap are the blog's, to the pixel — it is the same mark. */
+  gap: 9px;
   font-weight: 500;
   font-size: 15px;
   letter-spacing: -0.01em;
@@ -54,8 +55,8 @@
    home. While the travelling dot is out on the page this is the ring it left
    behind — the mark and the dot are the same object, never two. */
 .wordmarkDot {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--accent);
   flex: none;
@@ -187,6 +188,21 @@
 .ctrlBtn:hover {
   color: var(--ink);
   background: var(--bg-hover);
+}
+
+/* The theme control is the mark itself — filled in the light theme, hollow in
+   the dark one — rather than a sun and a moon. Set in the mono at the blog's
+   size, because the glyph's drawn diameter is what has to match, and that is a
+   property of the face rather than of the number. */
+.themeBtn {
+  font-family: var(--font-mono), monospace;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--ink-tertiary);
+}
+
+.themeBtn:hover {
+  color: var(--ink);
 }
 
 .ctrlBtn svg {
