@@ -33,7 +33,11 @@
 
   /* Layout */
   --frame: 960px;
-  --header-h: 64px;
+  /* The blog's height. The two sites are read one after the other and an 8px
+     difference in where the header line sits reads as a mistake rather than as
+     a variation. Feeds the header's own height and every section's
+     scroll-margin, so this token is the only place it is stated. */
+  --header-h: 56px;
   --radius: 10px;
   --radius-sm: 6px;
 

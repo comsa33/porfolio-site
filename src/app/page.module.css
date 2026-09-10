@@ -20,10 +20,14 @@
   top: 0;
   z-index: 100;
   background: color-mix(in srgb, var(--bg) 80%, transparent);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  /* Saturating as well as blurring is what makes content passing underneath
+     read as glass rather than as fog — the blog's values. */
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
   border-bottom: 1px solid transparent;
-  transition: border-color var(--dur) var(--ease);
+  /* The hairline arriving means something changed — the page is no longer at
+     the top — so it is a state change, not a movement. */
+  transition: border-color var(--dur-fast) var(--ease-state);
 }
 
 /* Hairline appears only once content is passing underneath */
