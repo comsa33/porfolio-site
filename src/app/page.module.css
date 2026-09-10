@@ -576,6 +576,18 @@ button.contactLink:hover span {
  */
 .endDot {
   --indicator-size: 6px;
+  /*
+   * What the mark stands up into when it arrives: a caret as tall as the type
+   * it ends, and drawn thin enough to read as a text cursor rather than as a
+   * bar. Stated here, beside the mark, and converted to scale factors by
+   * TravelingDot — which measures this element's own font size, so the caret
+   * tracks the clamp on .footerText at every width.
+   *
+   * --caret-height is a multiple of the type's size; --caret-width is absolute,
+   * because a cursor is the same weight whatever it is standing next to.
+   */
+  --caret-height: 1;
+  --caret-width: 1.6px;
   display: inline-block;
   width: var(--indicator-size);
   height: var(--indicator-size);

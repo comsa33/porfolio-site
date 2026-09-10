@@ -128,13 +128,13 @@
   }
   /* the jump, drawn out past where it is going */
   10% {
-    transform: translateY(-6%) scale(0.26, 2.92);
-    border-radius: 1px;
+    transform: translateY(-6%) scale(var(--caret-x-over, 0.26), var(--caret-y-over, 2.92));
+    border-radius: 0.5px;
   }
   /* and settling into the caret it overshot */
   15% {
-    transform: translateY(0) scale(0.34, 2.5);
-    border-radius: 1px;
+    transform: translateY(0) scale(var(--caret-x, 0.34), var(--caret-y, 2.5));
+    border-radius: 0.5px;
   }
   /* blink, blink */
   23.9% {
@@ -163,8 +163,8 @@
   }
   /* the caret holds its shape from 15% to here — then the same move backwards */
   66% {
-    transform: translateY(0) scale(0.34, 2.5);
-    border-radius: 1px;
+    transform: translateY(0) scale(var(--caret-x, 0.34), var(--caret-y, 2.5));
+    border-radius: 0.5px;
     opacity: 1;
   }
   /* collapsed, past a ball and into a squash — which is a bounce waiting to go */

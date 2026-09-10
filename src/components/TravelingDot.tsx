@@ -147,6 +147,31 @@ export default function TravelingDot({ active }: TravelingDotProps) {
     };
 
     /**
+     * The caret the mark stands up into, as scale factors on the ball.
+     *
+     * It has to be as tall as the type it is ending, and the type is set in a
+     * clamp — 20px on a phone, 25.6px on a desktop — while the mark itself is a
+     * fixed 6px. A ratio written into the keyframes would therefore be right at
+     * exactly one viewport width. Measuring the seat's own font size and
+     * dividing gives a caret that is the height of the line at every width.
+     */
+    const sizeCaret = (host: HTMLElement, size: number) => {
+      if (!ball) return;
+      const cs = getComputedStyle(host);
+      const fontSize = parseFloat(cs.fontSize) || 16;
+      const ratio = parseFloat(cs.getPropertyValue('--caret-height')) || 0.92;
+      const width = parseFloat(cs.getPropertyValue('--caret-width')) || 1.6;
+      const h = (fontSize * ratio) / size;
+      const w = width / size;
+      ball.style.setProperty('--caret-y', String(h));
+      ball.style.setProperty('--caret-x', String(w));
+      // The jump overshoots the caret and settles back into it; that is what
+      // makes it read as a spring rather than as a change of shape.
+      ball.style.setProperty('--caret-y-over', String(h * 1.16));
+      ball.style.setProperty('--caret-x-over', String(w * 0.78));
+    };
+
+    /**
      * The closing seat is the only host the dot arrives at for good, so it is
      * the only one worth landing on. The hop waits out the flight, then takes
      * the ball over from the travel deformation.
@@ -155,6 +180,7 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       window.clearTimeout(landing);
       ball?.removeAttribute('data-land');
       if (!ball || !host.hasAttribute('data-dot-end')) return;
+      sizeCaret(host, spotFor(host).size);
       landing = window.setTimeout(() => {
         ball.removeAttribute('data-squish');
         void ball.offsetWidth; // let the animation restart
