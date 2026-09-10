@@ -603,7 +603,11 @@ button.contactLink:hover span {
   margin-left: 0.08em;
   vertical-align: baseline;
   position: relative;
-  top: 0.1em;
+  /* Measured on the page rather than from the metrics: the mark reads as a
+     period a little lower than the arithmetic puts it, and the caret that
+     grows off its underside then stands at the height of the line instead of
+     over it. One number sets both, since the caret's foot is the mark. */
+  top: 0.16em;
 }
 
 /* Two ways to leave with something: write, or take the document. */
