@@ -626,29 +626,57 @@ export default function TravelingDot({ active }: TravelingDotProps) {
     };
 
     /* Written once, from the top, with a moment's grace for a reader who is
-       already on their way down. */
-    const openingIsOn =
-      !written &&
-      scribe !== null &&
-      ball !== null &&
-      window.scrollY < HOME_THRESHOLD &&
-      !matchMedia('(prefers-reduced-motion: reduce)').matches;
+       already on their way down. Anything that stops it says so in development,
+       because a sequence that silently does not run looks exactly like a page
+       that never had one. */
+    const whyNot = () => {
+      if (written) return 'already written this load';
+      if (!scribe) return 'no [data-dot-write] line in <main>';
+      if (!ball) return 'no ball inside the dot';
+      if (window.scrollY >= HOME_THRESHOLD) return `already scrolled (${window.scrollY}px)`;
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return 'reduced motion';
+      return null;
+    };
 
-    if (openingIsOn && measureLine()) {
+    /** Uncover the line and let the ordinary machinery take it from here. */
+    const noOpening = (reason: string) => {
+      writing = false;
+      scribe?.style.removeProperty('--hide');
+      if (process.env.NODE_ENV !== 'production') {
+        console.info('[TravelingDot] opening skipped —', reason);
+      }
+      placeNow();
+    };
+
+    const beginOpening = () => {
+      const reason = whyNot();
+      if (reason) return noOpening(reason);
+      // Measured against the real face: the mono is a webfont, and character
+      // stops taken against the fallback put the caret in the wrong places.
+      if (!measureLine()) return noOpening('the line has no text to measure');
       writing = true;
       scribe!.style.setProperty('--hide', `${revealStops[revealStops.length - 1]}px`);
       writeTimer = window.setTimeout(() => {
-        if (window.scrollY >= HOME_THRESHOLD) {
-          // Gone already: the line is simply there, and nothing was written.
-          writing = false;
-          scribe!.style.removeProperty('--hide');
-          placeNow();
-          return;
-        }
+        // Gone already: the line is simply there, and nothing was written.
+        if (window.scrollY >= HOME_THRESHOLD) return noOpening('left during the guard');
         startWriting();
       }, WRITE_GUARD_MS);
-    } else if (scribe) {
-      scribe.style.removeProperty('--hide');
+    };
+
+    // The markup holds the line covered, so waiting on the font costs no flash.
+    // The timeout is in case the font never resolves at all.
+    writing = true;
+    let opened = false;
+    const openOnce = () => {
+      if (opened) return;
+      opened = true;
+      beginOpening();
+    };
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(openOnce);
+      window.setTimeout(openOnce, 1200);
+    } else {
+      openOnce();
     }
 
     // Scroll events arrive faster than frames, so they are coalesced onto one.
