@@ -107,6 +107,8 @@ export default function TravelingDot({ active }: TravelingDotProps) {
     let closeTimer = 0;
     let closed = false;
     let closingRun = false;
+    /* Whether the reader has ever been anywhere but the top. */
+    let leftTheTop = false;
     let snakeFrame = 0;
 
     const setTransform = (x: number, y: number) => {
@@ -306,12 +308,19 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       frame = 0;
       if (writing) return;
 
-      // At the very top the dot is home and no heading holds a slot open. It
-      // goes home even after it has written the line: the mark in the header is
-      // the only colour in the chrome, and leaving it hollow for the rest of the
-      // visit is a price paid on every scroll to the top for something that
-      // happened once. The blog returns it too, and the two are one series.
-      if (window.scrollY < HOME_THRESHOLD) {
+      // At the very top the dot is home and no heading holds a slot open. The
+      // mark comes home even after it has written the line — it is the only
+      // colour in the chrome, and leaving it hollow for the whole visit is a
+      // price paid on every scroll to the top for something that happened once,
+      // and the blog brings it home too.
+      //
+      // But not straight away. Having just sat down at the head of the line it
+      // wrote, the mark is at the top by definition, and sending it home on
+      // those grounds would undo the end of the opening the moment it finished.
+      // So the rule waits for the reader to actually go somewhere first.
+      const atTop = window.scrollY < HOME_THRESHOLD;
+      if (!atTop) leftTheTop = true;
+      if (atTop && (!written || leftTheTop)) {
         goHome();
         ready = true;
         return;
