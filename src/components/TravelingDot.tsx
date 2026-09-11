@@ -287,10 +287,12 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       frame = 0;
       if (writing) return;
 
-      // At the very top the dot is home and no heading holds a slot open —
-      // unless it has written the line, in which case the head of that line is
-      // where it belongs and going home would unwrite it.
-      if (window.scrollY < HOME_THRESHOLD && !written) {
+      // At the very top the dot is home and no heading holds a slot open. It
+      // goes home even after it has written the line: the mark in the header is
+      // the only colour in the chrome, and leaving it hollow for the rest of the
+      // visit is a price paid on every scroll to the top for something that
+      // happened once. The blog returns it too, and the two are one series.
+      if (window.scrollY < HOME_THRESHOLD) {
         goHome();
         ready = true;
         return;
