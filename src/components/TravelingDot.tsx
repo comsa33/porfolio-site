@@ -75,7 +75,14 @@ export default function TravelingDot({ active }: TravelingDotProps) {
     const snake = snakeRef.current;
     const snakePath = snake?.firstElementChild as SVGPathElement | null;
     /* The line the dot writes on its way in. */
-    const scribe = main.querySelector<HTMLElement>('[data-dot-write]');
+    const scribe = main.querySelector<HTMLElement>('[data-dot-write="open"]');
+    /* The closing line, written the same way but one character at a time,
+       because it wraps and a clip cannot follow text around a corner. */
+    const closer = main.querySelector<HTMLElement>('[data-dot-write="close"]');
+    const closerChars = closer
+      ? Array.from(closer.querySelectorAll<HTMLElement>('[data-dot-char]'))
+      : [];
+    const seat = main.querySelector<HTMLElement>('[data-dot-end]');
 
     // The mark in the header. Flagged from the header markup so this file does
     // not have to know its class name.
@@ -94,6 +101,9 @@ export default function TravelingDot({ active }: TravelingDotProps) {
     let writing = false;
     let writeTimer = 0;
     let fontTimer = 0;
+    let closeTimer = 0;
+    let closed = false;
+    let closingRun = false;
     let snakeFrame = 0;
 
     const setTransform = (x: number, y: number) => {
@@ -223,6 +233,12 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       window.clearTimeout(landing);
       ball?.removeAttribute('data-land');
       if (!ball || !host.hasAttribute('data-dot-end')) return;
+      // The first arrival at the closing seat is not an arrival: the sentence
+      // has not been written yet, and writing it is how the mark gets there.
+      if (!closed && closerChars.length) {
+        startClosing();
+        return;
+      }
       sizeCaret(host, spotFor(host).size);
       landing = window.setTimeout(() => {
         ball.removeAttribute('data-squish');
@@ -692,11 +708,166 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       openOnce();
     }
 
+    /* ==================== The closing ====================
+     *
+     * The same hand writes the last line. The mark comes down it as a caret,
+     * types the sentence a character at a time, and where the sentence ends it
+     * is already standing on the full stop — so it drops into it and bounces,
+     * and the page is closed by the thing that opened it.
+     *
+     * Once, when the line comes into view, and any scroll past finishes the
+     * sentence rather than leaving it half-written.
+     */
+
+    /** The caret standing just past character `n` of the closing line. */
+    const closerCaret = (n: number) => {
+      const el = closerChars[Math.max(0, Math.min(n, closerChars.length - 1))];
+      const a = el.getBoundingClientRect();
+      const p = main.getBoundingClientRect();
+      const cs = getComputedStyle(closer!);
+      const fontSize = parseFloat(cs.fontSize);
+      const caretW = parseFloat(cs.getPropertyValue('--caret-width')) || 1.6;
+      const caretRatio = parseFloat(cs.getPropertyValue('--caret-height')) || 1;
+      const size = seat ? spotFor(seat).size : 6;
+      // Each span's box is the line it sits on, so this follows the text when
+      // the sentence wraps without anything having to know that it did.
+      const baseline = a.top - p.top + (a.height - fontSize) / 2 + fontSize * 0.8;
+      const x = (n < 0 ? a.left : a.right) - p.left;
+      return {
+        x: Math.round(x - (size - caretW) / 2),
+        y: Math.round(baseline + fontSize * 0.1 - size),
+        size,
+        caretW,
+        caretH: fontSize * caretRatio,
+      };
+    };
+
+    const closerCaretVars = (n: number) => {
+      if (!ball) return;
+      const c = closerCaret(n);
+      const h = c.caretH / c.size;
+      const w = c.caretW / c.size;
+      ball.style.setProperty('--cx', String(w));
+      ball.style.setProperty('--cy', String(h));
+      ball.style.setProperty('--cx-over', String(w * 0.62));
+      ball.style.setProperty('--cy-over', String(h * 1.5));
+      ball.style.setProperty('--cx-under', String(w * 1.14));
+      ball.style.setProperty('--cy-under', String(h * 0.93));
+    };
+
+    const asCloserCaret = (n: number) => {
+      const c = closerCaret(n);
+      dot.style.setProperty('--size', `${c.size}px`);
+      setTransform(c.x, c.y);
+      if (!ball) return;
+      ball.style.transformOrigin = '50% 100%';
+      ball.style.transform = `scale(${c.caretW / c.size}, ${c.caretH / c.size})`;
+      ball.style.borderRadius = '0.5px';
+    };
+
+    /** Reveal everything and put the mark on the full stop, without ceremony. */
+    const parkOnSeat = () => {
+      closerChars.forEach((c) => {
+        c.style.opacity = '1';
+      });
+      closed = true;
+      closingRun = false;
+      if (ball) {
+        ball.removeAttribute('data-drop');
+        ball.style.transform = '';
+        ball.style.transformOrigin = '';
+        ball.style.borderRadius = '';
+        ball.style.transition = '';
+      }
+      dot.style.transition = '';
+      dot.setAttribute('data-ready', 'true');
+      writing = false;
+      if (seat) {
+        currentHost?.removeAttribute('data-dot-active');
+        currentHost = seat;
+        atHome = false;
+      }
+      ready = true;
+      placeNow();
+    };
+
+    /** The last move: the caret becomes the full stop and bounces on it. */
+    const closeOnSeat = () => {
+      if (!ball || !seat) return parkOnSeat();
+      closerCaretVars(closerChars.length - 1);
+      ball.style.transition = '';
+      ball.style.transform = '';
+      ball.style.borderRadius = '';
+      ball.setAttribute('data-drop', '');
+      const s = spotFor(seat);
+      dot.style.setProperty('--size', `${s.size}px`);
+      dot.style.transition = `transform ${DROP_MS}ms var(--ease-out)`;
+      setTransform(s.x, s.y);
+      window.setTimeout(parkOnSeat, DROP_MS + 20);
+    };
+
+    let closerTyped = 0;
+    const closerStep = () => {
+      if (closerTyped >= closerChars.length) return closeOnSeat();
+      const ch = closerChars[closerTyped];
+      ch.style.opacity = '1';
+      closerTyped++;
+      asCloserCaret(closerTyped - 1);
+      const gap =
+        TYPE_MS +
+        (Math.random() * 2 - 1) * TYPE_JITTER +
+        ((ch.textContent ?? '') === ' ' ? TYPE_MS * TYPE_WORD_PAUSE : 0);
+      closeTimer = window.setTimeout(closerStep, Math.max(8, gap));
+    };
+
+    /** Moved on mid-sentence: finish it, seat the mark, no bounce. */
+    const abandonClosing = () => {
+      window.clearTimeout(closeTimer);
+      parkOnSeat();
+    };
+
+    const startClosing = () => {
+      if (closed || !closer || !ball || !closerChars.length) return;
+      writing = true;
+      closed = true; // claimed, so nothing starts it twice
+      closingRun = true;
+      window.clearTimeout(landing);
+      ball.removeAttribute('data-land');
+      ball.removeAttribute('data-squish');
+      currentHost?.removeAttribute('data-dot-active');
+      currentHost = null;
+
+      // down to the head of the line, then stand up on it
+      const c = closerCaret(-1);
+      dot.setAttribute('data-ready', 'true');
+      dot.style.setProperty('--size', `${c.size}px`);
+      setTransform(c.x, c.y);
+      closeTimer = window.setTimeout(() => {
+        closerCaretVars(0);
+        ball.style.transformOrigin = '50% 100%';
+        ball.setAttribute('data-caret-in', '');
+        closeTimer = window.setTimeout(() => {
+          ball.removeAttribute('data-caret-in');
+          dot.removeAttribute('data-ready'); // a caret snaps between letters
+          closerStep();
+        }, RISE_MS);
+      }, FLIGHT_MS);
+    };
+
     // Scroll events arrive faster than frames, so they are coalesced onto one.
     // The observers below are already batched by the browser, and waiting a
     // frame would only delay the flight, so they place at once.
     const schedule = () => {
       if (writing) {
+        if (closingRun) {
+          // Past it: finish the sentence and seat the mark, rather than leave
+          // the last line of the page half-written behind them.
+          const r = closer!.getBoundingClientRect();
+          if (r.bottom < window.innerHeight * 0.15 || r.top > window.innerHeight) {
+            abandonClosing();
+          }
+          return;
+        }
         if (window.scrollY >= HOME_THRESHOLD) abandonWriting();
         return;
       }
@@ -706,6 +877,27 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       if (frame) cancelAnimationFrame(frame);
       place();
     };
+
+    /* The closing starts as its line comes up from the bottom of the screen —
+       earlier than the section becomes current, so the sentence is written as
+       the reader arrives at it rather than sitting blank waiting for them. */
+    let closeWatch: IntersectionObserver | null = null;
+    if (closer && closerChars.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      closeWatch = new IntersectionObserver(
+        ([e]) => {
+          if (!e.isIntersecting || closed) return;
+          closeWatch?.disconnect();
+          startClosing();
+        },
+        { rootMargin: '0px 0px -15% 0px' },
+      );
+      closeWatch.observe(closer);
+    } else {
+      closerChars.forEach((c) => {
+        c.style.opacity = '1';
+      });
+      closed = true;
+    }
 
     place();
     window.addEventListener('scroll', schedule, { passive: true });
@@ -730,6 +922,9 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       window.clearTimeout(landing);
       window.clearTimeout(writeTimer);
       window.clearTimeout(fontTimer);
+      window.clearTimeout(closeTimer);
+      closeWatch?.disconnect();
+      closerChars.forEach((c) => c.style.removeProperty('opacity'));
       cancelAnimationFrame(snakeFrame);
       scribe?.style.removeProperty('--hide');
       home?.removeAttribute('data-dot-state');

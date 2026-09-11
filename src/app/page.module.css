@@ -595,6 +595,19 @@ button.contactLink:hover span {
   letter-spacing: -0.015em;
 }
 
+/* Each character of the closing line waits for the caret to reach it. Opacity
+   rather than visibility, so the sentence stays in the accessibility tree while
+   it is being written. */
+.footerChar {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footerChar {
+    opacity: 1;
+  }
+}
+
 /*
  * The seat the travelling dot comes to rest in. It draws nothing itself — the
  * dot that has been following the reader down the page is the full stop, and

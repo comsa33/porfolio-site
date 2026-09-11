@@ -277,6 +277,11 @@ export default function Home() {
 
   const rise = (i: number) => ({ '--i': i }) as React.CSSProperties;
 
+  const closingLine =
+    lang === 'ko'
+      ? '무엇을 만들었는지보다 왜 그렇게 정했는지가 궁금하시다면'
+      : "If you'd rather hear why than what";
+
   return (
     <>
       <header className={styles.header} data-scrolled={scrolled}>
@@ -373,13 +378,13 @@ export default function Home() {
             <span
               className={styles.eyebrowTitle}
               data-dot="hero"
-              data-dot-write=""
+              data-dot-write="open"
               style={{ '--hide': '100%' } as React.CSSProperties}
             >
               {data.profile.title}
             </span>
             <noscript>
-              <style>{`[data-dot-write]{--hide:0px !important}`}</style>
+              <style>{`[data-dot-write]{--hide:0px !important}[data-dot-char]{opacity:1 !important}`}</style>
             </noscript>
           </p>
           <h1 className={`${styles.lede} rise`} style={rise(1)}>
@@ -604,10 +609,17 @@ export default function Home() {
               what completes it, which is why the mark lands on an open clause
               and blinks there. The line is the blog's own, on purpose: the two
               sites are the same person, and this is the seam between them. */}
-          <p className={styles.footerText}>
-            {lang === 'ko'
-              ? '무엇을 만들었는지보다 왜 그렇게 정했는지가 궁금하시다면'
-              : "If you'd rather hear why than what"}
+          {/* The dot types this one too, so it arrives a character at a time.
+              A clip cannot do it — the sentence wraps — so each character is
+              its own span and the caret reads its position from them, which is
+              what lets the caret turn the line with the text. The words are all
+              in the document; only their paint waits. */}
+          <p className={styles.footerText} data-dot-write="close">
+            {Array.from(closingLine).map((ch, i) => (
+              <span key={i} className={styles.footerChar} data-dot-char="">
+                {ch}
+              </span>
+            ))}
             <span className={styles.endDot} data-dot="contact" data-dot-end aria-hidden />
           </p>
           <div className={styles.footerActions}>
