@@ -93,6 +93,7 @@ export default function TravelingDot({ active }: TravelingDotProps) {
     /* While the opening runs, the scroll position does not place the dot. */
     let writing = false;
     let writeTimer = 0;
+    let fontTimer = 0;
     let snakeFrame = 0;
 
     const setTransform = (x: number, y: number) => {
@@ -674,7 +675,7 @@ export default function TravelingDot({ active }: TravelingDotProps) {
     };
     if (document.fonts?.ready) {
       document.fonts.ready.then(openOnce);
-      window.setTimeout(openOnce, 1200);
+      fontTimer = window.setTimeout(openOnce, 1200);
     } else {
       openOnce();
     }
@@ -716,6 +717,7 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       if (flying) window.clearTimeout(flying);
       window.clearTimeout(landing);
       window.clearTimeout(writeTimer);
+      window.clearTimeout(fontTimer);
       cancelAnimationFrame(snakeFrame);
       scribe?.style.removeProperty('--hide');
       home?.removeAttribute('data-dot-state');
