@@ -372,9 +372,12 @@ export default function TravelingDot({ active }: TravelingDotProps) {
 
     const caretSpot = (n: number) => {
       const g = lineBox();
+      // The mark's own size, not a literal: the caret is drawn by scaling it,
+      // so the two have to be the same number or the handover shifts.
+      const size = spotFor(scribe!).size;
       return {
-        x: Math.round(g.left + inkStops[n] - (6 - g.caretW) / 2),
-        y: Math.round(g.baseline + g.fontSize * 0.1 - 6),
+        x: Math.round(g.left + inkStops[n] - (size - g.caretW) / 2),
+        y: Math.round(g.baseline + g.fontSize * 0.1 - size),
       };
     };
 
@@ -382,19 +385,21 @@ export default function TravelingDot({ active }: TravelingDotProps) {
     const asCaret = (n: number) => {
       const g = lineBox();
       const s = caretSpot(n);
-      dot.style.setProperty('--size', '6px');
-      dot.style.transform = `translate(${s.x}px, ${s.y}px)`;
+      dot.style.setProperty('--size', `${spotFor(scribe!).size}px`);
+      setTransform(s.x, s.y);
       if (!ball) return;
       ball.style.transformOrigin = '50% 100%';
-      ball.style.transform = `scale(${g.caretW / 6}, ${g.caretH / 6})`;
+      const size = spotFor(scribe!).size;
+      ball.style.transform = `scale(${g.caretW / size}, ${g.caretH / size})`;
       ball.style.borderRadius = '0.5px';
     };
 
     const sizeCaretVars = () => {
       if (!ball) return;
       const g = lineBox();
-      const h = g.caretH / 6;
-      const w = g.caretW / 6;
+      const size = spotFor(scribe!).size;
+      const h = g.caretH / size;
+      const w = g.caretW / size;
       ball.style.setProperty('--cx', String(w));
       ball.style.setProperty('--cy', String(h));
       ball.style.setProperty('--cx-over', String(w * 0.62));
@@ -502,6 +507,10 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       }
       dot.style.transition = '';
       scribe?.style.removeProperty('--hide');
+      // A caret snaps from letter to letter, so the glide was turned off to
+      // write the line. Turn it back on, or the dot teleports between sections
+      // for the rest of the page.
+      dot.setAttribute('data-ready', 'true');
       ready = true;
       placeNow();
     };
@@ -543,9 +552,10 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       const fs = parseFloat(cs.fontSize);
       const lh = parseFloat(cs.lineHeight) || fs * 1.4;
       dot.style.transition = `transform ${DROP_MS}ms var(--ease-out)`;
-      dot.style.transform = `translate(${Math.round(a.left - p.left)}px, ${Math.round(
-        a.top - p.top + (lh - 6) / 2,
-      )}px)`;
+      setTransform(
+        Math.round(a.left - p.left),
+        Math.round(a.top - p.top + (lh - spotFor(scribe!).size) / 2),
+      );
       wait(DROP_MS + 20, handOver);
     };
 
@@ -605,13 +615,13 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       if (h) {
         dot.removeAttribute('data-ready');
         dot.style.setProperty('--size', `${h.size}px`);
-        dot.style.transform = `translate(${h.x}px, ${h.y}px)`;
+        setTransform(h.x, h.y);
         void dot.offsetWidth;
         dot.setAttribute('data-ready', 'true');
       }
       const s = caretSpot(0);
-      dot.style.setProperty('--size', '6px');
-      dot.style.transform = `translate(${s.x}px, ${s.y}px)`;
+      dot.style.setProperty('--size', `${spotFor(scribe!).size}px`);
+      setTransform(s.x, s.y);
 
       wait(FLIGHT_MS, () => {
         sizeCaretVars();
