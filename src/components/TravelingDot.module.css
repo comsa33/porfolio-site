@@ -219,6 +219,63 @@
   visibility: hidden;
 }
 
+/*
+ * dot → caret. The mark is still settling from the journey when it decides to
+ * stand up, so this starts where the landing squash leaves off rather than at a
+ * shape the ball is not currently in — a first keyframe the element has to jump
+ * to is a pop, and it is the one thing that gives a morph away.
+ *
+ * Then: it takes its own weight, gathers, and is thrown — well past the caret
+ * it is heading for, recoiling back through it before it stands still. It stays
+ * round the whole way up, because a ball drawn out by its own speed is a
+ * capsule; squaring off happens once it has stopped, which is the difference
+ * between a mark being thrown and a caret being grown.
+ */
+.ball[data-caret-in] {
+  animation: caretIn 460ms var(--ease-out) forwards;
+}
+
+@keyframes caretIn {
+  /* still settling from the journey */
+  0% {
+    transform: scale(1.04, 0.97);
+    border-radius: 50%;
+  }
+  /* takes the weight */
+  12% {
+    transform: scale(1.34, 0.7);
+    border-radius: 50%;
+  }
+  /* gathers — and accelerates out of the crouch rather than easing out of it */
+  26% {
+    transform: scale(1.12, 0.84);
+    border-radius: 50%;
+    animation-timing-function: cubic-bezier(0.5, 0, 0.75, 0.4);
+  }
+  /* thrown, and still a ball */
+  56% {
+    transform: scale(var(--cx-over, 0.16), var(--cy-over, 2.75));
+    border-radius: 50%;
+  }
+  /* recoiling back through the caret, squat and a shade wider */
+  76% {
+    transform: scale(var(--cx-under, 0.29), var(--cy-under, 1.7));
+    border-radius: 25%;
+  }
+  /* standing still: the caret, squared off */
+  100% {
+    transform: scale(var(--cx, 0.25), var(--cy, 1.84));
+    border-radius: 0.5px;
+  }
+}
+
+/* Standing. The typing code writes the same transform inline as it moves the
+   caret along the line; this is what holds it between those writes. */
+.ball[data-caret] {
+  transform: scale(var(--cx, 0.25), var(--cy, 1.84));
+  border-radius: 0.5px;
+}
+
 /* caret → dot, at the head of the line it just wrote: it collapses onto its
    foot, then bounces twice before it is a full stop. */
 .ball[data-drop] {
@@ -252,9 +309,11 @@
   }
 }
 
-/* A cursor blinks; it does not pulse. */
+/* A cursor blinks; it does not pulse. And it holds solid for a beat first —
+   every editor does, because a cursor that starts blinking the instant it
+   arrives reads as a flicker rather than as something waiting. */
 .ball[data-blink] {
-  animation: blink 1.06s step-end infinite;
+  animation: blink 1.06s step-end 420ms infinite;
 }
 
 @keyframes blink {
@@ -304,7 +363,8 @@
   .ball[data-squish],
   .ball[data-land],
   .ball[data-drop],
-  .ball[data-blink] {
+  .ball[data-blink],
+  .ball[data-caret-in] {
     animation: none;
   }
 }

@@ -25,7 +25,10 @@ const TYPE_MS = 45;
 const TYPE_JITTER = 25;
 /** A space is a beat, not a character. */
 const TYPE_WORD_PAUSE = 1.6;
-const RISE_MS = 380;
+/* The rise starts before the glide has quite finished, so the landing runs
+   into the crouch instead of the mark sitting still between the two. */
+const LAND_INTO_RISE_MS = 540;
+const RISE_MS = 460;
 const CRAWL_MS = 560;
 const CRAWL_HOLD_MS = 160;
 const GATHER_MS = 460;
@@ -394,7 +397,10 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       // so the two have to be the same number or the handover shifts.
       const size = spotFor(scribe!).size;
       return {
-        x: Math.round(g.left + inkStops[n] - (size - g.caretW) / 2),
+        // x is not rounded: a caret snapped to whole pixels sits one pixel
+        // nearer some letters than others, and in a mono line that reads as the
+        // spacing wobbling rather than as crispness.
+        x: g.left + inkStops[n] - (size - g.caretW) / 2,
         y: Math.round(g.baseline + g.fontSize * 0.1 - size),
       };
     };
@@ -639,10 +645,13 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       }
       const s = caretSpot(0);
       dot.style.setProperty('--size', `${spotFor(scribe!).size}px`);
-      setTransform(s.x, s.y);
+      // moveTo rather than setTransform: the mark should arrive at the line
+      // deformed by the journey, the way it arrives anywhere else.
+      moveTo(s.x, s.y);
 
-      wait(FLIGHT_MS, () => {
+      wait(LAND_INTO_RISE_MS, () => {
         sizeCaretVars();
+        ball.removeAttribute('data-squish');
         ball.style.transformOrigin = '50% 100%';
         ball.setAttribute('data-caret-in', '');
         wait(RISE_MS, () => {
@@ -734,7 +743,7 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       const baseline = a.top - p.top + (a.height - fontSize) / 2 + fontSize * 0.8;
       const x = (n < 0 ? a.left : a.right) - p.left;
       return {
-        x: Math.round(x - (size - caretW) / 2),
+        x: x - (size - caretW) / 2,
         y: Math.round(baseline + fontSize * 0.1 - size),
         size,
         caretW,
@@ -841,9 +850,10 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       const c = closerCaret(-1);
       dot.setAttribute('data-ready', 'true');
       dot.style.setProperty('--size', `${c.size}px`);
-      setTransform(c.x, c.y);
+      moveTo(c.x, c.y);
       closeTimer = window.setTimeout(() => {
         closerCaretVars(0);
+        ball.removeAttribute('data-squish');
         ball.style.transformOrigin = '50% 100%';
         ball.setAttribute('data-caret-in', '');
         closeTimer = window.setTimeout(() => {
@@ -851,7 +861,7 @@ export default function TravelingDot({ active }: TravelingDotProps) {
           dot.removeAttribute('data-ready'); // a caret snaps between letters
           closerStep();
         }, RISE_MS);
-      }, FLIGHT_MS);
+      }, LAND_INTO_RISE_MS);
     };
 
     // Scroll events arrive faster than frames, so they are coalesced onto one.
