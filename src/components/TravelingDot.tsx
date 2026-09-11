@@ -17,6 +17,27 @@ const FLIGHT_MS = 600;
 /** A move shorter than this is a nudge, not a journey — no deformation. */
 const JOURNEY_PX = 6;
 
+/* ---- The opening, which happens once and only from the top of the page ----
+ * Scroll inside the guard and it never starts at all; scroll after that and it
+ * finishes the line instead of unwriting it. */
+const WRITE_GUARD_MS = 100;
+const TYPE_MS = 45;
+const TYPE_JITTER = 25;
+/** A space is a beat, not a character. */
+const TYPE_WORD_PAUSE = 1.6;
+const RISE_MS = 380;
+const CRAWL_MS = 560;
+const CRAWL_HOLD_MS = 160;
+const GATHER_MS = 460;
+const BLINK_MS = 2120;
+const DROP_MS = 640;
+/** The stroke any thinner than this stops reading as a line. */
+const MIN_STROKE = 0.9;
+
+/* The opening runs once per load. A module-level flag rather than a ref, so a
+   development double-mount does not write the line twice. */
+let written = false;
+
 type Spot = { x: number; y: number; size: number };
 
 /**
@@ -39,6 +60,7 @@ type Spot = { x: number; y: number; size: number };
  */
 export default function TravelingDot({ active }: TravelingDotProps) {
   const ref = useRef<HTMLSpanElement>(null);
+  const snakeRef = useRef<SVGSVGElement>(null);
   const activeRef = useRef(active);
 
   useEffect(() => {
@@ -50,6 +72,10 @@ export default function TravelingDot({ active }: TravelingDotProps) {
     const main = dot?.parentElement;
     if (!dot || !main) return;
     const ball = dot.firstElementChild as HTMLElement | null;
+    const snake = snakeRef.current;
+    const snakePath = snake?.firstElementChild as SVGPathElement | null;
+    /* The line the dot writes on its way in. */
+    const scribe = main.querySelector<HTMLElement>('[data-dot-write]');
 
     // The mark in the header. Flagged from the header markup so this file does
     // not have to know its class name.
@@ -64,6 +90,10 @@ export default function TravelingDot({ active }: TravelingDotProps) {
     let currentHost: HTMLElement | null = null;
     let lastX = NaN;
     let lastY = NaN;
+    /* While the opening runs, the scroll position does not place the dot. */
+    let writing = false;
+    let writeTimer = 0;
+    let snakeFrame = 0;
 
     const setTransform = (x: number, y: number) => {
       dot.style.transform = `translate(${x}px, ${y}px)`;
@@ -254,9 +284,12 @@ export default function TravelingDot({ active }: TravelingDotProps) {
 
     const place = () => {
       frame = 0;
+      if (writing) return;
 
-      // At the very top the dot is home and no heading holds a slot open.
-      if (window.scrollY < HOME_THRESHOLD) {
+      // At the very top the dot is home and no heading holds a slot open —
+      // unless it has written the line, in which case the head of that line is
+      // where it belongs and going home would unwrite it.
+      if (window.scrollY < HOME_THRESHOLD && !written) {
         goHome();
         ready = true;
         return;
@@ -276,10 +309,356 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       ready = true;
     };
 
+    /* ==================== The opening ====================
+     *
+     * The mark comes off the header, stands up as a caret and writes the line
+     * under it; having written it, it runs the length of the line as a stroke —
+     * down, along underneath, up again at the front — and sits down there as a
+     * dot, which is where it would have been anyway. The page is written rather
+     * than merely displayed, and the mark that writes it is the mark that
+     * names the site.
+     *
+     * Everything here is once per load, never on the way back up, and any
+     * scroll finishes it rather than reversing it.
+     */
+
+    /** Where each character's ink ends, and how much of the box to uncover. */
+    let inkStops: number[] = [];
+    let revealStops: number[] = [];
+
+    const measureLine = () => {
+      const node = scribe?.firstChild;
+      if (!scribe || !node || node.nodeType !== Node.TEXT_NODE) return false;
+      const n = (node.textContent ?? '').length;
+      if (!n) return false;
+      const r = document.createRange();
+      const left = scribe.getBoundingClientRect().left;
+      // Letter-spacing is added after every character, the last one included, so
+      // a prefix's right edge sits that far past the ink. The clip wants the
+      // whole advance; the caret wants the ink. Using one number for both is
+      // what makes a caret run ahead of the text it is writing.
+      const ls = parseFloat(getComputedStyle(scribe).letterSpacing) || 0;
+      inkStops = [0];
+      revealStops = [0];
+      for (let k = 1; k <= n; k++) {
+        r.setStart(node, 0);
+        r.setEnd(node, k);
+        const right = r.getBoundingClientRect().right - left;
+        revealStops.push(right);
+        inkStops.push(right - ls);
+      }
+      return true;
+    };
+
+    /** The line's geometry in the parent's coordinates. */
+    const lineBox = () => {
+      const a = scribe!.getBoundingClientRect();
+      const p = main.getBoundingClientRect();
+      const cs = getComputedStyle(scribe!);
+      const fontSize = parseFloat(cs.fontSize);
+      const lineHeight = parseFloat(cs.lineHeight) || fontSize * 1.4;
+      const caretW = parseFloat(cs.getPropertyValue('--caret-width')) || 1.5;
+      const caretRatio = parseFloat(cs.getPropertyValue('--caret-height')) || 0.92;
+      return {
+        left: a.left - p.left,
+        // half-leading, then the ascent: where the letters actually stand
+        baseline: a.top - p.top + (lineHeight - fontSize) / 2 + fontSize * 0.8,
+        fontSize,
+        caretW,
+        caretH: fontSize * caretRatio,
+      };
+    };
+
+    const caretSpot = (n: number) => {
+      const g = lineBox();
+      return {
+        x: Math.round(g.left + inkStops[n] - (6 - g.caretW) / 2),
+        y: Math.round(g.baseline + g.fontSize * 0.1 - 6),
+      };
+    };
+
+    /** Paints the ball as a caret standing on the line at a given x. */
+    const asCaret = (n: number) => {
+      const g = lineBox();
+      const s = caretSpot(n);
+      dot.style.setProperty('--size', '6px');
+      dot.style.transform = `translate(${s.x}px, ${s.y}px)`;
+      if (!ball) return;
+      ball.style.transformOrigin = '50% 100%';
+      ball.style.transform = `scale(${g.caretW / 6}, ${g.caretH / 6})`;
+      ball.style.borderRadius = '0.5px';
+    };
+
+    const sizeCaretVars = () => {
+      if (!ball) return;
+      const g = lineBox();
+      const h = g.caretH / 6;
+      const w = g.caretW / 6;
+      ball.style.setProperty('--cx', String(w));
+      ball.style.setProperty('--cy', String(h));
+      ball.style.setProperty('--cx-over', String(w * 0.62));
+      ball.style.setProperty('--cy-over', String(h * 1.5));
+      ball.style.setProperty('--cx-under', String(w * 1.14));
+      ball.style.setProperty('--cy-under', String(h * 0.93));
+    };
+
+    /* ---- the stroke that runs the line ---- */
+
+    let route: { T: number; A: number; B: number; caretLen: number } | null = null;
+    let strokeState = { tail: 0, head: 0 };
+
+    const layoutRoute = () => {
+      if (!snakePath) return null;
+      const g = lineBox();
+      const half = g.caretW / 2;
+      const x1 = g.left + half;
+      const x2 = g.left + inkStops[inkStops.length - 1] + half;
+      const caretBottom = g.baseline + g.fontSize * 0.1;
+      const yTop = caretBottom - g.caretH;
+      const yBot = g.baseline + g.fontSize * 0.34;
+      const r = 3.5;
+
+      snakePath.setAttribute(
+        'd',
+        `M${x2} ${yTop}L${x2} ${yBot - r}Q${x2} ${yBot} ${x2 - r} ${yBot}` +
+          `L${x1 + r} ${yBot}Q${x1} ${yBot} ${x1} ${yBot - r}L${x1} ${yTop}`,
+      );
+
+      const T = snakePath.getTotalLength();
+      // Where the corners fall, found by walking the path rather than by algebra.
+      let A = 0;
+      let B = 0;
+      for (let k = 0; k <= 260; k++) {
+        const L = (T * k) / 260;
+        const pt = snakePath.getPointAtLength(L);
+        if (!A && pt.y >= yBot - 0.6) A = L;
+        if (!B && A && pt.x <= x1 + 0.6) B = L;
+      }
+      route = { T, A, B, caretLen: g.caretH };
+      return route;
+    };
+
+    /*
+     * The thickness is not animated. It is read off the length every frame, the
+     * way a band's is: stretch it and it thins, let it gather and it thickens,
+     * and the two can never fall out of step because there is only one number.
+     * Square-rooted, so most of the thinning happens early in the stretch.
+     */
+    const drawRoute = (tail: number, head: number) => {
+      if (!snakePath || !route) return;
+      const g = lineBox();
+      const len = Math.max(0, head - tail);
+      const k = Math.sqrt(Math.min(1, route.caretLen / Math.max(len, 0.001)));
+      snakePath.style.strokeWidth = `${MIN_STROKE + (g.caretW - MIN_STROKE) * k}px`;
+      snakePath.style.strokeDasharray = `${len} ${route.T * 2 + 40}`;
+      snakePath.style.strokeDashoffset = String(-tail);
+      strokeState = { tail, head };
+    };
+
+    const runRoute = (
+      to: { tail: number; head: number },
+      dur: number,
+      curve: (k: number) => number,
+      done: () => void,
+    ) => {
+      cancelAnimationFrame(snakeFrame);
+      const from = { ...strokeState };
+      const t0 = performance.now();
+      const tick = (now: number) => {
+        const k = Math.min(1, (now - t0) / dur);
+        const e = curve(k);
+        drawRoute(from.tail + (to.tail - from.tail) * e, from.head + (to.head - from.head) * e);
+        if (k < 1) snakeFrame = requestAnimationFrame(tick);
+        else done();
+      };
+      tick(t0);
+    };
+
+    const easeOutCubic = (k: number) => 1 - Math.pow(1 - k, 3);
+    const easeInOutCubic = (k: number) =>
+      k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+
+    /* ---- the sequence ---- */
+
+    const wait = (ms: number, fn: () => void) => {
+      writeTimer = window.setTimeout(fn, ms);
+    };
+
+    /** Hands the mark back to the ordinary machinery, wherever it has got to. */
+    const handOver = () => {
+      writing = false;
+      cancelAnimationFrame(snakeFrame);
+      window.clearTimeout(writeTimer);
+      snake?.removeAttribute('data-on');
+      dot.removeAttribute('data-writing');
+      ball?.removeAttribute('data-drop');
+      ball?.removeAttribute('data-blink');
+      if (ball) {
+        ball.style.transition = '';
+        ball.style.transform = '';
+        ball.style.transformOrigin = '';
+        ball.style.borderRadius = '';
+      }
+      dot.style.transition = '';
+      scribe?.style.removeProperty('--hide');
+      ready = true;
+      placeNow();
+    };
+
+    /** The reader moved on. Finish the line, never unwrite it, and hand back. */
+    const abandonWriting = () => {
+      if (!writing) return;
+      window.clearTimeout(writeTimer);
+      cancelAnimationFrame(snakeFrame);
+      if (scribe) {
+        scribe.style.transition = 'clip-path 120ms ease-out';
+        scribe.style.setProperty('--hide', '0px');
+        window.setTimeout(() => scribe.style.removeProperty('transition'), 200);
+      }
+      // Mid-crawl: run the rest of the route rather than drop it, then hand back.
+      if (snake?.hasAttribute('data-on') && route) {
+        runRoute({ tail: route.T - route.caretLen, head: route.T }, 180, easeOutCubic, handOver);
+        return;
+      }
+      handOver();
+    };
+
+    /** The mark sits down at the head of the line it wrote, and the line makes
+     *  room for it as it lands. */
+    const sitDown = () => {
+      if (!ball) return handOver();
+      sizeCaretVars();
+      ball.removeAttribute('data-blink');
+      ball.style.transition = '';
+      ball.style.transform = '';
+      ball.style.borderRadius = '';
+      ball.setAttribute('data-drop', '');
+      scribe?.setAttribute('data-dot-active', '');
+      currentHost = scribe;
+      atHome = false;
+      const a = scribe!.getBoundingClientRect();
+      const p = main.getBoundingClientRect();
+      const cs = getComputedStyle(scribe!);
+      const fs = parseFloat(cs.fontSize);
+      const lh = parseFloat(cs.lineHeight) || fs * 1.4;
+      dot.style.transition = `transform ${DROP_MS}ms var(--ease-out)`;
+      dot.style.transform = `translate(${Math.round(a.left - p.left)}px, ${Math.round(
+        a.top - p.top + (lh - 6) / 2,
+      )}px)`;
+      wait(DROP_MS + 20, handOver);
+    };
+
+    const crawl = () => {
+      const g = layoutRoute();
+      if (!g || !snakePath) return sitDown();
+      ball?.removeAttribute('data-caret');
+      dot.setAttribute('data-writing', '');
+      // Draw first, show second: a path shown first wears whatever dash it was
+      // left with, which reads as a stray caret blinking at the end of the line.
+      drawRoute(0, g.caretLen);
+      snake?.setAttribute('data-on', '');
+
+      runRoute({ tail: g.A, head: g.B }, CRAWL_MS, easeInOutCubic, () => {
+        wait(CRAWL_HOLD_MS, () => {
+          runRoute({ tail: g.T - g.caretLen, head: g.T }, GATHER_MS, easeOutCubic, () => {
+            asCaret(0);
+            void dot.offsetWidth; // in place before it is seen
+            snake?.removeAttribute('data-on');
+            dot.removeAttribute('data-writing');
+            ball?.setAttribute('data-blink', '');
+            wait(BLINK_MS, sitDown);
+          });
+        });
+      });
+    };
+
+    let typed = 0;
+    const typeStep = () => {
+      if (!scribe) return crawl();
+      if (typed >= revealStops.length - 1) return crawl();
+      typed++;
+      scribe.style.setProperty(
+        '--hide',
+        `${revealStops[revealStops.length - 1] - revealStops[typed]}px`,
+      );
+      asCaret(typed);
+      const ch = (scribe.firstChild?.textContent ?? '')[typed - 1];
+      const gap =
+        TYPE_MS +
+        (Math.random() * 2 - 1) * TYPE_JITTER +
+        (ch === ' ' ? TYPE_MS * TYPE_WORD_PAUSE : 0);
+      wait(Math.max(8, gap), typeStep);
+    };
+
+    const startWriting = () => {
+      // No mark to come from, or no line to write: the page is simply there.
+      if (!scribe || !ball || !home) return handOver();
+      writing = true;
+      written = true;
+      atHome = false;
+      home.setAttribute('data-dot-state', 'away');
+      dot.removeAttribute('data-home');
+
+      // from the mark, to the head of the line
+      const h = homeSpot();
+      if (h) {
+        dot.removeAttribute('data-ready');
+        dot.style.setProperty('--size', `${h.size}px`);
+        dot.style.transform = `translate(${h.x}px, ${h.y}px)`;
+        void dot.offsetWidth;
+        dot.setAttribute('data-ready', 'true');
+      }
+      const s = caretSpot(0);
+      dot.style.setProperty('--size', '6px');
+      dot.style.transform = `translate(${s.x}px, ${s.y}px)`;
+
+      wait(FLIGHT_MS, () => {
+        sizeCaretVars();
+        ball.style.transformOrigin = '50% 100%';
+        ball.setAttribute('data-caret-in', '');
+        wait(RISE_MS, () => {
+          ball.removeAttribute('data-caret-in');
+          ball.setAttribute('data-caret', '');
+          dot.removeAttribute('data-ready'); // a caret snaps between letters
+          typeStep();
+        });
+      });
+    };
+
+    /* Written once, from the top, with a moment's grace for a reader who is
+       already on their way down. */
+    const openingIsOn =
+      !written &&
+      scribe !== null &&
+      ball !== null &&
+      window.scrollY < HOME_THRESHOLD &&
+      !matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (openingIsOn && measureLine()) {
+      writing = true;
+      scribe!.style.setProperty('--hide', `${revealStops[revealStops.length - 1]}px`);
+      writeTimer = window.setTimeout(() => {
+        if (window.scrollY >= HOME_THRESHOLD) {
+          // Gone already: the line is simply there, and nothing was written.
+          writing = false;
+          scribe!.style.removeProperty('--hide');
+          placeNow();
+          return;
+        }
+        startWriting();
+      }, WRITE_GUARD_MS);
+    } else if (scribe) {
+      scribe.style.removeProperty('--hide');
+    }
+
     // Scroll events arrive faster than frames, so they are coalesced onto one.
     // The observers below are already batched by the browser, and waiting a
     // frame would only delay the flight, so they place at once.
     const schedule = () => {
+      if (writing) {
+        if (window.scrollY >= HOME_THRESHOLD) abandonWriting();
+        return;
+      }
       if (!frame) frame = requestAnimationFrame(place);
     };
     const placeNow = () => {
@@ -308,6 +687,9 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       if (returning) window.clearTimeout(returning);
       if (flying) window.clearTimeout(flying);
       window.clearTimeout(landing);
+      window.clearTimeout(writeTimer);
+      cancelAnimationFrame(snakeFrame);
+      scribe?.style.removeProperty('--hide');
       home?.removeAttribute('data-dot-state');
       currentHost?.removeAttribute('data-dot-active');
     };
@@ -323,8 +705,16 @@ export default function TravelingDot({ active }: TravelingDotProps) {
   }, [active]);
 
   return (
-    <span ref={ref} className={styles.dot} data-home="" aria-hidden="true">
-      <span className={styles.ball} />
-    </span>
+    <>
+      <span ref={ref} className={styles.dot} data-home="" aria-hidden="true">
+        <span className={styles.ball} />
+      </span>
+      {/* The route the mark runs once it has written the line. Empty until then,
+          and drawn in the parent's own pixel coordinates — no viewBox, so one
+          user unit is one CSS pixel. */}
+      <svg ref={snakeRef} className={styles.snake} aria-hidden="true">
+        <path />
+      </svg>
+    </>
   );
 }

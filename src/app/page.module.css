@@ -239,12 +239,37 @@
   margin-bottom: 2rem;
 }
 
+/*
+ * The line the dot writes on its way into the page. It is uncovered from the
+ * left as the caret moves through it — the text is in the document in full from
+ * the first byte, so search engines and screen readers are unaffected; only the
+ * paint is withheld. --hide starts at 100% in the markup so nothing flashes
+ * before the script runs, and TravelingDot takes it from there.
+ *
+ * The caret the mark stands up into is stated here, beside the line, the way
+ * the closing mark states its own: as tall as the type, and this thin.
+ */
 .eyebrowTitle {
   font-family: var(--font-mono), monospace;
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.02em;
   color: var(--ink-tertiary);
+  /* Stated, so the mark is the same size while it is writing the line as it is
+     once it sits down at the head of it — derived from the type, the two
+     disagreed by a pixel and the handover popped. */
+  --indicator-size: 6px;
+  --caret-height: 0.92;
+  --caret-width: 1.5px;
+  clip-path: inset(0 var(--hide, 0px) 0 0);
+}
+
+/* Nobody should be left with an invisible line because the animation is not
+   wanted or the script never arrived. */
+@media (prefers-reduced-motion: reduce) {
+  .eyebrowTitle {
+    --hide: 0px !important;
+  }
 }
 
 /* The intro paragraph is the hero. Keywords stay ink; the rest recedes. */

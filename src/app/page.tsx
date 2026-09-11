@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import React, { useEffect, useState, useSyncExternalStore } from 'react';
 import {
   ArrowUpRight,
   Check,
@@ -366,9 +366,21 @@ export default function Home() {
               below wraps to four lines, and a slot opening in a paragraph
               moves more type than it marks. */}
           <p className={`${styles.eyebrow} rise`} style={rise(0)}>
-            <span className={styles.eyebrowTitle} data-dot="hero">
+            {/* The dot writes this line on its way in — see TravelingDot. It is
+                clipped rather than absent, so the words are in the document
+                whether or not anything animates; without JavaScript the rule
+                below simply uncovers them. */}
+            <span
+              className={styles.eyebrowTitle}
+              data-dot="hero"
+              data-dot-write=""
+              style={{ '--hide': '100%' } as React.CSSProperties}
+            >
               {data.profile.title}
             </span>
+            <noscript>
+              <style>{`[data-dot-write]{--hide:0px !important}`}</style>
+            </noscript>
           </p>
           <h1 className={`${styles.lede} rise`} style={rise(1)}>
             {emphasize(getCareerIntro(lang, data.profile.intro[lang]), LEDE_KEYWORDS[lang])}
