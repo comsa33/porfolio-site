@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { JetBrains_Mono } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 
 /*
@@ -52,7 +53,12 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500&display=swap"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        {/* Page views, counted without cookies — so the page that a recruiter
+            opens does not greet them with a consent banner. */}
+        <Analytics />
+      </body>
     </html>
   );
 }
