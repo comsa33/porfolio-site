@@ -19,6 +19,71 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
+/*
+ * This is the one expensive thing the site can be asked to do: every call opens
+ * a browser. Everything else here is static or a hairline of JavaScript, so a
+ * scanner hammering this route is the only shape of traffic that turns into a
+ * bill. Three guards, cheapest first.
+ *
+ * None of them is a substitute for a spend limit and a firewall rule, and the
+ * rate limit in particular only knows about the instance it is running in —
+ * serverless spreads requests across several. They stop the casual case: a bot
+ * that found the URL, or a page somewhere hotlinking the PDF.
+ */
+
+/** Renders in flight in this instance. A browser each; two is plenty. */
+const MAX_IN_FLIGHT = 2;
+let inFlight = 0;
+
+/** Per-address budget, in this instance, over a rolling minute. */
+const WINDOW_MS = 60_000;
+const MAX_PER_WINDOW = 6;
+const recent = new Map<string, number[]>();
+
+function overBudget(ip: string, now: number) {
+  const seen = (recent.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
+  seen.push(now);
+  recent.set(ip, seen);
+  // The map is per-instance and short-lived, but an instance that stays warm
+  // under a scan should not grow one entry per address for ever.
+  if (recent.size > 500) {
+    for (const [key, times] of recent) {
+      if (!times.length || now - times[times.length - 1] > WINDOW_MS) recent.delete(key);
+    }
+  }
+  return seen.length > MAX_PER_WINDOW;
+}
+
+/** Hosts this route will point a browser at. */
+function rendererOrigin(request: NextRequest) {
+  const origin = request.nextUrl.origin;
+  const { hostname } = new URL(origin);
+  const ours =
+    hostname === 'localhost' ||
+    hostname === '127.0.0.1' ||
+    hostname === 'po24lio.com' ||
+    hostname.endsWith('.po24lio.com') ||
+    hostname.endsWith('.vercel.app');
+  // nextUrl.origin comes from the Host header. Vercel will not route a host it
+  // does not know to this project, so this is belt and braces — but the failure
+  // it prevents is pointing a headless browser at somebody else's site, and
+  // that is worth a string comparison.
+  return ours ? origin : null;
+}
+
+/** Did this come from the page, or from somewhere else entirely? */
+function fromOurPage(request: NextRequest) {
+  const site = request.headers.get('sec-fetch-site');
+  if (site === 'same-origin' || site === 'same-site') return true;
+  const referer = request.headers.get('referer');
+  if (!referer) return false;
+  try {
+    return new URL(referer).host === request.headers.get('host');
+  } catch {
+    return false;
+  }
+}
+
 /** Local development has a real Chrome; the lambda has the packed one. */
 const LOCAL_CHROME = [
   '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
@@ -60,6 +125,27 @@ const footer = (label: string) => `
   </div>`;
 
 export async function GET(request: NextRequest) {
+  // The document is offered by the page; it is not a public endpoint that
+  // renders a browserful of work for anyone who finds the URL.
+  if (!fromOurPage(request)) {
+    return Response.json({ error: 'not_from_the_page' }, { status: 403 });
+  }
+
+  const origin = rendererOrigin(request);
+  if (!origin) return Response.json({ error: 'unknown_host' }, { status: 400 });
+
+  const ip = (request.headers.get('x-forwarded-for') ?? '').split(',')[0].trim() || 'unknown';
+  if (overBudget(ip, Date.now())) {
+    return Response.json(
+      { error: 'too_many_renders' },
+      { status: 429, headers: { 'Retry-After': '60' } },
+    );
+  }
+
+  if (inFlight >= MAX_IN_FLIGHT) {
+    return Response.json({ error: 'busy' }, { status: 503, headers: { 'Retry-After': '5' } });
+  }
+
   const params = request.nextUrl.searchParams;
   const lang: 'ko' | 'en' = params.get('lang') === 'en' ? 'en' : 'ko';
   const doc = (params.get('doc') ?? 'custom') as PresetId;
@@ -74,12 +160,13 @@ export async function GET(request: NextRequest) {
 
   // The page to print is the preview route, minus its own auto-print and
   // colophon: this PDF carries real page numbers in the margin instead.
-  const target = new URL('/export', request.nextUrl.origin);
+  const target = new URL('/export', origin);
   params.forEach((value, key) => target.searchParams.set(key, value));
   target.searchParams.set('print', '0');
   target.searchParams.set('pdf', '1');
 
   let browser: Browser | undefined;
+  inFlight++;
   try {
     browser = await launch();
     const page = await browser.newPage();
@@ -110,6 +197,7 @@ export async function GET(request: NextRequest) {
     console.error('[export] pdf render failed', error);
     return Response.json({ error: 'render_failed' }, { status: 500 });
   } finally {
+    inFlight--;
     await browser?.close();
   }
 }
