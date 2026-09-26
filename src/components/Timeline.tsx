@@ -121,7 +121,20 @@ const Timeline: React.FC<TimelineProps> = ({ items, lang, onCertClick }) => {
             <div className={styles.main}>
               <h3 className={styles.title}>
                 {title}
-                <span className={styles.role}>{role}</span>
+                <span className={styles.role}>
+                  {/* "title · team" or "field · degree": the first part is what
+                      the entry is about, the rest a step quieter. */}
+                  {role.split(' · ').map((part, k) =>
+                    k === 0 ? (
+                      part
+                    ) : (
+                      <span key={k} className={styles.roleRest}>
+                        {' · '}
+                        {part}
+                      </span>
+                    ),
+                  )}
+                </span>
               </h3>
               <div className={styles.body}>
                 <span className={styles.rail} data-rail="" aria-hidden>

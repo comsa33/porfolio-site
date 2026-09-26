@@ -9,8 +9,8 @@ export const timeline = [
       en: 'Chonnam National Univ.',
     },
     role: {
-      ko: '미술학과 시각디자인전공 (미술학사)',
-      en: 'Visual Design, BFA',
+      ko: '시각디자인 · 미술학사',
+      en: 'Visual Design · BFA',
     },
     type: 'Education',
     description: {
@@ -82,8 +82,8 @@ export const timeline = [
       en: 'Korea Cyber University',
     },
     role: {
-      ko: '인공지능 전공 (학사)',
-      en: 'AI Major (Bachelor)',
+      ko: '인공지능 · 학사',
+      en: "Artificial Intelligence · Bachelor's",
     },
     type: 'Education',
     description: {
@@ -206,19 +206,17 @@ export const timeline = [
     date: '2024.09 ~ 2025.08',
     title: {
       ko: '서울과학종합대학원',
-      en: 'aSSIST',
+      en: 'aSSIST · Seoul AI School',
     },
     role: {
-      ko: 'AI 빅데이터 (석사)',
-      en: 'AI Big Data (Master)',
+      ko: 'AI·빅데이터 · 석사',
+      en: "AI & Big Data · Master's",
     },
     type: 'Education',
     description: {
-      ko: `• AI 빅데이터 석사 과정
-• 학점 4.23/4.3
+      ko: `• 학점 4.23/4.3
 • 석사논문: 생성형 AI 기반 시계열 예측 자동화 연구`,
-      en: `• Master's in AI Big Data
-• GPA 4.23/4.3
+      en: `• GPA 4.23/4.3
 • Thesis: Generative AI-based Time Series Forecasting Automation`,
     },
     paperLink:
@@ -236,13 +234,13 @@ export const timeline = [
       en: 'SDG Management School',
     },
     role: {
-      ko: '경영학 석사 (MBA)',
-      en: 'Master of Business Administration (MBA)',
+      ko: '경영학 · EMBA',
+      en: 'Business Administration · EMBA',
     },
     type: 'Education',
     description: {
-      ko: '스위스 경영대학원 Executive MBA 과정.',
-      en: 'Executive Master of Business Administration program in Switzerland.',
+      ko: '스위스 경영대학원. 서울과학종합대학원 AI·빅데이터 석사와 복수학위.',
+      en: "Swiss business school, a dual degree with the AI & Big Data master's at aSSIST.",
     },
   },
   {
@@ -250,16 +248,33 @@ export const timeline = [
     date: '2026.03 ~',
     title: {
       ko: '서울과학종합대학원',
-      en: 'aSSIST',
+      en: 'aSSIST · Seoul AI School',
     },
     role: {
-      ko: 'AI 공학박사 (PhD)',
-      en: 'AI Engineering (PhD)',
+      ko: 'AI 공학 · 박사과정',
+      en: 'AI Engineering · PhD (in progress)',
     },
     type: 'Education',
     description: {
-      ko: '• AI 공학박사 과정',
-      en: '• PhD in AI Engineering',
+      ko: 'SDG Management School 경영학 박사(DBA)와 복수학위.',
+      en: 'A dual degree with the DBA at SDG Management School.',
+    },
+  },
+  {
+    id: 'edu-sdg-dba',
+    date: '2026.03 ~',
+    title: {
+      ko: 'SDG Management School',
+      en: 'SDG Management School',
+    },
+    role: {
+      ko: '경영학 · DBA 과정',
+      en: 'Business Administration · DBA (in progress)',
+    },
+    type: 'Education',
+    description: {
+      ko: '스위스 경영대학원 박사과정. 서울과학종합대학원 AI 공학 박사과정과 복수학위.',
+      en: 'Swiss business school doctorate, a dual degree with the AI Engineering PhD at aSSIST.',
     },
   },
   {

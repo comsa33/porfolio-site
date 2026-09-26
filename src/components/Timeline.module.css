@@ -80,6 +80,10 @@
   color: var(--ink-secondary);
 }
 
+.roleRest {
+  color: var(--ink-tertiary);
+}
+
 .body {
   position: relative;
   padding-left: var(--indent);
