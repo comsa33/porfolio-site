@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { ArrowUpRight, ChevronDown } from 'lucide-react';
 import BrandIcon from './BrandIcon';
 import styles from './Publications.module.css';
-import { isRowToggleClick } from './rowToggle';
+import { holdRowInPlace, isRowToggleClick } from './rowToggle';
 import { Publication } from '@/types';
 
 interface PublicationsProps {
@@ -19,6 +19,12 @@ interface PublicationsProps {
 const Publications: React.FC<PublicationsProps> = ({ items, lang }) => {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
+  const toggle = (id: string, from: HTMLElement) => {
+    const row = from.closest('li');
+    if (row) holdRowInPlace(row);
+    setExpandedId((prev) => (prev === id ? null : id));
+  };
+
   return (
     <ol className={styles.list}>
       {items.map((pub, i) => {
@@ -31,7 +37,7 @@ const Publications: React.FC<PublicationsProps> = ({ items, lang }) => {
             className={styles.row}
             data-status={pub.status}
             style={{ '--i': i } as React.CSSProperties}
-            onClick={(e) => isRowToggleClick(e) && setExpandedId(isOpen ? null : pub.id)}
+            onClick={(e) => isRowToggleClick(e) && toggle(pub.id, e.currentTarget)}
           >
             <div className={styles.meta}>
               <span className={styles.year}>{pub.year}</span>
@@ -59,7 +65,7 @@ const Publications: React.FC<PublicationsProps> = ({ items, lang }) => {
                 <button
                   type="button"
                   className={styles.actionBtn}
-                  onClick={() => setExpandedId(isOpen ? null : pub.id)}
+                  onClick={(e) => toggle(pub.id, e.currentTarget)}
                   aria-expanded={isOpen}
                   aria-controls={detailsId}
                 >

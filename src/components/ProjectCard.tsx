@@ -9,7 +9,7 @@ import { profile } from '@/data/profile';
 import ProjectDetailModal from './ProjectDetailModal';
 import ArchitectureModal from './ArchitectureModal';
 import { useEdgeReveal, useRowActive, useSameHeight } from './useEdgeReveal';
-import { isRowToggleClick } from './rowToggle';
+import { holdRowInPlace, isRowToggleClick } from './rowToggle';
 
 interface ProjectCardProps {
   project: Project;
@@ -40,6 +40,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang, index, expande
   // than competing with the list it introduces.
   const peek = project.peekLine?.[lang];
   const rowRef = useRef<HTMLLIElement>(null);
+  const toggle = () => {
+    if (rowRef.current) holdRowInPlace(rowRef.current);
+    onToggle();
+  };
   const row = useRowActive(rowRef);
   const open = row.active && !expanded && Boolean(peek);
   const slotRef = useEdgeReveal(open, rowRef);
@@ -54,7 +58,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang, index, expande
         style={{ '--i': index } as React.CSSProperties}
         onPointerEnter={row.onPointerEnter}
         onPointerLeave={row.onPointerLeave}
-        onClick={(e) => isRowToggleClick(e) && onToggle()}
+        onClick={(e) => isRowToggleClick(e) && toggle()}
       >
         <div className={styles.period}>
           {project.period?.[lang]}
@@ -206,7 +210,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang, index, expande
             <button
               type="button"
               className={styles.actionBtn}
-              onClick={onToggle}
+              onClick={toggle}
               aria-expanded={expanded}
               aria-controls={detailsId}
             >

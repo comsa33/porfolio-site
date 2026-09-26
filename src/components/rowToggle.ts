@@ -12,3 +12,71 @@ export function isRowToggleClick(e: React.MouseEvent<HTMLElement>): boolean {
   if (selection && selection.toString().length > 0) return false;
   return true;
 }
+
+/** Reads a duration token such as --dur-slow, in milliseconds. */
+function tokenMs(name: string, fallback: number): number {
+  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const n = parseFloat(v);
+  return Number.isFinite(n) ? (v.endsWith('s') && !v.endsWith('ms') ? n * 1000 : n) : fallback;
+}
+
+/** cubic-bezier(0.16, 1, 0.3, 1) — the --ease-out token, evaluated in JS. */
+function easeOut(t: number): number {
+  const [x1, y1, x2, y2] = [0.16, 1, 0.3, 1];
+  const bez = (a: number, b: number, s: number) =>
+    3 * a * s * (1 - s) ** 2 + 3 * b * s * s * (1 - s) + s ** 3;
+  let lo = 0;
+  let hi = 1;
+  for (let i = 0; i < 20; i++) {
+    const mid = (lo + hi) / 2;
+    if (bez(x1, x2, mid) < t) lo = mid;
+    else hi = mid;
+  }
+  return bez(y1, y2, (lo + hi) / 2);
+}
+
+/**
+ * Keeps a row where the reader tapped it while the list reflows around it.
+ *
+ * Opening one row closes whichever was open, and when that one sits above,
+ * its collapse pulls the new row up — often far enough that its top goes
+ * under the header. So for as long as the fold runs, the page is scrolled by
+ * exactly as much as the row has moved, and the row stays put. If its top was
+ * already under the header when it was tapped, it is brought down to just
+ * below it over the same time, with the site's ease-out.
+ *
+ * Any wheel, touch or key from the reader ends it at once: the page follows
+ * the reader, it never holds on to the scroll against them.
+ */
+export function holdRowInPlace(row: HTMLElement): void {
+  const header = document.querySelector('header');
+  const floor = (header?.getBoundingClientRect().bottom ?? 0) + 12;
+  const start = row.getBoundingClientRect().top;
+  const target = Math.max(start, floor);
+  const duration = tokenMs('--dur-slow', 640) + 60;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let stopped = false;
+  const stop = () => {
+    stopped = true;
+  };
+  const inputs = ['wheel', 'touchstart', 'keydown'] as const;
+  inputs.forEach((t) => window.addEventListener(t, stop, { passive: true, once: true }));
+  const cleanup = () => inputs.forEach((t) => window.removeEventListener(t, stop));
+
+  const t0 = performance.now();
+  const tick = (now: number) => {
+    if (stopped) return cleanup();
+    const k = Math.min(1, (now - t0) / duration);
+    const want = start + (target - start) * (reduce ? 1 : easeOut(k));
+    const drift = row.getBoundingClientRect().top - want;
+    // 'instant', because the page sets scroll-behavior: smooth and a smooth
+    // correction would trail the fold by a frame and read as a wobble.
+    if (Math.abs(drift) >= 0.5) {
+      window.scrollTo({ top: window.scrollY + drift, behavior: 'instant' });
+    }
+    if (k < 1) requestAnimationFrame(tick);
+    else cleanup();
+  };
+  requestAnimationFrame(tick);
+}
