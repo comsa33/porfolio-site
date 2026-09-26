@@ -15,6 +15,7 @@
   gap: 0 2rem;
   padding: 1.5rem 0;
   border-bottom: 1px solid var(--line);
+  cursor: pointer;
   animation: rise var(--dur-slow) var(--ease-out) backwards;
   animation-delay: calc(var(--i, 0) * 50ms);
 }

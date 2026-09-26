@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { ArrowUpRight, ChevronDown } from 'lucide-react';
 import BrandIcon from './BrandIcon';
 import styles from './Publications.module.css';
+import { isRowToggleClick } from './rowToggle';
 import { Publication } from '@/types';
 
 interface PublicationsProps {
@@ -30,6 +31,7 @@ const Publications: React.FC<PublicationsProps> = ({ items, lang }) => {
             className={styles.row}
             data-status={pub.status}
             style={{ '--i': i } as React.CSSProperties}
+            onClick={(e) => isRowToggleClick(e) && setExpandedId(isOpen ? null : pub.id)}
           >
             <div className={styles.meta}>
               <span className={styles.year}>{pub.year}</span>
@@ -61,7 +63,7 @@ const Publications: React.FC<PublicationsProps> = ({ items, lang }) => {
                   aria-expanded={isOpen}
                   aria-controls={detailsId}
                 >
-                  {isOpen ? (lang === 'ko' ? '접기' : 'Less') : lang === 'ko' ? '요약' : 'Summary'}
+                  {isOpen ? (lang === 'ko' ? '접기' : 'Less') : lang === 'ko' ? '더 보기' : 'More'}
                   <ChevronDown
                     size={13}
                     strokeWidth={1.75}

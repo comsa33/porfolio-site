@@ -8,12 +8,16 @@ import { Project } from '@/types';
 import ProjectDetailModal from './ProjectDetailModal';
 import ArchitectureModal from './ArchitectureModal';
 import { useEdgeReveal, useRowActive, useSameHeight } from './useEdgeReveal';
+import { isRowToggleClick } from './rowToggle';
 
 interface ProjectCardProps {
   project: Project;
   lang: 'ko' | 'en';
   /** Position in the visible list; drives the entrance stagger. */
   index: number;
+  /** Only one project is open at a time, so the list owns which one. */
+  expanded: boolean;
+  onToggle: () => void;
 }
 
 /**
@@ -21,8 +25,7 @@ interface ProjectCardProps {
  * it. Details are always rendered and revealed with a height transition so
  * expanding feels like the row growing rather than content popping in.
  */
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang, index }) => {
-  const [expanded, setExpanded] = useState(false);
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang, index, expanded, onToggle }) => {
   const [showDetail, setShowDetail] = useState(false);
   const [showArchitecture, setShowArchitecture] = useState(false);
 
@@ -50,6 +53,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang, index }) => {
         style={{ '--i': index } as React.CSSProperties}
         onPointerEnter={row.onPointerEnter}
         onPointerLeave={row.onPointerLeave}
+        onClick={(e) => isRowToggleClick(e) && onToggle()}
       >
         <div className={styles.period}>
           {project.period?.[lang]}
@@ -177,7 +181,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang, index }) => {
             <button
               type="button"
               className={styles.actionBtn}
-              onClick={() => setExpanded(!expanded)}
+              onClick={onToggle}
               aria-expanded={expanded}
               aria-controls={detailsId}
             >

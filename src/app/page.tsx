@@ -178,6 +178,7 @@ export default function Home() {
   const [certModalImage, setCertModalImage] = useState<string | null>(null);
   const [emailCopied, setEmailCopied] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
+  const [openProjectId, setOpenProjectId] = useState<string | null>(null);
 
   const theme = useSyncExternalStore(subscribeTheme, readTheme, () => 'light' as Theme);
   const toggleTheme = (e: React.MouseEvent<HTMLButtonElement>) =>
@@ -545,7 +546,16 @@ export default function Home() {
           {/* Keyed on the filter so a change remounts the rows and replays the stagger. */}
           <ol className={styles.projectList} key={techFilter ?? projectFilter}>
             {visibleProjects.map((project, i) => (
-              <ProjectCard key={project.id} project={project} lang={lang} index={i} />
+              <ProjectCard
+                key={project.id}
+                project={project}
+                lang={lang}
+                index={i}
+                expanded={openProjectId === project.id}
+                onToggle={() =>
+                  setOpenProjectId((prev) => (prev === project.id ? null : project.id))
+                }
+              />
             ))}
           </ol>
         </section>
