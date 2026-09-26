@@ -349,6 +349,15 @@ export default function Home() {
     { key: 'conference', label: { ko: '학회', en: 'Conferences' } },
     { key: 'patent', label: { ko: '특허', en: 'Patents' } },
   ] as const;
+  // A kind gets its own filter only once there are two of it: a filter that
+  // leaves a single row is a control with nothing to do. When a second paper
+  // of a kind lands, its filter appears on its own.
+  const shownResearchFilters = researchFilters.filter(
+    (f) =>
+      f.key === 'featured' ||
+      f.key === 'all' ||
+      data.publications.filter((p) => p.category === f.key).length >= 2,
+  );
 
   const visiblePublications = data.publications.filter((p) => {
     if (researchFilter === 'all') return true;
@@ -665,7 +674,7 @@ export default function Home() {
               {SECTION_TITLES.research[lang]}
             </h2>
             <div className={styles.filterGroup} role="tablist" aria-label="Research filter">
-              {researchFilters.map((f) => (
+              {shownResearchFilters.map((f) => (
                 <button
                   key={f.key}
                   role="tab"
