@@ -352,7 +352,9 @@ export default function Home() {
 
   const visiblePublications = data.publications.filter((p) => {
     if (researchFilter === 'all') return true;
-    if (researchFilter === 'featured') return p.status !== 'under-review';
+    // Featured: settled work only, and not the early conference talk.
+    if (researchFilter === 'featured')
+      return p.status !== 'under-review' && p.category !== 'conference';
     return p.category === researchFilter;
   });
 
