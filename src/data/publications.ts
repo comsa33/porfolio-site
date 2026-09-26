@@ -3,31 +3,6 @@ import type { Publication } from '@/types';
 
 export const publications = [
   {
-    id: 'tara-knosys',
-    title: 'TARA: Tool-Augmented Retrieval Agents for Self-Corrective RAG',
-    venue: {
-      ko: 'Knowledge-Based Systems (Elsevier)',
-      en: 'Knowledge-Based Systems (Elsevier)',
-    },
-    year: '2026',
-    status: 'under-review',
-    statusLabel: {
-      ko: '심사 완료 · 편집자 결정 대기',
-      en: 'Review complete · awaiting editor decision',
-    },
-    authorRole: {
-      ko: '제1저자 (주저자)',
-      en: 'First author',
-    },
-    indexing: 'SCIE',
-    summary: {
-      ko: '고정 루프 기반 Self-Corrective RAG를 6개 도구(검색·질의분해·품질평가·본문조회·문서구조탐색·용어매핑)를 갖춘 ReAct 에이전트로 대체한 프레임워크. 전체 파이프라인을 DSPy 선언적 프로그램으로 구현해 프롬프트 자동 최적화를 적용했고, 4개 데이터셋에서 2WikiMultiHopQA F1 +0.089 (p<0.001)를 달성했습니다. 교차 모델 검증을 통해 추론형 모델의 거부 비대칭(Reasoning Model Refusal Asymmetry) 현상을 규명했습니다.',
-      en: 'Replaces fixed-loop Self-Corrective RAG with a ReAct agent equipped with six tools (retrieval, query decomposition, quality assessment, passage lookup, document-structure exploration, terminology mapping). The full pipeline is written as a declarative DSPy program with automatic prompt optimization, achieving +0.089 F1 on 2WikiMultiHopQA (p<0.001) across four datasets. Cross-model validation identified a Reasoning Model Refusal Asymmetry.',
-    },
-    codeLink: 'https://github.com/comsa33/self-corrective-rag',
-    category: 'journal',
-  },
-  {
     id: 'jips-trajectory-clustering',
     title:
       'Auditing Trajectory Clustering in LLM-Agent Failure Analysis: A Multi-Dataset Validation Protocol',
