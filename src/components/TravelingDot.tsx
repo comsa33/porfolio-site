@@ -532,6 +532,11 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       dot.removeAttribute('data-writing');
       ball?.removeAttribute('data-drop');
       ball?.removeAttribute('data-blink');
+      // Scrolled away mid-line, the ball can still be standing as a caret. Left
+      // on, its squared-off corners outlive the caret's scale and it travels on
+      // as a square.
+      ball?.removeAttribute('data-caret');
+      ball?.removeAttribute('data-caret-in');
       if (ball) {
         ball.style.transition = '';
         ball.style.transform = '';
@@ -792,6 +797,7 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       closingRun = false;
       if (ball) {
         ball.removeAttribute('data-drop');
+        ball.removeAttribute('data-caret-in');
         ball.style.transform = '';
         ball.style.transformOrigin = '';
         ball.style.borderRadius = '';
