@@ -37,7 +37,7 @@ export const timeline = [
   },
   {
     id: 'career-english-edu',
-    date: '2011.05 ~ 2020.08',
+    date: '2011.05 ~ 2021.03',
     title: {
       ko: '영어 교육 분야 경력',
       en: 'English Education Career',
@@ -48,8 +48,8 @@ export const timeline = [
     },
     type: 'Career',
     description: {
-      ko: '토익쉽/고파토익 어학원 설립 및 운영. 대학 및 교육기관에서 영어 회화 및 토익 강의 (9년).',
-      en: 'Founded and operated 2 language institutes. Taught TOEIC and English conversation at universities (9 years).',
+      ko: '토익쉽/고파토익 어학원 설립 및 운영. 대학·교육기관 영어 회화·토익 강의, 개인사업자로 온라인 강의 (약 10년).',
+      en: 'Founded and ran two language institutes; taught TOEIC and English conversation at universities and institutions, and online courses as a sole proprietor (about 10 years).',
     },
   },
   {
