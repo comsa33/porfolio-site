@@ -24,7 +24,7 @@ export type ExportSectionId =
   | 'etc';
 
 export type TemplateId = 'hairline' | 'ledger' | 'editorial';
-export type PresetId = 'resume' | 'career' | 'portfolio' | 'custom';
+export type PresetId = 'resume' | 'career' | 'custom';
 
 export interface ExportItem {
   id: string;
@@ -249,11 +249,6 @@ export const PRESETS: {
     label: { ko: '경력기술서', en: 'Experience report' },
     sub: { ko: '회사 프로젝트와 성과 중심', en: 'Company projects and outcomes' },
   },
-  {
-    id: 'portfolio',
-    label: { ko: '포트폴리오', en: 'Portfolio' },
-    sub: { ko: '연구 · 개인 프로젝트 · 여정까지', en: 'Research, personal work, the journey' },
-  },
 ];
 
 const idsOf = (section: ExportSectionId) =>
@@ -264,31 +259,47 @@ const idsOf = (section: ExportSectionId) =>
  * the moment one box is touched.
  */
 export function presetPicks(preset: Exclude<PresetId, 'custom'>): string[] {
-  if (preset === 'portfolio') return [...ALL_ITEM_IDS];
+  // Each preset carries only what its reader looks for. Anything else is one
+  // tap away in 직접 고르기.
 
-  // The travel blog is a portfolio link, not a résumé one.
-  const workContacts = idsOf('contact').filter((id) => id !== 'contact-worldtrip');
+  // Ways to reach you about a job: not the blog, ORCID or the travel site.
+  const WORK_CONTACTS = ['contact-email', 'contact-github', 'contact-linkedin'];
+  const contacts = idsOf('contact').filter((id) => WORK_CONTACTS.includes(id));
+
+  // The IT career; ten years of English teaching are not what this reader weighs.
+  const career = CAREER_ENTRIES.filter((t) => t.type === 'Dev').map((t) => t.id);
 
   if (preset === 'resume') {
     return [
-      ...workContacts,
+      ...contacts,
       ...idsOf('summary'),
       ...idsOf('skills'),
-      ...idsOf('career'),
-      ...idsOf('research'),
+      ...career,
+      // Settled work only, and not the early conference talk.
+      ...RESEARCH_ENTRIES.filter(
+        (r) => r.status !== 'under-review' && r.category !== 'conference',
+      ).map((r) => r.id),
       ...idsOf('education'),
-      // Certifications only — bootcamps, exhibitions and travel are not résumé material.
-      ...ETC_ENTRIES.filter((t) => t.type === 'Certification').map((t) => t.id),
+      // Certifications only, and not the ones the site folds into another
+      // (19011 is the common module of the 42001 course).
+      ...ETC_ENTRIES.filter((t) => t.type === 'Certification' && !t.foldInto).map((t) => t.id),
     ];
   }
 
+  // 경력기술서: what was built at each company and what came of it. Skills are
+  // left out because every project carries its stack; the weaker, older
+  // company projects are left out so each company leads with its best.
+  const MINOR_COMPANY_PROJECTS = ['py-editor', 'knowledge-base'];
   return [
-    ...workContacts,
+    ...contacts,
     ...idsOf('summary'),
-    ...idsOf('skills'),
-    ...idsOf('career'),
-    ...PROJECT_ENTRIES.filter((p) => p.scope === 'company').map((p) => p.id),
-    ...idsOf('research'),
+    ...career,
+    ...PROJECT_ENTRIES.filter(
+      (p) => p.scope === 'company' && !MINOR_COMPANY_PROJECTS.includes(p.id),
+    ).map((p) => p.id),
+    // Research done at a company: the patent. The journal article belongs to
+    // the degree, so it goes on the résumé.
+    ...RESEARCH_ENTRIES.filter((r) => r.category === 'patent').map((r) => r.id),
   ];
 }
 
@@ -316,7 +327,6 @@ export function estimatePages(picked: Set<string>): number {
 export const DOC_LABELS: Record<PresetId, LocalizedString> = {
   resume: { ko: '이력서', en: 'Resume' },
   career: { ko: '경력기술서', en: 'Experience' },
-  portfolio: { ko: '포트폴리오', en: 'Portfolio' },
   custom: { ko: '문서', en: 'Document' },
 };
 

@@ -17,7 +17,7 @@ import {
 import { portfolioData as data } from '@/data';
 import styles from './export.module.css';
 
-const PRESET_IDS: PresetId[] = ['resume', 'career', 'portfolio', 'custom'];
+const PRESET_IDS: PresetId[] = ['resume', 'career', 'custom'];
 
 const DOWNLOAD_LABEL = {
   idle: { ko: 'PDF 내려받기', en: 'Download PDF' },
@@ -60,7 +60,9 @@ function ExportView() {
   const picked = useMemo(() => {
     const raw = (params.get('pick') ?? '').split(',').filter(isExportId);
     // A bare /export?doc=resume is still a valid request for that document.
-    return new Set(raw.length > 0 ? raw : doc === 'custom' ? presetPicks('career') : presetPicks(doc));
+    return new Set(
+      raw.length > 0 ? raw : doc === 'custom' ? presetPicks('career') : presetPicks(doc),
+    );
   }, [params, doc]);
 
   /** The same query, handed to the renderer that returns a real file. */
