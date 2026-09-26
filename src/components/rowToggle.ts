@@ -36,23 +36,23 @@ function easeOut(t: number): number {
 }
 
 /**
- * Keeps a row where the reader tapped it while the list reflows around it.
+ * Makes sure an opened row's top is on screen, not under the header.
  *
- * Opening one row closes whichever was open, and when that one sits above,
- * its collapse pulls the new row up — often far enough that its top goes
- * under the header. So for as long as the fold runs, the page is scrolled by
- * exactly as much as the row has moved, and the row stays put. If its top was
- * already under the header when it was tapped, it is brought down to just
- * below it over the same time, with the site's ease-out.
+ * Opening a row closes whichever was open, and when that one sits above, its
+ * collapse pulls the new row up until its top goes under the header. So the
+ * row is steered every frame of the fold: it stays where it was tapped, and
+ * if its top was already under the header it glides down to just below it.
+ * The glide uses the site's ease-out and the fold's own duration.
  *
  * Any wheel, touch or key from the reader ends it at once: the page follows
  * the reader, it never holds on to the scroll against them.
  */
-export function holdRowInPlace(row: HTMLElement): void {
+export function settleRow(row: HTMLElement): void {
   const header = document.querySelector('header');
   const floor = (header?.getBoundingClientRect().bottom ?? 0) + 12;
   const start = row.getBoundingClientRect().top;
   const target = Math.max(start, floor);
+
   const duration = tokenMs('--dur-slow', 640) + 60;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 

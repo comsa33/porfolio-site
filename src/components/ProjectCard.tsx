@@ -9,7 +9,7 @@ import { profile } from '@/data/profile';
 import ProjectDetailModal from './ProjectDetailModal';
 import ArchitectureModal from './ArchitectureModal';
 import { useEdgeReveal, useRowActive, useSameHeight } from './useEdgeReveal';
-import { holdRowInPlace, isRowToggleClick } from './rowToggle';
+import { isRowToggleClick, settleRow } from './rowToggle';
 
 interface ProjectCardProps {
   project: Project;
@@ -41,7 +41,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang, index, expande
   const peek = project.peekLine?.[lang];
   const rowRef = useRef<HTMLLIElement>(null);
   const toggle = () => {
-    if (rowRef.current) holdRowInPlace(rowRef.current);
+    if (rowRef.current) settleRow(rowRef.current);
     onToggle();
   };
   const row = useRowActive(rowRef);
