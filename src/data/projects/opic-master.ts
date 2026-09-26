@@ -46,6 +46,50 @@ const project = {
       en: 'Structured model answer shadowing (OPIc template learning)',
     },
   ],
+  posts: [
+    {
+      slug: 'measuring-abuse-then-doing-nothing',
+      title: {
+        ko: '다계정 파밍 피해액을 확인해 보니 $0.27',
+        en: 'Multi-account farming cost us $0.27',
+      },
+    },
+    {
+      slug: 'where-is-midnight',
+      title: {
+        ko: 'UTC 서버에서 생긴 KST 경계 버그 여섯 개',
+        en: 'Six KST boundary bugs on a UTC server',
+      },
+    },
+    {
+      slug: 'blamed-ios-twice',
+      title: {
+        ko: 'moof 로 시작하는 파일',
+        en: 'A file that starts with moof',
+      },
+    },
+    {
+      slug: 'everything-but-the-payment-test',
+      title: {
+        ko: 'R8 최적화가 결제 플러그인을 지웠다',
+        en: 'R8 optimisation deleted the payment plugin',
+      },
+    },
+    {
+      slug: 'signups-down-revenue-up',
+      title: {
+        ko: '가입이 27% 줄었는데 매출은 최고였던 주',
+        en: 'The week signups fell 27% and revenue hit a high',
+      },
+    },
+    {
+      slug: 'nobody-reads-the-banner',
+      title: {
+        ko: '사람들은 저런 거 잘 안 읽어',
+        en: "People don't read those things",
+      },
+    },
+  ],
   features: [
     'Real-time AI Feedback',
     'Cross-platform (Capacitor)',
