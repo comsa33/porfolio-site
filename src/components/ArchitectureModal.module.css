@@ -183,9 +183,11 @@
   stroke: none !important;
 }
 
+/* Lifelines are what the messages hang between, so they need to be seen —
+   the rule colour one step up, still well under the messages' ink. */
 .mermaid :global(line.actor-line),
 .mermaid :global(.actor-line) {
-  stroke: var(--line) !important;
+  stroke: var(--line-strong) !important;
   stroke-width: 1px !important;
 }
 
