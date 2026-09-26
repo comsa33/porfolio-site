@@ -43,8 +43,8 @@ export const timeline = [
       en: 'English Education Career',
     },
     role: {
-      ko: '어학원 설립/운영 및 전임강사',
-      en: 'Founder & Instructor',
+      ko: '설립자 · 전임강사',
+      en: 'Founder · Instructor',
     },
     type: 'Career',
     description: {
@@ -138,8 +138,8 @@ export const timeline = [
       en: 'GravyLab',
     },
     role: {
-      ko: '데이터엔지니어 (선임연구원)',
-      en: 'Data Engineer',
+      ko: 'ML 엔지니어 · AI Lab.',
+      en: 'ML Engineer · AI Lab.',
     },
     type: 'Dev',
     description: {
@@ -165,8 +165,8 @@ export const timeline = [
       en: 'Illunex',
     },
     role: {
-      ko: '데이터엔지니어 (AI 팀)',
-      en: 'Data Engineer',
+      ko: '데이터엔지니어 · 인공지능팀',
+      en: 'Data Engineer · AI Team',
     },
     type: 'Dev',
     description: {
@@ -186,8 +186,8 @@ export const timeline = [
       en: 'Posicube',
     },
     role: {
-      ko: '매니저 · AI 개발1팀',
-      en: 'Manager · AI Dev Team 1',
+      ko: 'AI 개발자 · AI 개발1팀',
+      en: 'AI Engineer · AI Dev Team 1',
     },
     type: 'Dev',
     description: {
