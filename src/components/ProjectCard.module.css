@@ -344,6 +344,18 @@
   font-weight: 500;
 }
 
+/* The same pen the contact row uses for the blog, so the blog reads as one
+   place wherever it is named. */
+.blogLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.blogLabel svg {
+  color: var(--ink-tertiary);
+}
+
 /* Posts on the blog. A separate site, so each carries the same arrow the
    blog link in the header does; otherwise they move like the actions below. */
 .postList {

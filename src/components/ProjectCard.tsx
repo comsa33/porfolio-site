@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useState } from 'react';
-import { ArrowUpRight, ChevronDown, Wrench, Network } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, Wrench, Network, PenLine } from 'lucide-react';
 import BrandIcon, { brandName } from './BrandIcon';
 import styles from './ProjectCard.module.css';
 import { Project } from '@/types';
@@ -176,7 +176,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang, index, expande
                 )}
                 {project.posts && project.posts.length > 0 && profile.blog && (
                   <>
-                    <p className={styles.expandedLabel}>{lang === 'ko' ? '관련 글' : 'Writing'}</p>
+                    <p className={`${styles.expandedLabel} ${styles.blogLabel}`}>
+                      <PenLine size={13} strokeWidth={1.75} aria-hidden />
+                      {lang === 'ko' ? '블로그' : 'Blog'}
+                    </p>
                     <ul className={styles.postList}>
                       {project.posts.map((post) => (
                         <li key={post.slug}>
