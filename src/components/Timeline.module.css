@@ -1,20 +1,24 @@
 /*
- * Journey as list rows. The date range is the mono column; no rail, no
- * markers. Category is a small sans word under the date so the eye can
- * still scan by kind without icons.
+ * Journey as list rows. The date range is the mono column, and the category
+ * is a small sans word under it. No rules between entries: each entry's
+ * details hang off a hairline rail that runs on to the next entry, so the
+ * entries read as stops on one line.
  */
 
 .list {
   list-style: none;
+  padding-top: 1.75rem;
 }
 
 .row {
+  --gap: 2rem; /* air between one entry's last line and the next entry */
+  --indent: 1.25rem; /* where the details start */
+  --rail-x: 3px; /* the rail, inside that indent */
   position: relative;
   display: grid;
   grid-template-columns: 8.5rem minmax(0, 1fr);
   gap: 0 2rem;
-  padding: 1.5rem 0;
-  border-bottom: 1px solid var(--line);
+  padding: 0 0 var(--gap);
   animation: rise var(--dur-slow) var(--ease-out) backwards;
   animation-delay: calc(var(--i, 0) * 50ms);
 }
@@ -76,12 +80,87 @@
   color: var(--ink-secondary);
 }
 
+.body {
+  position: relative;
+  padding-left: var(--indent);
+  margin-top: 0.55rem;
+}
+
+/* The rail leaves each entry from under its title and stops just short of the
+   next one, so the headings read as stations on it and never sit on the line. */
+.rail {
+  position: absolute;
+  left: var(--rail-x);
+  top: 0.35rem;
+  bottom: calc(-1 * var(--gap) + 0.45rem);
+  width: 1px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.row:last-child .rail {
+  bottom: 0.4rem;
+}
+
+/* Filled down to a line across the screen as the reader scrolls. */
+.fill {
+  position: absolute;
+  inset: 0;
+  background: var(--ink-secondary);
+  transform-origin: 50% 0;
+  transform: scaleY(0);
+}
+
 .desc {
+  list-style: none;
   font-size: 15px;
   line-height: 1.7;
+}
+
+/* Dim until the fill reaches the line's branch, then the colour it has
+   everywhere else. A state change, so it takes the state easing. */
+.line {
+  color: var(--line-strong);
+  transition: color var(--dur-fast) var(--ease-state);
+}
+
+.line + .line {
+  margin-top: 0.15rem;
+}
+
+/* Every line hangs off the rail on a short branch. A one-sentence entry is a
+   list of one, so no entry looks different from the rest. */
+.line::before {
+  content: '';
+  position: absolute;
+  left: var(--rail-x);
+  width: 8px;
+  height: 1px;
+  margin-top: 0.85em;
+  background: var(--line-strong);
+  transform-origin: 0 50%;
+  transition: background-color var(--dur-instant) var(--ease);
+}
+
+.line[data-on] {
   color: var(--ink-secondary);
-  margin-top: 0.4rem;
-  white-space: pre-line;
+}
+
+.line[data-on]::before {
+  background: var(--ink-secondary);
+}
+
+/* A hairline where the screen can draw one: half a CSS pixel is one device
+   pixel at 2x, which is what makes it read as a line rather than a bar. */
+@media (min-resolution: 2dppx) {
+  .rail {
+    transform: scaleX(0.5);
+    transform-origin: 0 0;
+  }
+
+  .line::before {
+    transform: scaleY(0.5);
+  }
 }
 
 .actions {
@@ -120,9 +199,9 @@
 
 @media (max-width: 720px) {
   .row {
+    --gap: 1.75rem;
     grid-template-columns: 1fr;
-    gap: 0.4rem;
-    padding: 1.25rem 0;
+    gap: 0.3rem;
   }
 
   .row::before {

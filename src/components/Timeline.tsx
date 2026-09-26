@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import styles from './Timeline.module.css';
 import { TimelineItem, TimelineType } from '@/types';
@@ -23,16 +23,71 @@ const KIND_LABELS: Record<TimelineType, { ko: string; en: string }> = {
 // Bootcamp entries are filed as "other" in the filter, and read as such here.
 const bootcampIds = ['edu-kcci', 'edu-codestates'];
 
+/** A description is a list when every line is a bullet; otherwise it is one line. */
+const toLines = (text: string) => {
+  const lines = text
+    .split('\n')
+    .map((l) => l.trim())
+    .filter(Boolean);
+  return lines.every((l) => l.startsWith('•')) ? lines.map((l) => l.replace(/^•\s*/, '')) : [text];
+};
+
 const isImageLink = (link: string) =>
   link.endsWith('.png') || link.endsWith('.jpg') || link.endsWith('.webp');
 
+/** Where on the screen the rail has filled to, as a share of its height. */
+const FILL_LINE = 0.55;
+
 /**
  * Journey as list rows: date range in the mono column, organisation and role
- * beside it. No rail or icons; the category is a word under the date.
+ * beside it. Each entry's details hang off a hairline rail that runs on to the
+ * next entry, every line on a short branch — a one-sentence entry is a list of
+ * one, so the rail looks the same all the way down. As the reader scrolls, the
+ * rail fills down to a line across the screen, and each line of text comes up
+ * from dim to its own colour as the fill reaches its branch. It follows the
+ * scroll and never takes it.
  */
 const Timeline: React.FC<TimelineProps> = ({ items, lang, onCertClick }) => {
+  const listRef = useRef<HTMLOListElement>(null);
+
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list) return;
+    const rails = Array.from(list.querySelectorAll<HTMLElement>('[data-rail]'));
+    const lines = Array.from(list.querySelectorAll<HTMLElement>('[data-line]'));
+    let frame = 0;
+
+    const paint = () => {
+      frame = 0;
+      const y = window.innerHeight * FILL_LINE;
+      for (const rail of rails) {
+        const box = rail.getBoundingClientRect();
+        const k = Math.min(1, Math.max(0, (y - box.top) / Math.max(1, box.height)));
+        (rail.firstElementChild as HTMLElement).style.transform = `scaleY(${k})`;
+      }
+      // A line is reached when the fill passes its branch, which sits a little
+      // below the top of its first line.
+      for (const line of lines) {
+        const reached = line.getBoundingClientRect().top + 12 < y;
+        line.toggleAttribute('data-on', reached);
+      }
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(paint);
+    };
+
+    paint();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+    };
+  }, [items, lang]);
+
   return (
-    <ol className={styles.list}>
+    <ol ref={listRef} className={styles.list}>
       {items.map((item, i) => {
         const title = typeof item.title === 'string' ? item.title : item.title[lang];
         const role = typeof item.role === 'string' ? item.role : item.role[lang];
@@ -59,32 +114,43 @@ const Timeline: React.FC<TimelineProps> = ({ items, lang, onCertClick }) => {
                 {title}
                 <span className={styles.role}>{role}</span>
               </h3>
-              <p className={styles.desc}>{item.description[lang]}</p>
+              <div className={styles.body}>
+                <span className={styles.rail} data-rail="" aria-hidden>
+                  <span className={styles.fill} />
+                </span>
+                <ul className={styles.desc}>
+                  {toLines(item.description[lang]).map((line, j) => (
+                    <li key={j} className={styles.line} data-line="">
+                      {line}
+                    </li>
+                  ))}
+                </ul>
 
-              {item.paperLink && item.paperTitle && (
-                <div className={styles.actions}>
-                  {onCertClick && isImageLink(item.paperLink) ? (
-                    <button
-                      type="button"
-                      onClick={() => onCertClick(item.paperLink!)}
-                      className={styles.actionBtn}
-                    >
-                      {item.paperTitle[lang]}
-                      <ArrowUpRight size={13} strokeWidth={1.75} />
-                    </button>
-                  ) : (
-                    <a
-                      href={item.paperLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles.actionBtn}
-                    >
-                      {item.paperTitle[lang]}
-                      <ArrowUpRight size={13} strokeWidth={1.75} />
-                    </a>
-                  )}
-                </div>
-              )}
+                {item.paperLink && item.paperTitle && (
+                  <div className={styles.actions}>
+                    {onCertClick && isImageLink(item.paperLink) ? (
+                      <button
+                        type="button"
+                        onClick={() => onCertClick(item.paperLink!)}
+                        className={styles.actionBtn}
+                      >
+                        {item.paperTitle[lang]}
+                        <ArrowUpRight size={13} strokeWidth={1.75} />
+                      </button>
+                    ) : (
+                      <a
+                        href={item.paperLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.actionBtn}
+                      >
+                        {item.paperTitle[lang]}
+                        <ArrowUpRight size={13} strokeWidth={1.75} />
+                      </a>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           </li>
         );
