@@ -45,6 +45,36 @@ const project = {
       en: 'Background ingest and retention-sweep workers; admin runtime settings swap prompts and policies without a redeploy',
     },
   ],
+  posts: [
+    {
+      slug: 'examples-beat-instructions',
+      title: {
+        ko: '한국어 대화에서 영어 기억이 추출되던 이유',
+        en: 'Why Korean conversations produced English memories',
+      },
+    },
+    {
+      slug: 'thresholds-are-measured',
+      title: {
+        ko: '문장 쌍을 모아 유사도 임계값 0.85를 정한 과정',
+        en: 'Setting the 0.85 similarity threshold from sentence pairs',
+      },
+    },
+    {
+      slug: 'failures-that-dont-throw',
+      title: {
+        ko: '예외를 던지지 않는 실패들',
+        en: 'The failures that never throw',
+      },
+    },
+    {
+      slug: 'vendoring-someone-elses-code',
+      title: {
+        ko: '오픈소스 13,000줄을 벤더링하기로 한 이유',
+        en: 'Why we vendored 13,000 lines of open source',
+      },
+    },
+  ],
   features: [
     'STM/LTM Split',
     'Write-time Verification Gate',
