@@ -40,10 +40,6 @@ const project = {
       ko: '테스트 대화 77건에서 엉뚱한 워커 선택 0건, 실패 8건은 워커나 프롬프트 한 곳 단위로 수정',
       en: 'No wrong-worker picks across 77 test conversations; the 8 failures were each fixed in one worker or one prompt',
     },
-    {
-      ko: '첨부·사내 문서·웹·코드 계산을 묻는 한 질문에 워커 다섯 종류가 29.5초에 답',
-      en: 'One question spanning an attachment, internal docs, the web, and a calculation answered by five kinds of workers in 29.5s',
-    },
   ],
   posts: [
     {
