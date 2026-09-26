@@ -523,9 +523,17 @@ export default function TravelingDot({ active }: TravelingDotProps) {
       writeTimer = window.setTimeout(fn, ms);
     };
 
+    /** Tells the rest of the page the opening is over, so nothing else moves
+     *  while the reader is still watching it (the skill index waits on this). */
+    const announceOpened = () => {
+      document.documentElement.dataset.opening = 'done';
+      window.dispatchEvent(new Event('dot:opened'));
+    };
+
     /** Hands the mark back to the ordinary machinery, wherever it has got to. */
     const handOver = () => {
       writing = false;
+      announceOpened();
       cancelAnimationFrame(snakeFrame);
       window.clearTimeout(writeTimer);
       snake?.removeAttribute('data-on');
@@ -693,6 +701,7 @@ export default function TravelingDot({ active }: TravelingDotProps) {
     /** Uncover the line and let the ordinary machinery take it from here. */
     const noOpening = (reason: string) => {
       writing = false;
+      announceOpened();
       scribe?.style.removeProperty('--hide');
       if (process.env.NODE_ENV !== 'production') {
         console.info('[TravelingDot] opening skipped —', reason);

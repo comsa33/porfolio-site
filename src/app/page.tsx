@@ -254,10 +254,13 @@ export default function Home() {
     document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  // The skill index draws its underlines once, left to right, the first time
-  // it is seen — after its own entrance has finished, since it is on the
-  // first screen. That one pass is what says "these are links" without a
-  // word; after it the underlines simply rest. Reduced motion skips it.
+  // The skill index draws its underlines once, left to right — the one pass
+  // that says "these are links" without a word; after it they simply rest.
+  // It waits its turn: not while the dot is still writing the opening line
+  // (the eye is there), and not while the reader is scrolling (the eye is
+  // moving). Once the opening is over, the index is in view and the page has
+  // been still for a moment, it plays after a half-second breath, and never
+  // again: a thing seen often should move less. Reduced motion skips it.
   const skillsRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = skillsRef.current;
@@ -266,25 +269,67 @@ export default function Home() {
       el.dataset.sweep = 'done';
       return;
     }
-    let timer = 0;
-    const run = async () => {
+
+    let opened = document.documentElement.dataset.opening === 'done';
+    let inView = false;
+    let still = true;
+    let idleTimer = 0;
+    let breathTimer = 0;
+    let doneTimer = 0;
+    let played = false;
+
+    const play = async () => {
+      played = true;
+      teardown();
       await Promise.all(el.getAnimations().map((a) => a.finished.catch(() => undefined)));
       el.dataset.sweep = 'run';
       const n = el.querySelectorAll('[data-k]').length;
-      timer = window.setTimeout(() => (el.dataset.sweep = 'done'), n * 70 + 700);
+      doneTimer = window.setTimeout(() => (el.dataset.sweep = 'done'), n * 70 + 700);
+    };
+
+    const consider = () => {
+      window.clearTimeout(breathTimer);
+      if (played || !opened || !inView || !still) return;
+      breathTimer = window.setTimeout(() => {
+        if (opened && inView && still) play();
+      }, 500);
+    };
+
+    const onOpened = () => {
+      opened = true;
+      consider();
+    };
+    const onScroll = () => {
+      still = false;
+      window.clearTimeout(breathTimer);
+      window.clearTimeout(idleTimer);
+      idleTimer = window.setTimeout(() => {
+        still = true;
+        consider();
+      }, 200);
     };
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (!entry.isIntersecting) return;
-        io.disconnect();
-        run();
+        inView = entry.isIntersecting;
+        consider();
       },
       { threshold: 0.4 },
     );
+
+    const teardown = () => {
+      io.disconnect();
+      window.removeEventListener('dot:opened', onOpened);
+      window.removeEventListener('scroll', onScroll);
+      window.clearTimeout(idleTimer);
+      window.clearTimeout(breathTimer);
+    };
+
+    window.addEventListener('dot:opened', onOpened);
+    window.addEventListener('scroll', onScroll, { passive: true });
     io.observe(el);
     return () => {
-      io.disconnect();
-      window.clearTimeout(timer);
+      teardown();
+      window.clearTimeout(doneTimer);
     };
   }, []);
 
