@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useSyncExternalStore } from 'react';
+import React, { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import {
   ArrowUpRight,
   Check,
@@ -254,6 +254,40 @@ export default function Home() {
     document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  // The skill index draws its underlines once, left to right, the first time
+  // it is seen — after its own entrance has finished, since it is on the
+  // first screen. That one pass is what says "these are links" without a
+  // word; after it the underlines simply rest. Reduced motion skips it.
+  const skillsRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = skillsRef.current;
+    if (!el) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.dataset.sweep = 'done';
+      return;
+    }
+    let timer = 0;
+    const run = async () => {
+      await Promise.all(el.getAnimations().map((a) => a.finished.catch(() => undefined)));
+      el.dataset.sweep = 'run';
+      const n = el.querySelectorAll('[data-k]').length;
+      timer = window.setTimeout(() => (el.dataset.sweep = 'done'), n * 70 + 700);
+    };
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        io.disconnect();
+        run();
+      },
+      { threshold: 0.4 },
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      window.clearTimeout(timer);
+    };
+  }, []);
+
   const skillGroups = (['backend', 'ai', 'system'] as const).map((key) => ({
     key,
     title: data.profile.coreSkills[key].title[lang],
@@ -477,13 +511,29 @@ export default function Home() {
             Skills double as a project index: the count is how many projects
             use the skill, and clicking one filters the list below.
           */}
-          <div className={`${styles.skills} rise`} style={rise(3)} data-lang={lang}>
-            {skillGroups.map((group) => (
+          <div
+            ref={skillsRef}
+            className={`${styles.skills} rise`}
+            style={rise(3)}
+            data-lang={lang}
+            data-sweep="pending"
+            suppressHydrationWarning
+          >
+            {skillGroups.map((group, g) => (
               <div key={group.key} className={styles.skillRow}>
                 <h2 className={styles.skillLabel}>{group.title}</h2>
                 <ul className={styles.skillTokens}>
-                  {group.skills.map(({ name, count }) => (
-                    <li key={name}>
+                  {group.skills.map(({ name, count }, j) => (
+                    <li
+                      key={name}
+                      data-k=""
+                      style={
+                        {
+                          '--k':
+                            skillGroups.slice(0, g).reduce((n, x) => n + x.skills.length, 0) + j,
+                        } as React.CSSProperties
+                      }
+                    >
                       <button
                         type="button"
                         className={`${styles.skillToken} ${techFilter === name ? styles.skillTokenActive : ''}`}

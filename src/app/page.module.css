@@ -409,8 +409,8 @@ button.contactLink:hover span {
 }
 
 .skillToken > span {
-  background-image: linear-gradient(currentColor, currentColor);
-  background-size: 0% 1px;
+  background-image: linear-gradient(var(--line-strong), var(--line-strong));
+  background-size: 100% 1px;
   background-position: 0 100%;
   background-repeat: no-repeat;
   transition: background-size var(--dur) var(--ease);
@@ -449,18 +449,23 @@ button.contactLink:hover span {
   transform: scale(0.97);
 }
 
-/* Where there is no pointer to hover with, nothing would say these are
-   links until one was tapped. So on touch screens the underline that hover
-   draws is there at rest, in the rule colour, and the active one inks it. */
-@media (hover: none) {
-  .skillToken > span {
-    background-image: linear-gradient(var(--line-strong), var(--line-strong));
-    background-size: 100% 1px;
-  }
+/* The underline rests under every name in the rule colour, so the index
+   reads as links on any screen; hover and the active filter ink it. It is
+   drawn in once, left to right, the first time the index is seen (see
+   skillsRef in page.tsx): held at zero until then, then each name's line
+   grows with the entrance motion, one stagger step after the last. */
+.skills[data-sweep='pending'] .skillToken > span {
+  background-size: 0% 1px;
+}
 
-  .skillTokenActive > span {
-    background-image: linear-gradient(currentColor, currentColor);
-  }
+.skills[data-sweep='run'] .skillToken > span {
+  transition: background-size var(--dur-slow) var(--ease-out);
+  transition-delay: calc(var(--k, 0) * 70ms);
+}
+
+.skillToken:hover > span,
+.skillTokenActive > span {
+  background-image: linear-gradient(currentColor, currentColor);
 }
 
 /* Active tech filter shown beside the section title */
