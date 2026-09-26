@@ -1,5 +1,10 @@
 import type { Project } from '@/types';
 
+// Cumulative users, as a floor. "N+" stays true while the app keeps growing,
+// so it only needs raising now and then, never correcting. One number, used
+// in both places below.
+const USERS = 800;
+
 const project = {
   id: 'opic-master',
   title: 'OPIc Master',
@@ -21,13 +26,13 @@ const project = {
     'TossPayments',
   ],
   peekLine: {
-    ko: 'Web·iOS·Android 동시 출시, 누적 사용자 450명',
-    en: 'Shipped on web, iOS and Android — 450+ cumulative users.',
+    ko: `Web·iOS·Android 동시 출시, 누적 사용자 ${USERS}명 이상`,
+    en: `Shipped on web, iOS and Android, ${USERS}+ cumulative users.`,
   },
   keyAchievements: [
     {
-      ko: 'Google Play/App Store 동시 출시 (Web + iOS + Android) — 누적 사용자 450+',
-      en: 'Published on both Google Play & App Store (Web + iOS + Android) — 450+ cumulative users',
+      ko: `Google Play/App Store 동시 출시 (Web + iOS + Android), 누적 사용자 ${USERS}명 이상`,
+      en: `Published on both Google Play & App Store (Web + iOS + Android), ${USERS}+ cumulative users`,
     },
     {
       ko: 'Gemini AI 기반 실시간 STT 분석 & 5개 영역 피드백 (문법/어휘/발음/유창성/내용)',
