@@ -1,6 +1,7 @@
 import type { LocalizedString, Project, Publication, TimelineItem } from '@/types';
 import { portfolioData as data } from './index';
 import { countProjectsForSkill } from './skillMatch';
+import { formatPeriod } from '@/lib/period';
 
 /*
  * The manifest behind the export composer.
@@ -66,7 +67,8 @@ const startOf = (date: string): number => {
 
 const newestFirst = (a: TimelineItem, b: TimelineItem) => startOf(b.date) - startOf(a.date);
 
-const timeline = (pred: (t: TimelineItem) => boolean) => data.timeline.filter(pred).sort(newestFirst);
+const timeline = (pred: (t: TimelineItem) => boolean) =>
+  data.timeline.filter(pred).sort(newestFirst);
 
 export const CAREER_ENTRIES = timeline((t) => t.type === 'Dev' || t.type === 'Career');
 
@@ -112,7 +114,7 @@ export const SKILL_ITEMS: {
 const timelineItem = (t: TimelineItem): ExportItem => ({
   id: t.id,
   title: both(t.title),
-  meta: join(both(t.role), both(t.date)),
+  meta: join(both(t.role), { ko: formatPeriod(t.date, 'ko'), en: formatPeriod(t.date, 'en') }),
 });
 
 /**
@@ -126,7 +128,7 @@ export const CONTACT_LINKS: { id: string; label: LocalizedString; value: string 
     { id: 'contact-github', label: both('GitHub'), value: data.profile.github },
     { id: 'contact-linkedin', label: both('LinkedIn'), value: data.profile.linkedin },
     { id: 'contact-orcid', label: both('ORCID'), value: data.profile.orcid },
-    { id: 'contact-blog', label: { ko: '기술 블로그', en: 'Tech blog' }, value: data.profile.blog },
+    { id: 'contact-blog', label: { ko: '블로그', en: 'Blog' }, value: data.profile.blog },
     {
       id: 'contact-worldtrip',
       label: { ko: '세계일주 기록', en: 'World trip' },
@@ -232,26 +234,30 @@ const VALID_IDS = new Set(ALL_ITEM_IDS);
 
 export const isExportId = (id: string) => VALID_IDS.has(id);
 
-export const PRESETS: { id: Exclude<PresetId, 'custom'>; label: LocalizedString; sub: LocalizedString }[] =
-  [
-    {
-      id: 'resume',
-      label: { ko: '이력서', en: 'Résumé' },
-      sub: { ko: '프로필 · 경력 · 학력 · 자격', en: 'Profile · experience · education · certs' },
-    },
-    {
-      id: 'career',
-      label: { ko: '경력기술서', en: 'Experience report' },
-      sub: { ko: '회사 프로젝트와 성과 중심', en: 'Company projects and outcomes' },
-    },
-    {
-      id: 'portfolio',
-      label: { ko: '포트폴리오', en: 'Portfolio' },
-      sub: { ko: '연구 · 개인 프로젝트 · 여정까지', en: 'Research, personal work, the journey' },
-    },
-  ];
+export const PRESETS: {
+  id: Exclude<PresetId, 'custom'>;
+  label: LocalizedString;
+  sub: LocalizedString;
+}[] = [
+  {
+    id: 'resume',
+    label: { ko: '이력서', en: 'Résumé' },
+    sub: { ko: '프로필 · 경력 · 학력 · 자격', en: 'Profile · experience · education · certs' },
+  },
+  {
+    id: 'career',
+    label: { ko: '경력기술서', en: 'Experience report' },
+    sub: { ko: '회사 프로젝트와 성과 중심', en: 'Company projects and outcomes' },
+  },
+  {
+    id: 'portfolio',
+    label: { ko: '포트폴리오', en: 'Portfolio' },
+    sub: { ko: '연구 · 개인 프로젝트 · 여정까지', en: 'Research, personal work, the journey' },
+  },
+];
 
-const idsOf = (section: ExportSectionId) => SECTION_BY_ID.get(section)?.items.map((i) => i.id) ?? [];
+const idsOf = (section: ExportSectionId) =>
+  SECTION_BY_ID.get(section)?.items.map((i) => i.id) ?? [];
 
 /**
  * A preset is a starting point, not a mode: the sheet drops to "직접 고르기"
@@ -334,7 +340,7 @@ export const TEMPLATES: {
     label: 'LEDGER',
     name: { ko: '레저', en: 'Ledger' },
     note: {
-      ko: '액센트 없이 검정 하나. 한 단 고밀도로 ATS 파싱과 흑백 출력을 우선합니다.',
+      ko: '액센트 없이 검정 하나. 한 단 고밀도, ATS 파싱과 흑백 출력 우선.',
       en: 'Black ink only, one dense column — built for ATS parsing and mono printing.',
     },
   },

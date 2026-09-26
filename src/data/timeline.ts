@@ -3,7 +3,7 @@ import type { TimelineItem } from '@/types';
 export const timeline = [
   {
     id: 'edudesign',
-    date: '2003.03 - 2013.02',
+    date: '2003.03 ~ 2013.02',
     title: {
       ko: '전남대학교',
       en: 'Chonnam National Univ.',
@@ -20,7 +20,7 @@ export const timeline = [
   },
   {
     id: 'design-biennale',
-    date: '2009.09 - 2009.11',
+    date: '2009.09 ~ 2009.11',
     title: {
       ko: '2009 광주디자인비엔날레',
       en: '2009 Gwangju Design Biennale',
@@ -37,7 +37,7 @@ export const timeline = [
   },
   {
     id: 'career-english-edu',
-    date: '2011.05 - 2020.08',
+    date: '2011.05 ~ 2020.08',
     title: {
       ko: '영어 교육 분야 경력',
       en: 'English Education Career',
@@ -76,7 +76,7 @@ export const timeline = [
   },
   {
     id: 'edu-kcyber',
-    date: '2020.03 - 2023.08',
+    date: '2020.03 ~ 2023.08',
     title: {
       ko: '고려사이버대학교',
       en: 'Korea Cyber University',
@@ -98,7 +98,7 @@ export const timeline = [
   },
   {
     id: 'edu-kcci',
-    date: '2021.03 - 2021.07',
+    date: '2021.03 ~ 2021.07',
     title: {
       ko: '대한상공회의소',
       en: 'Korea Chamber of Commerce',
@@ -115,7 +115,7 @@ export const timeline = [
   },
   {
     id: 'edu-codestates',
-    date: '2021.09 - 2022.04',
+    date: '2021.09 ~ 2022.04',
     title: {
       ko: '코드스테이츠',
       en: 'Code States',
@@ -132,7 +132,7 @@ export const timeline = [
   },
   {
     id: 'dev-gravylab',
-    date: '2022.05 - 2023.06',
+    date: '2022.05 ~ 2023.06',
     title: {
       ko: '그레이비랩',
       en: 'GravyLab',
@@ -159,7 +159,7 @@ export const timeline = [
   },
   {
     id: 'dev-illunex',
-    date: '2023.11 - 2024.07',
+    date: '2023.11 ~ 2024.07',
     title: {
       ko: '일루넥스',
       en: 'Illunex',
@@ -180,7 +180,7 @@ export const timeline = [
   },
   {
     id: 'dev-posicube',
-    date: '2024.08 - Current',
+    date: '2024.08 ~',
     title: {
       ko: '포지큐브',
       en: 'Posicube',
@@ -203,7 +203,7 @@ export const timeline = [
   },
   {
     id: 'edu-aSST',
-    date: '2024.09 - 2025.08',
+    date: '2024.09 ~ 2025.08',
     title: {
       ko: '서울과학종합대학원',
       en: 'aSSIST',
@@ -230,7 +230,7 @@ export const timeline = [
   },
   {
     id: 'edu-sdg',
-    date: '2024.09 - 2025.08',
+    date: '2024.09 ~ 2025.08',
     title: {
       ko: 'SDG Management School',
       en: 'SDG Management School',
@@ -247,7 +247,7 @@ export const timeline = [
   },
   {
     id: 'edu-assist-phd',
-    date: '2026.03 -',
+    date: '2026.03 ~',
     title: {
       ko: '서울과학종합대학원',
       en: 'aSSIST',

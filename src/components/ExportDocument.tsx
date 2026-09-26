@@ -24,6 +24,7 @@ import {
 import { getCareerIntro, LEDE_KEYWORDS } from '@/lib/career';
 import type { LocalizedString, TimelineItem } from '@/types';
 import styles from './ExportDocument.module.css';
+import { formatPeriod } from '@/lib/period';
 
 interface Props {
   picked: Set<string>;
@@ -134,7 +135,7 @@ function timelineEntry(item: TimelineItem, lang: 'ko' | 'en', withBody: boolean)
       key={item.id}
       title={value(item.title, lang)}
       role={value(item.role, lang)}
-      date={item.date}
+      date={formatPeriod(item.date, lang)}
       lines={withBody ? bullets(item.description[lang]) : undefined}
     />
   );

@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import styles from './Timeline.module.css';
 import { TimelineItem, TimelineType } from '@/types';
+import { formatPeriod } from '@/lib/period';
 
 interface TimelineProps {
   items: TimelineItem[];
@@ -105,7 +106,7 @@ const Timeline: React.FC<TimelineProps> = ({ items, lang, onCertClick }) => {
             style={{ '--i': i } as React.CSSProperties}
           >
             <div className={styles.meta}>
-              <span className={styles.date}>{item.date}</span>
+              <span className={styles.date}>{formatPeriod(item.date, lang)}</span>
               <span className={styles.kind}>{kind}</span>
             </div>
 
