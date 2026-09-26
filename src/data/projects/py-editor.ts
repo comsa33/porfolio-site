@@ -11,8 +11,8 @@ const project = {
     en: 'Monaco Editor wired to a Python LSP with multi-user process pooling',
   },
   fullDescription: {
-    ko: 'Monaco Editor와 Python LSP를 연동한 VSCode 스타일 웹 IDE입니다. Custom Process Pool을 통해 멀티유저 환경에서도 안정적인 LSP 서비스를 제공하며, WebSocket 기반 저지연 통신으로 실시간 자동완성과 Go-to-Definition을 지원합니다.',
-    en: 'VSCode-style web IDE integrating Monaco Editor with Python LSP. Provides stable LSP service in multi-user environments through custom process pooling, and supports real-time auto-completion and go-to-definition via low-latency WebSocket communication.',
+    ko: 'Monaco Editor와 Python LSP를 연동한 VSCode 스타일 웹 IDE입니다. 여러 사용자가 LSP 프로세스 풀을 나눠 쓰고, WebSocket으로 자동완성과 Go-to-Definition을 제공합니다.',
+    en: 'A VSCode-style web IDE wiring Monaco Editor to a Python LSP. Users share a pool of LSP processes, with auto-completion and go-to-definition over WebSocket.',
   },
   techStack: [
     'Vanilla JS (Vite)',
@@ -41,8 +41,8 @@ const project = {
       en: '1MB message buffering & automatic stale request cleanup (memory leak prevention)',
     },
     {
-      ko: 'Context-Aware AI Copilot (코드 분석 + RAG 파이프라인)',
-      en: 'Context-aware AI Copilot (code analysis + RAG pipeline)',
+      ko: 'AI Copilot (코드 분석 + RAG로 컨텍스트 구성)',
+      en: 'AI Copilot (code analysis + RAG for context)',
     },
     {
       ko: '유휴 프로세스 자동 회수 & 좀비 프로세스 방지 로직',
@@ -78,12 +78,12 @@ const project = {
         },
         icon: '🏊',
         problem: {
-          ko: '멀티유저 환경에서 각 사용자마다 Python LSP 프로세스를 생성하면 메모리 사용량이 폭발적으로 증가합니다. 20명이 동시 접속하면 20개 pylsp 프로세스 × 150MB = 3GB 메모리 소비.',
-          en: 'Creating a Python LSP process for each user in a multi-user environment causes explosive memory growth. 20 concurrent users = 20 pylsp processes × 150MB = 3GB memory consumption.',
+          ko: '사용자마다 pylsp 프로세스를 띄우면 20명 동시 접속 시 약 3GB(150MB × 20) 사용.',
+          en: 'One pylsp process per user means about 3GB (150MB × 20) for 20 concurrent users.',
         },
         solution: {
-          ko: '**Object Pool Pattern** 기반 LSP Process Pool을 설계했습니다. 최대 20개 프로세스로 제한하고, Idle Timeout(5분)으로 자동 정리합니다. 사용자 연결 해제 시 프로세스를 종료하지 않고 Pool에 반환하여 재사용합니다.',
-          en: 'Designed LSP Process Pool based on **Object Pool Pattern**. Limited to max 20 processes with idle timeout (5 min) for automatic cleanup. Processes are returned to pool instead of being killed when users disconnect.',
+          ko: 'Object Pool 패턴 기반 LSP Process Pool 설계. 최대 20개 프로세스, 5분 유휴 시 자동 정리, 연결 해제 시 종료 대신 Pool에 반환해 재사용.',
+          en: 'Object-pool-based LSP process pool: max 20 processes, idle cleanup after 5 minutes, and processes returned to the pool for reuse on disconnect.',
         },
         technicalDetails: {
           ko: `\`\`\`
@@ -202,8 +202,8 @@ class LSPProcessPool {
           en: '100 concurrent AI Copilot requests trigger context building (memory intensive) for each request, causing server memory spikes. Backend LB cannot prevent this.',
         },
         solution: {
-          ko: '`p-limit` 라이브러리 기반 Concurrency Limiter를 구현했습니다. 최대 10개 동시 요청으로 제한하고, 초과 요청은 자동으로 대기열에 적재됩니다. Statistics tracking으로 모니터링합니다.',
-          en: 'Implemented Concurrency Limiter based on `p-limit` library. Limited to max 10 concurrent requests with automatic queueing for excess requests. Includes statistics tracking for monitoring.',
+          ko: '`p-limit` 기반 Concurrency Limiter 구현. 동시 요청 최대 10개, 초과분은 대기열로. 처리 통계로 모니터링.',
+          en: 'Concurrency limiter built on `p-limit`: max 10 concurrent requests, the rest queued, with stats for monitoring.',
         },
         technicalDetails: {
           ko: `\`\`\`
@@ -291,8 +291,8 @@ await limiter.execute(() => callLLMAPI());
         },
         csFoundations: ['Rate Limiting', 'Semaphore', 'Queue Management', 'Backpressure'],
         impact: {
-          ko: '동시 LLM 호출 상한으로 메모리 스파이크 제거 — 큐 기반 백프레셔로 과부하에서도 응답성 유지',
-          en: 'A concurrency cap removes memory spikes — queue-based backpressure keeps the server responsive under load',
+          ko: '동시 LLM 호출 상한으로 메모리 스파이크 제거, 초과 요청은 대기열에서 순서대로 처리',
+          en: 'A concurrency cap removes memory spikes; excess requests wait in the queue',
         },
       },
       {
@@ -307,12 +307,12 @@ await limiter.execute(() => callLLMAPI());
         },
         icon: '🛡️',
         problem: {
-          ko: '브라우저 클라이언트가 시스템 경로(/constants, /llms)에 접근하면 민감한 설정 파일이 노출됩니다. 외부 FastAPI 서비스는 모든 경로 접근이 필요하지만, 브라우저는 /workspace만 허용해야 합니다.',
-          en: 'Browser clients accessing system paths (/constants, /llms) exposes sensitive configuration files. External FastAPI services need full path access, but browsers should only access /workspace.',
+          ko: '브라우저에서 시스템 경로(/constants, /llms)에 접근하면 설정 파일 노출. 외부 FastAPI 서비스는 전체 경로가 필요하지만 브라우저는 /workspace만 허용해야 함.',
+          en: 'Browser access to system paths (/constants, /llms) would expose config files. External FastAPI services need every path; browsers should only reach /workspace.',
         },
         solution: {
-          ko: '**X-Service-Auth 헤더** 기반 인증으로 호출자를 구분합니다. 토큰이 있으면 외부 서비스로 인식하여 전체 경로 허용, 없으면 브라우저 클라이언트로 간주하여 /workspace만 허용합니다.',
-          en: 'Implemented caller distinction based on **X-Service-Auth header**. With token = external service (full access), without token = browser client (workspace only).',
+          ko: '`X-Service-Auth` 헤더로 호출자 구분. 토큰이 있으면 외부 서비스로 보고 전체 경로 허용, 없으면 브라우저로 보고 /workspace만 허용.',
+          en: 'Callers are told apart by the `X-Service-Auth` header: with a token, an external service with full access; without, a browser limited to /workspace.',
         },
         technicalDetails: {
           ko: `\`\`\`
@@ -391,8 +391,8 @@ app.use('/api/files', pathAccessControl);
           'Multi-tenancy',
         ],
         impact: {
-          ko: '브라우저는 /workspace만, 인증된 서비스는 전체 경로 — 최소 권한 원칙으로 시스템 경로 노출 차단',
-          en: 'Browsers reach only /workspace while authenticated services get full paths — least privilege blocks system-path exposure',
+          ko: '브라우저에서 시스템 경로 접근 차단',
+          en: 'System paths are no longer reachable from the browser',
         },
       },
     ],
@@ -403,7 +403,7 @@ app.use('/api/files', pathAccessControl);
           en: 'System Architecture',
         },
         description: {
-          ko: '웹 IDE의 전체 시스템 구조. Client Layer, WebSocket Layer, Middleware, Service Layer, API Layer, External Resources 간의 상호작용을 보여줍니다.',
+          ko: '웹 IDE의 전체 시스템 구조. Client Layer, WebSocket Layer, Middleware, Service Layer, API Layer, External Resources 간의 상호작용.',
           en: 'Overall system structure of the web IDE. Shows interactions between Client Layer, WebSocket Layer, Middleware, Service Layer, API Layer, and External Resources.',
         },
         mermaidFilePath: {
@@ -417,7 +417,7 @@ app.use('/api/files', pathAccessControl);
           en: 'LSP WebSocket Communication Flow',
         },
         description: {
-          ko: 'WebSocket 연결부터 LSP 요청/응답, 파일 변경 감지, Git 동기화, 연결 종료까지의 전체 흐름. Process Pool에서의 프로세스 할당/반환 및 Cache 관리 메커니즘을 포함합니다.',
+          ko: 'WebSocket 연결부터 LSP 요청/응답, 파일 변경 감지, Git 동기화, 연결 종료까지의 전체 흐름. Process Pool의 프로세스 할당/반환과 Cache 관리 포함.',
           en: 'Complete flow from WebSocket connection to LSP request/response, file change detection, Git synchronization, and connection cleanup. Includes process allocation/release from pool and cache management mechanisms.',
         },
         mermaidFilePath: {

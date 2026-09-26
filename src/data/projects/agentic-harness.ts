@@ -11,8 +11,8 @@ const project = {
     en: 'A self-driving control plane where agents build, deploy, and verify agents',
   },
   fullDescription: {
-    ko: '에이전트가 여러 도구·서브에이전트를 조율하고, 나아가 에이전트가 스스로 에이전트를 만들어 배포·검증·디버깅하는 자율 제어 체계를 설계·구현했습니다. 관리 플레인(저작·배포)과 런타임 플레인(실행·스트리밍)을 분리한 2-플레인 아키텍처로 인증·권한 경계를 확보하고, 되돌릴 수 없는 상용 배포만 사람이 승인하도록(HITL) 자율성과 통제의 경계를 명시적으로 그었습니다.',
-    en: 'Designed and built a control system in which an agent orchestrates tools and sub-agents — and ultimately authors, deploys, verifies, and debugs other agents. A two-plane architecture separates the management plane (authoring/deployment) from the runtime plane (execution/streaming) to establish clear auth boundaries, with human approval (HITL) required only for irreversible production deployments.',
+    ko: '에이전트가 여러 도구·서브에이전트를 조율하고, 나아가 에이전트가 스스로 에이전트를 만들어 배포·검증·디버깅하는 자율 제어 체계를 설계·구현했습니다. 관리 플레인(저작·배포)과 런타임 플레인(실행·스트리밍)을 나눠 인증·권한 경계를 두었고, 되돌릴 수 없는 상용 배포만 사람이 승인합니다(HITL).',
+    en: 'Designed and built a control system in which an agent orchestrates tools and sub-agents — and in turn authors, deploys, verifies, and debugs other agents. The management plane (authoring/deployment) is separated from the runtime plane (execution/streaming) for auth boundaries, and only irreversible production deploys need human approval (HITL).',
   },
   techStack: [
     'Python',
@@ -30,8 +30,8 @@ const project = {
   },
   keyAchievements: [
     {
-      ko: '오케스트레이션 계층 설계·구현 — 의도 분류 → 도구 선택 → 병렬 실행 → 서브에이전트 위임',
-      en: 'Built the orchestration layer — intent classification → tool selection → parallel execution → sub-agent delegation',
+      ko: '오케스트레이션 계층 설계·구현 (의도 분류 → 도구 선택 → 병렬 실행 → 서브에이전트 위임)',
+      en: 'Built the orchestration layer (intent classification → tool selection → parallel execution → sub-agent delegation)',
     },
     {
       ko: '추론 모델/일반 모델별 도구 선택 전략을 이원화해 백본 모델 교체 시 시나리오 무수정 대응',
@@ -42,16 +42,16 @@ const project = {
       en: 'Standardized 30+ external MCP servers (Kubernetes control, observability, code editing) into agent tools',
     },
     {
-      ko: '자율 에이전트 하네스 — 저작 → 검증 → 배포 → 실행 테스트 → 로그 기반 디버깅까지 스스로 도는 풀 라이프사이클 루프',
-      en: 'An agentic harness that closes the full lifecycle loop on its own: author → verify → deploy → smoke-test → log-driven debugging',
+      ko: '저작 → 검증 → 배포 → 실행 테스트 → 로그 기반 디버깅을 스스로 반복하는 자율 에이전트 하네스',
+      en: 'Agentic harness that runs author → verify → deploy → smoke-test → log-driven debugging on its own',
     },
     {
-      ko: '컨텍스트·비용 효율화 — 작업별 절차 문서를 온디맨드 로드하는 스킬 체계로 시스템 프롬프트 26% 감축 (69,943자 → 51,449자), 기능 회귀 0',
-      en: 'Context and cost efficiency — an on-demand skill system for per-task procedure docs cut the system prompt 26% (69,943 → 51,449 chars) with zero functional regression',
+      ko: '작업별 절차 문서를 필요할 때만 불러오는 스킬 체계로 시스템 프롬프트 26% 감축 (69,943자 → 51,449자)',
+      en: 'Loading per-task procedure docs on demand as skills cut the system prompt 26% (69,943 → 51,449 chars)',
     },
     {
-      ko: '글래스박스 — 추론 과정·도구 호출·코드 diff를 실시간 스트리밍으로 노출, 추론 요약을 2경로 하이브리드로 추출해 프로바이더 무관하게 제공',
-      en: 'Glass-box execution — streams reasoning, tool calls, and code diffs live, extracting reasoning summaries through a dual-path hybrid that stays provider-agnostic',
+      ko: '추론 과정·도구 호출·코드 diff 실시간 스트리밍, 프로바이더와 무관한 추론 요약 추출(2경로)',
+      en: 'Live streaming of reasoning, tool calls, and code diffs, with provider-agnostic reasoning summaries (two extraction paths)',
     },
   ],
   features: [
@@ -92,8 +92,8 @@ const project = {
           en: 'Two-Plane Architecture',
         },
         description: {
-          ko: '저작·배포를 담당하는 관리 플레인과 실행·스트리밍을 담당하는 런타임 플레인을 분리한 구조. 모든 관리 작업은 인증 게이트웨이를 경유하고 실행 테스트만 런타임 플레인으로 가므로, 에이전트의 권한 경계가 구조적으로 보장됩니다.',
-          en: 'The management plane (authoring, deployment) is separated from the runtime plane (execution, streaming). Every management action goes through the auth gateway while only smoke tests touch the runtime plane, so the agent’s permission boundary is enforced structurally.',
+          ko: '저작·배포를 담당하는 관리 플레인과 실행·스트리밍을 담당하는 런타임 플레인을 분리한 구조. 모든 관리 작업은 인증 게이트웨이를 경유하고, 실행 테스트만 런타임 플레인으로 갑니다.',
+          en: 'The management plane (authoring, deployment) is separated from the runtime plane (execution, streaming). Every management action goes through the auth gateway; only smoke tests touch the runtime plane.',
         },
         mermaidFilePath: {
           ko: '/architecture/agentic-harness/two-plane.mmd',

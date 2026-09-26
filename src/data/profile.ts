@@ -13,8 +13,8 @@ export const profile = {
   blog: 'https://blog.po24lio.com',
   worldtrip: 'https://backpacking.po24lio.com',
   story: {
-    ko: '디자이너로 시작해 34개국을 여행하며 얻은 통찰을, 이제 AI 기술로 구현합니다',
-    en: 'From Designer to World Traveler to AI Engineer — Building Intelligent Systems with Global Perspective',
+    ko: '시각디자인 전공, 영어 강사, 31개국 배낭여행을 거쳐 AI 엔지니어로',
+    en: 'Designer, English teacher, and backpacker through 31 countries, now an AI engineer',
   },
   intro: {
     ko: '{years}년차 AI 엔지니어입니다. AI 모델을 만드는 일에서 시작해, 지금은 모델이 실제로 동작하는 시스템을 만듭니다. LLM 에이전트의 실행 런타임과 오케스트레이션, 메모리, 품질 평가까지 전 계층을 설계하고 구현합니다.',

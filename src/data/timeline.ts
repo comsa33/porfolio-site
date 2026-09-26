@@ -14,8 +14,8 @@ export const timeline = [
     },
     type: 'Education',
     description: {
-      ko: '디자인적 사고와 시각적 커뮤니케이션 능력 함양.',
-      en: 'Developed design thinking and visual communication skills.',
+      ko: '시각디자인 전공 졸업.',
+      en: 'Graduated in Visual Design.',
     },
   },
   {
@@ -65,8 +65,8 @@ export const timeline = [
     },
     type: 'Travel',
     description: {
-      ko: '32개국 배낭여행. 다양한 문화 체험 및 글로벌 마인드셋 함양.',
-      en: 'Backpacked through 32 countries. Experienced diverse cultures and cultivated a global mindset.',
+      ko: '31개국 배낭여행.',
+      en: 'Backpacked through 31 countries.',
     },
     paperLink: 'https://backpacking.po24lio.com/',
     paperTitle: {
@@ -275,8 +275,8 @@ export const timeline = [
     },
     type: 'Certification',
     description: {
-      ko: 'ISO 19011:2018 경영시스템 심사 가이드라인에 따른 심사원 자격. 모든 ISO 경영시스템 심사의 기반이 되는 핵심 자격증.',
-      en: 'Auditor qualification based on ISO 19011:2018 guidelines for auditing management systems. Core certification for all ISO management system audits.',
+      ko: 'ISO 19011:2018 경영시스템 심사 가이드라인에 따른 심사원 자격.',
+      en: 'Auditor qualification under the ISO 19011:2018 management-system audit guidelines.',
     },
     paperLink: '/certificates/iso_19011_certificate.png',
     paperTitle: {
@@ -297,8 +297,8 @@ export const timeline = [
     },
     type: 'Certification',
     description: {
-      ko: '세계 최초의 AI 관리 국제 표준 ISO/IEC 42001:2023 심사원 자격. AI 시스템의 거버넌스, 리스크 관리, 윤리적 개발에 대한 전문성 인증.',
-      en: "Auditor qualification for ISO/IEC 42001:2023, the world's first international standard for AI management systems. Expertise in AI governance, risk management, and ethical development.",
+      ko: 'ISO/IEC 42001:2023(AI 경영시스템) 심사원 자격.',
+      en: 'Auditor qualification for ISO/IEC 42001:2023 (AI management systems).',
     },
     paperLink: '/certificates/iso_42001_certificate.png',
     paperTitle: {

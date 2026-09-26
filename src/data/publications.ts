@@ -97,8 +97,8 @@ export const publications = [
       en: 'Co-inventor (4 inventors)',
     },
     summary: {
-      ko: '그레이비랩 재직 중 개발한 구직자-기업 매칭 ML 모델의 등록특허. 경력·학력 데이터 기반 구직자 클러스터링과 설문 기반 업무 성향 도출, 기업 평판·정보 데이터 기반 구인자 클러스터링을 결합해 개인 그룹과 기업 그룹을 컬쳐핏 관점에서 매칭하는 방법을 제안합니다. 스킬 매칭 중심의 기존 접근을 넘어 객관 지표와 문화적 적합성을 함께 반영한 것이 특징입니다. (2022.08.31 출원 · 2024.10.23 등록)',
-      en: 'Registered patent for the job-seeker–employer matching ML model built at GravyLab. It clusters job seekers from career and education data with survey-derived work tendencies, clusters employers from reputation and company data, and matches the two groups at the culture-fit level — combining objective metrics with cultural compatibility beyond skill-based matching. Filed Aug 31, 2022; granted Oct 23, 2024.',
+      ko: '그레이비랩 재직 중 개발한 구직자-기업 매칭 ML 모델의 등록특허. 경력·학력 데이터 기반 구직자 클러스터링과 설문 기반 업무 성향 도출, 기업 평판·정보 데이터 기반 구인자 클러스터링을 결합해 개인 그룹과 기업 그룹을 컬쳐핏 관점에서 매칭하는 방법을 제안합니다. (2022.08.31 출원 · 2024.10.23 등록)',
+      en: 'Registered patent for the job-seeker–employer matching ML model built at GravyLab. It clusters job seekers from career and education data with survey-derived work tendencies, clusters employers from reputation and company data, and matches the two groups at the culture-fit level. Filed Aug 31, 2022; granted Oct 23, 2024.',
     },
     link: 'https://patents.google.com/patent/KR102721044B1/ko',
     category: 'patent',

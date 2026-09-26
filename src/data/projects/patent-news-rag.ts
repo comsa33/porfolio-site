@@ -21,7 +21,7 @@ const project = {
   },
   keyAchievements: [
     {
-      ko: 'RAG 문서검색 서버 개발 — 특허/뉴스 챗봇의 검색 계층 담당',
+      ko: '특허/뉴스 챗봇의 RAG 문서검색 서버 개발',
       en: 'Developed the RAG document-retrieval server powering the chatbot’s search layer',
     },
     {

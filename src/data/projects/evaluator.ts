@@ -31,32 +31,32 @@ const project = {
   },
   keyAchievements: [
     {
-      ko: 'RAGAS 라이브러리 직접 의존 없이 경량 자체 구현 (프롬프트 규격은 준수) — 버전·프로바이더 종속 제거',
+      ko: 'RAGAS 메트릭 경량 자체 구현 (프롬프트 규격 준수, 라이브러리 버전·프로바이더 종속 없음)',
       en: 'Reimplemented RAGAS metrics in-house (keeping prompt specifications) to remove version and provider lock-in',
     },
     {
-      ko: '평가 재현성을 위한 의도적 탈-LLM 설계 — LLM 호출을 의도 추출 1회로 한정하고 요청 조립을 결정론적 상태머신으로 전환, 파싱 실패 원천 제거',
-      en: "Deliberately de-LLM'd for reproducibility — one LLM call for intent extraction, with request assembly moved to a deterministic state machine, eliminating parse failures",
+      ko: '재현성을 위해 LLM 호출을 의도 추출 1회로 줄이고 요청 조립은 결정론적 상태머신으로 전환 (파싱 실패 제거)',
+      en: 'For reproducibility, cut LLM calls to one intent extraction and moved request assembly to a deterministic state machine (no parse failures)',
     },
     {
-      ko: 'LLM-as-judge self-bias 회피 원칙 수립 — 평가 모델과 대상 모델의 패밀리 분리를 가이드하고 모델별 점수 차이가 정상임을 문서화',
-      en: 'Established an LLM-as-judge self-bias policy — judge and target models must come from different families, with expected score variation documented',
+      ko: 'LLM-as-judge self-bias 회피 가이드 작성 (평가·대상 모델 패밀리 분리, 모델별 점수 차이 문서화)',
+      en: 'Wrote LLM-as-judge self-bias guidance (separate judge and target model families, documented expected score differences)',
     },
     {
-      ko: '측정값 자체가 틀렸던 결함을 근본 수정 — 특정 서비스 Recall이 0으로 오측정되던 문제를 규명·수정, 실데이터 97/100건 교정 및 기존 정상 케이스 회귀 0',
-      en: 'Root-caused a defect in the measurements themselves — fixed Recall misreporting as 0 for certain services, correcting 97 of 100 real records with zero regression',
+      ko: '특정 서비스의 Recall이 0으로 잘못 계산되던 결함 수정 (실데이터 97/100건 교정)',
+      en: 'Fixed a defect that computed Recall as 0 for certain services (97 of 100 real records corrected)',
     },
     {
-      ko: 'LLMOps — 사내 LLM 게이트웨이용 커스텀 DSPy LM 어댑터 구현, BootstrapFewShot·MIPROv2로 프롬프트 자동 최적화, 배포 산출물 번들 369KB → 175KB 감축',
-      en: 'LLMOps — built a custom DSPy LM adapter for the in-house gateway, automated prompt optimization with BootstrapFewShot/MIPROv2, and cut the deployment bundle from 369KB to 175KB',
+      ko: '사내 LLM 게이트웨이용 커스텀 DSPy LM 어댑터 구현, BootstrapFewShot·MIPROv2 프롬프트 자동 최적화, 배포 번들 369KB → 175KB',
+      en: 'Custom DSPy LM adapter for the in-house LLM gateway, automated prompt optimization with BootstrapFewShot/MIPROv2, deploy bundle 369KB → 175KB',
     },
     {
-      ko: 'v2 전면 재설계 — 평가 데이터셋·실행·생성 프롬프트·판정 기준의 도메인 분리, FastAPI + SQLAlchemy 2.0(async) + PostgreSQL 기반, alembic 마이그레이션으로 스키마 이력 관리',
-      en: 'Ground-up v2 redesign — evaluation datasets, runs, generation prompts, and judgment criteria as separate domains on FastAPI + SQLAlchemy 2.0 (async) + PostgreSQL, with schema history under alembic migrations',
+      ko: 'v2 재설계 (평가 데이터셋·실행·생성 프롬프트·판정 기준 도메인 분리, FastAPI + SQLAlchemy 2.0(async) + PostgreSQL, alembic 마이그레이션)',
+      en: 'v2 redesign (evaluation datasets, runs, generation prompts, and judgment criteria as separate domains; FastAPI + SQLAlchemy 2.0 (async) + PostgreSQL; alembic migrations)',
     },
     {
-      ko: '재현 가능한 평가 이력 — 실행 시점 판정 기준 스냅샷·전역 실행 큐·구조화된 실행 오류로 사후 추적성 확보, 검색·응답·판정 워커가 gold 대조·판정 분류·집계 로직을 공유',
-      en: 'Reproducible evaluation history — run-time snapshots of judgment criteria, a global run queue, and structured run errors keep results traceable; retrieval, response, and judgment workers share one gold-comparison, classification, and aggregation core',
+      ko: '실행 시점 판정 기준 스냅샷·전역 실행 큐·구조화된 실행 오류로 평가 이력 추적, 검색·응답·판정 워커의 gold 대조·판정 분류·집계 로직 공통화',
+      en: 'Traceable evaluation history via run-time criteria snapshots, a global run queue, and structured run errors; retrieval, response, and judgment workers share gold comparison, classification, and aggregation',
     },
   ],
   features: [
@@ -82,8 +82,8 @@ const project = {
           en: 'Retrieval Evaluation Run',
         },
         description: {
-          ko: '전역 큐에서 슬롯을 받아 데이터셋 정합 검사 후 결과 행을 전량 선생성하고, 행별로 검색 서비스를 질의해 정답(gold)과 대조하는 흐름. 실행 시점의 설정·인덱스 스냅샷이 이후 판단의 전부가 되어 재현 가능합니다.',
-          en: 'A run claims a global queue slot, integrity-checks the dataset, pre-creates every result row, then queries the retrieval service per row and compares against gold. The config and index snapshot taken at run time is all later judgment relies on, keeping runs reproducible.',
+          ko: '전역 큐에서 슬롯을 받아 데이터셋 정합 검사 후 결과 행을 전량 선생성하고, 행별로 검색 서비스를 질의해 정답(gold)과 대조하는 흐름. 실행 시점의 설정·인덱스를 스냅샷으로 남겨 재현할 수 있습니다.',
+          en: 'A run claims a global queue slot, integrity-checks the dataset, pre-creates every result row, then queries the retrieval service per row and compares against gold. The config and index are snapshotted at run time so runs can be reproduced.',
         },
         mermaidFilePath: {
           ko: '/architecture/evaluator/retrieval-run.mmd',
@@ -96,8 +96,8 @@ const project = {
           en: 'Response Evaluation Run',
         },
         description: {
-          ko: '평가 전용 경로가 아니라 실서비스 대화 경로에 실제 질의를 보내 end-to-end 응답 품질을 측정합니다. 호출 단위 추적 ID 선저장, 폴링 타임아웃, 실패 시에도 근거 문서 보존으로 어떤 실패든 사후 추적이 가능합니다.',
-          en: 'Real queries go through the live conversation path — not an evaluation-only shortcut — to measure end-to-end response quality. Pre-stored per-call trace IDs, mandatory polling timeouts, and passage preservation on failure keep every outcome traceable.',
+          ko: '실서비스 대화 경로로 실제 질의를 보내 end-to-end 응답 품질을 측정합니다. 호출 단위 추적 ID 선저장, 폴링 타임아웃, 실패 시 근거 문서 보존으로 실패 원인을 추적할 수 있습니다.',
+          en: 'Real queries go through the live conversation path to measure end-to-end response quality. Pre-stored per-call trace IDs, polling timeouts, and passage preservation on failure make failures traceable.',
         },
         mermaidFilePath: {
           ko: '/architecture/evaluator/response-run.mmd',

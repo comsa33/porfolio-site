@@ -8,8 +8,8 @@ const project = {
     en: 'AI-Powered OPIc Mock Test & Feedback App',
   },
   fullDescription: {
-    ko: 'Google Play/App Store 출시된 크로스플랫폼 OPIc 학습 앱입니다. Gemini AI 기반 실시간 음성 분석으로 문법/발음/유창성 피드백을 제공하고, SRS(간격반복) 학습 시스템과 구조화된 모범 답안 쉐도잉 기능을 통해 효과적인 OPIc 준비를 지원합니다.',
-    en: 'Cross-platform OPIc learning app published on Google Play/App Store. Provides real-time grammar/pronunciation/fluency feedback through Gemini AI-based voice analysis, with SRS flashcard system and structured model answer shadowing for effective OPIc preparation.',
+    ko: 'Google Play/App Store에 출시한 크로스플랫폼 OPIc 학습 앱입니다. Gemini로 답변 음성을 분석해 문법·발음·유창성 피드백을 주고, SRS 표현 복습과 모범 답안 쉐도잉을 제공합니다.',
+    en: 'A cross-platform OPIc study app on Google Play/App Store. Gemini analyzes spoken answers for grammar, pronunciation, and fluency feedback, with SRS expression review and model-answer shadowing.',
   },
   techStack: [
     'Next.js 16',
@@ -71,8 +71,8 @@ const project = {
       {
         id: 'inline-grammar-correction',
         title: {
-          ko: '인라인 문법 교정: 직관적 피드백 UX',
-          en: 'Inline Grammar Correction: Intuitive Feedback UX',
+          ko: '인라인 문법 교정 UI',
+          en: 'Inline Grammar Correction UI',
         },
         category: {
           ko: 'UX설계',
@@ -206,8 +206,8 @@ function calculateNextReview(card: Card, quality: number) {
         },
         csFoundations: ['Spaced Repetition', 'SM-2 Algorithm', 'Learning Science', 'State Machine'],
         impact: {
-          ko: '**성과**: SM-2 기반 간격 반복으로 복습 타이밍 자동화 — 일정 관리 없이 망각 곡선에 맞춰 복습 제시.',
-          en: '**Impact**: SM-2 spaced repetition automates review timing — reviews follow the forgetting curve without manual scheduling.',
+          ko: '**성과**: 사용자가 일정을 관리하지 않아도 복습 시점을 자동 제시.',
+          en: '**Impact**: Review timing is scheduled automatically, no manual planning.',
         },
         commits: [],
       },
@@ -293,8 +293,8 @@ export async function POST(request: Request) {
           'Cross-platform Development',
         ],
         impact: {
-          ko: '**성과**: Web/iOS/Android 3개 플랫폼 결제를 단일 흐름으로 통합 — 환불 시 권한 자동 회수까지 서버에서 일원 처리.',
-          en: '**Impact**: One payment flow across Web/iOS/Android — entitlement auto-revocation on refund handled server-side.',
+          ko: '**성과**: Web·iOS·Android 결제 상태를 서버 한 곳에서 관리, 환불 시 권한 자동 회수.',
+          en: '**Impact**: Web, iOS, and Android payment state managed in one place on the server, with access revoked automatically on refund.',
         },
         commits: ['66d81f6', 'e9a79a4', '632c2b4'],
       },

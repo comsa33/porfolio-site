@@ -11,8 +11,8 @@ const project = {
     en: 'Domain-tuned Korean models on a single GPU, released openly',
   },
   fullDescription: {
-    ko: '업무와 별개로 오픈소스 모델을 직접 파인튜닝해 공개해 온 개인 연구입니다. 모델은 Hugging Face(MIT), 학습 코드는 GitHub에 공개되어 있어 결과를 직접 확인할 수 있고, 학습한 모델을 영어 시험 학습 서비스에 연결해 실사용까지 완결했습니다.',
-    en: 'Personal research, separate from day-to-day work, fine-tuning open-source models and releasing them. The models are on Hugging Face (MIT) and the training code on GitHub, so results are directly verifiable — and the tuned models power a real English-exam study service.',
+    ko: '업무와 별개로 오픈소스 모델을 파인튜닝해 공개한 개인 연구입니다. 모델은 Hugging Face(MIT), 학습 코드는 GitHub에 있고, 학습한 모델은 영어 시험 학습 서비스에 연결했습니다.',
+    en: 'Personal research, separate from work: fine-tuning open-source models and releasing them. Models are on Hugging Face (MIT) and training code on GitHub; the tuned models power an English-exam study service.',
   },
   techStack: [
     'PyTorch',
@@ -41,12 +41,12 @@ const project = {
       en: 'Applied adapters across all attention and MLP projections including embedding and output layers, fitting training under the memory ceiling with gradient checkpointing and accumulation',
     },
     {
-      ko: '학습 데이터셋 직접 구축 — 문항 생성 태스크용 QA 데이터셋을 설계·구축하고 모델 출력이 JSON 스키마를 지키도록 학습 데이터 형식(Alpaca 계열 지시 포맷)을 규정',
-      en: 'Built the training data from scratch — designed a QA dataset for item generation and specified an Alpaca-style instruction format that enforces JSON-schema-conformant output',
+      ko: '문항 생성용 QA 학습 데이터셋 직접 구축, JSON 스키마 출력을 위한 Alpaca 계열 지시 포맷 규정',
+      en: 'Built the item-generation QA training set, with an Alpaca-style instruction format for JSON-schema output',
     },
     {
-      ko: '학습 모델을 GGUF(q8_0)로 양자화해 로컬 추론이 가능한 형태로 배포, 문항 생성 관리자 백엔드·조회 API·인증 서버·모바일 앱(Flutter)까지 연결해 엔드투엔드 서비스로 완성',
-      en: 'Quantized to GGUF (q8_0) for local inference and wired it end-to-end — item-generation admin backend, query API, auth server, and a Flutter mobile app',
+      ko: '학습 모델을 GGUF(q8_0)로 양자화해 로컬 추론용으로 배포, 문항 생성 관리자 백엔드·조회 API·인증 서버·Flutter 앱까지 연결',
+      en: 'Quantized to GGUF (q8_0) for local inference, connected to an item-generation admin backend, query API, auth server, and Flutter app',
     },
   ],
   features: [

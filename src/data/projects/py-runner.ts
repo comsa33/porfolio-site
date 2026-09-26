@@ -11,7 +11,7 @@ const project = {
     en: 'Multi-pod distributed Python sandbox with zero-downtime dynamic deployment',
   },
   fullDescription: {
-    ko: '멀티팟 환경에서 AI 에이전트를 동적으로 등록·배포·실행하는 실행 런타임입니다. 에이전트 관리 서버와 프로덕션·개발 샌드박스를 프로세스 격리로 나눈 3서버 구조 위에서, Redis Pub/Sub 동기화와 FastAPI 서브앱 동적 로딩으로 서버 재시작 없는 배포를 실현했습니다.',
+    ko: '멀티팟 환경에서 AI 에이전트를 동적으로 등록·배포·실행하는 실행 런타임입니다. 에이전트 관리 서버와 프로덕션·개발 샌드박스를 프로세스 격리로 나눈 3서버 구조 위에서 Redis Pub/Sub 동기화와 FastAPI 서브앱 동적 로딩으로 서버 재시작 없이 배포합니다.',
     en: 'An execution runtime that registers, deploys, and runs AI agents dynamically across pods. Three process-isolated servers — agent management, production sandbox, dev sandbox — with Redis Pub/Sub synchronization and dynamic FastAPI sub-app loading deploy changes without a restart.',
   },
   techStack: [
@@ -42,8 +42,8 @@ const project = {
       en: 'Real-time multi-pod deployment sync via a Redis Pub/Sub event bus, with distributed locks achieving 0% deployment failure',
     },
     {
-      ko: 'FastAPI 서브앱 동적 로딩으로 서버 재시작 없이 기능 추가·교체 — 사용자 정의 에이전트 API·커스텀 LLM·알고리즘 스크립트까지 무중단 배포',
-      en: 'Zero-downtime deployment — dynamic sub-app loading adds or swaps user-defined agent APIs, custom LLMs, and algorithm scripts without a restart',
+      ko: 'FastAPI 서브앱 동적 로딩으로 사용자 정의 에이전트 API·커스텀 LLM·알고리즘 스크립트를 재시작 없이 배포',
+      en: 'Dynamic FastAPI sub-app loading deploys user-defined agent APIs, custom LLMs, and algorithm scripts without a restart',
     },
     {
       ko: '프로바이더 무관 LLM 어댑터 계층 (Azure/AWS Bedrock/Anthropic/Google/OpenAI) + Redis Stream 기반 SSE 토큰 스트리밍',
@@ -84,12 +84,12 @@ const project = {
         },
         icon: '🔒',
         problem: {
-          ko: '**이슈**: 여러 Pod가 동시에 Agent 버전 목록을 읽고 수정할 때 Race Condition 발생. Pod A가 v3를 추가하는 동안 Pod B가 같은 시점에 읽어서 v4만 추가하면, v3 배포가 손실되는 심각한 데이터 무결성 문제.',
-          en: '**Issue**: Race condition occurred when multiple pods simultaneously read and modified agent version list. When Pod A added v3 while Pod B read at the same time and added only v4, v3 deployment was lost - a critical data integrity issue.',
+          ko: '**이슈**: 여러 Pod가 동시에 Agent 버전 목록을 읽고 수정할 때 Race Condition 발생. Pod A가 v3를 추가하는 동안 Pod B가 같은 시점에 읽어서 v4만 추가하면, v3 배포가 유실됨.',
+          en: '**Issue**: Race condition occurred when multiple pods simultaneously read and modified agent version list. When Pod A added v3 while Pod B read at the same time and added only v4, v3 deployment was lost.',
         },
         solution: {
-          ko: '**해결**: Redis 기반 Distributed Lock을 도입하여 임계 영역(Critical Section) 보호. Context Manager 패턴(`async with`)으로 Lock 획득/해제를 자동화하고, 타입 검증 로직을 추가하여 None/str/bytes 등 다양한 타입을 안전하게 처리. 반환 타입을 `set[str]`로 통일하여 일관성 확보.',
-          en: '**Solution**: Introduced Redis-based Distributed Lock to protect critical sections. Automated lock acquisition/release with Context Manager pattern (`async with`), added type validation logic to safely handle various types (None/str/bytes). Ensured consistency by unifying return type to `set[str]`.',
+          ko: '**해결**: Redis 기반 Distributed Lock을 도입하여 임계 영역(Critical Section) 보호. Context Manager 패턴(`async with`)으로 Lock 획득/해제를 자동화하고, None/str/bytes 타입 검증 추가, 반환 타입을 `set[str]`로 통일.',
+          en: '**Solution**: Introduced Redis-based Distributed Lock to protect critical sections. Automated lock acquisition/release with Context Manager pattern (`async with`), added None/str/bytes type checks, and unified the return type to `set[str]`.',
         },
         technicalDetails: {
           ko: `\`\`\`python
@@ -141,8 +141,8 @@ async def safe_deploy(agent_id, version):
           'Type Safety',
         ],
         impact: {
-          ko: '**성과**: 도입 후 동시 배포로 인한 버전 유실 재발 0건 — 배포 실패율 0% 유지.',
-          en: '**Impact**: No version-loss recurrence from concurrent deployments since the fix — deployment failure rate held at 0%.',
+          ko: '**성과**: 도입 후 동시 배포로 인한 버전 유실 재발 없음.',
+          en: '**Impact**: No version loss from concurrent deploys since the fix.',
         },
         commits: ['942909a', '76dfbc3'],
       },
@@ -217,16 +217,16 @@ async def stream_handler(request):
           'Memory Management',
         ],
         impact: {
-          ko: '**성과**: 토큰 누적 제거로 응답 길이와 무관하게 메모리 사용량 평탄 유지 — 장시간 스트리밍·동시 요청에서 안정성 확보.',
-          en: '**Impact**: Memory stays flat regardless of response length — stable under long streams and concurrent requests.',
+          ko: '**성과**: 토큰을 쌓지 않아 응답 길이와 관계없이 메모리 사용량 일정.',
+          en: '**Impact**: Memory stays flat regardless of response length.',
         },
         commits: ['346a8f5', '8c4aba6'],
       },
       {
         id: 'at-least-once',
         title: {
-          ko: 'At-least-once: 장애에도 로그 손실 제로',
-          en: 'At-least-once: Zero Log Loss Even During Failures',
+          ko: 'At-least-once 로그 수집',
+          en: 'At-least-once Log Collection',
         },
         category: {
           ko: '분산시스템',
@@ -284,8 +284,8 @@ async def _flush_agent(self, agent_key):
           'Failure Recovery',
         ],
         impact: {
-          ko: '**성과**: 장애 시 로그 손실 0건 — flush 성공 후에만 ACK하므로 재시작 시 마지막 ACK 지점부터 자동 재전달.',
-          en: '**Impact**: Zero log loss on failure — ACK only after a successful flush, so redelivery resumes from the last ACK point on restart.',
+          ko: '**성과**: 서버 장애 후 재시작해도 로그 유실 없음.',
+          en: '**Impact**: No log loss across server crashes and restarts.',
         },
         commits: [],
       },
@@ -311,8 +311,8 @@ async def _flush_agent(self, agent_key):
           en: 'Dynamic Registration & Zero-downtime Propagation',
         },
         description: {
-          ko: '스키마 등록 한 번으로 코드 템플릿 생성 → 파일 저장 → 분산 락 하의 상태 갱신 → Pub/Sub 브로드캐스트 → 전 파드 서브앱 동적 로딩까지 이어지는 흐름. 동시 배포가 락으로 직렬화되어 배포 실패율 0%를 유지합니다.',
-          en: 'One schema registration flows through template generation, file save, state update under a distributed lock, Pub/Sub broadcast, and dynamic sub-app loading on every pod. Concurrent deploys are serialized by the lock, holding deploy failures at 0%.',
+          ko: '스키마 등록 한 번으로 코드 템플릿 생성 → 파일 저장 → 분산 락 하의 상태 갱신 → Pub/Sub 브로드캐스트 → 전 파드 서브앱 동적 로딩까지 이어지는 흐름. 동시 배포는 락으로 직렬화됩니다.',
+          en: 'One schema registration flows through template generation, file save, state update under a distributed lock, Pub/Sub broadcast, and dynamic sub-app loading on every pod. Concurrent deploys are serialized by the lock.',
         },
         mermaidFilePath: {
           ko: '/architecture/pyrunner/deploy-propagation.mmd',
@@ -325,8 +325,8 @@ async def _flush_agent(self, agent_key):
           en: 'Log Collection Pipeline',
         },
         description: {
-          ko: '에이전트 실행 로그를 Redis Stream Consumer Group으로 수집하는 배치 파이프라인. flush 성공 후에만 ACK하는 At-least-once 보장으로 장애 시에도 로그가 유실되지 않습니다.',
-          en: 'A batched pipeline collecting agent execution logs via Redis Stream consumer groups. ACK only after a successful flush gives at-least-once delivery — no log loss even through failures.',
+          ko: '에이전트 실행 로그를 Redis Stream Consumer Group으로 수집하는 배치 파이프라인. flush 성공 후에만 ACK합니다(At-least-once).',
+          en: 'A batched pipeline collecting agent execution logs via Redis Stream consumer groups. ACKs only after a successful flush (at-least-once).',
         },
         mermaidFilePath: {
           ko: '/architecture/pyrunner/batch-flow.mmd',

@@ -8,8 +8,8 @@ const project = {
     en: 'Privacy-First Minimalist Social Messenger App',
   },
   fullDescription: {
-    ko: "Google Play/App Store 출시된 프라이버시 중심 메신저입니다. SHA-256 기반 연락처 동기화로 원본 전화번호 없이 친구를 찾고, 익명 커넥트 시스템과 '스퀘어 로그' 피드로 새로운 소셜 경험을 제공합니다. Firebase + Cloud Functions 기반 실시간 아키텍처.",
-    en: "A privacy-first messenger published on Google Play/App Store. Find friends via SHA-256 contact sync without exposing phone numbers. Features anonymous 'Connect' system and 'Square Log' feed for a new social experience. Real-time architecture based on Firebase + Cloud Functions.",
+    ko: "Firebase·Cloud Functions로 만든 프라이버시 중심 메신저로, Google Play/App Store에 출시했습니다. 전화번호 해시로 친구를 찾고, 익명 커넥트와 '스퀘어 로그' 피드를 제공합니다.",
+    en: "A privacy-focused messenger built on Firebase and Cloud Functions, published on Google Play/App Store. Friends are found through phone-number hashes, with anonymous 'Connect' and a 'Square Log' feed.",
   },
   techStack: ['Flutter', 'Dart', 'Firebase', 'Cloud Functions', 'TypeScript', 'Firestore', 'FCM'],
   peekLine: {
@@ -18,8 +18,8 @@ const project = {
   },
   keyAchievements: [
     {
-      ko: 'SHA-256 연락처 해싱으로 Privacy-First 친구 찾기 (서버에 원본 전화번호 Zero)',
-      en: 'Privacy-first friend finding with SHA-256 contact hashing (zero raw phone numbers on server)',
+      ko: 'SHA-256 연락처 해싱으로 원본 전화번호 없이 친구 찾기',
+      en: 'Friend finding via SHA-256 contact hashing, no raw phone numbers on the server',
     },
     {
       ko: 'Asymmetric Soft Delete 패턴으로 채팅방 비대칭 삭제 구현',
@@ -63,8 +63,8 @@ const project = {
       {
         id: 'privacy-first-contact-sync',
         title: {
-          ko: 'Privacy-First 연락처 동기화: 서버에 전화번호 Zero',
-          en: 'Privacy-First Contact Sync: Zero Phone Numbers on Server',
+          ko: '해시 기반 연락처 동기화',
+          en: 'Hash-based Contact Sync',
         },
         category: {
           ko: '보안',
@@ -72,8 +72,8 @@ const project = {
         },
         icon: '🔐',
         problem: {
-          ko: '**이슈**: 연락처에서 친구를 찾으려면 전화번호를 서버에 업로드해야 하는데, 이는 심각한 개인정보 노출 위험. 사용자들의 전화번호가 서버에 평문으로 저장되면 데이터 유출 시 치명적.',
-          en: '**Issue**: Finding friends from contacts required uploading phone numbers to the server, posing serious privacy risks. Storing phone numbers in plain text on servers would be catastrophic in case of data breach.',
+          ko: '**이슈**: 연락처로 친구를 찾으려면 전화번호를 서버에 올려야 함. 평문으로 저장하면 유출 시 번호가 그대로 노출.',
+          en: '**Issue**: Finding friends from contacts meant uploading phone numbers; stored in plain text, a breach would expose them directly.',
         },
         solution: {
           ko: '**해결**: 클라이언트에서 E.164 정규화 후 SHA-256 해싱만 서버로 전송. 서버는 phoneHashes 역인덱스로 해시 매칭만 수행. Firestore Rules로 클라이언트 직접 접근 차단.',
@@ -124,8 +124,8 @@ if (!matchedUserData.settings?.allowPhoneSearch) continue;
           'Firestore Security Rules',
         ],
         impact: {
-          ko: '**성과**: 서버에 원본 전화번호 0건 저장 — DB에는 해시만 존재해 유출 시에도 원본 번호가 직접 드러나지 않음.',
-          en: '**Impact**: Zero raw phone numbers on the server — the DB holds only hashes, so a breach does not directly expose numbers.',
+          ko: '**성과**: DB에는 해시만 저장, 유출돼도 원본 번호가 바로 드러나지 않음.',
+          en: '**Impact**: The DB holds only hashes, so a breach does not directly expose numbers.',
         },
       },
       {
@@ -140,8 +140,8 @@ if (!matchedUserData.settings?.allowPhoneSearch) continue;
         },
         icon: '🗑️',
         problem: {
-          ko: '**이슈**: 채팅방을 나가면 상대방 대화까지 삭제되는 일반적인 메신저와 달리, 한쪽만 나가도 상대방 대화는 보존해야 함. 단, 나간 후 새 메시지가 오면 다시 보여야 하는 복잡한 요구사항.',
-          en: "**Issue**: Unlike typical messengers where leaving deletes both sides, needed to preserve other party's chat. Plus, new messages after leaving should restore visibility - a complex requirement.",
+          ko: '**이슈**: 채팅방을 나가면 상대방 대화까지 삭제되는 일반적인 메신저와 달리, 한쪽만 나가도 상대방 대화는 보존해야 함. 단, 나간 후 새 메시지가 오면 다시 보여야 함.',
+          en: "**Issue**: Unlike typical messengers where leaving deletes both sides, needed to preserve other party's chat. Plus, new messages after leaving should restore visibility.",
         },
         solution: {
           ko: '**해결**: participantDetails에 hiddenSince/visibleFrom 타임스탬프 패턴 도입. 나갈 때 hiddenSince 설정, 상대방이 메시지 보내면 visibleFrom 설정으로 복원.',
@@ -198,8 +198,8 @@ Future<void> _restoreHiddenParticipant() async {
           'Race Condition Prevention',
         ],
         impact: {
-          ko: '**성과**: 한쪽의 나가기·삭제가 상대방의 대화 이력에 영향을 주지 않음 — 복원 시에도 각자의 시점 유지.',
-          en: "**Impact**: One side's leave or delete never touches the other's history — each keeps their own view on restore.",
+          ko: '**성과**: 한쪽이 나가거나 삭제해도 상대방 대화 이력은 그대로, 복원 시에도 각자의 시점 유지.',
+          en: "**Impact**: One side's leave or delete leaves the other's history intact, and each keeps their own view on restore.",
         },
       },
       {
@@ -214,8 +214,8 @@ Future<void> _restoreHiddenParticipant() async {
         },
         icon: '👻',
         problem: {
-          ko: '**이슈**: 일반적인 차단은 메시지 전송 실패 UI로 차단 사실이 노출됨. 이는 사용자 갈등을 유발하고, 차단한 사람도 불편함을 느낌.',
-          en: '**Issue**: Typical blocking exposes the fact through message failure UI, causing user conflict. The blocker also feels uncomfortable.',
+          ko: '**이슈**: 일반적인 차단은 전송 실패 표시로 차단 사실이 드러나 사용자 간 갈등 유발.',
+          en: '**Issue**: Typical blocking reveals itself through a send-failure message, causing conflict between users.',
         },
         solution: {
           ko: '**해결**: 차단된 사용자의 메시지는 DB에 정상 저장하되 shadowBlocked: true 플래그 추가. 알림/배지 업데이트 생략으로 수신자에게 도달 안 함.',
@@ -274,8 +274,8 @@ if (!isShadowBlocked) {
           'Firestore Subcollection',
         ],
         impact: {
-          ko: '**성과**: 차단 사실이 발신자에게 드러나지 않는 UX — 발신은 평소처럼 동작하고 수신자에게만 도달하지 않음.',
-          en: '**Impact**: Blocking stays invisible to the sender — sending works as usual, the message simply never reaches the blocker.',
+          ko: '**성과**: 발신자는 평소처럼 보내고, 메시지는 차단한 사람에게 도달하지 않음.',
+          en: '**Impact**: The sender sends as usual; the message never reaches the blocker.',
         },
       },
       {
@@ -290,8 +290,8 @@ if (!isShadowBlocked) {
         },
         icon: '🤝',
         problem: {
-          ko: '**이슈**: 익명 커넥트 친구의 정체를 공개할 때, 한쪽만 먼저 공개하면 비대칭 정보 노출 발생. 상대방이 내 정보만 보고 소통을 피할 수 있는 불공정한 상황.',
-          en: '**Issue**: When revealing anonymous connect friend identity, one-sided reveal creates asymmetric information exposure. Unfair situation where other party can avoid communication after seeing your info.',
+          ko: '**이슈**: 익명 커넥트 친구의 정체를 공개할 때 한쪽만 먼저 공개하면, 상대가 내 정보만 보고 대화를 피할 수 있음.',
+          en: '**Issue**: If only one side reveals identity in an anonymous connect, the other can see it and avoid the conversation.',
         },
         solution: {
           ko: '**해결**: openRequests 맵으로 양측 요청 추적. 둘 다 요청해야만 _completeSquareOpen 실행. 오픈 시 커넥트 채팅방 아카이브, 일반 friendship 생성까지 원자적 처리.',
@@ -344,8 +344,8 @@ batch.set(regularRef, {/*new friendship*/});
           'Information Symmetry',
         ],
         impact: {
-          ko: '**성과**: 쌍방이 동시에 공개할 때만 실명 전환 — 한쪽만 정보가 노출되는 비대칭 상황을 프로토콜 수준에서 차단.',
-          en: '**Impact**: Identity reveals only when both sides open simultaneously — one-sided exposure is blocked at the protocol level.',
+          ko: '**성과**: 양쪽이 모두 요청해야 실명 전환, 한쪽만 노출되는 경우 없음.',
+          en: '**Impact**: Identities switch only when both sides request it, so neither is exposed alone.',
         },
       },
     ],
@@ -356,8 +356,8 @@ batch.set(regularRef, {/*new friendship*/});
           en: 'Contact Sync System Flow',
         },
         description: {
-          ko: '클라이언트 연락처 해싱부터 Cloud Functions 매칭, Firestore 업데이트까지의 전체 프라이버시 보존 연락처 동기화 프로세스.',
-          en: 'Complete privacy-preserving contact sync process from client hashing through Cloud Functions matching to Firestore updates.',
+          ko: '클라이언트 연락처 해싱부터 Cloud Functions 매칭, Firestore 업데이트까지의 연락처 동기화 흐름.',
+          en: 'Contact sync flow from client-side hashing through Cloud Functions matching to Firestore updates.',
         },
         mermaidFilePath: {
           ko: '/architecture/square/contact-sync-flow.mmd',
