@@ -9,7 +9,7 @@ import { profile } from '@/data/profile';
 import ProjectDetailModal from './ProjectDetailModal';
 import ArchitectureModal from './ArchitectureModal';
 import { useEdgeReveal, useRowActive, useSameHeight } from './useEdgeReveal';
-import { isRowToggleClick, settleRow } from './rowToggle';
+import { isRowToggleClick, toggleInPlace } from './rowToggle';
 
 interface ProjectCardProps {
   project: Project;
@@ -41,8 +41,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang, index, expande
   const peek = project.peekLine?.[lang];
   const rowRef = useRef<HTMLLIElement>(null);
   const toggle = () => {
-    if (rowRef.current) settleRow(rowRef.current);
-    onToggle();
+    if (rowRef.current) toggleInPlace(rowRef.current, onToggle);
+    else onToggle();
   };
   const row = useRowActive(rowRef);
   const open = row.active && !expanded && Boolean(peek);
@@ -54,6 +54,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang, index, expande
       <li
         ref={rowRef}
         data-project-row=""
+        data-open={expanded ? '' : undefined}
         className={styles.row}
         style={{ '--i': index } as React.CSSProperties}
         onPointerEnter={row.onPointerEnter}
@@ -152,6 +153,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang, index, expande
 
           <div
             id={detailsId}
+            data-details=""
             className={`${styles.details} ${expanded ? styles.detailsOpen : ''}`}
             aria-hidden={!expanded}
           >

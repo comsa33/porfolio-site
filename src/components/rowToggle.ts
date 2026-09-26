@@ -1,3 +1,4 @@
+import { flushSync } from 'react-dom';
 import type React from 'react';
 
 /**
@@ -13,70 +14,58 @@ export function isRowToggleClick(e: React.MouseEvent<HTMLElement>): boolean {
   return true;
 }
 
-/** Reads a duration token such as --dur-slow, in milliseconds. */
-function tokenMs(name: string, fallback: number): number {
-  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-  const n = parseFloat(v);
-  return Number.isFinite(n) ? (v.endsWith('s') && !v.endsWith('ms') ? n * 1000 : n) : fallback;
-}
-
-/** cubic-bezier(0.16, 1, 0.3, 1) — the --ease-out token, evaluated in JS. */
-function easeOut(t: number): number {
-  const [x1, y1, x2, y2] = [0.16, 1, 0.3, 1];
-  const bez = (a: number, b: number, s: number) =>
-    3 * a * s * (1 - s) ** 2 + 3 * b * s * s * (1 - s) + s ** 3;
-  let lo = 0;
-  let hi = 1;
-  for (let i = 0; i < 20; i++) {
-    const mid = (lo + hi) / 2;
-    if (bez(x1, x2, mid) < t) lo = mid;
-    else hi = mid;
-  }
-  return bez(y1, y2, (lo + hi) / 2);
-}
-
 /**
- * Makes sure an opened row's top is on screen, not under the header.
+ * Opens or closes a row in a one-open-at-a-time list, without the page
+ * shifting under the reader.
  *
- * Opening a row closes whichever was open, and when that one sits above, its
- * collapse pulls the new row up until its top goes under the header. So the
- * row is steered every frame of the fold: it stays where it was tapped, and
- * if its top was already under the header it glides down to just below it.
- * The glide uses the site's ease-out and the fold's own duration.
+ * Opening a row closes the one that was open. When that one sits above and
+ * its fold would pull the tapped row's top out of sight — because it is off
+ * screen already, or tall enough — it is closed at once, without the
+ * animation, and the page is scrolled by exactly the height it lost in the
+ * same frame: the tapped row does not move and opens where it was tapped.
+ * (Chrome does this on its own as scroll anchoring; Safari does not.) When
+ * the fold leaves the tapped row in view, it runs as usual — the cause of the
+ * movement is on screen, so nothing is corrected.
  *
- * Any wheel, touch or key from the reader ends it at once: the page follows
- * the reader, it never holds on to the scroll against them.
+ * And if the tapped row's top was already under the header, the page scrolls
+ * once, smoothly, to bring it out.
  */
-export function settleRow(row: HTMLElement): void {
+export function toggleInPlace(row: HTMLElement, commit: () => void): void {
   const header = document.querySelector('header');
-  const floor = (header?.getBoundingClientRect().bottom ?? 0) + 12;
-  const start = row.getBoundingClientRect().top;
-  const target = Math.max(start, floor);
+  // The header can scroll away on narrow screens, so the floor is whichever
+  // is lower: the header's bottom edge or the top of the screen.
+  const floor = Math.max(0, header?.getBoundingClientRect().bottom ?? 0) + 12;
+  const opening = !row.hasAttribute('data-open');
+  const prev = row.parentElement?.querySelector<HTMLElement>(':scope > [data-open]');
+  // How far the row would be pulled up if the open one folded away with its
+  // animation: the height of that one's details panel, when it sits above.
+  const rowTop = row.getBoundingClientRect().top;
+  const above = Boolean(prev && prev !== row && prev.getBoundingClientRect().top < rowTop);
+  const shrink = above
+    ? (prev!.querySelector<HTMLElement>('[data-details]')?.getBoundingClientRect().height ?? 0)
+    : 0;
+  const snap =
+    opening && above && (prev!.getBoundingClientRect().bottom <= floor || rowTop - shrink < floor);
 
-  const duration = tokenMs('--dur-slow', 640) + 60;
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const before = snap ? prev!.getBoundingClientRect().height : 0;
+  if (snap) prev!.setAttribute('data-snap', '');
 
-  let stopped = false;
-  const stop = () => {
-    stopped = true;
-  };
-  const inputs = ['wheel', 'touchstart', 'keydown'] as const;
-  inputs.forEach((t) => window.addEventListener(t, stop, { passive: true, once: true }));
-  const cleanup = () => inputs.forEach((t) => window.removeEventListener(t, stop));
+  flushSync(commit);
 
-  const t0 = performance.now();
-  const tick = (now: number) => {
-    if (stopped) return cleanup();
-    const k = Math.min(1, (now - t0) / duration);
-    const want = start + (target - start) * (reduce ? 1 : easeOut(k));
-    const drift = row.getBoundingClientRect().top - want;
-    // 'instant', because the page sets scroll-behavior: smooth and a smooth
-    // correction would trail the fold by a frame and read as a wobble.
-    if (Math.abs(drift) >= 0.5) {
-      window.scrollTo({ top: window.scrollY + drift, behavior: 'instant' });
+  if (snap) {
+    const lost = before - prev!.getBoundingClientRect().height;
+    if (lost > 0) window.scrollTo({ top: window.scrollY - lost, behavior: 'instant' });
+    requestAnimationFrame(() => prev!.removeAttribute('data-snap'));
+  }
+
+  if (opening) {
+    const top = row.getBoundingClientRect().top;
+    if (top < floor) {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({
+        top: window.scrollY - (floor - top),
+        behavior: reduce ? 'instant' : 'smooth',
+      });
     }
-    if (k < 1) requestAnimationFrame(tick);
-    else cleanup();
-  };
-  requestAnimationFrame(tick);
+  }
 }

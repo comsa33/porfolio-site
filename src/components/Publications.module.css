@@ -86,6 +86,11 @@
   transition: grid-template-rows var(--dur-slow) var(--ease);
 }
 
+/* Closed out of sight: no fold to watch, so no animation (see toggleInPlace). */
+.row[data-snap] .details {
+  transition: none;
+}
+
 .detailsOpen {
   grid-template-rows: 1fr;
 }

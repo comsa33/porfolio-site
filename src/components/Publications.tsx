@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { ArrowUpRight, ChevronDown } from 'lucide-react';
 import BrandIcon from './BrandIcon';
 import styles from './Publications.module.css';
-import { isRowToggleClick, settleRow } from './rowToggle';
+import { isRowToggleClick, toggleInPlace } from './rowToggle';
 import { Publication } from '@/types';
 
 interface PublicationsProps {
@@ -21,8 +21,9 @@ const Publications: React.FC<PublicationsProps> = ({ items, lang }) => {
 
   const toggle = (id: string, from: HTMLElement) => {
     const row = from.closest('li');
-    if (row) settleRow(row);
-    setExpandedId((prev) => (prev === id ? null : id));
+    const commit = () => setExpandedId((prev) => (prev === id ? null : id));
+    if (row) toggleInPlace(row, commit);
+    else commit();
   };
 
   return (
@@ -36,6 +37,7 @@ const Publications: React.FC<PublicationsProps> = ({ items, lang }) => {
             key={pub.id}
             className={styles.row}
             data-status={pub.status}
+            data-open={isOpen ? '' : undefined}
             style={{ '--i': i } as React.CSSProperties}
             onClick={(e) => isRowToggleClick(e) && toggle(pub.id, e.currentTarget)}
           >
@@ -53,6 +55,7 @@ const Publications: React.FC<PublicationsProps> = ({ items, lang }) => {
 
               <div
                 id={detailsId}
+                data-details=""
                 className={`${styles.details} ${isOpen ? styles.detailsOpen : ''}`}
                 aria-hidden={!isOpen}
               >
