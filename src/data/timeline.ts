@@ -92,8 +92,8 @@ export const timeline = [
     },
     paperLink: 'https://kiss.kstudy.com/Detail/Ar?key=4028402',
     paperTitle: {
-      ko: '학사 논문',
-      en: "Bachelor's Thesis",
+      ko: '학술대회 발표 (ASK 2023)',
+      en: 'Conference paper (ASK 2023)',
     },
   },
   {
@@ -222,8 +222,8 @@ export const timeline = [
     paperLink:
       'https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART003244700',
     paperTitle: {
-      ko: '석사 논문',
-      en: "Master's Thesis",
+      ko: '학술지 게재',
+      en: 'Journal article',
     },
   },
   {
