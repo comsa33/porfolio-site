@@ -3,31 +3,6 @@ import type { Publication } from '@/types';
 
 export const publications = [
   {
-    id: 'jips-trajectory-clustering',
-    title:
-      'Auditing Trajectory Clustering in LLM-Agent Failure Analysis: A Multi-Dataset Validation Protocol',
-    venue: {
-      ko: 'Journal of Information Processing Systems (한국정보처리학회)',
-      en: 'Journal of Information Processing Systems (KIPS)',
-    },
-    year: '2026',
-    status: 'under-review',
-    statusLabel: {
-      ko: '심사 진행 중',
-      en: 'Under review',
-    },
-    authorRole: {
-      ko: '제1저자 (주저자)',
-      en: 'First author',
-    },
-    indexing: 'SCOPUS',
-    summary: {
-      ko: "LLM 에이전트 실패 분석에서 '트래젝토리 클러스터가 외부 실패 라벨과 정렬된다'는 통념을 검증한 연구. 누수 감사·층화 라벨 검증·멀티라벨 검증·matched-K 베이스라인 비교로 구성된 4단계 프로토콜을 제안하고, 3개 공개 벤치마크(AFTraj-2K, AgentErrorBench, AgentRx)에 26개 피처 기반 표현으로 적용했습니다. 겉보기 정렬 대부분이 태스크·프레임워크 교란요인으로 설명됨을 규명했습니다 (NMI 0.32→0.21).",
-      en: 'Tests the common assumption that trajectory clusters align with external failure labels in LLM-agent analysis. Proposes a four-stage protocol — leakage audit, stratified label validation, multi-label validation, and matched-K baseline comparison — applied to three public benchmarks (AFTraj-2K, AgentErrorBench, AgentRx) under 26 feature-based representations, showing most apparent alignment is explained by task and framework confounders (NMI 0.32→0.21).',
-    },
-    category: 'journal',
-  },
-  {
     id: 'jksqm-lhtt',
     title:
       'LLM 기반 시계열 예측 하이퍼파라미터 자동 튜닝 프레임워크: 서울시 대기질 데이터 사례연구',
