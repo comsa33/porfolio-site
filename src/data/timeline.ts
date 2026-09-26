@@ -205,7 +205,7 @@ export const timeline = [
     id: 'edu-aSST',
     date: '2024.09 ~ 2025.08',
     title: {
-      ko: '서울과학종합대학원',
+      ko: '서울과학종합대학원대학교',
       en: 'aSSIST · Seoul AI School',
     },
     role: {
@@ -239,7 +239,7 @@ export const timeline = [
     },
     type: 'Education',
     description: {
-      ko: '스위스 경영대학원. 서울과학종합대학원 AI·빅데이터 석사와 복수학위.',
+      ko: '스위스 경영대학원. 서울과학종합대학원대학교 AI·빅데이터 석사와 복수학위.',
       en: "Swiss business school, a dual degree with the AI & Big Data master's at aSSIST.",
     },
   },
@@ -247,7 +247,7 @@ export const timeline = [
     id: 'edu-assist-phd',
     date: '2026.03 ~',
     title: {
-      ko: '서울과학종합대학원',
+      ko: '서울과학종합대학원대학교',
       en: 'aSSIST · Seoul AI School',
     },
     role: {
@@ -273,7 +273,7 @@ export const timeline = [
     },
     type: 'Education',
     description: {
-      ko: '스위스 경영대학원 박사과정. 서울과학종합대학원 AI 공학 박사과정과 복수학위.',
+      ko: '스위스 경영대학원 박사과정. 서울과학종합대학원대학교 AI 공학 박사과정과 복수학위.',
       en: 'Swiss business school doctorate, a dual degree with the AI Engineering PhD at aSSIST.',
     },
   },
