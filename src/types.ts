@@ -65,6 +65,11 @@ export interface TimelineItem {
   description: LocalizedString;
   paperLink?: string; // Optional research paper link
   paperTitle?: LocalizedString; // Optional research paper title
+  /**
+   * On the site, show this entry inside another one (its link joins that
+   * entry's) instead of as its own row. The PDF export still lists it apart.
+   */
+  foldInto?: string;
 }
 
 export interface Project {

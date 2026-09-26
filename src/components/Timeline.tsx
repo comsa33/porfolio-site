@@ -8,6 +8,8 @@ import { formatPeriod } from '@/lib/period';
 
 interface TimelineProps {
   items: TimelineItem[];
+  /** Entries shown inside another (see TimelineItem.foldInto): their links join the host's. */
+  folded?: TimelineItem[];
   lang: 'ko' | 'en';
   onCertClick?: (imagePath: string) => void;
 }
@@ -48,7 +50,13 @@ const FILL_LINE = 0.55;
  * from dim to its own colour as the fill reaches its branch. It follows the
  * scroll and never takes it.
  */
-const Timeline: React.FC<TimelineProps> = ({ items, lang, onCertClick }) => {
+const Timeline: React.FC<TimelineProps> = ({ items, folded = [], lang, onCertClick }) => {
+  // An entry's own link first, then those of the entries folded into it.
+  const links = (item: TimelineItem) =>
+    [item, ...folded.filter((f) => f.foldInto === item.id)].flatMap((t) =>
+      t.paperLink && t.paperTitle ? [{ href: t.paperLink, title: t.paperTitle }] : [],
+    );
+
   const listRef = useRef<HTMLOListElement>(null);
 
   useEffect(() => {
@@ -148,27 +156,31 @@ const Timeline: React.FC<TimelineProps> = ({ items, lang, onCertClick }) => {
                   ))}
                 </ul>
 
-                {item.paperLink && item.paperTitle && (
+                {links(item).length > 0 && (
                   <div className={styles.actions}>
-                    {onCertClick && isImageLink(item.paperLink) ? (
-                      <button
-                        type="button"
-                        onClick={() => onCertClick(item.paperLink!)}
-                        className={styles.actionBtn}
-                      >
-                        {item.paperTitle[lang]}
-                        <ArrowUpRight size={13} strokeWidth={1.75} />
-                      </button>
-                    ) : (
-                      <a
-                        href={item.paperLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles.actionBtn}
-                      >
-                        {item.paperTitle[lang]}
-                        <ArrowUpRight size={13} strokeWidth={1.75} />
-                      </a>
+                    {links(item).map(({ href, title }) =>
+                      onCertClick && isImageLink(href) ? (
+                        <button
+                          key={href}
+                          type="button"
+                          onClick={() => onCertClick(href)}
+                          className={styles.actionBtn}
+                        >
+                          {title[lang]}
+                          <ArrowUpRight size={13} strokeWidth={1.75} />
+                        </button>
+                      ) : (
+                        <a
+                          key={href}
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={styles.actionBtn}
+                        >
+                          {title[lang]}
+                          <ArrowUpRight size={13} strokeWidth={1.75} />
+                        </a>
+                      ),
                     )}
                   </div>
                 )}

@@ -62,8 +62,8 @@ export const profile = {
     {
       id: 'iso-42001',
       name: {
-        ko: 'ISO/IEC 42001 AI 경영시스템 심사원',
-        en: 'ISO/IEC 42001 AI MS Auditor',
+        ko: 'ISO/IEC 42001 AI 경영시스템 심사원보',
+        en: 'ISO/IEC 42001 AI MS Provisional Auditor',
       },
       issuer: 'ISOC (ISO Certification)',
       date: '2026.01',
@@ -73,8 +73,8 @@ export const profile = {
     {
       id: 'iso-19011',
       name: {
-        ko: 'ISO 19011 경영시스템 심사원',
-        en: 'ISO 19011 MS Auditor',
+        ko: 'ISO 19011 경영시스템 심사원보',
+        en: 'ISO 19011 MS Provisional Auditor',
       },
       issuer: 'ISOC (ISO Certification)',
       date: '2026.01',

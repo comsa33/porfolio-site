@@ -212,6 +212,7 @@ export default function Home() {
   const bootcampIds = ['edu-kcci', 'edu-codestates'];
 
   const filteredTimeline = sortedTimeline.filter((item) => {
+    if (item.foldInto) return false; // shown inside its host entry instead
     if (timelineFilter === 'all') return true;
     if (timelineFilter === 'education')
       return item.type === 'Education' && !bootcampIds.includes(item.id);
@@ -546,8 +547,8 @@ export default function Home() {
               <ShieldCheck size={14} strokeWidth={1.75} />
               <span>
                 {lang === 'ko'
-                  ? 'ISO/IEC 42001 AI 경영시스템 심사원'
-                  : 'ISO/IEC 42001 AI MS Auditor'}
+                  ? 'ISO/IEC 42001 AI 경영시스템 심사원보'
+                  : 'ISO/IEC 42001 AI MS Provisional Auditor'}
               </span>
             </span>
           </div>
@@ -701,7 +702,12 @@ export default function Home() {
             </div>
           </div>
           <div className={styles.listWrap} key={timelineFilter}>
-            <Timeline items={filteredTimeline} lang={lang} onCertClick={setCertModalImage} />
+            <Timeline
+              items={filteredTimeline}
+              folded={data.timeline.filter((t) => t.foldInto)}
+              lang={lang}
+              onCertClick={setCertModalImage}
+            />
           </div>
         </section>
 
