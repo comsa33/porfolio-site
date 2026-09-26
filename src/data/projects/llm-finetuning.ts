@@ -69,7 +69,7 @@ const project = {
     github: 'https://github.com/comsa33/finetune-llm',
   },
   featured: false,
-  order: 6,
+  order: 7,
   scope: 'personal',
 } satisfies Project;
 

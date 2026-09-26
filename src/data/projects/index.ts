@@ -1,4 +1,5 @@
 import type { Project } from '@/types';
+import a2aOrchestration from './a2a-orchestration';
 import agenticHarness from './agentic-harness';
 import pyRunner from './py-runner';
 import opicMaster from './opic-master';
@@ -15,6 +16,7 @@ import gptRecruit from './gpt-recruit';
 
 // 표시 순서는 각 프로젝트의 order 필드가 결정한다. 이 배열 순서는 무관.
 export const projects: Project[] = [
+  a2aOrchestration,
   agenticHarness,
   pyRunner,
   opicMaster,

@@ -3,16 +3,16 @@ import type { Project } from '@/types';
 const project = {
   id: 'agentic-harness',
   title: {
-    ko: '멀티에이전트 오케스트레이션 & 자율 에이전트',
-    en: 'Multi-Agent Orchestration & Agentic Harness',
+    ko: '자율 에이전트 하네스',
+    en: 'Agentic Harness',
   },
   shortDescription: {
     ko: '에이전트가 에이전트를 만들고 배포·검증하는 자율 제어 체계',
     en: 'A self-driving control plane where agents build, deploy, and verify agents',
   },
   fullDescription: {
-    ko: '에이전트가 여러 도구·서브에이전트를 조율하고, 나아가 에이전트가 스스로 에이전트를 만들어 배포·검증·디버깅하는 자율 제어 체계를 설계·구현했습니다. 관리 플레인(저작·배포)과 런타임 플레인(실행·스트리밍)을 나눠 인증·권한 경계를 두었고, 되돌릴 수 없는 상용 배포만 사람이 승인합니다(HITL).',
-    en: 'Designed and built a control system in which an agent orchestrates tools and sub-agents — and in turn authors, deploys, verifies, and debugs other agents. The management plane (authoring/deployment) is separated from the runtime plane (execution/streaming) for auth boundaries, and only irreversible production deploys need human approval (HITL).',
+    ko: '에이전트가 스스로 에이전트를 만들어 배포·검증·디버깅하는 자율 제어 체계를 설계·구현했습니다. 관리 플레인(저작·배포)과 런타임 플레인(실행·스트리밍)을 나눠 인증·권한 경계를 두었고, 되돌릴 수 없는 상용 배포만 사람이 승인합니다(HITL).',
+    en: 'Designed and built a control system in which an agent authors, deploys, verifies, and debugs other agents. The management plane (authoring/deployment) is separated from the runtime plane (execution/streaming) for auth boundaries, and only irreversible production deploys need human approval (HITL).',
   },
   techStack: [
     'Python',
@@ -25,13 +25,13 @@ const project = {
     'Prometheus',
   ],
   peekLine: {
-    ko: '오케스트레이션 계층 설계·구현 — 의도 분류부터 서브에이전트 위임까지',
-    en: 'Built the orchestration layer, from intent classification to sub-agent delegation.',
+    ko: '저작·검증·배포·디버깅을 스스로 반복하는 에이전트 하네스',
+    en: 'An agent that authors, verifies, deploys, and debugs agents on its own.',
   },
   keyAchievements: [
     {
-      ko: '오케스트레이션 계층 설계·구현 (의도 분류 → 도구 선택 → 병렬 실행 → 서브에이전트 위임)',
-      en: 'Built the orchestration layer (intent classification → tool selection → parallel execution → sub-agent delegation)',
+      ko: '저작 → 검증 → 배포 → 실행 테스트 → 로그 기반 디버깅을 스스로 반복하는 자율 에이전트 하네스',
+      en: 'Agentic harness that runs author → verify → deploy → smoke-test → log-driven debugging on its own',
     },
     {
       ko: '추론 모델/일반 모델별 도구 선택 전략을 이원화해 백본 모델 교체 시 시나리오 무수정 대응',
@@ -40,10 +40,6 @@ const project = {
     {
       ko: '외부 MCP 서버 30종 이상(쿠버네티스 제어, 관측성, 코드 편집 등)을 표준 규약으로 에이전트 도구화',
       en: 'Standardized 30+ external MCP servers (Kubernetes control, observability, code editing) into agent tools',
-    },
-    {
-      ko: '저작 → 검증 → 배포 → 실행 테스트 → 로그 기반 디버깅을 스스로 반복하는 자율 에이전트 하네스',
-      en: 'Agentic harness that runs author → verify → deploy → smoke-test → log-driven debugging on its own',
     },
     {
       ko: '작업별 절차 문서를 필요할 때만 불러오는 스킬 체계로 시스템 프롬프트 26% 감축 (69,943자 → 51,449자)',
@@ -55,7 +51,6 @@ const project = {
     },
   ],
   features: [
-    'Multi-Agent Orchestration',
     'MCP Tool Integration (30+)',
     'Autonomous Agent Harness',
     'Two-Plane Architecture',
@@ -102,8 +97,8 @@ const project = {
       },
     ],
   },
-  featured: true,
-  order: 2,
+  featured: false,
+  order: 5,
   scope: 'company',
 } satisfies Project;
 

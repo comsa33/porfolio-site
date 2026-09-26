@@ -52,7 +52,7 @@ const project = {
     en: 'May 2022 ~ Jun 2023',
   },
   featured: false,
-  order: 7,
+  order: 8,
   scope: 'company',
 } satisfies Project;
 
