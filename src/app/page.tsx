@@ -1,23 +1,12 @@
 'use client';
 
 import React, { useEffect, useRef, useState, useSyncExternalStore } from 'react';
-import {
-  ArrowUpRight,
-  Check,
-  FileDown,
-  Github,
-  Globe,
-  Linkedin,
-  Mail,
-  PenLine,
-  ShieldCheck,
-  X,
-} from 'lucide-react';
+import { ArrowUpRight, Check, FileDown, Github, Linkedin, Mail, X } from 'lucide-react';
 import styles from './page.module.css';
+import BrandIcon from '@/components/BrandIcon';
 import Timeline from '@/components/Timeline';
 import Publications from '@/components/Publications';
 import ProjectCard from '@/components/ProjectCard';
-import BrandIcon from '@/components/BrandIcon';
 import TravelingDot from '@/components/TravelingDot';
 import ExportSheet from '@/components/ExportSheet';
 import { portfolioData as data } from '@/data';
@@ -417,8 +406,8 @@ export default function Home() {
             )}
             {/*
               Third site in the series. Desktop only in the header: the phone
-              nav is sized for exactly five items, and the contact section
-              carries this link on every width.
+              nav is sized for exactly five items, and on every width the
+              journey's world-trip entry links to it.
             */}
             {data.profile.worldtrip && (
               <a
@@ -508,39 +497,6 @@ export default function Home() {
                 <span>LinkedIn</span>
               </a>
             )}
-            {data.profile.orcid && (
-              <a
-                href={data.profile.orcid}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.contactLink}
-              >
-                <BrandIcon url={data.profile.orcid} size={14} />
-                <span>ORCID</span>
-              </a>
-            )}
-            {data.profile.blog && (
-              <a
-                href={data.profile.blog}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.contactLink}
-              >
-                <PenLine size={14} strokeWidth={1.75} />
-                <span>Blog</span>
-              </a>
-            )}
-            {data.profile.worldtrip && (
-              <a
-                href={data.profile.worldtrip}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.contactLink}
-              >
-                <Globe size={14} strokeWidth={1.75} />
-                <span>{lang === 'ko' ? '세계일주' : 'World Trip'}</span>
-              </a>
-            )}
             {/*
               Sits with the links rather than in the header: the phone nav is
               already sized for exactly five items, and this belongs next to
@@ -554,14 +510,6 @@ export default function Home() {
               <FileDown size={14} strokeWidth={1.75} />
               <span>{lang === 'ko' ? '이력서 · 경력기술서' : 'Résumé · Experience'}</span>
             </button>
-            <span className={styles.contactLink}>
-              <ShieldCheck size={14} strokeWidth={1.75} />
-              <span>
-                {lang === 'ko'
-                  ? 'ISO/IEC 42001 AI 경영시스템 심사원보'
-                  : 'ISO/IEC 42001 AI MS Provisional Auditor'}
-              </span>
-            </span>
           </div>
 
           {/*
@@ -690,6 +638,21 @@ export default function Home() {
           <div className={styles.listWrap} key={researchFilter}>
             <Publications items={visiblePublications} lang={lang} />
           </div>
+          {/* The full record lives on ORCID; the list above is what is settled. */}
+          {data.profile.orcid && (
+            <div className={styles.researchFoot}>
+              <a
+                href={data.profile.orcid}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.contactLink}
+              >
+                <BrandIcon url={data.profile.orcid} size={14} />
+                <span>ORCID</span>
+                <ArrowUpRight size={12} strokeWidth={1.75} />
+              </a>
+            </div>
+          )}
         </section>
 
         {/* Journey */}
