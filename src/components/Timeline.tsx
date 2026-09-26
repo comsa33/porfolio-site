@@ -60,7 +60,15 @@ const Timeline: React.FC<TimelineProps> = ({ items, lang, onCertClick }) => {
 
     const paint = () => {
       frame = 0;
-      const y = window.innerHeight * FILL_LINE;
+      // The journey sits near the foot of the page, where the last entries can
+      // never scroll up to the fill line. So over the last stretch of scroll
+      // the line slides down with it, and at the very bottom it is the bottom
+      // of the screen: everything on screen has been reached.
+      const vh = window.innerHeight;
+      const stretch = vh * (1 - FILL_LINE);
+      const left = document.documentElement.scrollHeight - vh - window.scrollY;
+      const k = 1 - Math.min(1, Math.max(0, left / stretch));
+      const y = vh * FILL_LINE + stretch * k;
       for (const rail of rails) {
         const box = rail.getBoundingClientRect();
         const k = Math.min(1, Math.max(0, (y - box.top) / Math.max(1, box.height)));
