@@ -403,7 +403,9 @@ button.contactLink:hover span {
   border: none;
   padding: 0;
   cursor: pointer;
-  transition: color var(--dur-instant) var(--ease);
+  transition:
+    color var(--dur-instant) var(--ease),
+    transform var(--dur-instant) var(--ease-out);
 }
 
 .skillToken > span {
@@ -438,6 +440,27 @@ button.contactLink:hover span {
 .skillToken:hover .skillCount,
 .skillTokenActive .skillCount {
   color: var(--accent);
+}
+
+/* Pressed: the name firms up and gives a little under the finger, so the tap
+   registers before the page scrolls away to the projects it filters. */
+.skillToken:active {
+  color: var(--ink);
+  transform: scale(0.97);
+}
+
+/* Where there is no pointer to hover with, nothing would say these are
+   links until one was tapped. So on touch screens the underline that hover
+   draws is there at rest, in the rule colour, and the active one inks it. */
+@media (hover: none) {
+  .skillToken > span {
+    background-image: linear-gradient(var(--line-strong), var(--line-strong));
+    background-size: 100% 1px;
+  }
+
+  .skillTokenActive > span {
+    background-image: linear-gradient(currentColor, currentColor);
+  }
 }
 
 /* Active tech filter shown beside the section title */
