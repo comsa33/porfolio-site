@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useRef, useState } from 'react';
-import { ChevronDown, Wrench, Network } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, Wrench, Network } from 'lucide-react';
 import BrandIcon, { brandName } from './BrandIcon';
 import styles from './ProjectCard.module.css';
 import { Project } from '@/types';
+import { profile } from '@/data/profile';
 import ProjectDetailModal from './ProjectDetailModal';
 import ArchitectureModal from './ArchitectureModal';
 import { useEdgeReveal, useRowActive, useSameHeight } from './useEdgeReveal';
@@ -169,6 +170,27 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang, index, expande
                             ),
                           }}
                         />
+                      ))}
+                    </ul>
+                  </>
+                )}
+                {project.posts && project.posts.length > 0 && profile.blog && (
+                  <>
+                    <p className={styles.expandedLabel}>{lang === 'ko' ? '관련 글' : 'Writing'}</p>
+                    <ul className={styles.postList}>
+                      {project.posts.map((post) => (
+                        <li key={post.slug}>
+                          <a
+                            href={`${profile.blog}/${lang}/${post.slug}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.postLink}
+                            tabIndex={expanded ? undefined : -1}
+                          >
+                            {post.title[lang]}
+                            <ArrowUpRight size={12} strokeWidth={1.75} />
+                          </a>
+                        </li>
                       ))}
                     </ul>
                   </>

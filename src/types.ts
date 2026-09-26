@@ -88,6 +88,11 @@ export interface Project {
    * account and live behind the expander; this is the headline of them.
    */
   peekLine?: LocalizedString;
+  /**
+   * Posts on the blog about this project, oldest first. Only the slug is kept;
+   * the link is built against profile.blog in the reader's language.
+   */
+  posts?: { slug: string; title: LocalizedString }[];
   features: (string | LocalizedString)[];
   detail?: ProjectDetail; // Optional detailed showcase
   featured?: boolean; // Featured project flag (default: false)

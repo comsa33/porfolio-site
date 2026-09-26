@@ -54,6 +54,36 @@ const project = {
       en: 'Solely built the observability layer (structured logging, OTLP tracing) and the batched, at-least-once log-collection worker; wrote 16k+ lines of core-module tests',
     },
   ],
+  posts: [
+    {
+      slug: 'filesystem-instead-of-a-database',
+      title: {
+        ko: '사용자 코드를 런타임에 import 하는 엔진',
+        en: 'An engine that imports user code at runtime',
+      },
+    },
+    {
+      slug: 'touching-someone-elses-stream',
+      title: {
+        ko: 'SSE 프레임 파싱을 하루 동안 고친 기록',
+        en: 'A day of fixing SSE frame parsing',
+      },
+    },
+    {
+      slug: 'a-channel-named-after-the-wrong-thing',
+      title: {
+        ko: '채널 키를 요청 ID로 잡으면 안 되는 이유',
+        en: 'Why a channel key should not be the request ID',
+      },
+    },
+    {
+      slug: 'mounted-but-unreachable',
+      title: {
+        ko: 'Mount 접두어 매칭이 라우트를 가릴 때',
+        en: 'When Mount prefix matching hides a route',
+      },
+    },
+  ],
   features: [
     'Dynamic Agent Runtime',
     'Redis-based Distributed Routing',

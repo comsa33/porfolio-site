@@ -45,6 +45,22 @@ const project = {
       en: 'One question spanning an attachment, internal docs, the web, and a calculation answered by five kinds of workers in 29.5s',
     },
   ],
+  posts: [
+    {
+      slug: 'splitting-agents-into-workers',
+      title: {
+        ko: '목적별 에이전트를 A2A 워커로 쪼갠 오케스트레이터',
+        en: 'An orchestrator that splits purpose-built agents into A2A workers',
+      },
+    },
+    {
+      slug: 'allowed-to-worker-agent-ids',
+      title: {
+        ko: 'allowed_agent_ids 가 worker_agent_ids 가 되기까지',
+        en: 'How allowed_agent_ids became worker_agent_ids',
+      },
+    },
+  ],
   features: [
     'A2A v1.0',
     'Agent Card Registry',

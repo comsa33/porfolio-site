@@ -344,6 +344,39 @@
   font-weight: 500;
 }
 
+/* Posts on the blog. A separate site, so each carries the same arrow the
+   blog link in the header does; otherwise they move like the actions below. */
+.postList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.postLink {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-secondary);
+  transition: color var(--dur-instant) var(--ease);
+}
+
+.postLink svg {
+  flex: none;
+  align-self: center;
+  color: var(--ink-tertiary);
+  transition:
+    color var(--dur-instant) var(--ease),
+    transform var(--dur) var(--ease-out);
+}
+
+.postLink:hover,
+.postLink:hover svg {
+  color: var(--ink);
+}
+
 /* Actions */
 .actions {
   display: flex;
