@@ -6,7 +6,11 @@ import './globals.css';
 /*
  * Body type is Pretendard (variable, dynamic subset) so Korean and Latin share
  * one design instead of a Latin display face falling back to a system Gothic
- * mid-sentence. Mono is reserved for Latin/numeric metadata only.
+ * mid-sentence. Mono is meant for Latin/numeric metadata, but company names,
+ * roles and statuses on those lines are Korean, and JetBrains Mono has no
+ * Hangul. A Mac fills it in from the system; the PDF renderer (serverless
+ * Chromium) has no Korean system font and printed tofu. So the mono stack
+ * falls back to Pretendard, a webfont, before any system font.
  */
 const PRETENDARD_CSS =
   'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css';
@@ -15,6 +19,7 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-mono',
   display: 'swap',
+  fallback: ['Pretendard Variable', 'Pretendard', 'ui-monospace', 'SFMono-Regular', 'monospace'],
 });
 
 export const metadata: Metadata = {
