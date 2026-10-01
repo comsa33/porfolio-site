@@ -133,6 +133,9 @@ export default function JdMatch({ lang, onMatched }: Props) {
         setError('no_match');
         return;
       }
+      // A matched posting is done with: the next visit to the panel is for a
+      // different one. A refused paste (any return above) stays to be fixed.
+      setJd('');
       setOpen(false);
       onMatched(body.matches);
     } catch {
