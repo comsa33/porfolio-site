@@ -9,6 +9,8 @@ import Publications from '@/components/Publications';
 import ProjectCard from '@/components/ProjectCard';
 import TravelingDot from '@/components/TravelingDot';
 import ExportSheet from '@/components/ExportSheet';
+import JdMatch from '@/components/JdMatch';
+import { matchLevel, type MatchScore } from '@/lib/jdMatch';
 import { portfolioData as data } from '@/data';
 import { countProjectsForSkill, projectMatchesSkill } from '@/data/skillMatch';
 import { getCareerIntro, LEDE_KEYWORDS } from '@/lib/career';
@@ -168,6 +170,9 @@ export default function Home() {
   const [emailCopied, setEmailCopied] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [openProjectId, setOpenProjectId] = useState<string | null>(null);
+  // Scores against a pasted job posting; while set, the project list is in that order.
+  const [matches, setMatches] = useState<MatchScore[] | null>(null);
+  const [exportSeed, setExportSeed] = useState<string[] | null>(null);
 
   const theme = useSyncExternalStore(subscribeTheme, readTheme, () => 'light' as Theme);
   const toggleTheme = (e: React.MouseEvent<HTMLButtonElement>) =>
@@ -230,16 +235,43 @@ export default function Home() {
     { key: 'personal', label: { ko: '개인', en: 'Personal' } },
   ] as const;
 
-  const visibleProjects = data.projects
-    .filter((p) => {
-      if (techFilter) return projectMatchesSkill(p, techFilter);
-      if (projectFilter === 'all') return true;
-      if (projectFilter === 'featured') return p.featured === true;
-      return p.scope === projectFilter;
-    })
-    .sort(sortByOrder);
+  const matchedIds = matches?.filter((m) => matchLevel(m.score)).map((m) => m.id) ?? [];
+  const levelOf = (id: string) => {
+    const m = matches?.find((x) => x.id === id);
+    return m ? matchLevel(m.score) : null;
+  };
+
+  const handleMatched = (result: MatchScore[]) => {
+    setMatches(result);
+    setTechFilter(null);
+    setOpenProjectId(null);
+  };
+
+  // Scroll once the matched list is committed — the panel has closed by then,
+  // so the jump is not short by its height. An effect rather than a frame
+  // callback: frames do not run in a background tab, effects do.
+  useEffect(() => {
+    if (matches) {
+      document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [matches]);
+
+  // A matched list shows every project, best fit first: nothing is hidden, the
+  // posting only decides the order and which rows carry a badge.
+  const rankOf = (id: string) => matches?.findIndex((m) => m.id === id) ?? -1;
+  const visibleProjects = matches
+    ? [...data.projects].sort((a, b) => rankOf(a.id) - rankOf(b.id))
+    : data.projects
+        .filter((p) => {
+          if (techFilter) return projectMatchesSkill(p, techFilter);
+          if (projectFilter === 'all') return true;
+          if (projectFilter === 'featured') return p.featured === true;
+          return p.scope === projectFilter;
+        })
+        .sort(sortByOrder);
 
   const selectSkill = (skill: string) => {
+    setMatches(null);
     setTechFilter(skill);
     document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
@@ -472,7 +504,11 @@ export default function Home() {
             {emphasize(getCareerIntro(lang, data.profile.intro[lang]), LEDE_KEYWORDS[lang])}
           </h1>
 
-          <div className={`${styles.contact} rise`} style={rise(2)}>
+          <div className="rise" style={rise(2)}>
+            <JdMatch lang={lang} onMatched={handleMatched} />
+          </div>
+
+          <div className={`${styles.contact} ${styles.contactAfterFork} rise`} style={rise(2)}>
             <a href={`mailto:${data.profile.email}`} className={styles.contactLink}>
               <Mail size={14} strokeWidth={1.75} />
               <span>{data.profile.email}</span>
@@ -577,35 +613,85 @@ export default function Home() {
                 </button>
               )}
             </h2>
-            <div
-              className={`${styles.filterGroup} ${techFilter ? styles.filterGroupMuted : ''}`}
-              role="tablist"
-              aria-label="Project filter"
-            >
-              {projectFilters.map((f) => (
+            {/* The filters do not apply to a matched list, which shows every project. */}
+            {!matches && (
+              <div
+                className={`${styles.filterGroup} ${techFilter ? styles.filterGroupMuted : ''}`}
+                role="tablist"
+                aria-label="Project filter"
+              >
+                {projectFilters.map((f) => (
+                  <button
+                    key={f.key}
+                    role="tab"
+                    aria-selected={!techFilter && projectFilter === f.key}
+                    className={`${styles.filterChip} ${!techFilter && projectFilter === f.key ? styles.filterActive : ''}`}
+                    onClick={() => {
+                      setTechFilter(null);
+                      setProjectFilter(f.key);
+                    }}
+                  >
+                    {f.label[lang]}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          {matches && (
+            <div className={styles.matchBar}>
+              <p className={styles.matchSummary} role="status">
+                {/* JdMatch never hands over a result with no match in it. */}
+                {lang === 'ko' ? (
+                  <>
+                    채용 공고 기준 · 프로젝트 {data.projects.length}개 중{' '}
+                    <strong>{matchedIds.length}개 일치</strong>
+                  </>
+                ) : (
+                  <>
+                    Ordered by the job posting ·{' '}
+                    <strong>
+                      {matchedIds.length} of {data.projects.length} match
+                    </strong>
+                  </>
+                )}
+              </p>
+              <div className={styles.matchActions}>
                 <button
-                  key={f.key}
-                  role="tab"
-                  aria-selected={!techFilter && projectFilter === f.key}
-                  className={`${styles.filterChip} ${!techFilter && projectFilter === f.key ? styles.filterActive : ''}`}
+                  type="button"
+                  className={styles.matchReset}
                   onClick={() => {
-                    setTechFilter(null);
-                    setProjectFilter(f.key);
+                    setMatches(null);
+                    setExportSeed(null);
                   }}
                 >
-                  {f.label[lang]}
+                  {lang === 'ko' ? '원래대로' : 'Reset'}
                 </button>
-              ))}
+                <button
+                  type="button"
+                  className={styles.matchExport}
+                  onClick={() => {
+                    setExportSeed(matchedIds);
+                    setExportOpen(true);
+                  }}
+                >
+                  <FileDown size={16} strokeWidth={1.75} />
+                  {lang === 'ko' ? '맞춤 이력서 PDF' : 'Tailored résumé PDF'}
+                </button>
+              </div>
             </div>
-          </div>
+          )}
           {/* Keyed on the filter so a change remounts the rows and replays the stagger. */}
-          <ol className={styles.projectList} key={techFilter ?? projectFilter}>
+          <ol
+            className={styles.projectList}
+            key={matches ? 'matched' : (techFilter ?? projectFilter)}
+          >
             {visibleProjects.map((project, i) => (
               <ProjectCard
                 key={project.id}
                 project={project}
                 lang={lang}
                 index={i}
+                match={levelOf(project.id)}
                 expanded={openProjectId === project.id}
                 onToggle={() =>
                   setOpenProjectId((prev) => (prev === project.id ? null : project.id))
@@ -745,7 +831,12 @@ export default function Home() {
         </footer>
       </main>
 
-      <ExportSheet lang={lang} isOpen={exportOpen} onClose={() => setExportOpen(false)} />
+      <ExportSheet
+        lang={lang}
+        isOpen={exportOpen}
+        onClose={() => setExportOpen(false)}
+        seedProjects={exportSeed}
+      />
 
       {certModalImage && (
         <div className={styles.certModal} onClick={() => setCertModalImage(null)}>

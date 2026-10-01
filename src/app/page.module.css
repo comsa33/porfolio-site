@@ -294,6 +294,72 @@
   margin-top: 2.5rem;
 }
 
+/* Below the job-posting fork the links are the second thing, not the first. */
+.contactAfterFork {
+  margin-top: 2rem;
+}
+
+.matchBar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.matchSummary {
+  font-size: 14px;
+  color: var(--ink-secondary);
+}
+
+.matchSummary strong {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.matchActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.matchReset,
+.matchExport {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 44px;
+  padding: 0 1rem;
+  border-radius: var(--radius);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity var(--dur-instant) var(--ease);
+}
+
+.matchReset {
+  border: 0;
+  background: transparent;
+  color: var(--ink-secondary);
+}
+
+.matchReset:hover {
+  color: var(--ink);
+}
+
+.matchExport {
+  border: 0;
+  background: var(--ink);
+  color: var(--bg);
+  padding: 0 1.25rem;
+}
+
+.matchExport:hover {
+  opacity: 0.85;
+}
+
 .researchFoot {
   margin-top: 1.25rem;
 }

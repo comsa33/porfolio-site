@@ -72,6 +72,23 @@
   letter-spacing: -0.01em;
 }
 
+/* po24lio badge: accent at 12% under accent-text, never white on the accent. */
+.matchBadge {
+  align-self: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  background: var(--accent-soft);
+  color: #9a3d00;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+[data-theme='dark'] .matchBadge {
+  color: var(--accent-hover);
+}
+
 .platformLinks {
   display: inline-flex;
   align-items: center;

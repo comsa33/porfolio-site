@@ -10,6 +10,7 @@ import ProjectDetailModal from './ProjectDetailModal';
 import ArchitectureModal from './ArchitectureModal';
 import { useEdgeReveal, useRowActive, useSameHeight } from './useEdgeReveal';
 import { isRowToggleClick, toggleInPlace } from './rowToggle';
+import { MATCH_LABEL, type MatchLevel } from '@/lib/jdMatch';
 
 interface ProjectCardProps {
   project: Project;
@@ -19,6 +20,8 @@ interface ProjectCardProps {
   /** Only one project is open at a time, so the list owns which one. */
   expanded: boolean;
   onToggle: () => void;
+  /** Set while the list is ordered against a pasted job posting. */
+  match?: MatchLevel | null;
 }
 
 /**
@@ -26,7 +29,14 @@ interface ProjectCardProps {
  * it. Details are always rendered and revealed with a height transition so
  * expanding feels like the row growing rather than content popping in.
  */
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang, index, expanded, onToggle }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({
+  project,
+  lang,
+  index,
+  expanded,
+  onToggle,
+  match,
+}) => {
   const [showDetail, setShowDetail] = useState(false);
   const [showArchitecture, setShowArchitecture] = useState(false);
 
@@ -69,6 +79,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, lang, index, expande
         <div className={styles.main}>
           <div className={styles.titleRow}>
             <h3 className={styles.title}>{title}</h3>
+            {match && <span className={styles.matchBadge}>{MATCH_LABEL[match][lang]}</span>}
             {project.platformLinks && (
               <span className={styles.platformLinks}>
                 {project.platformLinks.web && (

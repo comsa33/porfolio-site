@@ -14,6 +14,7 @@ import {
   matchPreset,
   OVERRIDE_LIMITS,
   PRESETS,
+  PROJECT_ENTRIES,
   presetPicks,
   TEMPLATES,
   type ExportSectionId,
@@ -26,7 +27,14 @@ interface Props {
   lang: 'ko' | 'en';
   isOpen: boolean;
   onClose: () => void;
+  /**
+   * Projects matched to a pasted job posting. When it arrives the sheet starts
+   * from the career preset with exactly these projects in place of its own.
+   */
+  seedProjects?: string[] | null;
 }
+
+const ALL_PROJECT_IDS = new Set(PROJECT_ENTRIES.map((p) => p.id));
 
 const LABEL = {
   idle: { ko: 'PDF 내려받기', en: 'Download PDF' },
@@ -148,9 +156,16 @@ function Editor({
  * site knows, and the document is whatever survives the checkboxes. The chosen
  * state travels in the URL, so the same link always rebuilds the same PDF.
  */
-export default function ExportSheet({ lang, isOpen, onClose }: Props) {
+export default function ExportSheet({ lang, isOpen, onClose, seedProjects }: Props) {
   const [mounted, setMounted] = useState(false);
   const [picked, setPicked] = useState<Set<string>>(() => new Set(presetPicks('career')));
+
+  useEffect(() => {
+    if (!seedProjects) return;
+    setPicked(
+      new Set([...presetPicks('career').filter((id) => !ALL_PROJECT_IDS.has(id)), ...seedProjects]),
+    );
+  }, [seedProjects]);
   const [template, setTemplate] = useState<TemplateId>('hairline');
   const [docLang, setDocLang] = useState<'ko' | 'en'>(lang);
   const [section, setSection] = useState<ExportSectionId>('projects');
@@ -430,7 +445,10 @@ export default function ExportSheet({ lang, isOpen, onClose }: Props) {
                         onClick={() => toggleGroup(group.ko)}
                       >
                         <span>{group[lang]}</span>
-                        <span className={styles.groupCount} data-partial={tally.on > 0 && tally.on < tally.total}>
+                        <span
+                          className={styles.groupCount}
+                          data-partial={tally.on > 0 && tally.on < tally.total}
+                        >
                           {tally.on}/{tally.total}
                         </span>
                       </button>

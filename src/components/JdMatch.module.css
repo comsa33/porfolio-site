@@ -1,0 +1,155 @@
+/*
+ * Values from the po24lio design system: buttons are ink, not accent (white on
+ * the accent is 2.9:1), 44px tall, radius 10. Motion uses the shared tokens
+ * only — hover is feedback under the pointer, so --dur-instant.
+ */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2.5rem;
+}
+
+.primary,
+.secondary,
+.ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 44px;
+  padding: 0 1.25rem;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    opacity var(--dur-instant) var(--ease),
+    background-color var(--dur-instant) var(--ease);
+}
+
+.primary {
+  border: 0;
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.primary:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.primary:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.secondary {
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--ink);
+}
+
+.secondary:hover {
+  background: var(--bg-hover);
+}
+
+.ghost {
+  border: 0;
+  background: transparent;
+  color: var(--ink-secondary);
+  padding: 0 1rem;
+}
+
+.ghost:hover {
+  color: var(--ink);
+}
+
+.hint {
+  margin-top: 0.75rem;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-secondary);
+}
+
+.panel {
+  margin-top: 2.5rem;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.panelHead,
+.panelFoot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.note {
+  font-size: 12px;
+  color: var(--ink-secondary);
+}
+
+/*
+ * A problem with the paste is said in ink weight, not in red: the site has one
+ * accent and it is not an alarm colour. The field's border joins it.
+ */
+.noteOver {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.field.fieldOver {
+  border-color: var(--ink);
+}
+
+.field {
+  width: 100%;
+  min-height: 9rem;
+  padding: 0.75rem 0.875rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+.panelButtons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions > * {
+    width: 100%;
+  }
+
+  .panelFoot {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .panelButtons > * {
+    flex: 1;
+  }
+}
