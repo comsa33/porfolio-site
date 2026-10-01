@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useId, useRef, useState } from 'react';
-import { ArrowDown, ArrowRight } from 'lucide-react';
+import { flushSync } from 'react-dom';
+import { ArrowDown, ArrowRight, Loader } from 'lucide-react';
 import styles from './JdMatch.module.css';
 import {
   matchLevel,
@@ -77,17 +78,28 @@ type ErrorKey = MatchError | 'network' | 'no_match';
 /**
  * The fork at the top of the page. Nothing is hidden behind it: the page reads
  * the same whether or not anyone presses either button. Only a pasted posting
- * changes anything, and only the order and the badges of the project list.
+ * changes anything.
+ *
+ * The buttons and the panel are two folds in one place: opening grows the panel
+ * out of where the buttons were and closing folds it back, with the same
+ * tokens and the same late fade as a project row's details, so nothing below
+ * jumps. Both stay mounted; the closed one is inert.
  */
 export default function JdMatch({ lang, onMatched }: Props) {
   const t = COPY[lang];
   const fieldId = useId();
   const noteId = useId();
   const [open, setOpen] = useState(false);
+  // Set when the panel closes because the page is scrolling away to the
+  // results: there is no fold left to watch, and a collapsing hero would move
+  // the scroll target while the page travels to it (ProjectCard does the same).
+  const [snap, setSnap] = useState(false);
   const [jd, setJd] = useState('');
   const [phase, setPhase] = useState<'idle' | 'working'>('idle');
   const [error, setError] = useState<ErrorKey | null>(null);
   const inflight = useRef<AbortController | null>(null);
+  const openRef = useRef<HTMLButtonElement>(null);
+  const fieldRef = useRef<HTMLTextAreaElement>(null);
 
   // Leaving the page mid-request must not land a result on nothing.
   useEffect(() => () => inflight.current?.abort(), []);
@@ -100,8 +112,27 @@ export default function JdMatch({ lang, onMatched }: Props) {
   // greyed-out button.
   const canSubmit = phase === 'idle' && length > 0 && !over;
 
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const openPanel = () => {
+    // Committed synchronously so the field is no longer inert when it takes
+    // focus — still inside the tap, which is what lets iOS raise the keyboard.
+    flushSync(() => {
+      setSnap(false);
+      setOpen(true);
+    });
+    fieldRef.current?.focus({ preventScroll: true });
+  };
+
+  const cancel = () => {
+    inflight.current?.abort();
+    flushSync(() => {
+      setOpen(false);
+      setError(null);
+    });
+    // Back to the button that opened it, not to the top of the document.
+    openRef.current?.focus({ preventScroll: true });
+  };
+
+  const submit = async () => {
     if (!canSubmit) return;
     if (length < MIN_JD_CHARS) {
       setError('too_short');
@@ -136,6 +167,7 @@ export default function JdMatch({ lang, onMatched }: Props) {
       // A matched posting is done with: the next visit to the panel is for a
       // different one. A refused paste (any return above) stays to be fixed.
       setJd('');
+      setSnap(true);
       setOpen(false);
       onMatched(body.matches);
     } catch {
@@ -147,79 +179,109 @@ export default function JdMatch({ lang, onMatched }: Props) {
     }
   };
 
-  const cancel = () => {
-    inflight.current?.abort();
-    setOpen(false);
-    setError(null);
+  // The same keys as the export sheet: ⌘↵ sends, Esc puts it away.
+  const onFieldKey = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+      void submit();
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      cancel();
+    }
   };
-
-  if (!open) {
-    return (
-      <div>
-        <div className={styles.actions}>
-          <button type="button" className={styles.primary} onClick={() => setOpen(true)}>
-            {t.open}
-            <ArrowRight size={16} strokeWidth={1.75} />
-          </button>
-          <a href="#projects" className={styles.secondary}>
-            {t.browse}
-            <ArrowDown size={16} strokeWidth={1.75} />
-          </a>
-        </div>
-        <p className={styles.hint}>{t.hint}</p>
-      </div>
-    );
-  }
 
   const message = over ? t.over(length) : error ? t.errors[error] : null;
 
   return (
-    <form className={styles.panel} onSubmit={submit} noValidate>
-      <div className={styles.panelHead}>
-        <label htmlFor={fieldId} className={styles.label}>
-          {t.label}
-        </label>
-        <span className={`${styles.note} ${over ? styles.noteOver : ''}`} aria-hidden="true">
-          {n(length)} / {n(MAX_JD_CHARS)}
-        </span>
-      </div>
-      <textarea
-        id={fieldId}
-        className={`${styles.field} ${over ? styles.fieldOver : ''}`}
-        value={jd}
-        rows={6}
-        autoFocus
-        aria-invalid={over || Boolean(error)}
-        aria-describedby={noteId}
-        readOnly={phase === 'working'}
-        onChange={(e) => {
-          setJd(e.target.value);
-          if (error) setError(null);
-        }}
-      />
-      <div className={styles.panelFoot}>
-        <span
-          id={noteId}
-          className={`${styles.note} ${message ? styles.noteOver : ''}`}
-          role={message ? 'alert' : undefined}
-        >
-          {message ?? t.stored}
-        </span>
-        <div className={styles.panelButtons}>
-          <button type="button" className={styles.ghost} onClick={cancel}>
-            {t.cancel}
-          </button>
-          <button
-            type="submit"
-            className={styles.primary}
-            disabled={!canSubmit}
-            aria-busy={phase === 'working'}
-          >
-            {phase === 'working' ? t.working : t.submit}
-            {phase !== 'working' && <ArrowRight size={16} strokeWidth={1.75} />}
-          </button>
+    <div className={styles.fork} data-snap={snap ? '' : undefined}>
+      <div className={styles.fold} data-open={!open} inert={open}>
+        <div className={styles.foldInner}>
+          <div className={styles.actions}>
+            <button ref={openRef} type="button" className={styles.primary} onClick={openPanel}>
+              {t.open}
+              <ArrowRight size={16} strokeWidth={1.75} />
+            </button>
+            <a href="#projects" className={styles.secondary}>
+              {t.browse}
+              <ArrowDown size={16} strokeWidth={1.75} />
+            </a>
+          </div>
+          <p className={styles.hint}>{t.hint}</p>
         </div>
       </div>
-    </form>
+
+      <div className={styles.fold} data-open={open} inert={!open}>
+        <div className={styles.foldInner}>
+          <form
+            className={styles.panel}
+            onSubmit={(e) => {
+              e.preventDefault();
+              void submit();
+            }}
+            noValidate
+          >
+            <div className={styles.panelHead}>
+              <label htmlFor={fieldId} className={styles.label}>
+                {t.label}
+              </label>
+              <span
+                className={`${styles.note} ${styles.count} ${over ? styles.noteOver : ''}`}
+                aria-hidden="true"
+              >
+                {n(length)} / {n(MAX_JD_CHARS)}
+              </span>
+            </div>
+            <textarea
+              ref={fieldRef}
+              id={fieldId}
+              className={styles.field}
+              value={jd}
+              rows={6}
+              aria-invalid={over || Boolean(error)}
+              aria-describedby={noteId}
+              readOnly={phase === 'working'}
+              onKeyDown={onFieldKey}
+              onChange={(e) => {
+                setJd(e.target.value);
+                if (error) setError(null);
+              }}
+            />
+            <div className={styles.panelFoot}>
+              <span
+                id={noteId}
+                className={`${styles.note} ${message ? styles.noteOver : ''}`}
+                role={message ? 'alert' : undefined}
+              >
+                {message ?? t.stored}
+              </span>
+              <div className={styles.panelButtons}>
+                <span className={styles.shortcut} aria-hidden="true">
+                  ⌘ ⏎
+                </span>
+                <button type="button" className={styles.ghost} onClick={cancel}>
+                  {t.cancel}
+                </button>
+                {/* The button keeps its box while it works; only the icon
+                    changes, as the export sheet's download button does. */}
+                <button
+                  type="submit"
+                  className={styles.primary}
+                  disabled={!canSubmit}
+                  aria-busy={phase === 'working'}
+                  data-phase={phase}
+                >
+                  {t.submit}
+                  {phase === 'working' ? (
+                    <Loader size={16} strokeWidth={1.75} aria-label={t.working} />
+                  ) : (
+                    <ArrowRight size={16} strokeWidth={1.75} />
+                  )}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 }

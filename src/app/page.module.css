@@ -336,17 +336,16 @@
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: opacity var(--dur-instant) var(--ease);
+  transition:
+    opacity var(--dur-instant) var(--ease),
+    color var(--dur-instant) var(--ease),
+    transform var(--dur-instant) var(--ease);
 }
 
 .matchReset {
   border: 0;
   background: transparent;
   color: var(--ink-secondary);
-}
-
-.matchReset:hover {
-  color: var(--ink);
 }
 
 .matchExport {
@@ -356,8 +355,9 @@
   padding: 0 1.25rem;
 }
 
-.matchExport:hover {
-  opacity: 0.85;
+/* The result line takes focus programmatically; it is not a control. */
+.matchSummary:focus {
+  outline: none;
 }
 
 .matchMore {
@@ -374,11 +374,28 @@
   font-weight: 500;
   color: var(--ink-secondary);
   cursor: pointer;
-  transition: color var(--dur-instant) var(--ease);
+  transition:
+    color var(--dur-instant) var(--ease),
+    transform var(--dur-instant) var(--ease);
 }
 
-.matchMore:hover {
-  color: var(--ink);
+/* Pressed: the skill token's give. */
+.matchReset:active,
+.matchExport:active,
+.matchMore:active {
+  transform: scale(0.97);
+}
+
+/* Hover only with a pointer — a tap would leave it stuck on. */
+@media (hover: hover) {
+  .matchReset:hover,
+  .matchMore:hover {
+    color: var(--ink);
+  }
+
+  .matchExport:hover {
+    opacity: 0.85;
+  }
 }
 
 .researchFoot {

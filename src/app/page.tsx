@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { flushSync } from 'react-dom';
 import {
   ArrowUpRight,
   Check,
@@ -260,12 +261,25 @@ export default function Home() {
 
   // Scroll once the matched list is committed — the panel has closed by then,
   // so the jump is not short by its height. An effect rather than a frame
-  // callback: frames do not run in a background tab, effects do.
+  // callback: frames do not run in a background tab, effects do. No behavior
+  // is passed, so the page's own scroll-behavior decides — smooth, or instant
+  // under reduced motion. Focus follows the eye to the result line, so a
+  // keyboard is not left at the top of a page it has moved away from.
+  const matchSummaryRef = useRef<HTMLParagraphElement>(null);
   useEffect(() => {
-    if (matches) {
-      document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    if (!matches) return;
+    document.getElementById('projects')?.scrollIntoView({ block: 'start' });
+    matchSummaryRef.current?.focus({ preventScroll: true });
   }, [matches]);
+
+  // "더 보기" hands focus to the first row it revealed.
+  const projectListRef = useRef<HTMLOListElement>(null);
+  const revealMore = () => {
+    flushSync(() => setMatchExpanded(true));
+    projectListRef.current
+      ?.querySelector<HTMLElement>(`:scope > li:nth-child(${MATCH_PREVIEW + 1}) :is(button, a)`)
+      ?.focus({ preventScroll: true });
+  };
 
   // A matched list is only the matches, best fit first; "전체 보기" brings the
   // rest back. Past three rows the list stops being a shortlist, so the tail
@@ -658,7 +672,7 @@ export default function Home() {
           </div>
           {matches && (
             <div className={styles.matchBar}>
-              <p className={styles.matchSummary} role="status">
+              <p ref={matchSummaryRef} className={styles.matchSummary} role="status" tabIndex={-1}>
                 {/* JdMatch never hands over a result with no match in it. */}
                 {lang === 'ko' ? (
                   <>
@@ -701,6 +715,7 @@ export default function Home() {
           )}
           {/* Keyed on the filter so a change remounts the rows and replays the stagger. */}
           <ol
+            ref={projectListRef}
             className={styles.projectList}
             key={matches ? 'matched' : (techFilter ?? projectFilter)}
           >
@@ -719,11 +734,7 @@ export default function Home() {
             ))}
           </ol>
           {matchHidden > 0 && (
-            <button
-              type="button"
-              className={styles.matchMore}
-              onClick={() => setMatchExpanded(true)}
-            >
+            <button type="button" className={styles.matchMore} onClick={revealMore}>
               {lang === 'ko'
                 ? `일치 프로젝트 ${matchHidden}개 더 보기`
                 : `${matchHidden} more matching project${matchHidden === 1 ? '' : 's'}`}
