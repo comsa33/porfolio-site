@@ -774,3 +774,11 @@
     animation: none;
   }
 }
+
+/* iOS zooms the page into any field set under 16px when it is tapped. */
+@media (pointer: coarse) {
+  .field,
+  .fieldArea {
+    font-size: 16px;
+  }
+}

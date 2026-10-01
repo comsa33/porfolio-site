@@ -1,7 +1,16 @@
 'use client';
 
 import React, { useEffect, useRef, useState, useSyncExternalStore } from 'react';
-import { ArrowUpRight, Check, FileDown, Github, Linkedin, Mail, X } from 'lucide-react';
+import {
+  ArrowUpRight,
+  Check,
+  ChevronDown,
+  FileDown,
+  Github,
+  Linkedin,
+  Mail,
+  X,
+} from 'lucide-react';
 import styles from './page.module.css';
 import BrandIcon from '@/components/BrandIcon';
 import Timeline from '@/components/Timeline';
@@ -173,6 +182,7 @@ export default function Home() {
   // Scores against a pasted job posting; while set, the project list is in that order.
   const [matches, setMatches] = useState<MatchScore[] | null>(null);
   const [exportSeed, setExportSeed] = useState<string[] | null>(null);
+  const [matchExpanded, setMatchExpanded] = useState(false);
 
   const theme = useSyncExternalStore(subscribeTheme, readTheme, () => 'light' as Theme);
   const toggleTheme = (e: React.MouseEvent<HTMLButtonElement>) =>
@@ -243,6 +253,7 @@ export default function Home() {
 
   const handleMatched = (result: MatchScore[]) => {
     setMatches(result);
+    setMatchExpanded(false);
     setTechFilter(null);
     setOpenProjectId(null);
   };
@@ -256,11 +267,19 @@ export default function Home() {
     }
   }, [matches]);
 
-  // A matched list shows every project, best fit first: nothing is hidden, the
-  // posting only decides the order and which rows carry a badge.
-  const rankOf = (id: string) => matches?.findIndex((m) => m.id === id) ?? -1;
+  // A matched list is only the matches, best fit first; "전체 보기" brings the
+  // rest back. Past three rows the list stops being a shortlist, so the tail
+  // waits behind one button.
+  const MATCH_PREVIEW = 3;
+  const matchedProjects = matchedIds
+    .map((id) => data.projects.find((p) => p.id === id))
+    .filter((p): p is (typeof data.projects)[number] => Boolean(p));
+  const matchHidden =
+    matchedProjects.length > MATCH_PREVIEW && !matchExpanded
+      ? matchedProjects.length - MATCH_PREVIEW
+      : 0;
   const visibleProjects = matches
-    ? [...data.projects].sort((a, b) => rankOf(a.id) - rankOf(b.id))
+    ? matchedProjects.slice(0, matchedProjects.length - matchHidden)
     : data.projects
         .filter((p) => {
           if (techFilter) return projectMatchesSkill(p, techFilter);
@@ -664,7 +683,7 @@ export default function Home() {
                     setExportSeed(null);
                   }}
                 >
-                  {lang === 'ko' ? '원래대로' : 'Reset'}
+                  {lang === 'ko' ? '전체 보기' : 'Show all'}
                 </button>
                 <button
                   type="button"
@@ -699,6 +718,18 @@ export default function Home() {
               />
             ))}
           </ol>
+          {matchHidden > 0 && (
+            <button
+              type="button"
+              className={styles.matchMore}
+              onClick={() => setMatchExpanded(true)}
+            >
+              {lang === 'ko'
+                ? `일치 프로젝트 ${matchHidden}개 더 보기`
+                : `${matchHidden} more matching project${matchHidden === 1 ? '' : 's'}`}
+              <ChevronDown size={14} strokeWidth={1.75} />
+            </button>
+          )}
         </section>
 
         {/* Research */}

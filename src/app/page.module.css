@@ -360,6 +360,27 @@
   opacity: 0.85;
 }
 
+.matchMore {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 44px;
+  margin-top: 0.5rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-secondary);
+  cursor: pointer;
+  transition: color var(--dur-instant) var(--ease);
+}
+
+.matchMore:hover {
+  color: var(--ink);
+}
+
 .researchFoot {
   margin-top: 1.25rem;
 }
