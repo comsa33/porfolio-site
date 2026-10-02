@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { checkBotId } from 'botid/server';
 import { projects } from '@/data/projects';
 import { MAX_JD_CHARS, MIN_JD_CHARS, type MatchError, type MatchScore } from '@/lib/jdMatch';
 
@@ -125,6 +126,10 @@ export async function POST(request: Request) {
   if (!key || Date.now() < pausedUntil) return fail('unavailable', 503);
 
   if (!sameOrigin(request)) return fail('invalid', 403);
+
+  // Before anything that costs: a script that passed the Origin check by
+  // forging it still has to pass BotID's challenge (always human in dev).
+  if ((await checkBotId()).isBot) return fail('bot', 403);
 
   if (Number(request.headers.get('content-length') ?? 0) > MAX_BODY_BYTES) {
     return fail('too_long', 413);

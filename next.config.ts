@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next';
+import { withBotId } from 'botid/next/config';
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
@@ -17,4 +18,6 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// BotID proxies its challenge through the site's own origin (see
+// src/instrumentation-client.ts for which requests carry it).
+export default withBotId(nextConfig);

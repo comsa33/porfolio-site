@@ -12,7 +12,8 @@ export type MatchError =
   | 'rate_limited'
   | 'unavailable'
   | 'upstream'
-  | 'invalid';
+  | 'invalid'
+  | 'bot';
 
 export interface MatchScore {
   id: string;

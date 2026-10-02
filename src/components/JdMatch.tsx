@@ -42,6 +42,7 @@ const COPY = {
       unavailable: '공고 읽는 AI가 오늘 몫을 다 썼습니다. 아래 목록은 제가 직접 골라 둔 것입니다',
       upstream: 'AI가 잠깐 딴생각을 했습니다. 다시 눌러 주세요',
       invalid: '요청이 어딘가에서 길을 잃었습니다. 새로고침 후 다시 해 주세요',
+      bot: '로봇으로 오해받았습니다. 새로고침 후 다시 눌러 주세요',
       network: '인터넷이 잠깐 자리를 비웠습니다. 연결을 확인하고 다시 눌러 주세요',
       no_match:
         '맞는 프로젝트를 못 찾았습니다. 채용 공고가 맞다면, 아직 제가 안 해 본 일인가 봅니다',
@@ -67,6 +68,7 @@ const COPY = {
       unavailable: 'The posting reader is done for the day. The list below was picked by hand',
       upstream: 'The AI lost its train of thought. Try again',
       invalid: 'The request got lost somewhere. Reload and try again',
+      bot: 'Mistaken for a robot. Reload and try again',
       network: 'The internet stepped out for a moment. Check your connection and try again',
       no_match: 'No project matched. If this is a job posting, it is something I have not done yet',
     },
@@ -154,7 +156,15 @@ export default function JdMatch({ lang, onMatched }: Props) {
         error?: MatchError;
       } | null;
       if (!res.ok || !body?.matches) {
-        setError(body?.error && body.error in t.errors ? body.error : 'upstream');
+        // A 429 from the Vercel firewall carries no JSON of ours; it is still
+        // "too many requests", not a fault.
+        setError(
+          body?.error && body.error in t.errors
+            ? body.error
+            : res.status === 429
+              ? 'rate_limited'
+              : 'upstream',
+        );
         return;
       }
       // Nothing clears the bar: a company intro or a cover letter can pass as a
