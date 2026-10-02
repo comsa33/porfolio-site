@@ -1,7 +1,15 @@
 import { NextResponse } from 'next/server';
 import { checkBotId } from 'botid/server';
 import { projects } from '@/data/projects';
-import { MAX_JD_CHARS, MIN_JD_CHARS, type MatchError, type MatchScore } from '@/lib/jdMatch';
+import { publications } from '@/data/publications';
+import { profile } from '@/data/profile';
+import {
+  MAX_JD_CHARS,
+  MIN_JD_CHARS,
+  type MatchError,
+  type MatchResult,
+  type MatchScore,
+} from '@/lib/jdMatch';
 
 /*
  * Scores every project against a pasted job posting with TypeSafe's Jev.
@@ -79,7 +87,7 @@ function overDailyCeiling(): boolean {
  * never kept; entries expire after an hour.
  */
 const CACHE_TTL_MS = 60 * 60_000;
-const cache = new Map<string, { at: number; matches: MatchScore[] }>();
+const cache = new Map<string, { at: number; result: MatchResult }>();
 
 async function hashOf(text: string): Promise<string> {
   const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
@@ -100,6 +108,20 @@ function sameOrigin(request: Request): boolean {
   } catch {
     return false;
   }
+}
+
+const PUB_PREFIX = 'pub:';
+const SKILL_PREFIX = 'skill:';
+const SKILL_QUESTION = 'Does the job posting in the state ask for `skill`, by name or plainly?';
+// Measured on the three trial postings (2026-10): skills named outright came
+// back 0.62–0.98, unasked ones 0.21 or under. One near miss sits between —
+// "SSE streaming" under "preferred" scored 0.41 for Streaming · Pub/Sub — and
+// stays unmarked: a mark should mean the posting plainly asks for it.
+const SKILL_MIN = 0.6;
+const SKILLS = Object.values(profile.coreSkills).flatMap((g) => g.skills);
+
+function describePub(p: (typeof publications)[number]): string {
+  return `${p.title} — ${p.summary.en}`;
 }
 
 function describe(p: (typeof projects)[number]): string {
@@ -151,21 +173,37 @@ export async function POST(request: Request) {
   const hash = await hashOf(jd);
   const cached = cache.get(hash);
   if (cached && Date.now() - cached.at < CACHE_TTL_MS) {
-    return NextResponse.json({ matches: cached.matches });
+    return NextResponse.json(cached.result);
   }
 
   if (overDailyCeiling()) return fail('unavailable', 503);
 
-  const questions: Record<string, unknown> = Object.fromEntries(
-    projects.map((p) => [
-      p.id,
-      {
-        type: 'score',
-        instructions: { project: describe(p), question: QUESTION },
-        criteria: LEVELS,
-      },
-    ]),
-  );
+  /*
+   * One request, one read of the posting: every project and paper is scored
+   * against it, every skill is asked about, and the posting itself is checked.
+   * Jev ingests the state once, so the extra questions cost next to nothing.
+   */
+  const questions: Record<string, unknown> = {};
+  for (const p of projects) {
+    questions[p.id] = {
+      type: 'score',
+      instructions: { project: describe(p), question: QUESTION },
+      criteria: LEVELS,
+    };
+  }
+  for (const pub of publications) {
+    questions[PUB_PREFIX + pub.id] = {
+      type: 'score',
+      instructions: { project: describePub(pub), question: QUESTION },
+      criteria: LEVELS,
+    };
+  }
+  for (const skill of SKILLS) {
+    questions[SKILL_PREFIX + skill] = {
+      type: 'noul',
+      instructions: { skill, question: SKILL_QUESTION },
+    };
+  }
   questions[POSTING_KEY] = {
     type: 'noul',
     instructions: 'Is the state a job posting or a description of a role to hire for?',
@@ -198,15 +236,23 @@ export async function POST(request: Request) {
   }
   if ((answers[POSTING_KEY]?.noul ?? 1) < POSTING_MIN) return fail('not_posting', 422);
 
-  const matches: MatchScore[] = projects
-    .map((p) => ({
-      id: p.id,
-      score: answers[p.id].score as number,
-      confidence: answers[p.id].confidence ?? 0,
-    }))
-    .sort((a, b) => b.score - a.score);
+  const ranked = (items: { id: string; key: string }[]): MatchScore[] =>
+    items
+      .map(({ id, key }) => ({
+        id,
+        score: answers[key]?.score ?? 0,
+        confidence: answers[key]?.confidence ?? 0,
+      }))
+      .sort((a, b) => b.score - a.score);
+
+  const result: MatchResult = {
+    matches: ranked(projects.map((p) => ({ id: p.id, key: p.id }))),
+    research: ranked(publications.map((p) => ({ id: p.id, key: PUB_PREFIX + p.id }))),
+    // A missing answer is not a yes.
+    skills: SKILLS.filter((s) => (answers[SKILL_PREFIX + s]?.noul ?? 0) >= SKILL_MIN),
+  };
 
   if (cache.size > 500) cache.clear();
-  cache.set(hash, { at: Date.now(), matches });
-  return NextResponse.json({ matches });
+  cache.set(hash, { at: Date.now(), result });
+  return NextResponse.json(result);
 }

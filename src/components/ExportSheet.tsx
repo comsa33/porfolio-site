@@ -15,6 +15,7 @@ import {
   OVERRIDE_LIMITS,
   PRESETS,
   PROJECT_ENTRIES,
+  RESEARCH_ENTRIES,
   presetPicks,
   TEMPLATES,
   type ExportSectionId,
@@ -28,13 +29,14 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   /**
-   * Projects matched to a pasted job posting. When it arrives the sheet starts
-   * from the career preset with exactly these projects in place of its own.
+   * Projects and papers matched to a pasted job posting. When it arrives the
+   * sheet starts from the career preset with exactly these in place of its own.
    */
   seedProjects?: string[] | null;
 }
 
-const ALL_PROJECT_IDS = new Set(PROJECT_ENTRIES.map((p) => p.id));
+// What a posting's verdict replaces in the preset: its projects and papers.
+const SEEDED_IDS = new Set([...PROJECT_ENTRIES, ...RESEARCH_ENTRIES].map((p) => p.id));
 
 const LABEL = {
   idle: { ko: 'PDF 내려받기', en: 'Download PDF' },
@@ -163,7 +165,7 @@ export default function ExportSheet({ lang, isOpen, onClose, seedProjects }: Pro
   useEffect(() => {
     if (!seedProjects) return;
     setPicked(
-      new Set([...presetPicks('career').filter((id) => !ALL_PROJECT_IDS.has(id)), ...seedProjects]),
+      new Set([...presetPicks('career').filter((id) => !SEEDED_IDS.has(id)), ...seedProjects]),
     );
   }, [seedProjects]);
   const [template, setTemplate] = useState<TemplateId>('hairline');

@@ -20,7 +20,7 @@ import ProjectCard from '@/components/ProjectCard';
 import TravelingDot from '@/components/TravelingDot';
 import ExportSheet from '@/components/ExportSheet';
 import JdMatch from '@/components/JdMatch';
-import { matchLevel, type MatchScore } from '@/lib/jdMatch';
+import { matchLevel, type MatchResult, type MatchScore } from '@/lib/jdMatch';
 import { portfolioData as data } from '@/data';
 import { countProjectsForSkill, projectMatchesSkill } from '@/data/skillMatch';
 import { getCareerIntro, LEDE_KEYWORDS } from '@/lib/career';
@@ -182,6 +182,9 @@ export default function Home() {
   const [openProjectId, setOpenProjectId] = useState<string | null>(null);
   // Scores against a pasted job posting; while set, the project list is in that order.
   const [matches, setMatches] = useState<MatchScore[] | null>(null);
+  // The same posting's verdict on the skill index and the research list.
+  const [matchSkills, setMatchSkills] = useState<string[] | null>(null);
+  const [researchMatches, setResearchMatches] = useState<MatchScore[] | null>(null);
   const [exportSeed, setExportSeed] = useState<string[] | null>(null);
   const [matchExpanded, setMatchExpanded] = useState(false);
 
@@ -247,16 +250,32 @@ export default function Home() {
   ] as const;
 
   const matchedIds = matches?.filter((m) => matchLevel(m.score)).map((m) => m.id) ?? [];
+  // Each list follows the posting only if the posting fits something in it; a
+  // research posting that fits a paper and no project leaves the projects be.
+  const projectsMatched = matchedIds.length > 0;
   const levelOf = (id: string) => {
     const m = matches?.find((x) => x.id === id);
     return m ? matchLevel(m.score) : null;
   };
 
-  const handleMatched = (result: MatchScore[]) => {
-    setMatches(result);
+  const handleMatched = (result: MatchResult) => {
+    setMatches(result.matches);
+    setMatchSkills(result.skills);
+    setMatchShown(false);
+    setResearchMatches(result.research);
     setMatchExpanded(false);
     setTechFilter(null);
     setOpenProjectId(null);
+  };
+
+  // "전체 보기": the whole page back as it was, in one press, wherever it is.
+  const clearMatch = () => {
+    setMatches(null);
+    setMatchSkills(null);
+    setMatchShown(false);
+    setResearchMatches(null);
+    setExportSeed(null);
+    setTechFilter(null);
   };
 
   // Scroll once the matched list is committed — the panel has closed by then,
@@ -268,8 +287,11 @@ export default function Home() {
   const matchSummaryRef = useRef<HTMLParagraphElement>(null);
   useEffect(() => {
     if (!matches) return;
-    document.getElementById('projects')?.scrollIntoView({ block: 'start' });
-    matchSummaryRef.current?.focus({ preventScroll: true });
+    const fitsProjects = matches.some((m) => matchLevel(m.score));
+    document.getElementById(fitsProjects ? 'projects' : 'research')?.scrollIntoView({
+      block: 'start',
+    });
+    if (fitsProjects) matchSummaryRef.current?.focus({ preventScroll: true });
   }, [matches]);
 
   // "더 보기" hands focus to the first row it revealed.
@@ -288,12 +310,17 @@ export default function Home() {
   const matchedProjects = matchedIds
     .map((id) => data.projects.find((p) => p.id === id))
     .filter((p): p is (typeof data.projects)[number] => Boolean(p));
+  // A skill pressed while matched narrows the matches rather than replacing
+  // them; its chip's × widens back to the posting's list.
+  const narrowedProjects = techFilter
+    ? matchedProjects.filter((p) => projectMatchesSkill(p, techFilter))
+    : matchedProjects;
   const matchHidden =
-    matchedProjects.length > MATCH_PREVIEW && !matchExpanded
-      ? matchedProjects.length - MATCH_PREVIEW
+    narrowedProjects.length > MATCH_PREVIEW && !matchExpanded
+      ? narrowedProjects.length - MATCH_PREVIEW
       : 0;
-  const visibleProjects = matches
-    ? matchedProjects.slice(0, matchedProjects.length - matchHidden)
+  const visibleProjects = projectsMatched
+    ? narrowedProjects.slice(0, narrowedProjects.length - matchHidden)
     : data.projects
         .filter((p) => {
           if (techFilter) return projectMatchesSkill(p, techFilter);
@@ -304,9 +331,10 @@ export default function Home() {
         .sort(sortByOrder);
 
   const selectSkill = (skill: string) => {
-    setMatches(null);
     setTechFilter(skill);
-    document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setMatchExpanded(false);
+    // Behaviour left to CSS, so reduced motion jumps instead of gliding.
+    document.getElementById('projects')?.scrollIntoView({ block: 'start' });
   };
 
   // The skill index draws its underlines once, left to right — the one pass
@@ -317,6 +345,27 @@ export default function Home() {
   // been still for a moment, it plays after a half-second breath, and never
   // again: a thing seen often should move less. Reduced motion skips it.
   const skillsRef = useRef<HTMLDivElement>(null);
+
+  // The posting's marks on the skill index are drawn where they can be seen:
+  // after a match the page has scrolled away to the projects, so the underlines
+  // wait for the index to come back into view, then ink in left to right on
+  // the sweep's own 70ms step.
+  const [matchShown, setMatchShown] = useState(false);
+  useEffect(() => {
+    const el = skillsRef.current;
+    if (!matchSkills?.length || !el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setMatchShown(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.5 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [matchSkills]);
   useEffect(() => {
     const el = skillsRef.current;
     if (!el) return;
@@ -413,13 +462,26 @@ export default function Home() {
       data.publications.filter((p) => p.category === f.key).length >= 2,
   );
 
-  const visiblePublications = data.publications.filter((p) => {
-    if (researchFilter === 'all') return true;
-    // Featured: settled work only, and not the early conference talk.
-    if (researchFilter === 'featured')
-      return p.status !== 'under-review' && p.category !== 'conference';
-    return p.category === researchFilter;
-  });
+  // Research follows the projects: while matched, only the papers the posting
+  // fits, best first. A posting no paper fits leaves the list as it was rather
+  // than empty.
+  const researchMatchedIds =
+    researchMatches?.filter((m) => matchLevel(m.score)).map((m) => m.id) ?? [];
+  const researchMatched = researchMatchedIds.length > 0;
+  const researchLevels = Object.fromEntries(
+    (researchMatches ?? []).map((m) => [m.id, matchLevel(m.score)]),
+  );
+  const visiblePublications = researchMatched
+    ? researchMatchedIds
+        .map((id) => data.publications.find((p) => p.id === id))
+        .filter((p): p is (typeof data.publications)[number] => Boolean(p))
+    : data.publications.filter((p) => {
+        if (researchFilter === 'all') return true;
+        // Featured: settled work only, and not the early conference talk.
+        if (researchFilter === 'featured')
+          return p.status !== 'under-review' && p.category !== 'conference';
+        return p.category === researchFilter;
+      });
 
   const rise = (i: number) => ({ '--i': i }) as React.CSSProperties;
 
@@ -591,6 +653,7 @@ export default function Home() {
             style={rise(3)}
             data-lang={lang}
             data-sweep="pending"
+            data-match={matchShown ? 'on' : undefined}
             suppressHydrationWarning
           >
             {skillGroups.map((group, g) => (
@@ -610,7 +673,7 @@ export default function Home() {
                     >
                       <button
                         type="button"
-                        className={`${styles.skillToken} ${techFilter === name ? styles.skillTokenActive : ''}`}
+                        className={`${styles.skillToken} ${techFilter === name ? styles.skillTokenActive : ''} ${matchSkills?.includes(name) ? styles.skillTokenMatch : ''}`}
                         onClick={() => selectSkill(name)}
                         title={
                           lang === 'ko'
@@ -620,6 +683,11 @@ export default function Home() {
                       >
                         <span>{name}</span>
                         <sup className={styles.skillCount}>{count}</sup>
+                        {matchSkills?.includes(name) && (
+                          <span className={styles.visuallyHidden}>
+                            {lang === 'ko' ? ' (공고 요구)' : ' (asked for)'}
+                          </span>
+                        )}
                       </button>
                     </li>
                   ))}
@@ -647,7 +715,7 @@ export default function Home() {
               )}
             </h2>
             {/* The filters do not apply to a matched list, which shows every project. */}
-            {!matches && (
+            {!projectsMatched && (
               <div
                 className={`${styles.filterGroup} ${techFilter ? styles.filterGroupMuted : ''}`}
                 role="tablist"
@@ -670,7 +738,7 @@ export default function Home() {
               </div>
             )}
           </div>
-          {matches && (
+          {projectsMatched && (
             <div className={styles.matchBar}>
               <p ref={matchSummaryRef} className={styles.matchSummary} role="status" tabIndex={-1}>
                 {/* JdMatch never hands over a result with no match in it. */}
@@ -689,21 +757,14 @@ export default function Home() {
                 )}
               </p>
               <div className={styles.matchActions}>
-                <button
-                  type="button"
-                  className={styles.matchReset}
-                  onClick={() => {
-                    setMatches(null);
-                    setExportSeed(null);
-                  }}
-                >
+                <button type="button" className={styles.matchReset} onClick={clearMatch}>
                   {lang === 'ko' ? '전체 보기' : 'Show all'}
                 </button>
                 <button
                   type="button"
                   className={styles.matchExport}
                   onClick={() => {
-                    setExportSeed(matchedIds);
+                    setExportSeed([...matchedIds, ...researchMatchedIds]);
                     setExportOpen(true);
                   }}
                 >
@@ -717,7 +778,7 @@ export default function Home() {
           <ol
             ref={projectListRef}
             className={styles.projectList}
-            key={matches ? 'matched' : (techFilter ?? projectFilter)}
+            key={projectsMatched ? `matched-${techFilter ?? ''}` : (techFilter ?? projectFilter)}
           >
             {visibleProjects.map((project, i) => (
               <ProjectCard
@@ -733,6 +794,9 @@ export default function Home() {
               />
             ))}
           </ol>
+          {projectsMatched && techFilter && narrowedProjects.length === 0 && (
+            <p className={styles.matchEmpty}>{lang === 'ko' ? '없음' : 'None'}</p>
+          )}
           {matchHidden > 0 && (
             <button type="button" className={styles.matchMore} onClick={revealMore}>
               {lang === 'ko'
@@ -749,22 +813,32 @@ export default function Home() {
             <h2 className={styles.sectionTitle} data-dot="research">
               {SECTION_TITLES.research[lang]}
             </h2>
-            <div className={styles.filterGroup} role="tablist" aria-label="Research filter">
-              {shownResearchFilters.map((f) => (
-                <button
-                  key={f.key}
-                  role="tab"
-                  aria-selected={researchFilter === f.key}
-                  className={`${styles.filterChip} ${researchFilter === f.key ? styles.filterActive : ''}`}
-                  onClick={() => setResearchFilter(f.key)}
-                >
-                  {f.label[lang]}
-                </button>
-              ))}
-            </div>
+            {researchMatched ? (
+              <button type="button" className={styles.matchReset} onClick={clearMatch}>
+                {lang === 'ko' ? '전체 보기' : 'Show all'}
+              </button>
+            ) : (
+              <div className={styles.filterGroup} role="tablist" aria-label="Research filter">
+                {shownResearchFilters.map((f) => (
+                  <button
+                    key={f.key}
+                    role="tab"
+                    aria-selected={researchFilter === f.key}
+                    className={`${styles.filterChip} ${researchFilter === f.key ? styles.filterActive : ''}`}
+                    onClick={() => setResearchFilter(f.key)}
+                  >
+                    {f.label[lang]}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
-          <div className={styles.listWrap} key={researchFilter}>
-            <Publications items={visiblePublications} lang={lang} />
+          <div className={styles.listWrap} key={researchMatched ? 'matched' : researchFilter}>
+            <Publications
+              items={visiblePublications}
+              lang={lang}
+              matchLevels={researchMatched ? researchLevels : undefined}
+            />
           </div>
           {/* The full record lives on ORCID; the list above is what is settled. */}
           {data.profile.orcid && (

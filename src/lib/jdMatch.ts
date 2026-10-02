@@ -22,6 +22,16 @@ export interface MatchScore {
   confidence: number;
 }
 
+/** What /api/match returns for a posting it accepted. */
+export interface MatchResult {
+  /** Every project, best fit first. */
+  matches: MatchScore[];
+  /** Every paper, best fit first. */
+  research: MatchScore[];
+  /** The skill names (as in profile.coreSkills) the posting asks for. */
+  skills: string[];
+}
+
 export type MatchLevel = 'core' | 'partial';
 
 /*

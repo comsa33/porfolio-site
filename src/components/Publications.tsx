@@ -6,17 +6,20 @@ import BrandIcon from './BrandIcon';
 import styles from './Publications.module.css';
 import { isRowToggleClick, toggleInPlace } from './rowToggle';
 import { Publication } from '@/types';
+import { MATCH_LABEL, type MatchLevel } from '@/lib/jdMatch';
 
 interface PublicationsProps {
   items: Publication[];
   lang: 'ko' | 'en';
+  /** Set while the list is ordered against a pasted job posting. */
+  matchLevels?: Record<string, MatchLevel | null>;
 }
 
 /**
  * Research as list rows: year / status / indexing in the mono column, title
  * and venue beside it, summary behind an animated disclosure.
  */
-const Publications: React.FC<PublicationsProps> = ({ items, lang }) => {
+const Publications: React.FC<PublicationsProps> = ({ items, lang, matchLevels }) => {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const toggle = (id: string, from: HTMLElement) => {
@@ -48,7 +51,14 @@ const Publications: React.FC<PublicationsProps> = ({ items, lang }) => {
             </div>
 
             <div className={styles.main}>
-              <h3 className={styles.title}>{pub.title}</h3>
+              <div className={styles.titleRow}>
+                <h3 className={styles.title}>{pub.title}</h3>
+                {matchLevels?.[pub.id] && (
+                  <span className={styles.matchBadge}>
+                    {MATCH_LABEL[matchLevels[pub.id] as MatchLevel][lang]}
+                  </span>
+                )}
+              </div>
               <p className={styles.venue}>
                 {pub.venue[lang]} · {pub.authorRole[lang]}
               </p>

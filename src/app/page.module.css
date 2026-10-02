@@ -576,6 +576,51 @@ button.contactLink:hover span {
   background-image: linear-gradient(currentColor, currentColor);
 }
 
+/* A skill the pasted posting asks for: the underline turns accent and thickens,
+   the name firms to ink. It waits at zero until the index is in view (see
+   matchShown in page.tsx), then draws on the sweep's motion and stagger.
+   Distinct from the active filter, which inks the line and the count instead. */
+.skillTokenMatch > span {
+  background-image:
+    linear-gradient(var(--accent), var(--accent)),
+    linear-gradient(var(--line-strong), var(--line-strong));
+  background-size:
+    0% 2px,
+    100% 1px;
+  background-position:
+    0 100%,
+    0 100%;
+  transition: background-size var(--dur-slow) var(--ease-out);
+  transition-delay: calc(var(--k, 0) * 70ms);
+}
+
+.skills[data-match='on'] .skillTokenMatch {
+  color: var(--ink);
+}
+
+.skills[data-match='on'] .skillTokenMatch > span {
+  background-size:
+    100% 2px,
+    100% 1px;
+}
+
+/* Said to a screen reader, not shown: the underline is the sighted cue. */
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* A skill that narrows the matches to nothing: one word, the chip undoes it. */
+.matchEmpty {
+  padding: 1.25rem 0;
+  font-size: 14px;
+  color: var(--ink-secondary);
+}
+
 /* Active tech filter shown beside the section title */
 .techChip {
   display: inline-flex;

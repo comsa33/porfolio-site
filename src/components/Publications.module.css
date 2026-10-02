@@ -194,3 +194,27 @@ a.actionBtn:hover svg {
     font-size: 16px;
   }
 }
+
+/* Same badge as a project row's: accent at 12% under accent-text. */
+.titleRow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.matchBadge {
+  align-self: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  background: var(--accent-soft);
+  color: #9a3d00;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+[data-theme='dark'] .matchBadge {
+  color: var(--accent-hover);
+}

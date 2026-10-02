@@ -9,12 +9,13 @@ import {
   MAX_JD_CHARS,
   MIN_JD_CHARS,
   type MatchError,
+  type MatchResult,
   type MatchScore,
 } from '@/lib/jdMatch';
 
 interface Props {
   lang: 'ko' | 'en';
-  onMatched: (matches: MatchScore[]) => void;
+  onMatched: (result: MatchResult) => void;
 }
 
 const n = (x: number) => x.toLocaleString();
@@ -153,6 +154,8 @@ export default function JdMatch({ lang, onMatched }: Props) {
       });
       const body = (await res.json().catch(() => null)) as {
         matches?: MatchScore[];
+        research?: MatchScore[];
+        skills?: string[];
         error?: MatchError;
       } | null;
       if (!res.ok || !body?.matches) {
@@ -170,7 +173,8 @@ export default function JdMatch({ lang, onMatched }: Props) {
       // Nothing clears the bar: a company intro or a cover letter can pass as a
       // posting, and an unrelated one reorders the page by noise. Either way the
       // page stays as it was and the panel says what to paste instead.
-      if (!body.matches.some((m) => matchLevel(m.score))) {
+      const fits = (list?: MatchScore[]) => (list ?? []).some((m) => matchLevel(m.score));
+      if (!fits(body.matches) && !fits(body.research)) {
         setError('no_match');
         return;
       }
@@ -179,7 +183,11 @@ export default function JdMatch({ lang, onMatched }: Props) {
       setJd('');
       setSnap(true);
       setOpen(false);
-      onMatched(body.matches);
+      onMatched({
+        matches: body.matches,
+        research: body.research ?? [],
+        skills: body.skills ?? [],
+      });
     } catch {
       // An abort is the visitor's own cancel; nothing to report.
       if (!controller.signal.aborted) setError('network');
