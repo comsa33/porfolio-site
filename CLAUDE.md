@@ -5,11 +5,11 @@ before designing, styling, or writing UI copy.
 
 - **System:** https://claude.ai/artifact/HLsexg6VJqH4rhobvzqKsy — read its
   `project/README.md` and `project/tokens.json` with the Artifact tool. Changes to
-  the system itself go through the **"designer po24lio"** session.
+  the system itself go through the **"po24lio designer"** session.
 - **Source of truth in code:** the tokens in `src/app/globals.css`. The system
   mirrors them; if the two disagree, the code wins — tell the designer session.
 - **Design boards first:** new visual work is drawn, approved, then built. The
-  site's planning board is owned by the **"designer po24lio"** session — ask it
+  site's planning board is owned by the **"po24lio designer"** session — ask it
   for new artboards (with the feature's states and edge cases) instead of
   editing the board yourself; read it freely:
   https://claude.ai/artifact/BJLRUj9tnsMnnAoxZHEhND
