@@ -103,9 +103,11 @@
     background var(--dur-instant) var(--ease);
 }
 
-.close:hover {
-  color: var(--ink);
-  background: var(--bg-hover);
+@media (hover: hover) {
+  .close:hover {
+    color: var(--ink);
+    background: var(--bg-hover);
+  }
 }
 
 /* Body: rail + content */
@@ -138,9 +140,11 @@
     background var(--dur-instant) var(--ease);
 }
 
-.railItem:hover {
-  color: var(--ink);
-  background: var(--bg-hover);
+@media (hover: hover) {
+  .railItem:hover {
+    color: var(--ink);
+    background: var(--bg-hover);
+  }
 }
 
 .railItemActive,
@@ -240,9 +244,11 @@
     background var(--dur-instant) var(--ease);
 }
 
-.pagerBtn:hover:not(:disabled) {
-  color: var(--ink);
-  background: var(--bg-hover);
+@media (hover: hover) {
+  .pagerBtn:hover:not(:disabled) {
+    color: var(--ink);
+    background: var(--bg-hover);
+  }
 }
 
 .pagerBtn:disabled {
@@ -272,8 +278,10 @@
     background-size var(--dur) var(--ease);
 }
 
-.segmentBtn:hover {
-  color: var(--ink);
+@media (hover: hover) {
+  .segmentBtn:hover {
+    color: var(--ink);
+  }
 }
 
 .segmentActive,

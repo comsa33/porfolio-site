@@ -132,7 +132,13 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  transition: color var(--dur-instant) var(--ease);
+  transition:
+    color var(--dur-instant) var(--ease),
+    transform var(--dur-instant) var(--ease);
+}
+
+.codeToggle:active {
+  transform: scale(0.97);
 }
 
 .codeToggle svg {
@@ -140,8 +146,10 @@
   transition: transform var(--dur) var(--ease-out);
 }
 
-.codeToggle:hover {
-  color: var(--ink);
+@media (hover: hover) {
+  .codeToggle:hover {
+    color: var(--ink);
+  }
 }
 
 .chevronOpen {
@@ -181,8 +189,11 @@
   max-width: 100%;
 }
 
+/* The highlighter theme paints its own background on the inline <code> too;
+   under the frame's ground it showed as a box behind every line. */
 .codeFrame code {
   font-family: var(--font-mono), monospace !important;
+  background: none !important;
 }
 
 .note {
@@ -191,6 +202,15 @@
   color: var(--ink-tertiary);
   border-bottom: 1px solid var(--line);
   background: var(--bg);
+}
+
+/* The line a case writes after its code ("핵심 개념: …"): the same strip,
+   closing the box instead of opening it, and in reading grey — it is a
+   sentence to read, not a label. */
+.noteAfter {
+  border-bottom: none;
+  border-top: 1px solid var(--line);
+  color: var(--ink-secondary);
 }
 
 @media (max-width: 860px) {

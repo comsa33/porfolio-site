@@ -24,16 +24,16 @@ function inline(md: string): string {
     .replace(/`([^`]+)`/g, '<code>$1</code>');
 }
 
-/** Strips the ``` fence and returns [language, code]. */
-function unfence(text: string): [string, string] {
-  const langMatch = text.match(/^```(\w+)/);
-  const language = langMatch ? langMatch[1] : 'python';
-  const code = text
-    .replace(/^```\w*\n?/, '')
-    .replace(/```\n?$/, '')
-    .replace(/\\n/g, '\n')
-    .trim();
-  return [language, code];
+/**
+ * Splits a fenced block into [language, code, after]. Most cases write a line
+ * after the closing fence ("**핵심 개념**: …"); matching the fence only at the
+ * very end used to leave it — and the ``` itself — printed inside the code box.
+ */
+function unfence(text: string): [string, string, string] {
+  const m = text.match(/^```(\w*)\n?([\s\S]*?)```([\s\S]*)$/);
+  if (!m) return ['python', text.replace(/\\n/g, '\n').trim(), ''];
+  const [, lang, body, rest] = m;
+  return [lang || 'python', body.replace(/\\n/g, '\n').trim(), rest.trim()];
 }
 
 function readTheme(): 'light' | 'dark' {
@@ -52,7 +52,7 @@ function CaseView({
   theme: 'light' | 'dark';
 }) {
   const [codeOpen, setCodeOpen] = useState(false);
-  const [language, code] = unfence(case_.technicalDetails[lang]);
+  const [language, code, after] = unfence(case_.technicalDetails[lang]);
   const codeId = `code-${case_.id}`;
 
   return (
@@ -124,6 +124,12 @@ function CaseView({
                 >
                   {code}
                 </SyntaxHighlighter>
+                {after && (
+                  <p
+                    className={`${styles.note} ${styles.noteAfter}`}
+                    dangerouslySetInnerHTML={{ __html: inline(after) }}
+                  />
+                )}
               </div>
             </div>
           </div>
