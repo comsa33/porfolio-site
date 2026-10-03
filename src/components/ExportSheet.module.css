@@ -711,7 +711,10 @@
 }
 
 /* Opens the same document as a page, for a look before taking it. */
-.preview {
+/* Its own name: sharing `.preview` with the preview column merged the two
+   rules, so the link drew the column's left rule and padding and the column
+   took the link's 12.5px grey. */
+.previewLink {
   font-size: 12.5px;
   color: var(--ink-secondary);
   background-image: linear-gradient(currentColor, currentColor);
@@ -723,7 +726,7 @@
     background-size var(--dur) var(--ease);
 }
 
-.preview:hover {
+.previewLink:hover {
   color: var(--ink);
   background-size: 100% 1px;
 }

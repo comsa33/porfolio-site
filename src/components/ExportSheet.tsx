@@ -566,7 +566,7 @@ export default function ExportSheet({ lang, isOpen, onClose, seedProjects }: Pro
               href={`/api/export?${query}&inline=1`}
               target="_blank"
               rel="noopener noreferrer"
-              className={styles.preview}
+              className={styles.previewLink}
             >
               {lang === 'ko' ? '미리보기' : 'Preview'}
             </a>
