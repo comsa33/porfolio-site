@@ -46,10 +46,6 @@ const project = {
       ko: '무료 크레딧 축소안을 결제 기록으로 검증. 결제는 무료분을 다 쓴 직후에 일어나 줄이면 손해라 현행 유지',
       en: 'Tested a plan to cut free credits against payment records: people pay right after the free credits run out, so cutting would lose money. Kept as is',
     },
-    {
-      ko: '다계정 악용 피해액을 재 보니 $0.27, 방어 기능을 만들지 않기로 결정',
-      en: 'Measured multi-account abuse at $0.27 in damage and decided not to build defenses',
-    },
   ],
   posts: [
     {
