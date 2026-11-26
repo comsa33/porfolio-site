@@ -7,8 +7,8 @@ const project = {
     en: 'AI Agent Execution Runtime',
   },
   shortDescription: {
-    ko: '멀티팟 분산 Python 샌드박스 & 무중단 동적 배포',
-    en: 'Multi-pod distributed Python sandbox with zero-downtime dynamic deployment',
+    ko: '멀티팟 분산 Python 샌드박스 & 재시작 없는 동적 배포',
+    en: 'Multi-pod distributed Python sandbox with restart-free dynamic deployment',
   },
   fullDescription: {
     ko: '멀티팟 환경에서 AI 에이전트를 동적으로 등록·배포·실행하는 실행 런타임입니다. 에이전트 관리 서버와 프로덕션·개발 샌드박스를 프로세스 격리로 나눈 3서버 구조 위에서 Redis Pub/Sub 동기화와 FastAPI 서브앱 동적 로딩으로 서버 재시작 없이 배포합니다.',
@@ -38,8 +38,8 @@ const project = {
       en: 'Standardized tools around a name/schema/executor contract so new tools plug in without core changes',
     },
     {
-      ko: 'Redis Pub/Sub 이벤트 버스로 Multi-Pod 실시간 배포 동기화 + Distributed Lock으로 배포 실패율 0% 달성',
-      en: 'Real-time multi-pod deployment sync via a Redis Pub/Sub event bus, with distributed locks achieving 0% deployment failure',
+      ko: 'Redis Pub/Sub 이벤트 버스로 멀티 파드 배포 동기화, 분산 락으로 동시 배포 시 버전 유실 방지',
+      en: 'Multi-pod deployment sync over a Redis Pub/Sub event bus, with a distributed lock that keeps concurrent deploys from losing versions',
     },
     {
       ko: 'FastAPI 서브앱 동적 로딩으로 사용자 정의 에이전트 API·커스텀 LLM·알고리즘 스크립트를 재시작 없이 배포',
@@ -87,7 +87,7 @@ const project = {
   features: [
     'Dynamic Agent Runtime',
     'Redis-based Distributed Routing',
-    'Zero-downtime Deployment',
+    'Restart-free Deployment',
     'SSE Streaming Pipeline',
     'Secure Sandbox Isolation',
     'At-least-once Log Collection',
@@ -337,8 +337,8 @@ async def _flush_agent(self, agent_key):
       },
       {
         title: {
-          ko: '동적 등록 · 무중단 배포 전파',
-          en: 'Dynamic Registration & Zero-downtime Propagation',
+          ko: '동적 등록 · 재시작 없는 배포 전파',
+          en: 'Dynamic Registration & Restart-free Propagation',
         },
         description: {
           ko: '스키마 등록 한 번으로 코드 템플릿 생성 → 파일 저장 → 분산 락 하의 상태 갱신 → Pub/Sub 브로드캐스트 → 전 파드 서브앱 동적 로딩까지 이어지는 흐름. 동시 배포는 락으로 직렬화됩니다.',
