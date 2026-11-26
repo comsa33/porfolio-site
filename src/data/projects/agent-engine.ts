@@ -29,8 +29,8 @@ const project = {
       en: 'Cut five app modes to two, in four stages so existing data keeps working',
     },
     {
-      ko: '모델 호출의 2분 제한 제거, 시간 초과는 재시도하지 않아 비용 중복 방지',
-      en: 'Removed a two-minute limit on model calls; timeouts are not retried, so a call is never paid for twice',
+      ko: '시간 초과된 모델 호출은 재시도하지 않기로 결정, 이미 실행된 호출에 비용이 두 번 나가는 것 방지',
+      en: 'Decided not to retry timed-out model calls, so a call that already ran is never paid for twice',
     },
     {
       ko: '실행 1건의 SQL 수를 테스트로 고정해 성능 회귀를 CI에서 차단',

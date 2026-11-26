@@ -36,10 +36,6 @@ const project = {
       ko: 'CI가 통과인데 테스트 392개 중 186개만 돌고 있던 것을 발견, 건너뛰면 실패하도록 변경',
       en: 'Found CI passing while running only 186 of 392 tests; a skipped test now fails the run',
     },
-    {
-      ko: '범위·설계·릴리스는 직접 결정, 구현 세부는 세션에 위임',
-      en: 'Scope, design, and releases are my calls; implementation details are delegated to sessions',
-    },
   ],
   features: [
     'Role-based Agent Sessions',
