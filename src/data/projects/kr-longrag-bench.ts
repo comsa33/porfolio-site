@@ -66,7 +66,7 @@ const project = {
     github: 'https://github.com/comsa33/kr-housing-longrag-bench',
   },
   featured: false,
-  order: 8,
+  order: 9,
   scope: 'personal',
 } satisfies Project;
 

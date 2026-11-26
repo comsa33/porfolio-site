@@ -1,6 +1,7 @@
 import type { Project } from '@/types';
 import agentTeamOps from './agent-team-ops';
 import agentEngine from './agent-engine';
+import lodelai from './lodelai';
 import a2aOrchestration from './a2a-orchestration';
 import agenticHarness from './agentic-harness';
 import pyRunner from './py-runner';
@@ -20,6 +21,7 @@ import gptRecruit from './gpt-recruit';
 export const projects: Project[] = [
   agentTeamOps,
   agentEngine,
+  lodelai,
   a2aOrchestration,
   agenticHarness,
   pyRunner,

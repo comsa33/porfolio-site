@@ -144,7 +144,7 @@ const project = {
     ],
   },
   featured: false,
-  order: 14,
+  order: 15,
   scope: 'personal',
 } satisfies Project;
 

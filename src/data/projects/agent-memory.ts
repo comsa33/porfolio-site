@@ -123,7 +123,7 @@ const project = {
     ],
   },
   featured: true,
-  order: 5,
+  order: 6,
   scope: 'company',
 } satisfies Project;
 

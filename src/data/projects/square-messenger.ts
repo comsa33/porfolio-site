@@ -77,7 +77,7 @@ const project = {
     ],
   },
   featured: false,
-  order: 15,
+  order: 16,
   scope: 'personal',
 } satisfies Project;
 
