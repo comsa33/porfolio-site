@@ -3,7 +3,7 @@ import type { Project } from '@/types';
 // Cumulative users, as a floor. "N+" stays true while the app keeps growing,
 // so it only needs raising now and then, never correcting. One number, used
 // in both places below.
-const USERS = 800;
+const USERS = 1300;
 
 const project = {
   id: 'opic-master',
