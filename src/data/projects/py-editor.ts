@@ -428,7 +428,7 @@ app.use('/api/files', pathAccessControl);
     ],
   },
   featured: false,
-  order: 10,
+  order: 12,
   scope: 'company',
 } satisfies Project;
 

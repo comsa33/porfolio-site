@@ -18,7 +18,6 @@ const ALIASES: Record<string, string[]> = {
   'RAG Pipeline': ['rag'],
   'LLM Evaluation': ['evaluat', '평가', 'judge', 'benchmark', '벤치마크'],
   MCP: ['mcp'],
-  DSPy: ['dspy'],
   'LLM Fine-tuning': ['qlora', 'lora', 'fine-tun', 'unsloth', 'trl', 'peft', '파인튜닝'],
   'Multi-Agent Orchestration': ['multi-agent', 'orchestrat', '멀티에이전트', '오케스트레이션'],
   'Sandboxed Execution': ['sandbox', '샌드박스', 'runtime', '런타임'],

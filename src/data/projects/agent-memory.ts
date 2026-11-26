@@ -37,8 +37,8 @@ const project = {
       en: 'Normalized per-entry-point user identifiers in one layer so a user’s memory doesn’t split in two; organization scope excluded for privacy',
     },
     {
-      ko: '오픈소스 메모리 엔진(mem0) 벤더링, 검증 게이트·어댑터는 훅으로 연결해 떼면 원본 그대로 동작',
-      en: 'Vendored the mem0 memory engine; the gate and adapters attach through hooks, and without them the code runs as upstream',
+      ko: '오픈소스 메모리 엔진(mem0) 벤더링, 검증 게이트·어댑터는 바깥 계층에서 연결',
+      en: 'Vendored the mem0 memory engine; the gate and adapters attach from an outer layer',
     },
     {
       ko: '백그라운드 적재·보존 스윕 워커, 재배포 없이 프롬프트·정책을 바꾸는 관리자 런타임 설정',
@@ -123,7 +123,7 @@ const project = {
     ],
   },
   featured: true,
-  order: 3,
+  order: 5,
   scope: 'company',
 } satisfies Project;
 

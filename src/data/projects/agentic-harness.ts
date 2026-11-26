@@ -98,7 +98,7 @@ const project = {
     ],
   },
   featured: false,
-  order: 5,
+  order: 7,
   scope: 'company',
 } satisfies Project;
 

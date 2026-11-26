@@ -73,7 +73,7 @@ const project = {
     en: 'Jul 2026 ~ Present',
   },
   featured: true,
-  order: 2,
+  order: 4,
   scope: 'company',
 } satisfies Project;
 

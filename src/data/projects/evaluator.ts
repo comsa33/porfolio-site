@@ -17,7 +17,6 @@ const project = {
   techStack: [
     'Python',
     'FastAPI',
-    'DSPy',
     'SQLAlchemy 2.0 (async)',
     'PostgreSQL 16',
     'Elasticsearch',
@@ -35,20 +34,8 @@ const project = {
       en: 'Reimplemented RAGAS metrics in-house (keeping prompt specifications) to remove version and provider lock-in',
     },
     {
-      ko: '재현성을 위해 LLM 호출을 의도 추출 1회로 줄이고 요청 조립은 결정론적 상태머신으로 전환 (파싱 실패 제거)',
-      en: 'For reproducibility, cut LLM calls to one intent extraction and moved request assembly to a deterministic state machine (no parse failures)',
-    },
-    {
-      ko: 'LLM-as-judge self-bias 회피 가이드 작성 (평가·대상 모델 패밀리 분리, 모델별 점수 차이 문서화)',
-      en: 'Wrote LLM-as-judge self-bias guidance (separate judge and target model families, documented expected score differences)',
-    },
-    {
       ko: '특정 서비스의 Recall이 0으로 잘못 계산되던 결함 수정 (실데이터 97/100건 교정)',
       en: 'Fixed a defect that computed Recall as 0 for certain services (97 of 100 real records corrected)',
-    },
-    {
-      ko: '사내 LLM 게이트웨이용 커스텀 DSPy LM 어댑터 구현, BootstrapFewShot·MIPROv2 프롬프트 자동 최적화, 배포 번들 369KB → 175KB',
-      en: 'Custom DSPy LM adapter for the in-house LLM gateway, automated prompt optimization with BootstrapFewShot/MIPROv2, deploy bundle 369KB → 175KB',
     },
     {
       ko: 'v2 재설계 (평가 데이터셋·실행·생성 프롬프트·판정 기준 도메인 분리, FastAPI + SQLAlchemy 2.0(async) + PostgreSQL, alembic 마이그레이션)',
@@ -71,8 +58,8 @@ const project = {
     en: 'Posicube Inc.',
   },
   period: {
-    ko: '2025.02 ~ 현재',
-    en: 'Feb 2025 ~ Present',
+    ko: '2025.12 ~ 현재',
+    en: 'Dec 2025 ~ Present',
   },
   detail: {
     architecture: [
@@ -135,7 +122,7 @@ const project = {
     ],
   },
   featured: true,
-  order: 4,
+  order: 6,
   scope: 'company',
 } satisfies Project;
 

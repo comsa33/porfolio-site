@@ -380,7 +380,7 @@ export async function POST(request: Request) {
     ],
   },
   featured: false,
-  order: 12,
+  order: 14,
   scope: 'personal',
 } satisfies Project;
 

@@ -39,7 +39,6 @@ export const profile = {
         'RAG Pipeline',
         'LLM Evaluation',
         'MCP',
-        'DSPy',
         'LLM Fine-tuning',
       ],
     },

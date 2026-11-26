@@ -366,7 +366,7 @@ async def _flush_agent(self, agent_key):
     ],
   },
   featured: true,
-  order: 1,
+  order: 3,
   scope: 'company',
 } satisfies Project;
 
