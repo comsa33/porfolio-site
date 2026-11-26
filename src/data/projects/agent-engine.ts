@@ -36,10 +36,6 @@ const project = {
       ko: '실행 1건의 SQL 수를 테스트로 고정해 성능 회귀를 CI에서 차단',
       en: 'The SQL count of a single run is pinned in tests, so CI blocks performance regressions',
     },
-    {
-      ko: '교육 중 나온 문제 4건을 당일 수정해 개발 환경에 배포',
-      en: 'Four problems raised during a training session were fixed and deployed to dev the same day',
-    },
   ],
   features: [
     'Agent & Chatflow Modes',
