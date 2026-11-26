@@ -7,12 +7,12 @@ const project = {
     en: 'Agent Authoring & Execution Engine',
   },
   shortDescription: {
-    ko: '오픈소스 워크플로 엔진을 사내 에이전트 플랫폼의 편집·실행 엔진으로 흡수 (백엔드 담당)',
-    en: 'An open-source workflow engine absorbed into the in-house agent platform as its authoring and execution engine (backend owner)',
+    ko: '오픈소스 워크플로 엔진을 사내 에이전트 플랫폼의 엔진으로 흡수 (백엔드 담당)',
+    en: 'An open-source workflow engine absorbed into the in-house agent platform (backend owner)',
   },
   fullDescription: {
-    ko: '오픈소스 워크플로 엔진을 사내 에이전트 플랫폼의 편집·실행 엔진으로 재구성했습니다. 자체 로그인·워크스페이스 같은 사용자 표면은 걷어내고 사용자·권한의 원본은 플랫폼에 둡니다. 백엔드를 담당하며 재구성의 방향과 설계 결정을 맡았습니다.',
-    en: 'Rebuilt an open-source workflow engine as the authoring and execution engine of the in-house agent platform. Its own login and workspace surfaces were removed, and the platform is the source of users and permissions. I own the backend and made the direction and design decisions for the rebuild.',
+    ko: '오픈소스 워크플로 엔진을 사내 에이전트 플랫폼의 편집·실행 엔진으로 재구성했습니다. 백엔드를 담당하며 재구성의 방향과 설계 결정을 맡았습니다.',
+    en: 'Rebuilt an open-source workflow engine as the authoring and execution engine of the in-house agent platform. I own the backend and made the direction and design decisions.',
   },
   techStack: ['Python', 'PostgreSQL', 'Redis', 'TypeScript/React', 'Kubernetes', 'Locust'],
   peekLine: {
@@ -21,28 +21,24 @@ const project = {
   },
   keyAchievements: [
     {
-      ko: '오픈소스 fork를 유지하는 대신 플랫폼의 엔진으로 흡수하기로 결정. 별도 로그인·워크스페이스가 플랫폼 권한 모델과 이중으로 충돌했기 때문. 표면은 화면, 라우터, 코드 순으로 제거',
-      en: 'Decided to absorb the engine into the platform, not to maintain a fork: its separate login and workspaces collided with the platform’s permission model. Surfaces come out in order: screens, routers, code',
+      ko: 'fork를 따라가는 대신 플랫폼의 엔진으로 흡수하기로 결정, 로그인·권한의 이중 구조 제거',
+      en: 'Chose to absorb the engine into the platform instead of following a fork, removing the duplicate login and permission model',
     },
     {
-      ko: '앱 모드 5개를 2개(Agent, Chatflow)로 축소. 남은 데이터가 깨지지 않게 화면, 입력, 저장 데이터, 코드 4단계로 나눠 진행',
-      en: 'Cut five app modes down to two (Agent, Chatflow), in four stages (screens, inputs, stored data, code) so existing data keeps working',
+      ko: '앱 모드 5개를 2개로 축소, 기존 데이터가 깨지지 않게 4단계로 진행',
+      en: 'Cut five app modes to two, in four stages so existing data keeps working',
     },
     {
-      ko: '모델 호출을 프록시 경유에서 직접 호출로 바꿔 2분 제한 제거. 시간 초과 응답은 모델이 이미 실행됐을 수 있어 재시도하지 않음',
-      en: 'Moved model calls from a proxy to direct calls, removing a two-minute limit. Timed-out responses are not retried, since the model may already have run',
+      ko: '모델 호출의 2분 제한 제거, 시간 초과는 재시도하지 않아 비용 중복 방지',
+      en: 'Removed a two-minute limit on model calls; timeouts are not retried, so a call is never paid for twice',
     },
     {
-      ko: '실행 1건의 SQL·트랜잭션·연결 수를 테스트에 숫자로 고정. 늘면 실패하고, 줄어도 숫자를 낮추라며 실패',
-      en: 'The SQL, transaction, and connection counts of one run are pinned as exact numbers in tests: an increase fails, and a decrease fails too until the number is lowered',
+      ko: '실행 1건의 SQL 수를 테스트로 고정해 성능 회귀를 CI에서 차단',
+      en: 'The SQL count of a single run is pinned in tests, so CI blocks performance regressions',
     },
     {
-      ko: '실행 중 화면의 노드 목록이 비어 있던 것을, 늦게 열어도 끝난 노드와 도는 노드가 보이도록 변경',
-      en: 'The live run view used to show an empty node list; it now shows finished and running nodes even when opened late',
-    },
-    {
-      ko: '교육 중 발견한 문제 4건을 당일 이슈 등록부터 수정, 리뷰, 개발 환경 배포까지 약 2시간',
-      en: 'Four problems found during a training session went from issue to fix, review, and dev deployment the same day, in about two hours',
+      ko: '교육 중 나온 문제 4건을 당일 수정해 개발 환경에 배포',
+      en: 'Four problems raised during a training session were fixed and deployed to dev the same day',
     },
   ],
   features: [
