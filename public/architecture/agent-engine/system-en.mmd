@@ -1,0 +1,29 @@
+flowchart LR
+    U[User] --> CS[Chat service]
+    A[Admin] --> ED[Editor<br/>graph canvas]
+
+    subgraph P[AI agent platform]
+        CS
+        PM[Platform admin service<br/>login · permissions · agent records]
+        GW[Model gateway]
+        TS[Search service · code sandbox]
+    end
+
+    subgraph E[Agent authoring and execution engine]
+        ED --> API[API server<br/>authoring API · run API]
+        API --> Q[Job queue]
+        Q --> EN[Execution engine<br/>graph · node runs]
+        EN -- node events --> ST[Event stream]
+        ST --> API
+        API --> DB[(Storage<br/>apps · versions · run records)]
+        EN --> DB
+    end
+
+    CS -->|run request| API
+    API -->|login · permission check| PM
+    EN --> GW
+    EN --> TS
+
+    style PM fill:#fff9c4,stroke:#fbc02d,stroke-width:2px,color:#000
+    style API fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#000
+    style EN fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000

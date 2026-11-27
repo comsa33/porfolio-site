@@ -51,6 +51,38 @@ const project = {
     ko: '2026.10 ~ 현재',
     en: 'Oct 2026 ~ Present',
   },
+  detail: {
+    architecture: [
+      {
+        title: {
+          ko: '플랫폼 안에서의 자리',
+          en: 'Where the engine sits in the platform',
+        },
+        description: {
+          ko: '로그인·권한·모델 호출은 플랫폼 서비스에 맡기고, 엔진은 편집과 실행만 맡는 구조. 사용자는 대화 서비스를 거쳐서만 실행을 요청합니다.',
+          en: 'Login, permissions, and model calls belong to platform services; the engine only authors and runs. Users reach a run only through the chat service.',
+        },
+        mermaidFilePath: {
+          ko: '/architecture/agent-engine/system.mmd',
+          en: '/architecture/agent-engine/system-en.mmd',
+        },
+      },
+      {
+        title: {
+          ko: '실행 한 건의 흐름',
+          en: 'One run, end to end',
+        },
+        description: {
+          ko: '질문이 작업 큐를 거쳐 실행 엔진에서 돌고, 노드 이벤트가 스트림으로 돌아오는 흐름. 시간 초과된 모델 호출은 자동으로 다시 보내지 않습니다.',
+          en: 'A question goes through the job queue to the execution engine, and node events stream back. A timed-out model call is not retried automatically.',
+        },
+        mermaidFilePath: {
+          ko: '/architecture/agent-engine/run-sequence.mmd',
+          en: '/architecture/agent-engine/run-sequence-en.mmd',
+        },
+      },
+    ],
+  },
   featured: true,
   order: 2,
   scope: 'company',

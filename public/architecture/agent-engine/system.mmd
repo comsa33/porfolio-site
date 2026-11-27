@@ -1,0 +1,29 @@
+flowchart LR
+    U[사용자] --> CS[대화 서비스]
+    A[관리자] --> ED[편집 화면<br/>그래프 캔버스]
+
+    subgraph P[AI 에이전트 플랫폼]
+        CS
+        PM[플랫폼 관리 서비스<br/>로그인 · 권한 · 에이전트 원본]
+        GW[모델 게이트웨이]
+        TS[검색 서비스 · 코드 샌드박스]
+    end
+
+    subgraph E[에이전트 편집·실행 엔진]
+        ED --> API[API 서버<br/>편집 API · 실행 API]
+        API --> Q[작업 큐]
+        Q --> EN[실행 엔진<br/>그래프 · 노드 실행]
+        EN -- 노드 이벤트 --> ST[이벤트 스트림]
+        ST --> API
+        API --> DB[(저장소<br/>앱 · 버전 · 실행 기록)]
+        EN --> DB
+    end
+
+    CS -->|실행 요청| API
+    API -->|로그인 · 권한 확인| PM
+    EN --> GW
+    EN --> TS
+
+    style PM fill:#fff9c4,stroke:#fbc02d,stroke-width:2px,color:#000
+    style API fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#000
+    style EN fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000

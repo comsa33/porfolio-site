@@ -1,0 +1,17 @@
+sequenceDiagram
+    participant U as User
+    participant C as Chat service
+    participant A as API server
+    participant W as Execution engine
+    participant G as Model gateway
+
+    U->>C: Question
+    C->>A: Run request
+    A->>A: Check permission and app, create run record
+    A->>W: Enqueue job
+    W->>G: Model call
+    Note over W,G: No automatic retry on timeout<br/>so a call that already ran is not billed twice
+    G-->>W: Response
+    W-->>A: Node events (event stream)
+    A-->>C: Streaming
+    C-->>U: Answer and sources
