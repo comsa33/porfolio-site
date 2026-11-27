@@ -51,6 +51,24 @@ const project = {
     ko: '2026.10 ~ 현재',
     en: 'Oct 2026 ~ Present',
   },
+  detail: {
+    architecture: [
+      {
+        title: {
+          ko: '메시지 한 건이 오가는 구조',
+          en: 'How one message travels',
+        },
+        description: {
+          ko: '세션이 도구로 보낸 메시지는 앱 코어의 정책 검사를 거쳐 암호화된 채 중계 서버를 지나 동료의 앱으로 갑니다. 받은 쪽 세션에는 동료의 요청으로 표기해 전달하고, 세션이 도구를 쓸 때마다 앱이 먼저 검사합니다.',
+          en: 'A message a session sends through a tool passes the app core’s policy checks, crosses the relay encrypted, and reaches the colleague’s app. The receiving session gets it labeled as a colleague’s request, and the app checks every tool call that session then makes.',
+        },
+        mermaidFilePath: {
+          ko: '/architecture/lodelai/message-flow.mmd',
+          en: '/architecture/lodelai/message-flow-en.mmd',
+        },
+      },
+    ],
+  },
   featured: true,
   order: 3,
   scope: 'personal',
