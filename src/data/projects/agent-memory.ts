@@ -25,8 +25,8 @@ const project = {
       en: 'An independent judge LLM verifies extracted memories before storage (criteria: attribution and novelty), so assistant suggestions are not saved as the user’s own and repeated in later extractions',
     },
     {
-      ko: '선호·대상·환경·교훈 4개 카테고리로 기억 관리, 에이전트가 저장·갱신·삭제하는 기억 도구를 MCP·REST로 제공',
-      en: 'Memory managed in four categories (preference, focus, context, learning); tools for the agent to store, update, and delete memories over MCP and REST',
+      ko: '선호·대상·환경·교훈 4개 카테고리로 기억 관리, 에이전트가 저장·갱신·삭제하는 기억 도구를 MCP로 제공',
+      en: 'Memory managed in four categories (preference, focus, context, learning); tools for the agent to store, update, and delete memories over MCP',
     },
     {
       ko: '매 턴 주입하는 기억에 글자·건수 상한, 잘린 경우 모델에 고지',
@@ -79,7 +79,7 @@ const project = {
     'STM/LTM Split',
     'Write-time Verification Gate',
     'Injection Budgeting',
-    'Memory CRUD Tools (MCP + REST)',
+    'Memory CRUD Tools (MCP)',
     'Managed Memory Categories',
   ],
   company: {

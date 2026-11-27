@@ -7,12 +7,12 @@ const project = {
     en: 'RAG/Agent Quality Evaluation Service',
   },
   shortDescription: {
-    ko: '검색 정확도·생성 품질을 정량 측정하는 벤치마크 자동화 (단독 개발)',
-    en: 'Automated benchmarking of retrieval accuracy and generation quality (sole developer)',
+    ko: '검색 정확도·생성 품질을 정량 측정하는 벤치마크 자동화 (백엔드 단독 개발)',
+    en: 'Automated benchmarking of retrieval accuracy and generation quality (sole backend developer)',
   },
   fullDescription: {
-    ko: '에이전트·RAG 품질을 정량 측정하는 평가 서비스를 단독 개발했습니다. 검색 정확도(Recall)와 생성 품질(RAGAS 계열 메트릭)을 자동 측정하고, 평가용 QnA 데이터셋 자동 생성 파이프라인까지 구축해 전 고객사 서비스의 품질 검증에 사용됩니다. 현재는 평가 데이터셋·평가 실행·생성 프롬프트·판정 기준을 도메인으로 분리한 DB 기반 v2로 전면 재설계해 기존 버전과 병행 운영 중입니다.',
-    en: 'Sole developer of a service that quantifies agent and RAG quality. It automatically measures retrieval accuracy (Recall) and generation quality (RAGAS-family metrics) and includes a pipeline that generates evaluation QnA datasets — used to validate quality across every client service. It has since been redesigned from the ground up as a DB-backed v2 that separates evaluation datasets, runs, generation prompts, and judgment criteria into their own domains, running alongside the original.',
+    ko: '에이전트·RAG 품질을 정량 측정하는 평가 서비스의 백엔드를 단독 개발했습니다. 검색 정확도(Recall)와 생성 품질(RAGAS 계열 메트릭)을 자동 측정하고, 평가용 QnA 데이터셋 자동 생성 파이프라인까지 구축했습니다. 현재는 평가 데이터셋·평가 실행·생성 프롬프트·판정 기준을 도메인으로 분리한 DB 기반 v2로 전면 재설계해 기존 버전과 병행 운영 중입니다.',
+    en: 'Sole backend developer of a service that quantifies agent and RAG quality. It automatically measures retrieval accuracy (Recall) and generation quality (RAGAS-family metrics) and includes a pipeline that generates evaluation QnA datasets. It has since been redesigned from the ground up as a DB-backed v2 that separates evaluation datasets, runs, generation prompts, and judgment criteria into their own domains, running alongside the original.',
   },
   techStack: [
     'Python',

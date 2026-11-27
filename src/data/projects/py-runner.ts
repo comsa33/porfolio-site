@@ -11,8 +11,8 @@ const project = {
     en: 'Multi-pod distributed Python sandbox with restart-free dynamic deployment',
   },
   fullDescription: {
-    ko: '멀티팟 환경에서 AI 에이전트를 동적으로 등록·배포·실행하는 실행 런타임입니다. 에이전트 관리 서버와 프로덕션·개발 샌드박스를 프로세스 격리로 나눈 3서버 구조 위에서 Redis Pub/Sub 동기화와 FastAPI 서브앱 동적 로딩으로 서버 재시작 없이 배포합니다.',
-    en: 'An execution runtime that registers, deploys, and runs AI agents dynamically across pods. Three process-isolated servers — agent management, production sandbox, dev sandbox — with Redis Pub/Sub synchronization and dynamic FastAPI sub-app loading deploy changes without a restart.',
+    ko: '멀티팟 환경에서 AI 에이전트를 동적으로 등록·배포·실행하는 실행 런타임입니다. 에이전트 관리 서버와 프로덕션·개발 샌드박스를 3개 프로세스로 나눈 구조 위에서 Redis Pub/Sub 동기화와 FastAPI 서브앱 동적 로딩으로 서버 재시작 없이 배포합니다.',
+    en: 'An execution runtime that registers, deploys, and runs AI agents dynamically across pods. Three separate server processes — agent management, production sandbox, dev sandbox — with Redis Pub/Sub synchronization and dynamic FastAPI sub-app loading deploy changes without a restart.',
   },
   techStack: [
     'Python',
@@ -21,21 +21,16 @@ const project = {
     'Redis (Pub/Sub·Stream)',
     'Elasticsearch',
     'MongoDB',
-    'OpenTelemetry',
     'pytest',
   ],
   peekLine: {
-    ko: '금융·공공·엔터프라이즈 7개 고객사 9개 프로젝트에 적용, 주 개발자',
-    en: 'Adopted by 9 projects across 7 finance, public and enterprise clients.',
+    ko: '여러 고객사 프로젝트가 함께 쓰는 공통 실행 런타임, 주 개발자',
+    en: 'The shared execution runtime behind multiple client projects; lead developer.',
   },
   keyAchievements: [
     {
-      ko: '금융·공공·엔터프라이즈 7개 고객사 / 9개 프로젝트에 적용된 실행 런타임 (주 개발자)',
-      en: 'Execution runtime adopted by 9 projects across 7 finance/public/enterprise clients (lead developer)',
-    },
-    {
-      ko: '도구를 이름·스키마·실행부 3요소로 규약화해 코어 수정 없이 신규 도구를 편입하는 플러그인 구조 확립',
-      en: 'Standardized tools around a name/schema/executor contract so new tools plug in without core changes',
+      ko: '여러 고객사 프로젝트가 함께 쓰는 공통 실행 런타임 (주 개발자)',
+      en: 'The shared execution runtime behind multiple client projects (lead developer)',
     },
     {
       ko: 'Redis Pub/Sub 이벤트 버스로 멀티 파드 배포 동기화, 분산 락으로 동시 배포 시 버전 유실 방지',
@@ -50,8 +45,8 @@ const project = {
       en: 'Provider-agnostic LLM adapter layer (Azure/AWS Bedrock/Anthropic/Google/OpenAI) with Redis Stream-backed SSE token streaming',
     },
     {
-      ko: '구조화 로깅·OTLP 트레이싱 등 관측성 계층과 로그 수집 워커(배치 flush · At-least-once)를 단독 개발, 핵심 모듈 테스트 1.6만 줄 이상 작성',
-      en: 'Solely built the observability layer (structured logging, OTLP tracing) and the batched, at-least-once log-collection worker; wrote 16k+ lines of core-module tests',
+      ko: '샌드박스 로그 송신부와 서버 쪽 로그 추가 API(중복 제거·크기 상한) 구현, 핵심 모듈 테스트 1.6만 줄 이상 작성',
+      en: 'Built the sandbox log sender and the server-side log append API (dedup, size caps); wrote 16k+ lines of core-module tests',
     },
   ],
   posts: [
@@ -89,16 +84,14 @@ const project = {
     'Redis-based Distributed Routing',
     'Restart-free Deployment',
     'SSE Streaming Pipeline',
-    'Secure Sandbox Isolation',
-    'At-least-once Log Collection',
   ],
   company: {
     ko: '(주)포지큐브',
     en: 'Posicube Inc.',
   },
   period: {
-    ko: '2024.12 ~ 2026.02',
-    en: 'Dec 2024 ~ Feb 2026',
+    ko: '2024.12 ~ 현재',
+    en: 'Dec 2024 ~ Present',
   },
   detail: {
     problemSolving: [
@@ -252,73 +245,6 @@ async def stream_handler(request):
         },
         commits: ['346a8f5', '8c4aba6'],
       },
-      {
-        id: 'at-least-once',
-        title: {
-          ko: 'At-least-once 로그 수집',
-          en: 'At-least-once Log Collection',
-        },
-        category: {
-          ko: '분산시스템',
-          en: 'Distributed System',
-        },
-        icon: '🛡️',
-        problem: {
-          ko: '**이슈**: 기존 방식은 메시지 수신 즉시 ACK 처리. 버퍼에 로그가 있는 상태에서 서버 장애 시 해당 로그 영구 손실. Redis에서 이미 ACK된 메시지는 재전달되지 않음.',
-          en: "**Issue**: Previous approach ACKed messages immediately upon receipt. If server crashed with logs in buffer, those logs were permanently lost. Redis doesn't redeliver already-ACKed messages.",
-        },
-        solution: {
-          ko: '**해결**: ACK를 flush 성공 후에만 수행하도록 변경. 실패 시 버퍼에 로그를 다시 넣어 다음 주기에 재시도. 서버 장애 시 Redis Consumer Group이 마지막 ACK 지점부터 재전달.',
-          en: '**Solution**: Changed to ACK only after successful flush. On failure, put logs back in buffer for retry in next cycle. On server crash, Redis Consumer Group redelivers from last ACK point.',
-        },
-        technicalDetails: {
-          ko: `\`\`\`python
-async def _flush_agent(self, agent_key):
-    logs = self.buffer.pop(agent_key, [])
-    
-    try:
-        await self._write_batch(logs)
-        
-        # 성공 시에만 ACK
-        for log in logs:
-            await self.ack_callback(log.msg_id)
-            
-    except Exception:
-        # 실패 시 버퍼에 반환
-        self.buffer[agent_key] = logs
-\`\`\`
-
-**핵심**: ACK 지연 + 실패 시 재시도 = At-least-once`,
-          en: `\`\`\`python
-async def _flush_agent(self, agent_key):
-    logs = self.buffer.pop(agent_key, [])
-    
-    try:
-        await self._write_batch(logs)
-        
-        # ACK only on success
-        for log in logs:
-            await self.ack_callback(log.msg_id)
-            
-    except Exception:
-        # On failure, return to buffer
-        self.buffer[agent_key] = logs
-\`\`\`
-
-**Key**: Delayed ACK + retry on failure = At-least-once`,
-        },
-        csFoundations: [
-          'At-least-once Delivery',
-          'Consumer Group',
-          'Message Acknowledgment',
-          'Failure Recovery',
-        ],
-        impact: {
-          ko: '**성과**: 서버 장애 후 재시작해도 로그 유실 없음.',
-          en: '**Impact**: No log loss across server crashes and restarts.',
-        },
-        commits: [],
-      },
     ],
     architecture: [
       {
@@ -327,8 +253,8 @@ async def _flush_agent(self, agent_key):
           en: 'Execution Runtime System Architecture',
         },
         description: {
-          ko: '메인 프로세스가 에이전트 관리 서버와 프로덕션·개발 샌드박스를 프로세스 격리로 스폰하는 3서버 구조. Redis가 배포 상태·분산 락·Pub/Sub을 담당하고, 공유 볼륨과 S3 호환 오브젝트 스토리지 위에서 사용자 스크립트·커스텀 LLM·알고리즘이 실행됩니다.',
-          en: 'A main process spawns three isolated servers — agent management, production sandbox, and dev sandbox. Redis carries deploy state, distributed locks, and Pub/Sub, while user scripts, custom LLMs, and algorithms run over a shared volume and S3-compatible object storage.',
+          ko: '메인 프로세스가 에이전트 관리 서버와 프로덕션·개발 샌드박스를 별도 프로세스로 스폰하는 3서버 구조. Redis가 배포 상태·분산 락·Pub/Sub을 담당하고, 공유 볼륨과 S3 호환 오브젝트 스토리지 위에서 사용자 스크립트·커스텀 LLM·알고리즘이 실행됩니다.',
+          en: 'A main process spawns three separate server processes — agent management, production sandbox, and dev sandbox. Redis carries deploy state, distributed locks, and Pub/Sub, while user scripts, custom LLMs, and algorithms run over a shared volume and S3-compatible object storage.',
         },
         mermaidFilePath: {
           ko: '/architecture/pyrunner/system-architecture.mmd',
@@ -347,20 +273,6 @@ async def _flush_agent(self, agent_key):
         mermaidFilePath: {
           ko: '/architecture/pyrunner/deploy-propagation.mmd',
           en: '/architecture/pyrunner/deploy-propagation-en.mmd',
-        },
-      },
-      {
-        title: {
-          ko: '로그 수집 파이프라인',
-          en: 'Log Collection Pipeline',
-        },
-        description: {
-          ko: '에이전트 실행 로그를 Redis Stream Consumer Group으로 수집하는 배치 파이프라인. flush 성공 후에만 ACK합니다(At-least-once).',
-          en: 'A batched pipeline collecting agent execution logs via Redis Stream consumer groups. ACKs only after a successful flush (at-least-once).',
-        },
-        mermaidFilePath: {
-          ko: '/architecture/pyrunner/batch-flow.mmd',
-          en: '/architecture/pyrunner/batch-flow-en.mmd',
         },
       },
     ],

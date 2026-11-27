@@ -38,12 +38,12 @@ const project = {
       en: 'Split tool-selection strategy by reasoning vs. general models so scenarios survive a backbone swap unchanged',
     },
     {
-      ko: '외부 MCP 서버 30종 이상(쿠버네티스 제어, 관측성, 코드 편집 등)을 표준 규약으로 에이전트 도구화',
-      en: 'Standardized 30+ external MCP servers (Kubernetes control, observability, code editing) into agent tools',
+      ko: '도구를 이름·설명·입력 스키마 한 규격으로 통일, 외부 MCP 서버(쿠버네티스 제어, 관측성 등)의 도구도 같은 규격으로 편입',
+      en: 'One tool contract (name, description, input schema); tools from external MCP servers (Kubernetes control, observability) join under the same contract',
     },
     {
-      ko: '작업별 절차 문서를 필요할 때만 불러오는 스킬 체계로 시스템 프롬프트 26% 감축 (69,943자 → 51,449자)',
-      en: 'Loading per-task procedure docs on demand as skills cut the system prompt 26% (69,943 → 51,449 chars)',
+      ko: '작업별 절차 문서를 필요할 때만 불러오는 스킬 체계로 시스템 프롬프트 27% 감축 (약 4.2만 자 → 3.1만 자)',
+      en: 'Loading per-task procedure docs on demand as skills cut the system prompt 27% (about 42k → 31k characters)',
     },
     {
       ko: '추론 과정·도구 호출·코드 diff 실시간 스트리밍, 프로바이더와 무관한 추론 요약 추출(2경로)',
@@ -51,7 +51,7 @@ const project = {
     },
   ],
   features: [
-    'MCP Tool Integration (30+)',
+    'MCP Tool Integration',
     'Autonomous Agent Harness',
     'Two-Plane Architecture',
     'Human-in-the-Loop Gating',

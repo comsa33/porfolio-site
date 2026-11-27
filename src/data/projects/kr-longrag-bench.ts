@@ -22,13 +22,13 @@ const project = {
     'LLM-as-judge',
   ],
   peekLine: {
-    ko: '근거 연결형 QA 1,997문항 — 12개 태스크 패밀리, 32k~512k 컨텍스트',
-    en: '1,997 evidence-linked QA items across 12 task families and 32k–512k contexts.',
+    ko: '근거 연결형 QA 1,888문항 — 11개 태스크 패밀리, 32k~512k 컨텍스트',
+    en: '1,888 evidence-linked QA items across 11 task families and 32k–512k contexts.',
   },
   keyAchievements: [
     {
-      ko: '41개 공식 공고(10개 공급기관·9개 시도)와 공공데이터포털 표 기반 근거 연결형 QA 1,997문항 구축 (12개 태스크 패밀리, 32k~512k 컨텍스트 티어)',
-      en: 'Built 1,997 evidence-linked QA items from 41 official announcements (10 providers, 9 regions) and public-portal tables (12 task families, 32k–512k context tiers)',
+      ko: '41개 공식 공고(10개 공급기관·9개 시도)와 공공데이터포털 표 기반 근거 연결형 QA 1,888문항 구축 (11개 태스크 패밀리, 32k~512k 컨텍스트 티어)',
+      en: 'Built 1,888 evidence-linked QA items from 41 official announcements (10 providers, 9 regions) and public-portal tables (11 task families, 32k–512k context tiers)',
     },
     {
       ko: '정답·근거 로케이터·결정론적 술어만 공개하는 원문 비재배포 릴리스 프로토콜 설계',
@@ -63,7 +63,7 @@ const project = {
   },
   platformLinks: {
     web: 'https://huggingface.co/datasets/comsa33/kr-housing-longrag-bench',
-    github: 'https://github.com/comsa33/kr-housing-longrag-bench',
+    github: 'https://github.com/comsa33/khat',
   },
   featured: false,
   order: 9,
