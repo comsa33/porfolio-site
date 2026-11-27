@@ -9,7 +9,7 @@ sequenceDiagram
     AG->>AG: Generate code template (API module · spec)
     AG->>IDE: Save files (shared volume)
     AG->>R: Acquire distributed lock → update deploy state
-    Note over R: Concurrent deploys serialized by the lock<br/>— no version-list loss · 0% deploy failures
+    Note over R: Concurrent deploys serialized by the lock<br/>— no version-list loss
     AG->>R: Publish deploy event (Pub/Sub)
     R-->>Pods: Broadcast to every pod
     Pods->>Pods: Dynamic sub-app loading — applied without a restart

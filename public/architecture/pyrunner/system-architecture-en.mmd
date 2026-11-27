@@ -1,7 +1,7 @@
 flowchart TD
     subgraph P[Execution runtime — multi-process]
         Main[Main process]
-        Main -->|spawn · process isolation| Agent[Agent management server<br/>dynamic API register · patch · rollback · reconcile]
+        Main -->|spawn · separate process| Agent[Agent management server<br/>dynamic API register · patch · rollback · reconcile]
         Main -->|spawn| Prod[Production sandbox<br/>runs user scripts · custom LLMs · algorithms]
         Main -->|spawn| Dev[Dev sandbox<br/>hot reload · test runs · debug info]
     end

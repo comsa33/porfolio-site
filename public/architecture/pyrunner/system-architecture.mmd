@@ -1,7 +1,7 @@
 flowchart TD
     subgraph P[실행 런타임 — 멀티프로세스]
         Main[메인 프로세스]
-        Main -->|spawn · 프로세스 격리| Agent[에이전트 관리 서버<br/>동적 API 등록 · 수정 · 롤백 · 조정]
+        Main -->|spawn · 별도 프로세스| Agent[에이전트 관리 서버<br/>동적 API 등록 · 수정 · 롤백 · 조정]
         Main -->|spawn| Prod[프로덕션 샌드박스<br/>사용자 스크립트 · 커스텀 LLM · 알고리즘 실행]
         Main -->|spawn| Dev[개발 샌드박스<br/>핫 리로딩 · 테스트 실행 · 디버그 정보]
     end

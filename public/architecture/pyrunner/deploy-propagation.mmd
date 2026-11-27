@@ -9,7 +9,7 @@ sequenceDiagram
     AG->>AG: 코드 템플릿 생성 (API 모듈 · 명세)
     AG->>IDE: 파일 저장 (공유 볼륨)
     AG->>R: 분산 락 획득 → 배포 상태 갱신
-    Note over R: 동시 배포는 락으로 직렬화<br/>— 버전 목록 유실 방지 · 배포 실패율 0%
+    Note over R: 동시 배포는 락으로 직렬화<br/>— 버전 목록 유실 방지
     AG->>R: Pub/Sub 배포 이벤트 발행
     R-->>Pods: 전 파드 브로드캐스트
     Pods->>Pods: 서브앱 동적 로딩 — 서버 재시작 없이 반영
